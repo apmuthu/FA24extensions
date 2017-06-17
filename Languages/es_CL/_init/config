@@ -1,0 +1,16 @@
+Package: es_CL
+Version: 2.4.1-2
+Description: Chile spanish translation Version merged from FA 2.3
+Author: Victor Rodrigez <caribe95@gmail.com>
+Maintenance: Victor Rodrigez <caribe95@gmail.com>
+Homepage: frontaccounting.net
+Language: es_CL
+Encoding: iso-8859-1
+RTLDir: no
+Depends: 
+Type: language
+Name: Spanish (Chile)
+Name-es_CL: Español (Chile)
+InstallPath: lang/es_CL
+Filename: es_CL-2.4.1-2
+

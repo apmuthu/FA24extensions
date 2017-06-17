@@ -1,0 +1,12 @@
+Package: modern
+Name: Theme Modern
+Description: Optional theme
+Filename: modern-2.4.0-1
+Author: Joe Hunt
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+Type: theme
+InstallPath: themes/modern
+Version: 2.4.0-1
+

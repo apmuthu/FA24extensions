@@ -1,0 +1,14 @@
+Package: chart_fr_CA-general
+Version: 2.4.1-1
+Name: French Canadian COA - General
+Description: This is a French Canadian chart of accounts for a starting company.
+Encoding: utf-8
+Author: ??
+Maintenance: Joe Hunt
+Homepage: 
+Depends: 
+Type: chart
+InstallPath: sql
+SqlScript: fr_CA-general.sql
+Filename: chart_fr_CA-general-2.4.1-1
+

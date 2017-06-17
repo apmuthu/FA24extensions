@@ -1,0 +1,12 @@
+Package: studio
+Name: Theme Studio
+Description: Div based optional theme
+Filename: studio-2.4.0-1
+Author: Joe Hunt
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+Type: theme
+InstallPath: themes/studio
+Version: 2.4.0-1
+

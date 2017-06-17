@@ -1,0 +1,15 @@
+Package: el_GR
+Version: 2.4.1-2
+Description: Greek translation for FrontAccounting. Version merged from FA 2.3
+Author: Kyriakos Tsoukalas <kt@labyrinthos.gr>
+Maintenance: Kyriakos Tsoukalas <kt@labyrinthos.gr>
+Homepage: Labyrinthos.gr
+Language: el_GR
+Encoding: UTF-8
+RTLDir: no
+Depends: 
+Type: language
+Name: Greek
+InstallPath: lang/el_GR
+Filename: el_GR-2.4.1-2
+

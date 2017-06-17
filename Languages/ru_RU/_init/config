@@ -1,0 +1,15 @@
+Package: ru_RU
+Version: 2.4.1-2
+Description: Russian translation Version merged from FA 2.3
+Author: Nurkamol Vakhidov <nurkamol@gmail.com>
+Maintenance: Nurkamol Vakhidov <nurkamol@gmail.com>
+Homepage: frontaccounting.net
+Language: ru_RU
+Encoding: UTF-8
+RTLDir: no
+Depends: 
+Type: language
+Name: Russian
+InstallPath: lang/ru_RU
+Filename: ru_RU-2.4.1-2
+

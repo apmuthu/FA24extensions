@@ -1,0 +1,19 @@
+/requisition_details.php: 59a4f82347be736759f684b736d71e945153c994
+/lang/da_DK/LC_MESSAGES/da_DK.po: 7eb7df616f0e35d615110d89da286e1ea3a37d4f
+/lang/da_DK/LC_MESSAGES/da_DK.mo: b15176ab6b8ecbb47ed863c5fd1985cd9cbb4a1b
+/lang/new_language_template/LC_MESSAGES/empty.po: 2fcc6569f4ac8e799034d936ae73ff3686e1a69b
+/lang/pl_PL/LC_MESSAGES/pl_PL.po: cc2d135680e82f15ac4ead4279f61cc54d2d67b3
+/lang/pl_PL/LC_MESSAGES/pl_PL.mo: e0581c22a9474e39d7a90ae62ef0642bc53da702
+/lang/index.php: 435866102943ef00e38d96927cb5ee20bff20688
+/_init/config: d72955948a17c5016e1ec7ea031f4ae7372a0bbb
+/includes/db/requisition_details_db.inc: 4f381e06377f4dba31e195095a57c14d1ccf99c6
+/includes/db/requisitions_db.inc: d6db4baf860d7b6cf032b2cffa9573bd01073ce8
+/includes/db/index.php: 435866102943ef00e38d96927cb5ee20bff20688
+/includes/index.php: 435866102943ef00e38d96927cb5ee20bff20688
+/includes/modules_db.inc: 9b3a2bc862fece6cb0cccf5edcca84227e684c9f
+/sql/update.sql: 5e8d2b37e1b24371acda512cd87c46b8a181b641
+/index.php: 435866102943ef00e38d96927cb5ee20bff20688
+/hooks.php: 9497c1bb0f8dd6caabec42e902e45051d38a198c
+/requisitions.php: 33afcd8925fa9cc58bd996c0bf2185ae99abf7ea
+/requisition_allocations.php: f2dc1ea4f3f175c8caae3dfca3f5a7ef34e19a25
+

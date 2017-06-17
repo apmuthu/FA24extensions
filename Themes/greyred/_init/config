@@ -1,0 +1,12 @@
+Package: greyred
+Name: Theme Greyred
+Description: Div based optional theme
+Filename: greyred-2.4.0-1
+Author: Joe Hunt
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+Type: theme
+InstallPath: themes/greyred
+Version: 2.4.0-1
+

@@ -1,0 +1,14 @@
+Package: response
+Version: 2.4.0-3
+Type: theme
+Name: Theme Response
+Description: Optional Theme. Dynamic Horizontal Menu.
+ Works execent in all browsers.
+ Execent in IOS. (one touch -> hover), (two touch -> click).
+ Fine in Android Tablets, smartphones.. (tow touch -> hover), (one touch -> click).
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: www.frontaccounting.com
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+InstallPath: themes/response
+Filename: response-2.4.0-3
+

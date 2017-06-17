@@ -1,0 +1,14 @@
+Package: dropdown
+Version: 2.4.0-2
+Type: theme
+Name: Theme Dropdown
+Description: Optional Theme. Dynamic Horizontal Menu.
+ Works execent in all browsers.
+ Fine in IOS. (one touch -> hover), (two touch -> click).
+ Ok in Android Tablets, smartphones.. (tow touch -> hover), (one touch -> click).
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: www.frontaccounting.com
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+InstallPath: themes/dropdown
+Filename: dropdown-2.4.0-2
+

@@ -1,0 +1,13 @@
+Package: bluecollar
+Version: 2.4.0-2
+Type: theme
+Name: Theme Bluecollar
+Description: Optiona Theme. Left expandable menu.
+ Works execent in all browsers.
+ Ok in IOS and Android tablets and smartphones, but not so good if the screen size is too small.
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: www.frontaccounting.com
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+InstallPath: themes/bluecollar
+Filename: bluecollar-2.4.0-2
+

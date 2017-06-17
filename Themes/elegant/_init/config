@@ -1,0 +1,13 @@
+Package: elegant
+Name: Theme Elegant
+Description: Div based optional theme
+Filename: elegant-2.4.0-1
+Author: Joe Hunt
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+Type: theme
+Path: elegant
+InstallPath: themes/elegant
+Version: 2.4.0-1
+

@@ -1,0 +1,12 @@
+Package: graylime
+Name: Theme Graylime
+Description: Div based optional theme
+Filename: graylime-2.4.0-1
+Author: Joe Hunt
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+Type: theme
+InstallPath: themes/graylime
+Version: 2.4.0-1
+

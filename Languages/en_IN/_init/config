@@ -1,0 +1,15 @@
+Package: en_IN
+Version: 2.4.1-2
+Description: India specific vocabulary fixes Version merged from FA 2.3
+Author: Ap.Muthu <apmuthu@usa.net>
+Maintenance: Ap.Muthu <apmuthu@usa.net>
+Homepage: n/a
+Language: en_IN
+Encoding: iso-8859-1
+RTLDir: no
+Depends: 
+Type: language
+Name: English (IN)
+InstallPath: lang/en_IN
+Filename: en_IN-2.4.1-2
+

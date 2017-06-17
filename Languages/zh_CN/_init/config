@@ -1,0 +1,15 @@
+Package: zh_CN
+Version: 2.4.1-2
+Description: Simplified chinese translation by Felix Ye Version merged from FA 2.3
+Author: Felix Ye <felix@mixpwr.com>
+Maintenance: Felix Ye <felix@mixpwr.com>
+Homepage: frontaccounting.net
+Language: zh_CN
+Encoding: utf-8
+RTLDir: no
+Depends: 
+Type: language
+Name: Chinese (Simplified)
+InstallPath: lang/zh_CN
+Filename: zh_CN-2.4.1-2
+
