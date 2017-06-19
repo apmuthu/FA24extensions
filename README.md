@@ -23,6 +23,7 @@ These FA extensions comprise:
 * FA users can update their modules with the changed files alone.
 * Windows users can bulk unarchive zips using:
 `FOR /R %a IN (*.zip) DO "C:\Program Files\7-Zip\7z.exe" x "%a" -y`
+* [Online SHA1 Hash Generator](http://hash.online-convert.com/sha1-generator)
 
 ## Caveats
 * This repo will be updated only when I have the time.
