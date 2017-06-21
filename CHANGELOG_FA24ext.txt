@@ -1,3 +1,4 @@
+2017-06-21  Ap.Muthu  Corrected GB general Chart of Accounts for FA v2.4.1 
 2017-06-19  Ap.Muthu  Dashboard Theme default.css - removed trailing */
 2017-06-19  Ap.Muthu  Theme greyred => grayred to match code
 2017-06-17  Ap.Muthu  Initial Import from official FA 2.4 extensions distribution repo
