@@ -1,21 +1,20 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Language: Romanian\n"
+"X-Poedit-Country: ROMANIA\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -909,7 +908,7 @@ msgstr "Da"
 msgid ""
 "You are about to remove company \\'%s\\'.\n"
 "Do you want to continue ?"
-msgstr "Veti anula acest document.\\nContinuati?"
+msgstr "Veti anula acest document.\nContinuati?"
 
 #: /admin/create_coy.php:274
 msgid "The marked company is the current company which cannot be deleted."
@@ -7854,7 +7853,7 @@ msgstr "Articole"
 msgid ""
 "Entered data has not been saved yet.\n"
 "Do you want to abandon changes?"
-msgstr "Informatiile introduse nu au fost salvate.\\nAbandonati modificarile?"
+msgstr "Informatiile introduse nu au fost salvate.\nAbandonati modificarile?"
 
 #: /includes/ui/ui_input.inc:656 /reporting/includes/reports_classes.inc:223
 msgid "Click Here to Pick up the date"
@@ -13305,7 +13304,7 @@ msgstr "Facturi recurente"
 msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
-msgstr "Veti anula acest document.\\nContinuati?"
+msgstr "Veti anula acest document.\nContinuati?"
 
 #: /sales/create_recurrent_invoices.php:203
 #: /sales/manage/recurrent_invoices.php:128
@@ -14310,8 +14309,8 @@ msgid ""
 msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
-msgstr "Veti anula acest document.\\nContinuati?"
+msgid "You are about to void this Document.\nDo you want to continue?"
+msgstr "Veti anula acest document.\nContinuati?"
 
 #: /sales/sales_order_entry.php:754
 msgid "Validate changes and update document"
@@ -14320,9 +14319,9 @@ msgstr "Validati modificarile si actualizati documentul"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
-msgstr "Veti anula acest document.\\nContinuati?"
+msgstr "Veti anula acest document.\nContinuati?"
 
 #: /sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"

@@ -6,17 +6,15 @@ msgstr ""
 "PO-Revision-Date: 2009-11-30 17:07+0100\n"
 "Last-Translator: Translation Team <info@frontaccounting.net>\n"
 "Language-Team: ESPAÑOL <LL@li.org>\n"
-"Language: \n"
+"Language: es_CO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.5\n"
-"X-Poedit-Language: Spanish\n"
-"X-Poedit-Country: COLOMBIA\n"
-"X-Poedit-Basepath: c:/Apache2/htdocs/account22\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-SearchPath-0: c:/Apache2/htdocs/account22\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: COLOMBIA\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -16605,7 +16603,7 @@ msgid ""
 msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
+msgid "You are about to void this Document.\nDo you want to continue?"
 msgstr ""
 
 #: /sales/sales_order_entry.php:754
@@ -16614,7 +16612,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
 msgstr ""
 

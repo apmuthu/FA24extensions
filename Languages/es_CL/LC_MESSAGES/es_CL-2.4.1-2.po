@@ -1,11 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# VICTOR RODRIGUEZ <Caribe95@gmail.com>, 2012.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: es_CL 2.3.17\n"
+"Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2013-08-10 12:44-0300\n"
@@ -15,11 +10,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: c:/Apache2/htdocs/account22\n"
-"X-Poedit-KeywordsList: _\n"
 "X-Generator: Poedit 1.5.4\n"
-"X-Poedit-SearchPath-0: c:/Apache2/htdocs/account22\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: CHILE\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -8040,7 +8035,7 @@ msgid ""
 "Entered data has not been saved yet.\n"
 "Do you want to abandon changes?"
 msgstr ""
-"Datos ingresados no han sido aun guardados.\\nDesea abandonar los cambios?"
+"Datos ingresados no han sido aun guardados.\nDesea abandonar los cambios?"
 
 #: /includes/ui/ui_input.inc:656 /reporting/includes/reports_classes.inc:223
 msgid "Click Here to Pick up the date"
@@ -14687,7 +14682,7 @@ msgstr ""
 "un documento antiguo"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
+msgid "You are about to void this Document.\nDo you want to continue?"
 msgstr ""
 "Está a punto de anular este Documento. \n"
 "¿Desea continuar?"
@@ -14698,10 +14693,10 @@ msgstr "Validar los cambios y actualizar el documento"
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
 msgstr ""
-"Está a punto de cancelar la parte no despachada de esta orden. \\n¿Desea "
+"Está a punto de cancelar la parte no despachada de esta orden. \n¿Desea "
 "continuar?"
 
 #: /sales/allocations/customer_allocate.php:28

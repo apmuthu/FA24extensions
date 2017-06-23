@@ -1,20 +1,18 @@
-# Front Accounting internationalization file.
-# Copyright (C) 2007-2008 Front Accounting Team
-# This file is distributed under the same license as the Front Accounting package.
-# Janusz Dobrowolski <janusz@iron.from.pl>, 2010.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.0\n"
+"Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2011-01-13 12:05+0100\n"
 "Last-Translator: Janusz Dobrowolski <janusz@iron.from.pl>\n"
-"Language-Team: \n"
-"Language: \n"
+"Language-Team: Janusz Dobrowolski <janusz@iron.from.pl>\n"
+"Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: Poland\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -7990,7 +7988,7 @@ msgid ""
 "Entered data has not been saved yet.\n"
 "Do you want to abandon changes?"
 msgstr ""
-"Wprowadzone dane nie zosta³y jeszcze zapisane.\\nCzy chcesz porzuciæ zmiany?"
+"Wprowadzone dane nie zosta³y jeszcze zapisane.\nCzy chcesz porzuciæ zmiany?"
 
 #: /includes/ui/ui_input.inc:656 /reporting/includes/reports_classes.inc:223
 msgid "Click Here to Pick up the date"
@@ -13595,7 +13593,7 @@ msgstr "Faktury Okresowe"
 msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
-msgstr "Zamierzasz anulowaæ ten dokument.\\nCzy chcesz kontynuowaæ?"
+msgstr "Zamierzasz anulowaæ ten dokument.\nCzy chcesz kontynuowaæ?"
 
 #: /sales/create_recurrent_invoices.php:203
 #: /sales/manage/recurrent_invoices.php:128
@@ -14612,8 +14610,8 @@ msgid ""
 msgstr "Porzuæ wprowadzanie lub usuñ edytowane zamówienie"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
-msgstr "Zamierzasz anulowaæ ten dokument.\\nCzy chcesz kontynuowaæ?"
+msgid "You are about to void this Document.\nDo you want to continue?"
+msgstr "Zamierzasz anulowaæ ten dokument.\nCzy chcesz kontynuowaæ?"
 
 #: /sales/sales_order_entry.php:754
 msgid "Validate changes and update document"
@@ -14622,9 +14620,9 @@ msgstr "Sprawd¼ zmiany i zapisz dokument"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
-msgstr "Zamierzasz anulowaæ ten dokument.\\nCzy chcesz kontynuowaæ?"
+msgstr "Zamierzasz anulowaæ ten dokument.\nCzy chcesz kontynuowaæ?"
 
 #: /sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"

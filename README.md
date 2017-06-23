@@ -24,8 +24,10 @@ These FA extensions comprise:
 * Windows users can bulk unarchive zips using:
 `FOR /R %a IN (*.zip) DO "C:\Program Files\7-Zip\7z.exe" x "%a" -y`
 * [Online SHA1 Hash Generator](http://hash.online-convert.com/sha1-generator)
+* [Online SHA1 checksum](https://emn178.github.io/online-tools/sha1_checksum.html)
 
 ## Caveats
 * This repo will be updated only when I have the time.
 * Files here are provided without any warranty / claims / support whatsoever.
 * All copyrights remain those of the respective authors / FA Project.
+

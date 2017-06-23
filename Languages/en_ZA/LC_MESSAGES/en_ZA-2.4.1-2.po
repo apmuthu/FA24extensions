@@ -1,11 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: en_ZA-1.0.1\n"
+"Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2013-08-16 14:18+0200\n"
@@ -17,6 +12,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: South Africa\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -14098,7 +14096,7 @@ msgid ""
 msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
+msgid "You are about to void this Document.\nDo you want to continue?"
 msgstr ""
 
 #: /sales/sales_order_entry.php:754
@@ -14107,7 +14105,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
 msgstr ""
 

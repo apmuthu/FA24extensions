@@ -1,22 +1,20 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: FrontAccounting - Indonesian for 2.3.19\n"
+"Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2014-03-01 18:46+0700\n"
-"Last-Translator: Y. SHaka <yshaka@yahoo.co.id>\n"
+"Last-Translator: Y. Shaka <yshaka@yahoo.co.id>\n"
 "Language-Team: Y. Shaka <yshaka@gmail.com>\n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Language: Bahasa Indonesia\n"
+"X-Poedit-Country: INDONESIA\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -7960,7 +7958,7 @@ msgstr "Barang"
 msgid ""
 "Entered data has not been saved yet.\n"
 "Do you want to abandon changes?"
-msgstr "Data yang dimasukkan belum disimpan.\\nBatalkan perubahan?"
+msgstr "Data yang dimasukkan belum disimpan.\nBatalkan perubahan?"
 
 #: /includes/ui/ui_input.inc:656 /reporting/includes/reports_classes.inc:223
 msgid "Click Here to Pick up the date"
@@ -13515,7 +13513,7 @@ msgstr "Tagihan Berulang"
 msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
-msgstr "Anda akan membatalkan dokumen ini (void).\\nLakukan?"
+msgstr "Anda akan membatalkan dokumen ini (void).\nLakukan?"
 
 #: /sales/create_recurrent_invoices.php:203
 #: /sales/manage/recurrent_invoices.php:128
@@ -14522,8 +14520,8 @@ msgstr ""
 "lama"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
-msgstr "Anda akan membatalkan dokumen ini (void).\\nLakukan?"
+msgid "You are about to void this Document.\nDo you want to continue?"
+msgstr "Anda akan membatalkan dokumen ini (void).\nLakukan?"
 
 #: /sales/sales_order_entry.php:754
 msgid "Validate changes and update document"
@@ -14531,10 +14529,10 @@ msgstr "Validasi perubahan dan simpan dokumen"
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
 msgstr ""
-"Anda akan membatalkan part yang belum terkirim pada order ini.\\nLakukan?"
+"Anda akan membatalkan part yang belum terkirim pada order ini.\nLakukan?"
 
 #: /sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"

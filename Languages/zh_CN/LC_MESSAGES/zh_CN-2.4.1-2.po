@@ -1,24 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
-# This file is distributed under the same license as the FrontAccounting package.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2011-02-13 21:53+0800\n"
-"Last-Translator: felixye <felix@mixpwr.com>\n"
+"Last-Translator: Felixye <felix@mixpwr.com>\n"
 "Language-Team: www.mixpwr.com\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-KeywordsList: _\n"
 "X-Poedit-Language: Simplified Chinese\n"
 "X-Poedit-Country: China\n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Poedit-Basepath: c:/Apache2/htdocs/account22\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Poedit-SearchPath-0: c:/Apache2/htdocs/account22\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -1030,7 +1025,7 @@ msgstr "是"
 msgid ""
 "You are about to remove company \\'%s\\'.\n"
 "Do you want to continue ?"
-msgstr "您将要作废此文件。\\n您要继续吗？"
+msgstr "您将要作废此文件。\n您要继续吗？"
 
 # c:/Apache2/htdocs/account/admin/create_coy.php:183
 #: /admin/create_coy.php:274
@@ -15865,7 +15860,7 @@ msgstr "周期性发票"
 msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
-msgstr "您将要作废此文件。\\n您要继续吗？"
+msgstr "您将要作废此文件。\n您要继续吗？"
 
 #: /sales/create_recurrent_invoices.php:203
 #: /sales/manage/recurrent_invoices.php:128
@@ -17015,8 +17010,8 @@ msgid ""
 msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
-msgstr "您将要作废此文件。\\n您要继续吗？"
+msgid "You are about to void this Document.\nDo you want to continue?"
+msgstr "您将要作废此文件。\n您要继续吗？"
 
 #: /sales/sales_order_entry.php:754
 #, fuzzy
@@ -17026,9 +17021,9 @@ msgstr "验证变化和更新文档"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
-msgstr "您将要作废此文件。\\n您要继续吗？"
+msgstr "您将要作废此文件。\n您要继续吗？"
 
 # c:/Apache/htdocs/account/sales/allocations/customer_allocate.php:8
 #: /sales/allocations/customer_allocate.php:28

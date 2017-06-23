@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FrontAccounting nl_NL (versie 8 January 2012)\n"
+"Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2014-02-04 20:32+0100\n"
@@ -10,13 +10,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Poedit-Basepath: c:\\Apache2\\htdocs\\account22\n"
 "X-Poedit-Bookmarks: 1369,1432,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-KeywordsList: _\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
-"X-Poedit-SearchPath-0: c:\\Apache2\\htdocs\\account22\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -8032,7 +8032,7 @@ msgid ""
 "Entered data has not been saved yet.\n"
 "Do you want to abandon changes?"
 msgstr ""
-"De ingevoerde gegevens gegevens zijn nog niet opgeslagen.\\nWeet u zeker dat "
+"De ingevoerde gegevens gegevens zijn nog niet opgeslagen.\nWeet u zeker dat "
 "u wilt annuleren?"
 
 #: /includes/ui/ui_input.inc:656 /reporting/includes/reports_classes.inc:223
@@ -13630,7 +13630,7 @@ msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
 msgstr ""
-"U staat op het punt om dit document terug te draaien.\\nWeet u zeker dat u "
+"U staat op het punt om dit document terug te draaien.\nWeet u zeker dat u "
 "wilt doorgaan?"
 
 #: /sales/create_recurrent_invoices.php:203
@@ -14652,9 +14652,9 @@ msgstr ""
 "document wordt gewijzigd."
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
+msgid "You are about to void this Document.\nDo you want to continue?"
 msgstr ""
-"U staat op het punt om dit document terug te draaien.\\nWeet u zeker dat u "
+"U staat op het punt om dit document terug te draaien.\nWeet u zeker dat u "
 "wilt doorgaan?"
 
 #: /sales/sales_order_entry.php:754
@@ -14663,10 +14663,10 @@ msgstr "Valideer uw wijzigingen en voer deze door."
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
 msgstr ""
-"U staat op het punt om een gedeelte van deze order te annuleren.\\nWeet u "
+"U staat op het punt om een gedeelte van deze order te annuleren.\nWeet u "
 "zeker dat u wilt doorgaan?"
 
 #: /sales/allocations/customer_allocate.php:28

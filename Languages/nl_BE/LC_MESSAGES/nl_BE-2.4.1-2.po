@@ -12,11 +12,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-KeywordsList: _\n"
 "X-Poedit-Language: Dutch\n"
 "X-Poedit-Country: BELGIUM\n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Poedit-Basepath: c:\\Apache2\\htdocs\\account21\n"
-"X-Poedit-SearchPath-0: c:\\Apache2\\htdocs\\account21\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -13784,7 +13783,7 @@ msgstr "Wederkerende facturen"
 msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
-msgstr "U gaat dit document annuleren.\\nWilt u verder gaan?"
+msgstr "U gaat dit document annuleren.\nWilt u verder gaan?"
 
 #: /sales/create_recurrent_invoices.php:203
 #: /sales/manage/recurrent_invoices.php:128
@@ -14820,8 +14819,8 @@ msgstr ""
 "document wordt aangepast"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
-msgstr "U gaat dit document annuleren.\\nWilt u verder gaan?"
+msgid "You are about to void this Document.\nDo you want to continue?"
+msgstr "U gaat dit document annuleren.\nWilt u verder gaan?"
 
 #: /sales/sales_order_entry.php:754
 msgid "Validate changes and update document"
@@ -14830,9 +14829,9 @@ msgstr "Aanvaard de veranderingen en pas het document aan"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
-msgstr "U gaat deze extensie verwijderen.\\nWilt u verder gaan?"
+msgstr "U gaat deze extensie verwijderen.\nWilt u verder gaan?"
 
 #: /sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"

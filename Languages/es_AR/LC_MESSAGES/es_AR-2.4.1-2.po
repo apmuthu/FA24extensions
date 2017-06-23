@@ -1,22 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: es_AR\n"
+"Project-Id-Version: FrontAccounting\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2009-11-30 17:02+0100\n"
 "Last-Translator: Translation Team <info@frontaccounting.net>\n"
 "Language-Team: Español <en@li.org>\n"
-"Language: \n"
+"Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-KeywordsList: _\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: ARGENTINA\n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Poedit-Basepath: c:/Apache2/htdocs/account22\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Generator: KBabel 1.11.4\n"
-"X-Poedit-SearchPath-0: c:/Apache2/htdocs/account22\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -14104,7 +14102,7 @@ msgstr "Facturas Periódicas"
 msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
-msgstr "Se anulará este Pedido. \\nQuiere Continuar?"
+msgstr "Se anulará este Pedido. \nQuiere Continuar?"
 
 #: /sales/create_recurrent_invoices.php:203
 #: /sales/manage/recurrent_invoices.php:128
@@ -15171,8 +15169,8 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
 #, fuzzy
-msgid "You are about to void this Document.\\nDo you want to continue?"
-msgstr "Se anulará este Pedido. \\nQuiere Continuar?"
+msgid "You are about to void this Document.\nDo you want to continue?"
+msgstr "Se anulará este Pedido. \nQuiere Continuar?"
 
 #: /sales/sales_order_entry.php:754
 msgid "Validate changes and update document"
@@ -15181,9 +15179,9 @@ msgstr "Confirmar cambios y actualizar documento"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
-msgstr "Se anulará este Pedido. \\nQuiere Continuar?"
+msgstr "Se anulará este Pedido. \nQuiere Continuar?"
 
 #: /sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"

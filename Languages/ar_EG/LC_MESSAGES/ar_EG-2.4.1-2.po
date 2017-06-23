@@ -4,16 +4,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2012-09-04 14:10+0400\n"
-"Last-Translator: \n"
-"Language-Team: www.infotechaccountants.com/forums <admin@infotechaccountants."
-"com>\n"
+"Last-Translator: InfoTechAccountants <http://www.infotechaccountants.com>\n"
+"Language-Team: InfoTechAccountants <admin@infotechaccountants.com>\n"
 "Language: ar_EG\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-Basepath: c:\\Apache2\\htdocs\\account228\n"
-"X-Poedit-SearchPath-0: c:\\Apache2\\htdocs\\account228\n"
+"X-Poedit-Language: Arabic\n"
+"X-Poedit-Country: EGYPT\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -14594,7 +14593,7 @@ msgid ""
 msgstr "إلغاء إدخال المستند أو حذف طلب المبيعات عندما يتم تحرير مستند قديم"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
+msgid "You are about to void this Document.\nDo you want to continue?"
 msgstr "أنت بصدد إلغاء هذا المستند . هل تريد أن تستمر ؟"
 
 #: /sales/sales_order_entry.php:754
@@ -14604,7 +14603,7 @@ msgstr "المصادقة على التغييرات و تحديث المستند"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
 msgstr "أنت بصدد حذف هذا الإمتداد البرمجي ، هل تريد أن تستمر ؟"
 

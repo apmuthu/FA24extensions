@@ -10,12 +10,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-KeywordsList: _\n"
 "X-Poedit-Language: English\n"
 "X-Poedit-Country: UNITED STATES\n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Poedit-Basepath: c:/Apache2/htdocs/account22\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Poedit-SearchPath-0: c:/Apache2/htdocs/account22\n"
 
 # c:/Apache/htdocs/account/OpenAccounting.php:59
 # c:/Apache/htdocs/account/OpenAccounting.php:60
@@ -16359,7 +16357,7 @@ msgid ""
 msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\\nDo you want to continue?"
+msgid "You are about to void this Document.\nDo you want to continue?"
 msgstr ""
 
 #: /sales/sales_order_entry.php:754
@@ -16368,7 +16366,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\\nDo you want to "
+"You are about to cancel undelivered part of this order.\nDo you want to "
 "continue?"
 msgstr ""
 
