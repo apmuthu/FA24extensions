@@ -1,3 +1,4 @@
+2017-06-24  Ap.Muthu  Charts Finsihed => Finished
 2017-06-24  Ap.Muthu  Single line comment in css not quite a comment
 2017-06-23  Ap.Muthu  Language .po files corrected for '\\n' => '\n' 
 2017-06-21  Ap.Muthu  Corrected GB general Chart of Accounts for FA v2.4.1 
