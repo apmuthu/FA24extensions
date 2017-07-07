@@ -198,10 +198,11 @@ function journal_bank_trans($type, $reference, $date, $bank_account, $bank_accou
     display_notification_centered(_("Added to table 'bank_trans': $curEntryId, $bank_account, $reference, $date, $amt, $person_type_id, $person_id (line $line in import file '{$_FILES['imp']['name']}')"));
 
     if ($first) {
-	// To eliminate the need for importing customer invoices:
+	// To keep customer and supplier accounts at zero after import of transactions, set
 	 	$zero_trans=0;
 	// Otherwise:
 	//	$zero_trans=$amt;
+	// (But then you will have to create invoices and purchase orders to zero them out).
             if ($person_type_id == PT_CUSTOMER) {
                 write_customer_trans($type, $curEntryId, $person_id, $BranchNo, $date, $reference, $zero_trans);
 	        if ($amt > 0)
@@ -211,7 +212,7 @@ function journal_bank_trans($type, $reference, $date, $bank_account, $bank_accou
 
 	    }
             if ($person_type_id == PT_SUPPLIER) {
-                write_supp_trans($type, $curEntryId, $person_id, $date, $due_date = "", $reference, $supp_reference = "", $amt, $amount_tax = 0, $discount = 0);
+                write_supp_trans($type, $curEntryId, $person_id, $date, $due_date = "", $reference, $supp_reference = "", $zero_trans, $amount_tax = 0, $discount = 0);
 	        if ($amt < 0)
 		    display_notification_centered(_("Added to table 'supp_trans' Debit: Supplier paid -$amt (line $line in import file '{$_FILES['imp']['name']}')"));
 	        else
@@ -568,29 +569,27 @@ function journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $co
 //Output the last typeno for general ledger related transactions using table gl_trans.
 function last_transno($type) {
     //'get last row's typeno since type_no is the trans no'
-    if ($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT) {
-        $sql = "SELECT id, type, trans_no, amount FROM " . TB_PREF . "bank_trans ORDER BY id DESC LIMIT 1";
+    if ($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT || $type == ST_BANKTRANSFER)
+    {
+        $sql = "SELECT id, `type`, trans_no, amount FROM ".TB_PREF."bank_trans WHERE `type` =".$type." ORDER BY id DESC LIMIT 1";
         $result = db_query($sql, _("Cannot locate last entry"));
-        if (db_num_rows($result) != 0) {
-            $row = db_fetch_assoc($result);
-            return $row['trans_no'];
-        }
+        $row = db_fetch_assoc($result);
+        return $row['trans_no'];        
     } // end if
     else if ($type == ST_JOURNAL) {
         $sql = "SELECT counter, type, type_no, amount FROM " . TB_PREF . "gl_trans ORDER BY counter DESC LIMIT 1";
         $result = db_query($sql, _("Cannot locate last entry"));
-        if (db_num_rows($result) != 0) {
-            $row = db_fetch_assoc($result);
-            return $row['type_no'];
-        }
+        $row = db_fetch_assoc($result);
+        return $row['type_no'];        
     } // end if
-    else if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
-        $sql = "SELECT trans_no,type FROM " . TB_PREF . "debtor_trans ORDER BY trans_no DESC LIMIT 1";
-        $result = db_query($sql, _("Cannot locate last entry"));
-        if (db_num_rows($result) != 0) {
+
+    if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE))
+    {
+         
+            $sql = "SELECT trans_no, `type` FROM ".TB_PREF."debtor_trans WHERE `type` =".$type." ORDER BY trans_no DESC LIMIT 1";
+            $result = db_query($sql, _("Cannot locate last entry"));
             $row = db_fetch_assoc($result);
-            return $row['trans_no'];
-        }
+            return $row['trans_no'];     
     }
     return 0; // empty file
     
