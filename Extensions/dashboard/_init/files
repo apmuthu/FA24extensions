@@ -1,7 +1,7 @@
 /dashboard_setup.php: 0a3d4036df0e865405da599534247757129873fe
 /dashboard.php: d52650a62ca84c2695bbe8790904b703ea1dba63
 /readme.txt: 72fe4fe635b69186653ab49c28517a39fdaae24a
-/reminder_setup.php: 05f4675318cba152200612e642257c9ee08dbff7
+/reminder_setup.php: 0d25e731ddb9ecdfd18dfeb038429ecc8a6e0071
 /widgets/customers.php: 88dfe69350aa7a47bf9003c379b192e453036f5c
 /widgets/salesinvoices.php: bb552cecebfccf2f50e7c642073db61d10a6f415
 /widgets/weeklysales.php: 2072f72554aeeb80081cabc430819cb04c2d8c1a
@@ -19,7 +19,7 @@
 /widgets/bankbalances.php: dcf029253b7a691ae4ba2cabedb62fa16c58b988
 /_init/config: 3866b68ed9ad24106fb4dd74834edaef22ac204a
 /includes/dashboard_db.inc: 39466b70fd56acce243b55c160e6a20b6f387cf8
-/includes/dashboard_ui.inc: d895cbcefcc786d251b1119ee1933b7a4a97d871
+/includes/dashboard_ui.inc: 2b397a6c8a60fbad8ecd455e1923eeb9c3db4d90
 /includes/index.php: ecaa5f0560883d40dc7508073f57abef01cb438b
 /completedreminder.php: 706fab14181017f6f20de133bc4db984c6047b32
 /sql/update.sql: 4b61635b2acc118030ee8fbfb2fb8dba266dbe37
