@@ -72,7 +72,8 @@ function osc_get_country($osc, $country_id) {
 
 function osc_address_format($osc, $data, $pre) {
     $company = $data[$pre . 'company'];
-    if (not_null($data[$pre . 'name'])) $name = $data[$pre . 'name'];
+    // if (not_null($data[$pre . 'name'])) $name = $data[$pre . 'name'];
+    if (!empty($data[$pre . 'name'])) $name = $data[$pre . 'name'];
     else $name = $data[$pre . 'firstname'] . ' ' . $data[$pre . 'lastname'];
     $street_address = $data[$pre . 'street_address'];
     $suburb = $data[$pre . 'suburb'];
@@ -81,7 +82,7 @@ function osc_address_format($osc, $data, $pre) {
     // $state = $data[$pre . 'state'];
     if (not_null($data[$pre . 'state'])) $state = $data[$pre . 'state'];
     else if (not_null($data[$pre . 'zone_id'])) $state = osc_get_zone_code_from_id($osc, $data[$pre . 'zone_id']);
-    if (not_null($data[$pre . 'country_id'])) $country = osc_get_country($osc, $data[$pre . 'country_id']);
+    if (!empty($data[$pre . 'country_id'])) $country = osc_get_country($osc, $data[$pre . 'country_id']);
     else $country = $data[$pre . 'country'];
 
     $ret = '';
@@ -141,6 +142,8 @@ $dbHost = "";
 $dbUser = "";
 $dbPassword = "";
 $dbName = "";
+$oscId="products_model";
+$oscPrefix="";
 $lastcid = 0;
 $lastoid = 0;
 $defaultTaxGroup = 0;
@@ -149,6 +152,8 @@ $db_Host = "";
 $db_User = "";
 $db_Password = "";
 $db_Name = "";
+$osc_Id="products_model";
+$osc_Prefix="";
 $last_cid = 0;
 $last_oid = 0;
 $default_TaxGroup = 0;
@@ -177,6 +182,18 @@ if ($found) {
     $result = db_query($sql, "could not get DB name");
     $row = db_fetch_row($result);
     $db_Name = $row[1];
+
+    // Get item prefix
+    $sql = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'osc_prefix'";
+    $result = db_query($sql, "could not get osc_prefix");
+    $row = db_fetch_row($result);
+    $osc_Prefix = $row[1];
+
+    // Get item prefix
+    $sql = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'osc_id'";
+    $result = db_query($sql, "could not get osc_id");
+    $row = db_fetch_row($result);
+    $osc_Id = $row[1];
 
     // Get last cID imported
     $sql = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastcid'";
@@ -226,7 +243,7 @@ if (isset($_POST['action'])) {
 	$sql = "DROP TABLE IF EXISTS ".TB_PREF."oscommerce";
 	db_query($sql, "Error dropping table");
 	$sql = "CREATE TABLE ".TB_PREF."oscommerce ( `name` char(15) NOT NULL default '', " .
-  	       " `value` varchar(100) NOT NULL default '', PRIMARY KEY  (`name`)) TYPE=MyISAM";
+  	       " `value` varchar(100) NOT NULL default '', PRIMARY KEY  (`name`)) ENGINE=MyISAM";
 	db_query($sql, "Error creating table");
         header("Location: osCommerce.php?action=show");
     }
@@ -235,53 +252,69 @@ if (isset($_POST['action'])) {
         if (isset($_POST['dbUser'])) $dbUser = $_POST['dbUser'];
         if (isset($_POST['dbPassword'])) $dbPassword = $_POST['dbPassword'];
         if (isset($_POST['dbName'])) $dbName = $_POST['dbName'];
+        if (isset($_POST['oscId'])) $oscId = $_POST['oscId'];
+        if (isset($_POST['oscPrefix'])) $oscPrefix = $_POST['oscPrefix'];
         if (isset($_POST['lastcid'])) $lastcid = $_POST['lastcid'];
         if (isset($_POST['lastoid'])) $lastoid = $_POST['lastoid'];
         if (isset($_POST['taxgroup'])) $defaultTaxGroup = $_POST['taxgroup'];
 
-        if ($dbHost != $db_Host) { // It changd
+        if ($dbHost != $db_Host) { // It changed
             if ($dbHost == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'myhost'";
             else if ($db_Host == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('myhost', '" . $dbHost . "')";
 	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = '" . $dbHost . "' WHERE name = 'myhost'";
 	    db_query($sql, "Update 'myhost'");
 	}
 
-        if ($dbUser != $db_User) { // It changd
+        if ($dbUser != $db_User) { // It changed
             if ($dbUser == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'myuser'";
             else if ($db_User == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('myuser', '" . $dbUser . "')";
 	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = '" . $dbUser . "' WHERE name = 'myuser'";
 	    db_query($sql, "Update 'myuser'");
 	}
 
-        if ($dbPassword != $db_Password) { // It changd
+        if ($dbPassword != $db_Password) { // It changed
             if ($dbPassword == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'mypassword'";
             else if ($db_Password == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('mypassword', '" . $dbPassword . "')";
 	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = '" . $dbPassword . "' WHERE name = 'mypassword'";
 	    db_query($sql, "Update 'mypassword'");
 	}
 
-        if ($dbName != $db_Name) { // It changd
+        if ($dbName != $db_Name) { // It changed
             if ($dbName == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'myname'";
             else if ($db_Name == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('myname', '" . $dbName . "')";
 	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = '" . $dbName . "' WHERE name = 'myname'";
 	    db_query($sql, "Update 'myname'");
         }
 
-        if ($lastcid != $last_cid) { // It changd
+        if ($oscId != $osc_Id) { // It changed
+            if ($oscId == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'osc_id'";
+            else if ($osc_Id == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('osc_id', '" . $oscId . "')";
+	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = '" . $oscId . "' WHERE name = 'osc_id'";
+	    db_query($sql, "Update 'osc_id'");
+        }
+
+        if ($oscPrefix != $osc_Prefix) { // It changed
+            if ($oscPrefix == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'osc_prefix'";
+            else if ($osc_Prefix == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('osc_prefix', '" . $oscPrefix . "')";
+	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = '" . $oscPrefix . "' WHERE name = 'osc_prefix'";
+	    db_query($sql, "Update 'osc_prefix'");
+        }
+
+        if ($lastcid != $last_cid) { // It changed
             if ($lastcid == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'lastcid'";
             else if ($last_cid == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastcid', $lastcid)";
 	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = $lastcid WHERE name = 'lastcid'";
 	    db_query($sql, "Update 'lastcid'");
 	}
 
-        if ($lastoid != $last_oid) { // It changd
+        if ($lastoid != $last_oid) { // It changed
             if ($lastoid == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'lastoid'";
             else if ($last_oid == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastoid', $lastoid)";
 	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = $lastoid WHERE name = 'lastoid'";
 	    db_query($sql, "Update 'lastoid'");
 	}
 
-        if ($defaultTaxGroup != $default_TaxGroup) { // It changd
+        if ($defaultTaxGroup != $default_TaxGroup) { // It changed
             if ($defaultTaxGroup == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'taxgroup'";
             else if ($default_TaxGroup == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('taxgroup', $defaultTaxGroup)";
 	    else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = $defaultTaxGroup WHERE name = 'taxgroup'";
@@ -293,10 +326,14 @@ if (isset($_POST['action'])) {
         $dbUser = $db_User;
         $dbPassword = $db_Password;
         $dbName = $db_Name;
+        $oscId = $osc_Id;
+        $oscPrefix = $osc_Prefix;
         $lastcid = $last_cid;
         $lastoid = $last_oid;
         $defaultTaxGroup = $default_TaxGroup;
     }
+
+
     if ($action == 'c_import') {
 		if (!check_num('credit_limit', 0)) {
 			display_error(_("The credit limit must be numeric and not less than zero."));
@@ -308,7 +345,7 @@ if (isset($_POST['action'])) {
         if (isset($_POST['max_cid'])) $max_cid = $_POST['max_cid'];
 
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword);
+        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
 
         if (!$osc) display_notification("Failed to connect osCommerce Database");
         else {
@@ -339,11 +376,13 @@ if (isset($_POST['action'])) {
                 $row = db_fetch_assoc($result);
     
                 if (!$row) {
-					add_customer($name, $name, $addr, $tax_id, $currency, $_POST['dimension_id'], $_POST['dimension2_id'], 1, $_POST['payment_terms'], 0, 0, input_num('credit_limit'), $_POST['sales_type'], NULL);
+			add_customer($name, $name, $addr, $tax_id, $currency, $_POST['dimension_id'], $_POST['dimension2_id'], 1, $_POST['payment_terms'], 0, 0, input_num('credit_limit'), $_POST['sales_type'], NULL);
+                    $id = db_insert_id();
+
                     if ($debug_sql) display_notification("INSERT DM " . $sql);
                     db_query($sql, "The customer could not be added");
-                    $id = db_insert_id();
-					add_branch($id, $name, $name, $addr, $_POST['salesman'], $area_code, $taxgid, $_POST['sales_account'], $_POST['sales_discount_account'], $_POST['receivables_account'], $_POST['payment_discount_account'], $_POST['default_location'], $addr, 0, 0, 1, NULL);
+
+			add_branch($id, $name, $name, $addr, $_POST['salesman'], $area_code, $taxgid, $_POST['sales_account'], $_POST['sales_discount_account'], $_POST['receivables_account'], $_POST['payment_discount_account'], $_POST['default_location'], $addr, 0, 0, 1, NULL);
                     if ($debug_sql) display_notification("INSERT BR " . $sql);
             		display_notification("Added New Customer $name");
 
@@ -370,7 +409,7 @@ if (isset($_POST['action'])) {
 	    	$last_oid = 0;
 		}
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword);
+        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
 		else {
 	    	if (!$one_database) mysql_select_db($dbName, $osc);
@@ -391,10 +430,10 @@ if (isset($_POST['action'])) {
 					if (not_null($row['comments'])) $comments .= $row['comments'] . "\n";
 				}
 				mysql_free_result($result);
-				// print_r($order);
+				////  print_r($order);
 				// print_r($order_total);
 				$sql = "SELECT * FROM ".TB_PREF."debtors_master where name=" . db_escape($order['customers_name']);
-				$result = db_query($sql, "Cold not find customer by name");
+				$result = db_query($sql, "Could not find customer by name");
 				// echo "Found " . db_num_rows($result);
 				if (db_num_rows($result) == 0) {
 					display_notification("Customer " . db_escape($order['customers_name']) . " not found");
@@ -414,7 +453,7 @@ if (isset($_POST['action'])) {
 		    		$result = db_query($sql, "could not find any customer branch");
 		    		$old_branch = db_fetch_assoc($result);
 					if ($debug_sql) print_r($old_branch);
-					add_branch($debtor_no, $old_branch['br_name'], $old_braanch['branch_ref'], $addr, $old_branch['salesman'], $old_branch['area'], $taxgid, $old_branch['sales_account'], $old_branch['sales_discount_account'], $old_branch['receivables_account'], $old_branch['payment_discount_account'], $old_branch['default_location'], $addr, 0, 0, 1, $old_branch['notes']);
+					add_branch($debtor_no, $old_branch['br_name'], $old_branch['branch_ref'], $addr, $old_branch['salesman'], $old_branch['area'], $taxgid, $old_branch['sales_account'], $old_branch['sales_discount_account'], $old_branch['receivables_account'], $old_branch['payment_discount_account'], $old_branch['default_location'], $addr, 0, 0, 1, $old_branch['notes']);
                     $id = db_insert_id();
 					$sql = "SELECT * FROM ".TB_PREF."cust_branch WHERE branch_code = $id";
                 	if ($debug_sql) display_notification("Get BR " . $sql);
@@ -435,8 +474,8 @@ if (isset($_POST['action'])) {
 				$cart->ship_via = $branch['default_ship_via'];
 				$cart->deliver_to = $branch['br_name'];
 				$cart->delivery_address = $branch['br_address'];
-				$cart->phone = $branch['phone'];
-				$cart->email = $branch['email'];
+				$cart->phone = $order['customers_telephone'];
+				$cart->email = $order['customers_email_address'];
 				$cart->freight_cost = $order_total['value'];
 				$cart->Location = $branch['default_location'];
 				$cart->due_date = Today();
@@ -444,7 +483,7 @@ if (isset($_POST['action'])) {
 				$result = mysql_query($sql, $osc);
 				$lines = array();
 				while ($prod = mysql_fetch_assoc($result)) {
-		    		add_to_order($cart, $prod['products_model'], $prod['products_quantity'], $prod['products_price'], $customer['pymt_discount']);
+		    		add_to_order($cart, $osc_Prefix . $prod[$osc_Id], $prod['products_quantity'], $prod['products_price'], $customer['pymt_discount']);
 				}
 				mysql_free_result($result);
 				$order_no = $cart->write(0);
@@ -460,11 +499,11 @@ if (isset($_POST['action'])) {
     }
     if ($action == 'p_check') { // Price Check
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword);
+        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
 		else {
 	    	if (!$one_database) mysql_select_db($dbName, $osc);
-	    	$sql = "SELECT products_model, products_price FROM products WHERE products_status = 1";
+	    	$sql = "SELECT " . $osc_Id . ", products_price FROM products WHERE products_status = 1";
 	    	// echo $sql;
 	    	$p_result = mysql_query($sql, $osc);
 	    	$currency = $_POST['currency'];
@@ -472,13 +511,13 @@ if (isset($_POST['action'])) {
 	    	$num_price_errors = 0;
 	    	while ($pp = mysql_fetch_assoc($p_result)) {
             	$price = $pp['products_price'];
-            	$model = $pp['products_model'];
+            	$osc_id = $osc_Prefix . $pp[$osc_Id];
 				$myprice = false;
-				$myprice = get_kit_price($model, $currency, $sales_type);
+				$myprice = get_kit_price($osc_id, $currency, $sales_type);
 				if ($myprice === false) {
-					display_notification("$model price not found in FA");
+					display_notification("$osc_id price not found in FA");
 				} else if ($price != $myprice) {
-		    		display_notification("$model Prices do not match FA $myprice osC $price");
+		    		display_notification("$osc_id Prices do not match FA $myprice osC $price");
 		    		$num_price_errors++;
 				}
         	}
@@ -487,24 +526,24 @@ if (isset($_POST['action'])) {
     }
     if ($action == 'p_update') { // Price Update
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword);
+        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
 		else {
 	    	if (!$one_database) mysql_select_db($dbName, $osc);
-	    	$sql = "SELECT products_model, products_price FROM products WHERE products_status = 1";
+	    	$sql = "SELECT " . $osc_Id . ", products_price FROM products WHERE products_status = 1";
 	    	$p_result = mysql_query($sql, $osc);
 	    	$currency = $_POST['currency'];
 	    	$sales_type = $_POST['sales_type'];
 	    	$num_price_errors = 0;
 	    	while ($pp = mysql_fetch_assoc($p_result)) {
                 $price = $pp['products_price'];
-                $model = $pp['products_model'];
+                $osc_id = $osc_Prefix . $pp[$osc_Id];
 				$myprice = false;
-				$myprice = get_kit_price($model, $currency, $sales_type);
-				if ($myprice === false) display_notification("$model price not found in FA");
+				$myprice = get_kit_price($osc_id, $currency, $sales_type);
+				if ($myprice === false) display_notification("$osc_id price not found in FA");
 				else if ($price != $myprice) {
-		    		display_notification("Updating $model from $price to $myprice");
-		    		$sql = "UPDATE products SET products_price = $myprice where products_model = '$model'";
+		    		display_notification("Updating $osc_id from $price to $myprice");
+		    		$sql = "UPDATE products SET products_price = $myprice where " . $osc_Id . " = '$osc_id'";
 		    		mysql_query($sql, $osc);
 		    		$num_price_errors++;
 				}
@@ -517,6 +556,8 @@ if (isset($_POST['action'])) {
     $dbUser = $db_User;
     $dbPassword = $db_Password;
     $dbName = $db_Name;
+    $oscId = $osc_Id;
+    $oscPrefix = $osc_Prefix;
     $lastcid = $last_cid;
     $lastoid = $last_oid;
     $defaultTaxGroup = $default_TaxGroup;
@@ -525,7 +566,7 @@ if (isset($_POST['action'])) {
         $min_cid = 0;
         $max_cid = 0;
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword);
+        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
         else {
 	    if (!$one_database) mysql_select_db($dbName, $osc);
@@ -547,7 +588,7 @@ if (isset($_POST['action'])) {
         $min_oid = 0;
         $max_oid = 0;
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword);
+        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
         else {
 	    if (!$one_database) mysql_select_db($dbName, $osc);
@@ -591,7 +632,7 @@ include($path_to_root . "/includes/ui.inc");
 
 if ($action == 'summary') {
     start_form(true);
-    start_table($table_style);
+    start_table(TABLESTYLE);
 
     $th = array("Type", "# of Updates Needed");
     table_header($th);
@@ -621,7 +662,7 @@ if ($action == 'summary') {
 
 if ($action == 'show') {
     start_form(true);
-    start_table($table_style);
+    start_table(TABLESTYLE);
 
     $th = array("Function", "Description");
     table_header($th);
@@ -644,6 +685,8 @@ if ($action == 'show') {
     	text_row("Password", 'dbPassword', $dbPassword, 20, 40);
 
     	text_row("DB Name", 'dbName', $dbName, 20, 40);
+    	text_row("Osc Id", 'oscId', $oscId, 20, 40);
+    	text_row("Osc_Item Prefix", 'oscPrefix', $oscPrefix, 20, 40);
     	tax_groups_list_row(_("Default Tax Group:"), 'taxgroup', $default_TaxGroup);
 	}
 
@@ -661,11 +704,12 @@ if ($action == 'show') {
 
     end_page();
 }
+
 if ($action == 'cimport') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Default GL Accounts");
 
@@ -706,10 +750,12 @@ if ($action == 'cimport') {
     currencies_list_row("Customer Currency:", 'currency', get_company_pref("curr_default"));
     payment_terms_list_row("Payment Terms:", 'payment_terms', null);
 	amount_row(_("Credit Limit:"), 'credit_limit', $credit_limit);
+
     if ($dim >= 1)
-        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', $_POST['dimension_id'], true, " ", false, 1);
+        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', null, true, " ", false, 1);
     if ($dim > 1)
-        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', $_POST['dimension2_id'], true, " ", false, 2);
+        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', null, true, " ", false, 2);
+
     text_row("Starting osC Customer ID:", 'min_cid', $min_cid, 6, 6);
     text_row("Ending osC Customer ID:", 'max_cid', $max_cid, 6, 6);
 
@@ -725,7 +771,7 @@ if ($action == 'oimport') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Order Import Options");
 
@@ -744,7 +790,7 @@ if ($action == 'pcheck') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Price Check Options");
 
@@ -768,7 +814,7 @@ if ($action == 'pupdate') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Update Price Options");
 

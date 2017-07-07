@@ -49,15 +49,25 @@ function get_supplier_id($supplier) {
 }
 
 function get_dimension_by_name($name) {
-    if ($name = '') return 0;
+    if ($name == '') return 0;
 
-    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name=$name";
+    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name='".$name."'";
     $result = db_query($sql, "Could not find dimension");
-    if ($db_num_rows($result) == 0) return -1;
+    if (db_num_rows($result) == 0) return -1;
     $row = db_fetch_row($result);
     if (!$row[0]) return -1;
     return $row[0];
 }
+
+function get_item_category_by_name($name)
+{
+        $sql="SELECT * FROM ".TB_PREF."stock_category WHERE description=".db_escape($name);
+
+        $result = db_query($sql,"an item category could not be retrieved");
+
+        return db_fetch($result);
+}
+
 
 function download_file($filename, $saveasname='')
 {
@@ -160,9 +170,10 @@ if (isset($_POST['import'])) {
 		if (!$fp)
 			die("can not open file $filename");
 
-		$lines = $i = $j = $k = $b = $u = $p = $pr = $dm_n = 0;
+		$lines = $i = $j = $k = $b = $u = $p = $pr = $dim_n = 0;
 		// type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
 		while ($data = fgetcsv($fp, 4096, $sep)) {
+			$data = array_map("utf8_decode", $data);
 			if ($lines++ == 0) continue;
 			list($type, $code, $id, $description, $category, $units, $qty, $mb_flag, $currency, $price) = $data;
 			$type = strtoupper($type);
@@ -196,19 +207,13 @@ if (isset($_POST['import'])) {
 			    db_query($sql, "Failed adding/updating UOM");
 			    $u++;
 			}
-			if ($type == 'ITEM' || $type == 'KIT' || $type == 'FOREIGN') {
-			    $sql = "SELECT category_id, description FROM ".TB_PREF."stock_category WHERE description='$category'";
-
-			    $result = db_query($sql, "could not get stock category");
-
-			    $row = db_fetch_row($result);
-			    if (!$row) {
-				add_item_category($category);
-				$cat = db_insert_id();
-			    } else $cat = $row[0];
-			}
 		        // type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
 			if ($type == 'KIT' || $type == 'FOREIGN') { // Sales Kit or Foriegn Item Code
+			    $row = get_item_category_by_name($category);
+			    if (!$row)
+				display_notification("TBD: unable to add_item_category without dimension");
+			    else
+				$cat=$row['category_id'];
 			    if ($type == 'FOREIGN') $foreign = 1;
 			    else $foreign = 0;
 			    $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
@@ -230,6 +235,26 @@ if (isset($_POST['import'])) {
                                     $dim_n++;
                                 }
                             }
+
+			    $row = get_item_category_by_name($category);
+			    if (!$row) {
+				    add_item_category($category, 
+					$_POST['tax_type_id'],
+					$_POST['sales_account'],
+					$_POST['cogs_account'],
+					$_POST['inventory_account'],
+					$_POST['adjustment_account'],
+					$_POST['wip_account'],
+					$units,
+					$mb_flag,
+					$dim,
+					0,
+					0,
+					0
+				    );
+				    $cat = db_insert_id();
+			    } else
+				$cat=$row['category_id'];
 			    $sql = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='$id'";
 			    $result = db_query($sql,"item could not be retreived");
 			    $row = db_fetch_row($result);
@@ -267,7 +292,7 @@ if (isset($_POST['import'])) {
 					    WHERE stock_id='$id'";
 
 				    db_query($sql, "The item could not be updated");
-				    display_notification("Line $lines: Update $id $descriptiont");
+				    display_notification("Line $lines: Update $id $description");
 				    $j++;
 			    }
 			    $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
