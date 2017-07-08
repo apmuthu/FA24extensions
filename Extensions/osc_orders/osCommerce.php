@@ -35,9 +35,9 @@ function not_null($str) {
 
 function osc_get_zone_code($osc, $zone_name) {
     $sql = "SELECT zone_code from zones where zone_name='$zone_name'";
-    $result = mysql_query($sql, $osc);
-    $zone = mysql_fetch_assoc($result);
-    mysql_free_result($result);
+    $result = mysqli_query($osc, $sql);
+    $zone = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
     $id = $zone['zone_code'];
     if (!not_null($id)) $id = $zone_name;
     return $id;
@@ -45,27 +45,27 @@ function osc_get_zone_code($osc, $zone_name) {
 
 function osc_get_zone_code_from_id($osc, $zone_id) {
     $sql = "SELECT zone_code from zones where zone_id='$zone_id'";
-    $result = mysql_query($sql, $osc);
-    $zone = mysql_fetch_assoc($result);
-    mysql_free_result($result);
+    $result = mysqli_query($osc, $sql);
+    $zone = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
     $id = $zone['zone_code'];
     return $id;
 }
 
 function osc_get_zone_name_from_id($osc, $zone_id) {
     $sql = "SELECT zone_name from zones where zone_id='$zone_id'";
-    $result = mysql_query($sql, $osc);
-    $zone = mysql_fetch_assoc($result);
-    mysql_free_result($result);
+    $result = mysqli_query($osc, $sql);
+    $zone = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
     $id = $zone['zone_name'];
     return $id;
 }
 
 function osc_get_country($osc, $country_id) {
     $sql = "SELECT countries_name from countries where countries_id='$country_id'";
-    $result = mysql_query($sql, $osc);
-    $country = mysql_fetch_assoc($result);
-    mysql_free_result($result);
+    $result = mysqli_query($osc, $sql);
+    $country = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
     $id = $country['countries_name'];
     return $id;
 }
@@ -345,18 +345,17 @@ if (isset($_POST['action'])) {
         if (isset($_POST['max_cid'])) $max_cid = $_POST['max_cid'];
 
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
+        else $osc = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
 
         if (!$osc) display_notification("Failed to connect osCommerce Database");
         else {
-	        if (!$one_database) mysql_select_db($dbName, $osc);
 	        $sql = "SELECT * FROM customers c left join address_book b on c.customers_default_address_id = b.address_book_id where c.customers_id  >= $min_cid AND c.customers_id <= $max_cid";
 	        // print $sql;
-	        $customers = mysql_query($sql, $osc);
+	        $customers = mysqli_query($osc, $sql);
 	        display_notification("Found " . db_num_rows($customers) . " new customers");
             // display_notification("osc " . $sql);
             $i = $j = 0;
-	        while ($cust = mysql_fetch_assoc($customers)) {
+	        while ($cust = mysqli_fetch_assoc($customers)) {
 		        $email = $cust['customers_email_address'];
 		        $name = $cust['customers_firstname'] . ' ' . $cust['customers_lastname'];
 		        $contact = $cust['entry_firstname'] . ' ' . $cust['entry_lastname'];
@@ -409,27 +408,26 @@ if (isset($_POST['action'])) {
 	    	$last_oid = 0;
 		}
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
+        else $osc = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
 		else {
-	    	if (!$one_database) mysql_select_db($dbName, $osc);
 	    	$sql = "SELECT * FROM orders where orders_id >= $first_oid AND orders_id <= $last_oid";
-	    	$oid_result = mysql_query($sql, $osc);
-        	// echo "Found " . mysql_num_rows($oid_result) . " New Orders\n";
-        	display_notification("Found " . mysql_num_rows($oid_result) . " New Orders");
-	    	while ($order = mysql_fetch_assoc($oid_result)) {
+	    	$oid_result = mysqli_query($osc, $sql);
+        	// echo "Found " . mysqli_num_rows($oid_result) . " New Orders\n";
+        	display_notification("Found " . mysqli_num_rows($oid_result) . " New Orders");
+	    	while ($order = mysqli_fetch_assoc($oid_result)) {
 				$oID = $order['orders_id'];
 				$sql = "SELECT * FROM orders_total WHERE orders_id = $oID AND class = 'ot_shipping'";
-				$result = mysql_query($sql, $osc);
-				$order_total = mysql_fetch_assoc($result);
-				mysql_free_result($result);
+				$result = mysqli_query($osc, $sql);
+				$order_total = mysqli_fetch_assoc($result);
+				mysqli_free_result($result);
 				$sql = "SELECT comments FROM orders_status_history WHERE orders_id = $oID";
-				$result = mysql_query($sql, $osc);
+				$result = mysqli_query($osc, $sql);
 				$comments = "";
-				while ($row = mysql_fetch_assoc($result)) {
+				while ($row = mysqli_fetch_assoc($result)) {
 					if (not_null($row['comments'])) $comments .= $row['comments'] . "\n";
 				}
-				mysql_free_result($result);
+				mysqli_free_result($result);
 				////  print_r($order);
 				// print_r($order_total);
 				$sql = "SELECT * FROM ".TB_PREF."debtors_master where name=" . db_escape($order['customers_name']);
@@ -480,12 +478,12 @@ if (isset($_POST['action'])) {
 				$cart->Location = $branch['default_location'];
 				$cart->due_date = Today();
 				$sql = "SELECT * FROM orders_products WHERE orders_id = $oID";
-				$result = mysql_query($sql, $osc);
+				$result = mysqli_query($osc, $sql);
 				$lines = array();
-				while ($prod = mysql_fetch_assoc($result)) {
+				while ($prod = mysqli_fetch_assoc($result)) {
 		    		add_to_order($cart, $osc_Prefix . $prod[$osc_Id], $prod['products_quantity'], $prod['products_price'], $customer['pymt_discount']);
 				}
-				mysql_free_result($result);
+				mysqli_free_result($result);
 				$order_no = $cart->write(0);
 				display_notification("Added Order Number $order_no for " . $order['customers_name']);
 		
@@ -494,22 +492,21 @@ if (isset($_POST['action'])) {
 	    			db_query($sql, "Update 'lastoid'");
 				}
 	    	}
-	    	if (!$one_database) mysql_close($osc);
+	    	if (!$one_database) mysqli_close($osc);
 		}
     }
     if ($action == 'p_check') { // Price Check
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
+        else $osc = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
 		else {
-	    	if (!$one_database) mysql_select_db($dbName, $osc);
 	    	$sql = "SELECT " . $osc_Id . ", products_price FROM products WHERE products_status = 1";
 	    	// echo $sql;
-	    	$p_result = mysql_query($sql, $osc);
+	    	$p_result = mysqli_query($osc, $sql);
 	    	$currency = $_POST['currency'];
 	    	$sales_type = $_POST['sales_type'];
 	    	$num_price_errors = 0;
-	    	while ($pp = mysql_fetch_assoc($p_result)) {
+	    	while ($pp = mysqli_fetch_assoc($p_result)) {
             	$price = $pp['products_price'];
             	$osc_id = $osc_Prefix . $pp[$osc_Id];
 				$myprice = false;
@@ -526,16 +523,15 @@ if (isset($_POST['action'])) {
     }
     if ($action == 'p_update') { // Price Update
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
+        else $osc = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
 		else {
-	    	if (!$one_database) mysql_select_db($dbName, $osc);
 	    	$sql = "SELECT " . $osc_Id . ", products_price FROM products WHERE products_status = 1";
-	    	$p_result = mysql_query($sql, $osc);
+	    	$p_result = mysqli_query($osc, $sql);
 	    	$currency = $_POST['currency'];
 	    	$sales_type = $_POST['sales_type'];
 	    	$num_price_errors = 0;
-	    	while ($pp = mysql_fetch_assoc($p_result)) {
+	    	while ($pp = mysqli_fetch_assoc($p_result)) {
                 $price = $pp['products_price'];
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
 				$myprice = false;
@@ -544,7 +540,7 @@ if (isset($_POST['action'])) {
 				else if ($price != $myprice) {
 		    		display_notification("Updating $osc_id from $price to $myprice");
 		    		$sql = "UPDATE products SET products_price = $myprice where " . $osc_Id . " = '$osc_id'";
-		    		mysql_query($sql, $osc);
+		    		mysqli_query($osc, $sql);
 		    		$num_price_errors++;
 				}
             }
@@ -566,44 +562,42 @@ if (isset($_POST['action'])) {
         $min_cid = 0;
         $max_cid = 0;
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
+        else $osc = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
         else {
-	    if (!$one_database) mysql_select_db($dbName, $osc);
             $sql = "SELECT `customers_id` FROM `customers` order by `customers_id` asc LIMIT 0,1";
-            $result = mysql_query($sql, $osc);
-            $cid = mysql_fetch_assoc($result);
+            $result = mysqli_query($osc, $sql);
+            $cid = mysqli_fetch_assoc($result);
             $min_cid = (int)$cid['customers_id'];
 	    if ($min_cid <= $last_cid) $min_cid = $last_cid+1;
-            mysql_free_result($result);
+            mysqli_free_result($result);
             $sql = "SELECT `customers_id` FROM `customers` order by `customers_id` desc LIMIT 0,1";
-            $result = mysql_query($sql, $osc);
-            $cid = mysql_fetch_assoc($result);
+            $result = mysqli_query($osc, $sql);
+            $cid = mysqli_fetch_assoc($result);
             $max_cid = (int)$cid['customers_id'];
-            mysql_free_result($result);
-            if (!$one_database) mysql_close($osc);
+            mysqli_free_result($result);
+            if (!$one_database) mysqli_close($osc);
         }
     }
     if ($action == 'oimport' || $action == 'summary') { // Preview Order Import page
         $min_oid = 0;
         $max_oid = 0;
         if ($one_database) $osc = $db;
-        else $osc = mysql_connect($dbHost, $dbUser, $dbPassword, true);
+        else $osc = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
         if (!$osc) display_notification("Failed to connect osCommerce Database");
         else {
-	    if (!$one_database) mysql_select_db($dbName, $osc);
             $sql = "SELECT `orders_id` FROM `orders` order by `orders_id` asc LIMIT 0,1";
-            $result = mysql_query($sql, $osc);
-            $oid = mysql_fetch_assoc($result);
+            $result = mysqli_query($osc, $sql);
+            $oid = mysqli_fetch_assoc($result);
             $min_oid = (int)$oid['orders_id'];
 	    if ($min_oid <= $last_oid) $min_oid = $last_oid+1;
-            mysql_free_result($result);
+            mysqli_free_result($result);
             $sql = "SELECT `orders_id` FROM `orders` order by `orders_id` desc LIMIT 0,1";
-            $result = mysql_query($sql, $osc);
-            $oid = mysql_fetch_assoc($result);
+            $result = mysqli_query($osc, $sql);
+            $oid = mysqli_fetch_assoc($result);
             $max_oid = (int)$oid['orders_id'];
-            mysql_free_result($result);
-            if (!$one_database) mysql_close($osc);
+            mysqli_free_result($result);
+            if (!$one_database) mysqli_close($osc);
         }
     }
 }
