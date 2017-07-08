@@ -25,27 +25,6 @@ function select_row($label, $name, $selected_id=null, $items, $options)
     echo "</td></tr>\n";
 }
 
-function text_input($label, $name, $value=null, $size="", $max="", $title=false,
-    $labparams="", $post_label="", $inparams="")
-{
-    global $Ajax;
-
-    default_focus($name);
-    if ($label != null)
-        label_cell($label, $labparams);
-
-    if ($value === null)
-        $value = get_post($name);
-    echo "<input $inparams type=\"text\" name=\"$name\" size=\"$size\" maxlength=\"$max\" value=\"$value\""
-        .($title ? " title='$title'" : '')
-        .">";
-
-    if ($post_label != "")
-        echo " " . $post_label;
-
-    $Ajax->addUpdate($name, $name, $value);
-}
-
 function start_cell()
 {
     echo "<td>";
