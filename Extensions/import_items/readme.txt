@@ -46,7 +46,9 @@ FOREIGN;ITEM_CODE;STOCK_ID;Description;Category;dummy;Quantity;dummy;dummy;dummy
 
 Where ITEM_CODE is the upc/etc code for an item and Stock_id is the item as we know it
 
-ITEM;ITEM_CODE;STOCK_ID;Description;Category;units;dummy;MB_FLAG;Currency;Price;
+TYPE = ITEM
+
+ITEM;ITEM_CODE;STOCK_ID;Description;Category;units;Dimension;MB_FLAG;Currency;Price;
 
 Where Item_Code = STOCK_ID of the item.
 
@@ -108,7 +110,7 @@ In this case the separator is ';', id is the Stock ID, description is the Stock 
 category is a category you want to put your Stock. If this category doesn't exist it will
 be created during import. units is the unit for the Stock. 
 
-The mb_flag is M for Manufacturered, B for Purchased or S for Service (no inventory)
+The mb_flag is M for Manufactured, B for Purchased or D for Service (no inventory)
 
 currency is the currency for the price.
 Leave empty for company currency.
@@ -160,7 +162,7 @@ left join products_to_categories pc on p.products_id = pc.products_id
 left join categories_description cd on pc.categories_id = cd.categories_id and cd.language_id = 1
 where p.products_status = 1
 
-The mb_flag is M for Manufacturered, B for Purchased or S for Service
+The mb_flag is M for Manufactured, B for Purchased or D for Service
 
 tom
 --------------------------------------------------------------------------------

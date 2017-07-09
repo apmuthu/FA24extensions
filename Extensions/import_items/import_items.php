@@ -41,7 +41,7 @@ function check_stock_id($stock_id) {
 }
 
 function get_supplier_id($supplier) {
-    $sql = "SELECT supplier_id FROM ".TB_PREF."suppliers where supp_name = $supplier";
+    $sql = "SELECT supplier_id FROM ".TB_PREF."suppliers where supp_name = '".$supplier."'";
     $result = db_query($sql, "Can not look up supplier");
     $row = db_fetch_row($result);
     if (!$row[0]) return 0;
@@ -49,11 +49,11 @@ function get_supplier_id($supplier) {
 }
 
 function get_dimension_by_name($name) {
-    if ($name = '') return 0;
+    if ($name == '') return 0;
 
-    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name=$name";
+    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name='".$name."'";
     $result = db_query($sql, "Could not find dimension");
-    if ($db_num_rows($result) == 0) return -1;
+    if (db_num_rows($result) == 0) return -1;
     $row = db_fetch_row($result);
     if (!$row[0]) return -1;
     return $row[0];
@@ -160,13 +160,14 @@ if (isset($_POST['import'])) {
 		if (!$fp)
 			die("can not open file $filename");
 
-		$lines = $i = $j = $k = $b = $u = $p = $pr = $dm_n = 0;
+		$lines = $i = $j = $k = $b = $u = $p = $pr = $dim_n = 0;
 		// type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
 		while ($data = fgetcsv($fp, 4096, $sep)) {
 			if ($lines++ == 0) continue;
 			list($type, $code, $id, $description, $category, $units, $qty, $mb_flag, $currency, $price) = $data;
 			$type = strtoupper($type);
 			$mb_flag = strtoupper($mb_flag);
+			if ($mb_flag == "S") $mb_flag ="D"; // old mb_flag toleration
 
 			if ($type == 'NOTE') continue; // a comment
 			if ($type == 'BOM') {
@@ -208,11 +209,11 @@ if (isset($_POST['import'])) {
 			    } else $cat = $row[0];
 			}
 		        // type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
-			if ($type == 'KIT' || $type == 'FOREIGN') { // Sales Kit or Foriegn Item Code
+			if ($type == 'KIT' || $type == 'FOREIGN') { // Sales Kit or Foreign Item Code
 			    if ($type == 'FOREIGN') $foreign = 1;
 			    else $foreign = 0;
 			    $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
-			    $result = db_query($sql, "item code could not be retreived");
+			    $result = db_query($sql, "item code could not be retrieved");
 			    $row = db_fetch_row($result);
 			    if (!$row) add_item_code($code, $id, $description, $cat, $qty, $foreign);
 			    else update_item_code($row[0], $code, $id, $description, $cat, $qty, $foreign);
@@ -231,7 +232,7 @@ if (isset($_POST['import'])) {
                                 }
                             }
 			    $sql = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='$id'";
-			    $result = db_query($sql,"item could not be retreived");
+			    $result = db_query($sql,"item could not be retrieved");
 			    $row = db_fetch_row($result);
 			    if (!$row) {
 				    $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
@@ -243,7 +244,7 @@ if (isset($_POST['import'])) {
 					    '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', $dim, 0)";
 
 				    db_query($sql, "The item could not be added");
-				    if ($mb_flag != "D") {
+				    if ($mb_flag == "M" || $mb_flag == "B") {
 					    $sql = "INSERT INTO ".TB_PREF."loc_stock (loc_code, stock_id) VALUES ('{$_POST['location']}', '$id')";
 
 					    db_query($sql, "The item locstock could not be added");
@@ -267,11 +268,11 @@ if (isset($_POST['import'])) {
 					    WHERE stock_id='$id'";
 
 				    db_query($sql, "The item could not be updated");
-				    display_notification("Line $lines: Update $id $descriptiont");
+				    display_notification("Line $lines: Update $id $description");
 				    $j++;
 			    }
 			    $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
-			    $result = db_query($sql, "item code could not be retreived");
+			    $result = db_query($sql, "item code could not be retrieved");
 			    $row = db_fetch_row($result);
 			    if (!$row) add_item_code($code, $id, $description, $cat, 1);
 			    else update_item_code($row[0], $code, $id, $description, $cat, 1);
@@ -288,7 +289,7 @@ if (isset($_POST['import'])) {
 				$sql = "SELECT * FROM ".TB_PREF."prices	WHERE stock_id='$code' AND sales_type_id={$_POST['sales_type_id']} AND
 					curr_abrev='$currency'";
 
-				$result = db_query($sql,"price could not be retreived");
+				$result = db_query($sql,"price could not be retrieved");
 
 				$row = db_fetch_row($result);
 				if (!$row) add_item_price($code, $_POST['sales_type_id'], $currency, $price);
