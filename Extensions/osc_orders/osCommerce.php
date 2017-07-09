@@ -226,7 +226,7 @@ if (isset($_POST['action'])) {
 	$sql = "DROP TABLE IF EXISTS ".TB_PREF."oscommerce";
 	db_query($sql, "Error dropping table");
 	$sql = "CREATE TABLE ".TB_PREF."oscommerce ( `name` char(15) NOT NULL default '', " .
-  	       " `value` varchar(100) NOT NULL default '', PRIMARY KEY  (`name`)) TYPE=MyISAM";
+  	       " `value` varchar(100) NOT NULL default '', PRIMARY KEY  (`name`)) ENGINE=MyISAM";
 	db_query($sql, "Error creating table");
         header("Location: osCommerce.php?action=show");
     }
@@ -335,7 +335,7 @@ if (isset($_POST['action'])) {
 		        $taxgid = get_tax_group_from_zone_id($osc, $cust['entry_zone_id'], $_POST['tax_group_id']);
         
                 $sql = "SELECT debtor_no,name FROM ".TB_PREF."debtors_master WHERE name=".db_escape($name);
-                $result = db_query($sql,"customer could not be retreived");
+                $result = db_query($sql,"customer could not be retrieved");
                 $row = db_fetch_assoc($result);
     
                 if (!$row) {
@@ -591,7 +591,7 @@ include($path_to_root . "/includes/ui.inc");
 
 if ($action == 'summary') {
     start_form(true);
-    start_table($table_style);
+    start_table(TABLESTYLE);
 
     $th = array("Type", "# of Updates Needed");
     table_header($th);
@@ -621,7 +621,7 @@ if ($action == 'summary') {
 
 if ($action == 'show') {
     start_form(true);
-    start_table($table_style);
+    start_table(TABLESTYLE);
 
     $th = array("Function", "Description");
     table_header($th);
@@ -665,7 +665,7 @@ if ($action == 'cimport') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Default GL Accounts");
 
@@ -725,7 +725,7 @@ if ($action == 'oimport') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Order Import Options");
 
@@ -744,7 +744,7 @@ if ($action == 'pcheck') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Price Check Options");
 
@@ -768,7 +768,7 @@ if ($action == 'pupdate') {
 
     start_form(true);
 
-    start_table("$table_style2 width=40%");
+    start_table(TABLESTYLE2, "width=40%");
 
     table_section_title("Update Price Options");
 
