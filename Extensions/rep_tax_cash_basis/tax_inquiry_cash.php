@@ -17,12 +17,12 @@ include_once($path_to_root . "/includes/data_checks.inc");
 
 include_once($path_to_root . "/modules/rep_tax_cash_basis/includes/tax_cash_db.inc");
 
-$js = '';
 set_focus('account');
-if ($use_popup_windows)
-	$js .= get_js_open_window(800, 500);
-if ($use_date_picker)
-	$js .= get_js_date_picker();
+$js = "";
+if ($SysPrefs->use_popup_windows) 
+    $js .= get_js_open_window(800, 500);
+if (user_use_date_picker())
+    $js .= get_js_date_picker();
 
 page(_($help_context = "Tax Inquiry (Cash Basis)"), false, false, '', $js);
 
