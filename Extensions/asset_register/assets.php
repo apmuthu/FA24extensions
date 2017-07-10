@@ -16,7 +16,7 @@ add_access_extensions();
 set_ext_domain('modules/asset_register');
 
 $js = "";
-if ($use_date_picker)
+if (user_use_date_picker())
 	$js .= get_js_date_picker();
 page(_($help_context = "Assets"), false, false, "", $js);
 
