@@ -65,7 +65,7 @@ ini_set("display_errors", "on");
 all_delete($yes=false);
 
 $js = "";
-if (user_use_date_picker()) 
+if ($SysPrefs->use_popup_windows) 
 	$js .= get_js_open_window(800, 500);
 $help_context = "Import General Journals  / Deposits / Payments / Bank Statements / Sales Orders / Sales Invoices  <a href='spreadsheet_headers.html'>Help: Formats</a>"; 
 page(_($help_context), false, false, "", $js);
