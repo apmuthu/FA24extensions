@@ -26,4 +26,4 @@ class hooks_import_transactions extends hooks {
 		return array($security_areas, $security_sections);
 	}
 }
-?>
+
