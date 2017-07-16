@@ -63,6 +63,17 @@ $help_context = "Import General Journals  / Deposits / Payments / Bank Statement
 page(_($help_context), false, false, "", $js);
 global $Refs;
 global $Ajax;
+
+$filename = (isset($_GET['filename']) ? $_GET['filename'] : '');
+if ($filename != "") {
+    initialize_controls();
+    $_POST['type'] = ST_JOURNAL;
+    $_FILES['imp']['name'] = $filename;
+    $_FILES['imp']['tmp_name'] = $filename;
+    $_POST['sep']=",";
+    $_POST['trial']=false;
+}
+
 if ((isset($_POST['type']))) {
     $type = $_POST['type'];
     $entry = new items_cart($type);
@@ -110,7 +121,6 @@ if ((isset($_POST['type']))) {
             $bank_desc = "";
             $ignore = "";
             $debitsEqualcredits = 1;
-            $subtype = $type;
             $nextdata = null;
             // check_db_has_stock_items(_("There are no inventory items defined in the system."));
             check_db_has_customer_branches(_("There are no customers, or there are no customers with branches. Please define customers and customer branches."));
@@ -135,29 +145,7 @@ if ((isset($_POST['type']))) {
                     display_notification_centered($memo);
 		    $bank_account_gl_code = $code_id;
                     $bank_account = is_bank_account($code_id);
-
-	// set $subtype based on first transaction line
-
-                    if ($prev_ref != $reference) {
-                        if ($bank_account != false) {
-			    $BranchNo = null;
-                            if ($amt > 0)
-				$subtype = ST_BANKDEPOSIT;
-                            else {
-
-	// If the amount is negative, the transaction could be
-	// either a bank payment or a bank transfer.   So if the next
-	// line of data is a bank account, its a bank transfer.
-
-				if (is_bank_account($next_code))
-					$subtype = ST_BANKTRANSFER;
-				else 
-					$subtype = ST_BANKPAYMENT;
-			    }
-			} else {
-			   $subtype = ST_JOURNAL;
-			}
-		    }
+		    $BranchNo = null;
                 } else if (($type == ST_BANKPAYMENT) && ($stateformat != null))
                 //All amounts to the right of amt are ignored since only considering payments which are to the left of deposits on a bank statement.
                 {
@@ -266,7 +254,7 @@ if ((isset($_POST['type']))) {
                 } elseif ((!$Refs->is_new_reference($reference, $type)) && ($reference == $prev_ref)) { //do nothing $Refs->save($type,$line,$reference);
                     
                 } elseif (((!$Refs->is_new_reference($reference, $type)) == null) && ($reference != $prev_ref)) {
-                    $Refs->save($type, $curEntryId[$subtype], $reference);
+                    $Refs->save($type, $curEntryId[$type], $reference);
                     // save_next_reference($type, $reference);
                     
                 }
@@ -287,21 +275,19 @@ display_notification_centered($line . ":" . $bank_account_gl_code);
                 }
                 if (!$error) {
                     if (($type == ST_JOURNAL)) {
-                        if ($subtype == ST_BANKTRANSFER
-				|| ($prev_ref != $reference &&
-					($subtype == ST_BANKDEPOSIT || $subtype == ST_BANKPAYMENT)))
-				journal_bank_trans($subtype, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$subtype], $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $prev_ref != $reference);
+                        if ($bank_account !== false)
+				journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$type], $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $prev_ref != $reference);
                         else {
                             if (check_tax_appropriate($code_id, $taxtype, $line) == true) {
-                                journal_inclusive_tax($subtype, $reference, $date, $line, $curEntryId[$subtype], $code_id, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id);
+                                journal_inclusive_tax($type, $reference, $date, $line, $curEntryId[$type], $code_id, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id);
                             }
                         }
-                        add_audit_trail($subtype, $curEntryId[$subtype], $date);
+                        add_audit_trail($type, $curEntryId[$type], $date);
                     } elseif (($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT) && ($amt > 0)) {
                         if (check_tax_appropriate($code_id, $taxtype, $line) == true) {
-                            bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$subtype], $code_id, $dim1, $dim2, $memo, ($type == ST_BANKDEPOSIT ? $amt : -$amt), $taxtype, $person_type_id, $person_id, $BranchNo);
+                            bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$type], $code_id, $dim1, $dim2, $memo, ($type == ST_BANKDEPOSIT ? $amt : -$amt), $taxtype, $person_type_id, $person_id, $BranchNo);
                         } else {
-                            display_notification_centered(_("Warning: Taxtype used with Asset or Liability - $curEntryId[$subtype], $date, $code_id.(line $line in import file '{$_FILES['imp']['name']}')"));
+                            display_notification_centered(_("Warning: Taxtype used with Asset or Liability - $curEntryId[$type], $date, $code_id.(line $line in import file '{$_FILES['imp']['name']}')"));
                         }
                     } elseif (($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT) && ($amt < 0)) {
                         display_notification_centered(_("Error: Credit amounts represented by negative amounts being entered. Check csv file is correct.(line $line in import file '{$_FILES['imp']['name']}')"));
@@ -309,10 +295,11 @@ display_notification_centered($line . ":" . $bank_account_gl_code);
                     }
                     $entryCount = $entryCount + 1;
                 }
-                if ($type != ST_JOURNAL
-			|| $reference != $next_ref) {
-			$curEntryId[$subtype]+= 1;
-		}
+                if (($type == ST_JOURNAL
+			&& $reference != $next_ref)
+			|| $type != ST_JOURNAL)
+			$curEntryId[$type]+= 1;
+
                 if ($error) {
                     $errCnt = $errCnt + 1;
                 }

@@ -118,6 +118,15 @@ function check_stock_id($stock_id) {
     return 1;
 }
 
+function get_item_category_by_name($name)
+{
+        $sql="SELECT * FROM ".TB_PREF."stock_category WHERE description=".db_escape($name);
+
+        $result = db_query($sql,"an item category could not be retrieved");
+
+        return db_fetch($result);
+}
+
 // error_reporting(E_ALL);
 // ini_set("display_errors", "on");
 
@@ -547,6 +556,87 @@ if (isset($_POST['action'])) {
         }
 	$action = 'pupdate';
     }
+
+    if ($action == 'i_import') { // Item Import
+        if ($one_database) $osc = $db;
+        else $osc = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
+        if (!$osc) display_notification("Failed to connect osCommerce Database");
+	else {
+		$sql = "SELECT p." . $osc_Id . ", pd.products_name, cd.categories_name, p.products_price FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id";
+
+	    	$p_result = mysqli_query($osc, $sql);
+	    	while ($pp = mysqli_fetch_assoc($p_result)) {
+			$products_name = utf8_decode($pp['products_name']);
+			$osc_id = $osc_Prefix . $pp[$osc_Id];
+
+			    $row = get_item_category_by_name($pp['categories_name']);
+			    if (!$row) {
+				    add_item_category($pp['categories_name'], 
+					$_POST['tax_type_id'],
+					$_POST['sales_account'],
+					$_POST['cogs_account'],
+					$_POST['inventory_account'],
+					$_POST['adjustment_account'],
+					$_POST['wip_account'],
+					$_POST['units'],
+					"B",
+					"",
+					0,
+					0,
+					0
+				    );
+				    $cat = db_insert_id();
+				    display_notification("Add Category " . $pp['categories_name']);
+			    } else
+				$cat=$row['category_id'];
+			    $sql = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='$osc_id'";
+			    $result = db_query($sql,"item could not be retreived");
+			    $row = db_fetch_row($result);
+			    if (!$row) {
+				    $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
+                                            tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
+                                            adjustment_account, wip_account, dimension_id, dimension2_id)
+                                            VALUES ('$osc_id', " . db_escape($products_name) . ", '',
+                                            '$cat', {$_POST['tax_type_id']}, '{$_POST['units']}', 'B',
+                                            '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
+                                            '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', '{$_POST['dimension_id']}', '{$_POST['dimension2_id']}')";
+
+
+				    db_query($sql, "The item could not be added");
+				    $sql = "INSERT INTO ".TB_PREF."loc_stock (loc_code, stock_id) VALUES ('{$_POST['default_location']}', '$osc_id')";
+
+				    db_query($sql, "The item locstock could not be added");
+				    display_notification("Insert $osc_id " . $products_name);
+/*
+			    } else {
+				    $sql = "UPDATE ".TB_PREF."stock_master SET long_description='',
+					    description=" . db_escape($products_name) .",
+					    category_id='$cat',
+					    sales_account='{$_POST['sales_account']}',
+					    inventory_account='{$_POST['inventory_account']}',
+					    cogs_account='{$_POST['cogs_account']}',
+					    adjustment_account='{$_POST['adjustment_account']}',
+					    wip_account='{$_POST['wip_account']}',
+					    dimension_id='{$_POST['dimension_id']}',
+					    dimension2_id='{$_POST['dimension2_id']}',
+					    units='{$_POST['units']}',
+					    mb_flag='B',
+					    tax_type_id={$_POST['tax_type_id']}
+					    WHERE stock_id='$osc_id'";
+				    db_query($sql, "The item could not be updated");
+				    display_notification("Update $osc_id " . $products_name);
+*/
+			    }
+			    $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$osc_id' AND stock_id = '$osc_id'";
+			    $result = db_query($sql, "item code could not be retreived");
+			    $row = db_fetch_row($result);
+			    if (!$row) add_item_code($osc_id, $osc_id, $products_name, $cat, 1);
+			    else update_item_code($row[0], $osc_id, $osc_id, $products_name, $cat, 1);
+		}
+	}
+    $action = 'iimport';
+    }
+
 } else {
     $dbHost = $db_Host;
     $dbUser = $db_User;
@@ -620,6 +710,9 @@ else hyperlink_params($_SERVER['PHP_SELF'], _("&Price Check"), "action=pcheck", 
 echo '&nbsp;|&nbsp;';
 if ($action == 'pupdate') echo 'Update Prices';
 else hyperlink_params($_SERVER['PHP_SELF'], _("&Update Prices"), "action=pupdate", false);
+echo '&nbsp;|&nbsp;';
+if ($action == 'iimport') echo 'Item Import';
+else hyperlink_params($_SERVER['PHP_SELF'], _("&Item Import"), "action=iimport", false);
 echo "<br><br>";
 
 include($path_to_root . "/includes/ui.inc");
@@ -821,6 +914,63 @@ if ($action == 'pupdate') {
 
     hidden('action', 'p_update');
     submit_center('pupdate', "Update osC Prices");
+    if ($num_price_errors > 0) display_notification("There were $num_price_errors prices updated");
+
+    end_form();
+    end_page();
+}
+if ($action == 'iimport') {
+
+    start_form(true);
+
+    start_table(TABLESTYLE2, "width=40%");
+
+    table_section_title("Import Items");
+    $company_record = get_company_prefs();
+
+    locations_list_row("Location:", 'default_location', null);
+
+    $dim = get_company_pref('use_dimension');
+    if ($dim < 1)
+        hidden('dimension_id', 0);
+    if ($dim < 2)
+        hidden('dimension2_id', 0);
+
+    if ($dim >= 1)
+        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', null, true, " ", false, 1);
+    if ($dim > 1)
+        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', null, true, " ", false, 2);
+
+    if (!isset($_POST['inventory_account']) || $_POST['inventory_account'] == "")
+        $_POST['inventory_account'] = $company_record["default_inventory_act"];
+
+    if (!isset($_POST['cogs_account']) || $_POST['cogs_account'] == "")
+        $_POST['cogs_account'] = $company_record["default_cogs_act"];
+
+    if (!isset($_POST['sales_account']) || $_POST['sales_account'] == "")
+        $_POST['sales_account'] = $company_record["default_inv_sales_act"];
+
+    if (!isset($_POST['adjustment_account']) || $_POST['adjustment_account'] == "")
+        $_POST['adjustment_account'] = $company_record["default_adj_act"];
+
+    if (!isset($_POST['wip_account']) || $_POST['wip_account'] == "")
+        $_POST['wip_account'] = $company_record["default_wip_act"];
+
+    if (!isset($_POST['units']) || $_POST['units'] == "")
+        $_POST['units'] = null;
+
+    gl_all_accounts_list_row("Sales Account:", 'sales_account', $_POST['sales_account']);
+    gl_all_accounts_list_row("Inventory Account:", 'inventory_account', $_POST['inventory_account']);
+    gl_all_accounts_list_row("C.O.G.S. Account:", 'cogs_account', $_POST['cogs_account']);
+    gl_all_accounts_list_row("Inventory Adjustments Account:", 'adjustment_account', $_POST['adjustment_account']);
+    gl_all_accounts_list_row("Item Assembly Costs Account:", 'wip_account', $_POST['wip_account']);
+    stock_units_list_row(_('Units of Measure:'), 'units', $_POST['units'], true);
+    item_tax_types_list_row("Item Tax Type:", 'tax_type_id', null);
+
+    end_table(1);
+
+    hidden('action', 'i_import');
+    submit_center('iimport', "Import Items");
     if ($num_price_errors > 0) display_notification("There were $num_price_errors prices updated");
 
     end_form();
