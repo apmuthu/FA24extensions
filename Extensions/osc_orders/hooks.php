@@ -1,10 +1,11 @@
 <?php
 define ('SS_OSCORDERS', 106<<8);
+
 class hooks_osc_orders extends hooks {
 	var $module_name = 'osCommerce Order Import'; 
 
 	/*
-		Install additonal menu options provided by module
+		Install additional menu options provided by module
 	*/
 	function install_options($app) {
 		global $path_to_root;
