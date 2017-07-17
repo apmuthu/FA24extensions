@@ -226,17 +226,17 @@ if (isset($_POST['import'])) {
 			    $k++;
 			}
 			if ($type == 'ITEM') {
-                            $dim = 0;
-                            if ($qty != '') {
+                $dim = 0;
+                if ($qty != '') {
 			        $dim = get_dimension_by_name($qty);
-                                if ($dim == -1) {
-                                    $date = Today();
-                                    $due = add_days($date, sys_prefs::default_dimension_required_by());
-                                    $ref = references::get_next(systypes::dimension());
-                                    $dim = add_dimension($ref, $qty, 1, $date, $due, "Added due to Item Import");
-                                    $dim_n++;
-                                }
-                            }
+                    if ($dim == -1) {
+                        $date = Today();
+                        $due = add_days($date, sys_prefs::default_dimension_required_by());
+                        $ref = references::get_next(systypes::dimension());
+                        $dim = add_dimension($ref, $qty, 1, $date, $due, "Added due to Item Import");
+                        $dim_n++;
+                    }
+                }
 			    $sql = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='$id'";
 			    $result = db_query($sql,"item could not be retrieved");
 			    $row = db_fetch_row($result);
