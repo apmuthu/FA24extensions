@@ -41,7 +41,7 @@ function check_stock_id($stock_id) {
 }
 
 function get_supplier_id($supplier) {
-    $sql = "SELECT supplier_id FROM ".TB_PREF."suppliers where supp_name = '".$supplier."'";
+    $sql = "SELECT supplier_id FROM ".TB_PREF."suppliers where supp_name = ".db_escape($supplier);
     $result = db_query($sql, "Can not look up supplier");
     $row = db_fetch_row($result);
     if (!$row[0]) return 0;
@@ -51,12 +51,21 @@ function get_supplier_id($supplier) {
 function get_dimension_by_name($name) {
     if ($name == '') return 0;
 
-    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name='".$name."'";
+    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name=".db_escape($name);
     $result = db_query($sql, "Could not find dimension");
     if (db_num_rows($result) == 0) return -1;
     $row = db_fetch_row($result);
     if (!$row[0]) return -1;
     return $row[0];
+}
+
+function get_item_category_by_name($name)
+{
+        $sql="SELECT * FROM ".TB_PREF."stock_category WHERE description=".db_escape($name);
+
+        $result = db_query($sql,"an item category could not be retrieved");
+
+        return db_fetch($result);
 }
 
 function download_file($filename, $saveasname='')
@@ -68,7 +77,7 @@ function download_file($filename, $saveasname='')
     if ($saveasname == '') $saveasname = basename($filename);
     header('Content-type: application/vnd.ms-excel');
     header('Content-Length: '.filesize($filename));
-    header('Content-Disposition: attachment; filename="'.$saveasname.'"');
+    header('Content-Disposition: attachment; filename='.db_escape($saveasname));
     readfile($filename);
 
     return true;
@@ -83,7 +92,7 @@ function download_csv($filename, $saveasname='')
     }
     if ($saveasname == '') $saveasname = basename($filename);
     header('Content-type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="'.$saveasname.'"');
+    header('Content-Disposition: attachment; filename='.db_escape($saveasname));
 // print all results, converting data as needed
     return true;
 }
@@ -163,6 +172,7 @@ if (isset($_POST['import'])) {
 		$lines = $i = $j = $k = $b = $u = $p = $pr = $dim_n = 0;
 		// type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
 		while ($data = fgetcsv($fp, 4096, $sep)) {
+			$data = array_map("utf8_decode", $data);
 			if ($lines++ == 0) continue;
 			list($type, $code, $id, $description, $category, $units, $qty, $mb_flag, $currency, $price) = $data;
 			$type = strtoupper($type);
@@ -198,15 +208,11 @@ if (isset($_POST['import'])) {
 			    $u++;
 			}
 			if ($type == 'ITEM' || $type == 'KIT' || $type == 'FOREIGN') {
-			    $sql = "SELECT category_id, description FROM ".TB_PREF."stock_category WHERE description='$category'";
-
-			    $result = db_query($sql, "could not get stock category");
-
-			    $row = db_fetch_row($result);
+			    $row = get_item_category_by_name($category);
 			    if (!$row) {
-				add_item_category($category);
-				$cat = db_insert_id();
-			    } else $cat = $row[0];
+				    add_item_category($category);
+				    $cat = db_insert_id();
+			    } else $cat = $row['category_id'];
 			}
 		        // type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
 			if ($type == 'KIT' || $type == 'FOREIGN') { // Sales Kit or Foreign Item Code
