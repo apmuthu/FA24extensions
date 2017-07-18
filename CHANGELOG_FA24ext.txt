@@ -1,3 +1,4 @@
+2017-07-17  BraathWaate  import_items module: indent cleanup and separation of ITEM addition
 2017-07-17  Ap.Muthu     import_items module: indent cleanup
 2017-07-17  BraathWaate  import_items module: dbescape and get_item_category_by_name()
 2017-07-11  Ap.Muthu     osc_orders module: Typos fixed
