@@ -113,7 +113,6 @@ if ((isset($_POST['type']))) {
             $firstlinecopied = false;
             $no = 0;
             $total_debit_positive = 0;
-            $total_credit_negative = 0;
             $skippedheader = false;
             $prev_ref = - 1;
             $next_ref = - 1;
@@ -146,6 +145,17 @@ if ((isset($_POST['type']))) {
 		    $bank_account_gl_code = $code_id;
                     $bank_account = is_bank_account($code_id);
 		    $BranchNo = null;
+		    if ($amt > 0)
+			$total_debit_positive += $amt;
+
+		    if ($reference != $next_ref) {
+			// Note: imported journal GL entries also require a journal entry.
+			// If the journal entry is not created, then
+			// a journal transaction entered through FA would have a trans_no
+			// starting from 1, and thus VOID would void the wrong G/L entries.
+			add_journal(ST_JOURNAL, $curEntryId[ST_JOURNAL], $total_debit_positive, $date, get_company_pref('curr_default'), $curEntryId[ST_JOURNAL]);
+			$total_debit_positive = 0;
+		    }
                 } else if (($type == ST_BANKPAYMENT) && ($stateformat != null))
                 //All amounts to the right of amt are ignored since only considering payments which are to the left of deposits on a bank statement.
                 {
