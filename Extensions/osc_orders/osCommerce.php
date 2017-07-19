@@ -111,7 +111,7 @@ function osc_get_country($country_id) {
 
 function osc_address_format($data, $pre) {
     $company = $data[$pre . 'company'];
-    if (not_null($data[$pre . 'name'])) $name = $data[$pre . 'name'];
+    if (!empty($data[$pre . 'name'])) $name = $data[$pre . 'name'];
     else $name = $data[$pre . 'firstname'] . ' ' . $data[$pre . 'lastname'];
     $street_address = $data[$pre . 'street_address'];
     $suburb         = $data[$pre . 'suburb'];
@@ -120,7 +120,7 @@ function osc_address_format($data, $pre) {
     // $state = $data[$pre . 'state'];
     if (not_null($data[$pre . 'state'])) $state = $data[$pre . 'state'];
     else if (not_null($data[$pre . 'zone_id'])) $state = osc_get_zone_code_from_id( $data[$pre . 'zone_id']);
-    if (not_null($data[$pre . 'country_id'])) $country = osc_get_country($data[$pre . 'country_id']);
+    if (!empty($data[$pre . 'country_id'])) $country = osc_get_country($data[$pre . 'country_id']);
     else $country = $data[$pre . 'country'];
 
     $ret = '';
@@ -186,6 +186,8 @@ $dbHost           = "";
 $dbUser           = "";
 $dbPassword       = "";
 $dbName           = "";
+$oscId            = "products_model";
+$oscPrefix        = "";
 $lastcid          = 0;
 $lastoid          = 0;
 $defaultTaxGroup  = 0;
@@ -194,6 +196,8 @@ $db_Host          = "";
 $db_User          = "";
 $db_Password      = "";
 $db_Name          = "";
+$osc_Id           = "products_model";
+$osc_Prefix       = "";
 $last_cid         = 0;
 $last_oid         = 0;
 $default_TaxGroup = 0;
@@ -222,6 +226,18 @@ if ($found) {
     $result  = db_query($sql, "could not get DB name");
     $row     = db_fetch_row($result);
     $db_Name = $row[1];
+
+    // Get item prefix
+    $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'osc_prefix'";
+    $result     = db_query($sql, "could not get osc_prefix");
+    $row        = db_fetch_row($result);
+    $osc_Prefix = $row[1];
+
+    // Get item prefix
+    $sql    = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'osc_id'";
+    $result = db_query($sql, "could not get osc_id");
+    $row    = db_fetch_row($result);
+    $osc_Id = $row[1];
 
     // Get last cID imported
     $sql    = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastcid'";
@@ -281,6 +297,8 @@ if (isset($_POST['action'])) {
         if (isset($_POST['dbUser']))     $dbUser          = $_POST['dbUser'];
         if (isset($_POST['dbPassword'])) $dbPassword      = $_POST['dbPassword'];
         if (isset($_POST['dbName']))     $dbName          = $_POST['dbName'];
+        if (isset($_POST['oscId']))      $oscId           = $_POST['oscId'];
+        if (isset($_POST['oscPrefix']))  $oscPrefix       = $_POST['oscPrefix'];
         if (isset($_POST['lastcid']))    $lastcid         = $_POST['lastcid'];
         if (isset($_POST['lastoid']))    $lastoid         = $_POST['lastoid'];
         if (isset($_POST['taxgroup']))   $defaultTaxGroup = $_POST['taxgroup'];
@@ -313,6 +331,20 @@ if (isset($_POST['action'])) {
             db_query($sql, "Update 'myname'");
         }
 
+        if ($oscId != $osc_Id) { // It changed
+            if ($oscId == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'osc_id'";
+            else if ($osc_Id == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('osc_id', ".db_escape($oscId).")";
+            else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($oscId)." WHERE name = 'osc_id'";
+            db_query($sql, "Update 'osc_id'");
+        }
+
+        if ($oscPrefix != $osc_Prefix) { // It changed
+            if ($oscPrefix == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'osc_prefix'";
+            else if ($osc_Prefix == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('osc_prefix', ".db_escape($oscPrefix).")";
+            else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($oscPrefix)." WHERE name = 'osc_prefix'";
+            db_query($sql, "Update 'osc_prefix'");
+        }
+
         if ($lastcid != $last_cid) { // It changed
             if ($lastcid == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'lastcid'";
             else if ($last_cid == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastcid', ".db_escape($lastcid).")";
@@ -339,13 +371,14 @@ if (isset($_POST['action'])) {
         $dbUser          = $db_User;
         $dbPassword      = $db_Password;
         $dbName          = $db_Name;
-
+        $oscId           = $osc_Id;
+        $oscPrefix       = $osc_Prefix;
         $lastcid         = $last_cid;
         $lastoid         = $last_oid;
         $defaultTaxGroup = $default_TaxGroup;
     }
 
-    if ( in_array($action, array('c_import', 'o_import', 'p_check', 'p_update')) && ($osc = osc_connect()) ) {
+    if ( in_array($action, array('c_import', 'o_import', 'p_check', 'p_update', 'i_import')) && ($osc = osc_connect()) ) {
 
         if ($action == 'c_import') {
             if (!check_num('credit_limit', 0)) {
@@ -358,7 +391,6 @@ if (isset($_POST['action'])) {
             if (isset($_POST['max_cid'])) $max_cid = $_POST['max_cid'];
 
             $sql = "SELECT * FROM customers c LEFT JOIN address_book b on c.customers_default_address_id = b.address_book_id where c.customers_id  >= ".osc_escape($min_cid)." AND c.customers_id <= ".osc_escape($max_cid);
-            // print $sql;
             $customers = osc_dbQuery($sql, true);
             display_notification("Found " . db_num_rows($customers) . " new customers");
             // display_notification("osc " . $sql);
@@ -416,7 +448,6 @@ if (isset($_POST['action'])) {
 
             $sql        = "SELECT * FROM orders where orders_id >= ".osc_escape($first_oid)." AND orders_id <= ".osc_escape($last_oid);
             $oid_result = osc_dbQuery($sql, true);
-            // echo "Found " . mysqli_num_rows($oid_result) . " New Orders\n";
             display_notification("Found " . mysqli_num_rows($oid_result) . " New Orders");
             while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID         = $order['orders_id'];
@@ -428,8 +459,6 @@ if (isset($_POST['action'])) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     if (not_null($row['comments'])) $comments .= $row['comments'] . "\n";
                 }
-                // print_r($order);
-                // print_r($order_total);
                 $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `name` = ".db_escape($order['customers_name']);
                 $result = db_query($sql, "Could not find customer by name");
                 // echo "Found " . db_num_rows($result);
@@ -481,7 +510,7 @@ if (isset($_POST['action'])) {
                 $result                  = osc_dbQuery($sql, true);
                 $lines                   = array();
                 while ($prod = mysqli_fetch_assoc($result)) {
-                    add_to_order($cart, $prod['products_model'], $prod['products_quantity'], $prod['products_price'], $customer['pymt_discount']);
+                    add_to_order($cart, $osc_Prefix . $prod[$osc_Id], $prod['products_quantity'], $prod['products_price'], $customer['pymt_discount']);
                 }
                 $order_no = $cart->write(0);
                 display_notification("Added Order Number $order_no for " . $order['customers_name']);
@@ -490,12 +519,14 @@ if (isset($_POST['action'])) {
                     $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($oID)." WHERE name = 'lastoid'";
                     db_query($sql, "Update 'lastoid'");
                 }
+
             }
+            $action = 'oimport';
         }
 
         if ($action == 'p_check') { // Price Check
 
-            $sql = "SELECT products_model, products_price FROM products WHERE products_status = 1";
+            $sql = "SELECT " . $osc_Id . ", products_price FROM products WHERE products_status = 1";
             // echo $sql;
             $p_result         = osc_dbQuery($sql, true);
             $currency         = $_POST['currency'];
@@ -503,12 +534,12 @@ if (isset($_POST['action'])) {
             $num_price_errors = 0;
             while ($pp = mysqli_fetch_assoc($p_result)) {
                 $price   = $pp['products_price'];
-                $model   = $pp['products_model'];
+                $osc_id = $osc_Prefix . $pp[$osc_Id];
                 $myprice = false;
-                $myprice = get_kit_price($model, $currency, $sales_type);
-                if ($myprice === false) display_notification("$model price not found in FA");
+                $myprice = get_kit_price($osc_id, $currency, $sales_type);
+                if ($myprice === false) display_notification("$osc_id price not found in FA");
                 else if ($price != $myprice) {
-                    display_notification("$model Prices do not match FA $myprice osC $price");
+                    display_notification("$osc_id Prices do not match FA $myprice osC $price");
                     $num_price_errors++;
                 }
             }
@@ -516,20 +547,20 @@ if (isset($_POST['action'])) {
         }
 
         if ($action == 'p_update') { // Price Update
-            $sql              = "SELECT products_model, products_price FROM products WHERE products_status = 1";
+            $sql              = "SELECT " . $osc_Id . ", products_price FROM products WHERE products_status = 1";
             $p_result         = osc_dbQuery($sql, true);
             $currency         = $_POST['currency'];
             $sales_type       = $_POST['sales_type'];
             $num_price_errors = 0;
             while ($pp = mysqli_fetch_assoc($p_result)) {
                 $price   = $pp['products_price'];
-                $model   = $pp['products_model'];
+                $osc_id = $osc_Prefix . $pp[$osc_Id];
                 $myprice = false;
-                $myprice = get_kit_price($model, $currency, $sales_type);
-                if ($myprice === false) display_notification("$model price not found in FA");
+                $myprice = get_kit_price($osc_id, $currency, $sales_type);
+                if ($myprice === false) display_notification("$osc_id price not found in FA");
                 else if ($price != $myprice) {
-                    display_notification("Updating $model from $price to $myprice");
-                    $sql = "UPDATE products SET products_price = ".osc_escape($myprice)." WHERE products_model = ".osc_escape($model);
+                    display_notification("Updating $osc_id from $price to $myprice");
+                    $sql = "UPDATE products SET products_price = ".osc_escape($myprice)." WHERE $osc_Id = ".osc_escape($osc_id);
                     osc_dbQuery($sql);
                     $num_price_errors++;
                 }
@@ -537,6 +568,61 @@ if (isset($_POST['action'])) {
             $action = 'pupdate';
         }
 
+        if ($action == 'i_import') { // Item Import
+            $sql = "SELECT p." . $osc_Id . ", pd.products_name, cd.categories_name, p.products_price FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id";
+
+            $p_result = osc_dbQuery($sql, true);
+            while ($pp = mysqli_fetch_assoc($p_result)) {
+            $products_name = utf8_decode($pp['products_name']);
+            $osc_id = $osc_Prefix . $pp[$osc_Id];
+
+                $row = get_item_category_by_name($pp['categories_name']);
+                if (!$row) {
+                    add_item_category($pp['categories_name'], 
+                    $_POST['tax_type_id'],
+                    $_POST['sales_account'],
+                    $_POST['cogs_account'],
+                    $_POST['inventory_account'],
+                    $_POST['adjustment_account'],
+                    $_POST['wip_account'],
+                    $_POST['units'],
+                    "B",
+                    "",
+                    0,
+                    0,
+                    0
+                    );
+                    $cat = db_insert_id();
+                    display_notification("Add Category " . $pp['categories_name']);
+                } else
+                    $cat = $row['category_id'];
+
+                $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($osc_id);
+                $result = db_query($sql,"item could not be retreived");
+                $row    = db_fetch_row($result);
+                if (!$row) {
+                    $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
+                            tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
+                            adjustment_account, wip_account, dimension_id, dimension2_id)
+                            VALUES ('$osc_id', " . db_escape($products_name) . ", '',
+                            '$cat', {$_POST['tax_type_id']}, '{$_POST['units']}', 'B',
+                            '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
+                            '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', '{$_POST['dimension_id']}', '{$_POST['dimension2_id']}')";
+
+                    db_query($sql, "The item could not be added");
+                    $sql = "INSERT INTO ".TB_PREF."loc_stock (loc_code, stock_id) VALUES ('{$_POST['default_location']}', ".db_escape($osc_id).")";
+
+                    db_query($sql, "The item locstock could not be added");
+                    display_notification("Insert $osc_id " . $products_name);
+                }
+                $sql    = "SELECT id from ".TB_PREF."item_codes WHERE item_code=".db_escape($osc_id)." AND stock_id = ".db_escape($osc_id);
+                $result = db_query($sql, "item code could not be retreived");
+                $row    = db_fetch_row($result);
+                if (!$row) add_item_code($osc_id, $osc_id, $products_name, $cat, 1);
+                else update_item_code($row[0], $osc_id, $osc_id, $products_name, $cat, 1);
+            }
+            $action = 'iimport';
+        }
    }
 
 } else {
@@ -544,12 +630,14 @@ if (isset($_POST['action'])) {
     $dbUser          = $db_User;
     $dbPassword      = $db_Password;
     $dbName          = $db_Name;
-
+    $oscId           = $osc_Id;
+    $oscPrefix       = $osc_Prefix;
     $lastcid         = $last_cid;
     $lastoid         = $last_oid;
     $defaultTaxGroup = $default_TaxGroup;
 
-    if ( in_array($action, array('summary', 'cimport', 'oimport')) && ($osc = osc_connect()) ) {
+    if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport')) && ($osc = osc_connect()) ) {
+
         if ($action == 'cimport' || $action == 'summary') { // Preview Customer Import page
             $min_cid = 0;
             $max_cid = 0;
@@ -575,6 +663,13 @@ if (isset($_POST['action'])) {
             $oid     = osc_dbQuery($sql);
             $max_oid = (int) $oid['orders_id'];
         }
+
+        if ($action == 'iimport' || $action == 'summary') { // Preview Item Import page
+            $min_iid = 0;
+            $max_iid = 0;
+
+            // TBD
+        }
     }
 }
 
@@ -598,6 +693,9 @@ else hyperlink_params($_SERVER['PHP_SELF'], _("&Price Check"), "action=pcheck", 
 echo '&nbsp;|&nbsp;';
 if ($action == 'pupdate') echo 'Update Prices';
 else hyperlink_params($_SERVER['PHP_SELF'], _("&Update Prices"), "action=pupdate", false);
+echo '&nbsp;|&nbsp;';
+if ($action == 'iimport') echo 'Item Import';
+else hyperlink_params($_SERVER['PHP_SELF'], _("&Item Import"), "action=iimport", false);
 echo "<br><br>";
 
 include($path_to_root . "/includes/ui.inc");
@@ -657,6 +755,8 @@ if ($action == 'show') {
         text_row("Password", 'dbPassword', $dbPassword, 20, 40);
         
         text_row("DB Name", 'dbName', $dbName, 20, 40);
+        text_row("Osc Id", 'oscId', $oscId, 20, 40);
+        text_row("Osc_Item Prefix", 'oscPrefix', $oscPrefix, 20, 40);
         tax_groups_list_row(_("Default Tax Group:"), 'taxgroup', $default_TaxGroup);
     }
 
@@ -722,9 +822,9 @@ if ($action == 'cimport') {
     amount_row(_("Credit Limit:"), 'credit_limit', $credit_limit);
 
     if ($dim >= 1)
-        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', $_POST['dimension_id'], true, " ", false, 1);
+        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', NULL, true, " ", false, 1);
     if ($dim > 1)
-        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', $_POST['dimension2_id'], true, " ", false, 2);
+        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', NULL, true, " ", false, 2);
 
     text_row("Starting osC Customer ID:", 'min_cid', $min_cid, 6, 6);
     text_row("Ending osC Customer ID:", 'max_cid', $max_cid, 6, 6);
@@ -800,6 +900,64 @@ if ($action == 'pupdate') {
 
     hidden('action', 'p_update');
     submit_center('pupdate', "Update osC Prices");
+    if ($num_price_errors > 0) display_notification("There were $num_price_errors prices updated");
+
+    end_form();
+    end_page();
+}
+
+if ($action == 'iimport') {
+
+    start_form(true);
+
+    start_table(TABLESTYLE2, "width=40%");
+
+    table_section_title("Import Items");
+    $company_record = get_company_prefs();
+
+    locations_list_row("Location:", 'default_location', null);
+
+    $dim = get_company_pref('use_dimension');
+    if ($dim < 1)
+        hidden('dimension_id', 0);
+    if ($dim < 2)
+        hidden('dimension2_id', 0);
+
+    if ($dim >= 1)
+        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', null, true, " ", false, 1);
+    if ($dim > 1)
+        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', null, true, " ", false, 2);
+
+    if (!isset($_POST['inventory_account']) || $_POST['inventory_account'] == "")
+        $_POST['inventory_account'] = $company_record["default_inventory_act"];
+
+    if (!isset($_POST['cogs_account']) || $_POST['cogs_account'] == "")
+        $_POST['cogs_account'] = $company_record["default_cogs_act"];
+
+    if (!isset($_POST['sales_account']) || $_POST['sales_account'] == "")
+        $_POST['sales_account'] = $company_record["default_inv_sales_act"];
+
+    if (!isset($_POST['adjustment_account']) || $_POST['adjustment_account'] == "")
+        $_POST['adjustment_account'] = $company_record["default_adj_act"];
+
+    if (!isset($_POST['wip_account']) || $_POST['wip_account'] == "")
+        $_POST['wip_account'] = $company_record["default_wip_act"];
+
+    if (!isset($_POST['units']) || $_POST['units'] == "")
+        $_POST['units'] = null;
+
+    gl_all_accounts_list_row("Sales Account:", 'sales_account', $_POST['sales_account']);
+    gl_all_accounts_list_row("Inventory Account:", 'inventory_account', $_POST['inventory_account']);
+    gl_all_accounts_list_row("C.O.G.S. Account:", 'cogs_account', $_POST['cogs_account']);
+    gl_all_accounts_list_row("Inventory Adjustments Account:", 'adjustment_account', $_POST['adjustment_account']);
+    gl_all_accounts_list_row("Item Assembly Costs Account:", 'wip_account', $_POST['wip_account']);
+    stock_units_list_row(_('Units of Measure:'), 'units', $_POST['units'], true);
+    item_tax_types_list_row("Item Tax Type:", 'tax_type_id', null);
+
+    end_table(1);
+
+    hidden('action', 'i_import');
+    submit_center('iimport', "Import Items");
     if ($num_price_errors > 0) display_notification("There were $num_price_errors prices updated");
 
     end_form();
