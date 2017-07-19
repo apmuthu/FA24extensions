@@ -24,9 +24,9 @@ function get_add_workcenter($name) {
     $result = db_query($sql, "Can not search workcentres table");
     $row = db_fetch_row($result);
     if (!$row[0]) {
-	$sql = "INSERT INTO ".TB_PREF."workcentres (name, description) VALUES ( $name, $name)";
-	$result = db_query($sql, "Could not add workcenter");
-	$id = db_insert_id();
+        $sql = "INSERT INTO ".TB_PREF."workcentres (name, description) VALUES ( $name, $name)";
+        $result = db_query($sql, "Could not add workcenter");
+        $id = db_insert_id();
         display_notification("Added $name as id $id");
     } else $id = $row[0];
     return $id;
@@ -41,7 +41,7 @@ function check_stock_id($stock_id) {
 }
 
 function get_supplier_id($supplier) {
-    $sql = "SELECT supplier_id FROM ".TB_PREF."suppliers where supp_name = '".$supplier."'";
+    $sql = "SELECT supplier_id FROM ".TB_PREF."suppliers where supp_name = ".db_escape($supplier);
     $result = db_query($sql, "Can not look up supplier");
     $row = db_fetch_row($result);
     if (!$row[0]) return 0;
@@ -51,7 +51,7 @@ function get_supplier_id($supplier) {
 function get_dimension_by_name($name) {
     if ($name == '') return 0;
 
-    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name='".$name."'";
+    $sql = "SELECT * FROM ".TB_PREF."dimensions WHERE name=".db_escape($name);
     $result = db_query($sql, "Could not find dimension");
     if (db_num_rows($result) == 0) return -1;
     $row = db_fetch_row($result);
@@ -62,10 +62,10 @@ function get_dimension_by_name($name) {
 function get_item_category_by_name($name)
 {
         $sql="SELECT * FROM ".TB_PREF."stock_category WHERE description=".db_escape($name);
-
         $result = db_query($sql,"an item category could not be retrieved");
-
         return db_fetch($result);
+}
+
 }
 
 
@@ -78,7 +78,7 @@ function download_file($filename, $saveasname='')
     if ($saveasname == '') $saveasname = basename($filename);
     header('Content-type: application/vnd.ms-excel');
     header('Content-Length: '.filesize($filename));
-    header('Content-Disposition: attachment; filename="'.$saveasname.'"');
+    header('Content-Disposition: attachment; filename='.db_escape($saveasname));
     readfile($filename);
 
     return true;
@@ -93,7 +93,7 @@ function download_csv($filename, $saveasname='')
     }
     if ($saveasname == '') $saveasname = basename($filename);
     header('Content-type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment; filename="'.$saveasname.'"');
+    header('Content-Disposition: attachment; filename='.db_escape($saveasname));
 // print all results, converting data as needed
     return true;
 }
@@ -162,214 +162,214 @@ if (isset($_POST['export'])) {
 page("Import of CSV formatted Items");
 
 if (isset($_POST['import'])) {
-	if (isset($_FILES['imp']) && $_FILES['imp']['name'] != '') {
-		$filename = $_FILES['imp']['tmp_name'];
-		$sep = $_POST['sep'];
+    if (isset($_FILES['imp']) && $_FILES['imp']['name'] != '') {
+        $filename = $_FILES['imp']['tmp_name'];
+        $sep = $_POST['sep'];
 
-		$fp = @fopen($filename, "r");
-		if (!$fp)
-			die("can not open file $filename");
+        $fp = @fopen($filename, "r");
+        if (!$fp)
+            die("can not open file $filename");
 
-		$lines = $i = $j = $k = $b = $u = $p = $pr = $dim_n = 0;
-		// type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
-		while ($data = fgetcsv($fp, 4096, $sep)) {
-			$data = array_map("utf8_decode", $data);
-			if ($lines++ == 0) continue;
-			list($type, $code, $id, $description, $category, $units, $qty, $mb_flag, $currency, $price) = $data;
-			$type = strtoupper($type);
-			$mb_flag = strtoupper($mb_flag);
-			if ($mb_flag == "S") $mb_flag ="D"; // old mb_flag toleration
+        $lines = $i = $j = $k = $b = $u = $p = $pr = $dim_n = 0;
+        // type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
+        while ($data = fgetcsv($fp, 4096, $sep)) {
+            $data = array_map("utf8_decode", $data);
+            if ($lines++ == 0) continue;
+            list($type, $code, $id, $description, $category, $units, $qty, $mb_flag, $currency, $price) = $data;
+            $type = strtoupper($type);
+            $mb_flag = strtoupper($mb_flag);
+            if ($mb_flag == "S") $mb_flag ="D"; // old mb_flag toleration
 
-			if ($type == 'NOTE') continue; // a comment
-			if ($type == 'BOM') {
-			    $parent = db_escape($code);
-			    $component = db_escape($id);
-			    if (check_stock_id($component)) {
-			        $workcenter = get_add_workcenter($description);
-			        $sql = "SELECT * FROM ".TB_PREF."bom WHERE parent = UPPER( $parent ) and component = UPPER( $component )";
-			        $result = db_query($sql, "Could not search BOM");
-			        $row = db_fetch_row($result);
-			        if (!$row[0]) $sql = "INSERT INTO ".TB_PREF."bom (parent, component, workcentre_added, loc_code, quantity) VALUES ($parent, $component, $workcenter, '{$_POST['location']}', $qty)";
-			        else $sql = "UPDATE ".TB_PREF."bom SET workcentre_added = $workcenter, loc_code = '{$_POST['location']}', quantity = $qty WHERE parent = $parent AND component = $component";
-			        db_query($sql, "Error adding/updating BOM");
-			        $b++;
-			    } else display_notification("Line $lines: BOM Component $component must be a STOCK_ID not ITEM_CODE");
-			}
+            if ($type == 'NOTE') continue; // a comment
+            if ($type == 'BOM') {
+                $parent = db_escape($code);
+                $component = db_escape($id);
+                if (check_stock_id($component)) {
+                    $workcenter = get_add_workcenter($description);
+                    $sql = "SELECT * FROM ".TB_PREF."bom WHERE parent = UPPER( $parent ) and component = UPPER( $component )";
+                    $result = db_query($sql, "Could not search BOM");
+                    $row = db_fetch_row($result);
+                    if (!$row[0]) $sql = "INSERT INTO ".TB_PREF."bom (parent, component, workcentre_added, loc_code, quantity) VALUES ($parent, $component, $workcenter, '{$_POST['location']}', $qty)";
+                    else $sql = "UPDATE ".TB_PREF."bom SET workcentre_added = $workcenter, loc_code = '{$_POST['location']}', quantity = $qty WHERE parent = $parent AND component = $component";
+                    db_query($sql, "Error adding/updating BOM");
+                    $b++;
+                } else display_notification("Line $lines: BOM Component $component must be a STOCK_ID not ITEM_CODE");
+            }
 
-			if ($type == 'UOM') {
-			    $abbr = db_escape($code);
-			    $name = db_escape($id);
-			    $dec = db_escape($qty);
-			    $sql = "SELECT * FROM ".TB_PREF."item_units WHERE UPPER( abbr ) = UPPER( $abbr )";
-			    $result = db_query($sql, "Unable to find units");
-			    $row = db_fetch_row($result);
-			    if (!$row[0]) $sql = "INSERT INTO ".TB_PREF."item_units (abbr, name, decimals) VALUES ( $abbr, $name, $dec )";
-			    else $sql = "UPDATE ".TB_PREF."item_units SET decimals = $dec where abbr = $abbr";
-			    db_query($sql, "Failed adding/updating UOM");
-			    $u++;
-			}
-		        // type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
-			if ($type == 'KIT' || $type == 'FOREIGN') { // Sales Kit or Foreign Item Code
-			    $row = get_item_category_by_name($category);
-			    if (!$row)
-				display_notification("TBD: unable to add_item_category without dimension");
-			    else
-				$cat=$row['category_id'];
-			    if ($type == 'FOREIGN') $foreign = 1;
-			    else $foreign = 0;
-			    $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
-			    $result = db_query($sql, "item code could not be retrieved");
-			    $row = db_fetch_row($result);
-			    if (!$row) add_item_code($code, $id, $description, $cat, $qty, $foreign);
-			    else update_item_code($row[0], $code, $id, $description, $cat, $qty, $foreign);
-			    $k++;
-			}
-			if ($type == 'ITEM') {
-                            $dim = 0;
-                            if ($qty != '') {
-			        $dim = get_dimension_by_name($qty);
-                                if ($dim == -1) {
-                                    $date = Today();
-                                    $due = add_days($date, sys_prefs::default_dimension_required_by());
-                                    $ref = references::get_next(systypes::dimension());
-                                    $dim = add_dimension($ref, $qty, 1, $date, $due, "Added due to Item Import");
-                                    $dim_n++;
-                                }
-                            }
+            if ($type == 'UOM') {
+                $abbr = db_escape($code);
+                $name = db_escape($id);
+                $dec = db_escape($qty);
+                $sql = "SELECT * FROM ".TB_PREF."item_units WHERE UPPER( abbr ) = UPPER( $abbr )";
+                $result = db_query($sql, "Unable to find units");
+                $row = db_fetch_row($result);
+                if (!$row[0]) $sql = "INSERT INTO ".TB_PREF."item_units (abbr, name, decimals) VALUES ( $abbr, $name, $dec )";
+                else $sql = "UPDATE ".TB_PREF."item_units SET decimals = $dec where abbr = $abbr";
+                db_query($sql, "Failed adding/updating UOM");
+                $u++;
+            }
+                // type, item_code, stock_id, description, category, units, qty, mb_flag, currency, price
+            if ($type == 'KIT' || $type == 'FOREIGN') { // Sales Kit or Foreign Item Code
+                $row = get_item_category_by_name($category);
+                if (!$row)
+                    display_notification("TBD: unable to add_item_category without dimension");
+                else
+                    $cat=$row['category_id'];
+                if ($type == 'FOREIGN') $foreign = 1;
+                else $foreign = 0;
+                $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
+                $result = db_query($sql, "item code could not be retrieved");
+                $row = db_fetch_row($result);
+                if (!$row) add_item_code($code, $id, $description, $cat, $qty, $foreign);
+                else update_item_code($row[0], $code, $id, $description, $cat, $qty, $foreign);
+                $k++;
+            }
+            if ($type == 'ITEM') {
+                $dim = 0;
+                if ($qty != '') {
+                    $dim = get_dimension_by_name($qty);
+                    if ($dim == -1) {
+                        $date = Today();
+                        $due = add_days($date, sys_prefs::default_dimension_required_by());
+                        $ref = references::get_next(systypes::dimension());
+                        $dim = add_dimension($ref, $qty, 1, $date, $due, "Added due to Item Import");
+                        $dim_n++;
+                    }
+                }
 
-			    $row = get_item_category_by_name($category);
-			    if (!$row) {
-				    add_item_category($category, 
-					$_POST['tax_type_id'],
-					$_POST['sales_account'],
-					$_POST['cogs_account'],
-					$_POST['inventory_account'],
-					$_POST['adjustment_account'],
-					$_POST['wip_account'],
-					$units,
-					$mb_flag,
-					$dim,
-					0,
-					0,
-					0
-				    );
-				    $cat = db_insert_id();
-			    } else
-				$cat=$row['category_id'];
-			    $sql = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='$id'";
-			    $result = db_query($sql,"item could not be retrieved");
-			    $row = db_fetch_row($result);
-			    if (!$row) {
-				    $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
-					    tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
-					    adjustment_account, wip_account, dimension_id, dimension2_id)
-					    VALUES ('$id', " . db_escape($description) . ", '',
-					    '$cat', {$_POST['tax_type_id']}, '$units', '$mb_flag',
-					    '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
-					    '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', $dim, 0)";
+                $row = get_item_category_by_name($category);
+                if (!$row) {
+                    add_item_category($category, 
+                        $_POST['tax_type_id'],
+                        $_POST['sales_account'],
+                        $_POST['cogs_account'],
+                        $_POST['inventory_account'],
+                        $_POST['adjustment_account'],
+                        $_POST['wip_account'],
+                        $units,
+                        $mb_flag,
+                        $dim,
+                        0,
+                        0,
+                        0
+                    );
+                    $cat = db_insert_id();
+                } else
+                    $cat=$row['category_id'];
+                $sql = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='$id'";
+                $result = db_query($sql,"item could not be retrieved");
+                $row = db_fetch_row($result);
+                if (!$row) {
+                    $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
+                        tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
+                        adjustment_account, wip_account, dimension_id, dimension2_id)
+                        VALUES ('$id', " . db_escape($description) . ", '',
+                        '$cat', {$_POST['tax_type_id']}, '$units', '$mb_flag',
+                        '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
+                        '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', $dim, 0)";
 
-				    db_query($sql, "The item could not be added");
-				    if ($mb_flag == "M" || $mb_flag == "B") {
-					    $sql = "INSERT INTO ".TB_PREF."loc_stock (loc_code, stock_id) VALUES ('{$_POST['location']}', '$id')";
+                    db_query($sql, "The item could not be added");
+                    if ($mb_flag == "M" || $mb_flag == "B") {
+                        $sql = "INSERT INTO ".TB_PREF."loc_stock (loc_code, stock_id) VALUES ('{$_POST['location']}', '$id')";
 
-					    db_query($sql, "The item locstock could not be added");
-				    }
+                        db_query($sql, "The item locstock could not be added");
+                    }
 
-				    $i++;
-			    } else {
-				    $sql = "UPDATE ".TB_PREF."stock_master SET long_description='',
-					    description=" . db_escape($description) .",
-					    category_id='$cat',
-					    sales_account='{$_POST['sales_account']}',
-					    inventory_account='{$_POST['inventory_account']}',
-					    cogs_account='{$_POST['cogs_account']}',
-					    adjustment_account='{$_POST['adjustment_account']}',
-					    wip_account='{$_POST['wip_account']}',
-					    dimension_id=$dim,
-					    dimension2_id=0,
-					    units='$units',
-					    mb_flag='$mb_flag',
-					    tax_type_id={$_POST['tax_type_id']}
-					    WHERE stock_id='$id'";
+                    $i++;
+                } else {
+                    $sql = "UPDATE ".TB_PREF."stock_master SET long_description='',
+                        description=" . db_escape($description) .",
+                        category_id='$cat',
+                        sales_account='{$_POST['sales_account']}',
+                        inventory_account='{$_POST['inventory_account']}',
+                        cogs_account='{$_POST['cogs_account']}',
+                        adjustment_account='{$_POST['adjustment_account']}',
+                        wip_account='{$_POST['wip_account']}',
+                        dimension_id=$dim,
+                        dimension2_id=0,
+                        units='$units',
+                        mb_flag='$mb_flag',
+                        tax_type_id={$_POST['tax_type_id']}
+                        WHERE stock_id='$id'";
 
-				    db_query($sql, "The item could not be updated");
-				    display_notification("Line $lines: Update $id $description");
-				    $j++;
-			    }
-			    $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
-			    $result = db_query($sql, "item code could not be retrieved");
-			    $row = db_fetch_row($result);
-			    if (!$row) add_item_code($code, $id, $description, $cat, 1);
-			    else update_item_code($row[0], $code, $id, $description, $cat, 1);
-			}
+                    db_query($sql, "The item could not be updated");
+                    display_notification("Line $lines: Update $id $description");
+                    $j++;
+                }
+                $sql = "SELECT id from ".TB_PREF."item_codes WHERE item_code='$code' AND stock_id = '$id'";
+                $result = db_query($sql, "item code could not be retrieved");
+                $row = db_fetch_row($result);
+                if (!$row) add_item_code($code, $id, $description, $cat, 1);
+                else update_item_code($row[0], $code, $id, $description, $cat, 1);
+            }
 
-			if ($type == 'ITEM' || $type == 'KIT' || $type == 'PRICE') {
-			    if (isset($price) && $price != "") {
-			        if ($currency == "") $currency = get_company_pref("curr_default");
-			        else {
-				    $row = get_currency($currency);
-				    if (!$row) add_currency($currency, "", "", "", "");
-			        }
+            if ($type == 'ITEM' || $type == 'KIT' || $type == 'PRICE') {
+                if (isset($price) && $price != "") {
+                    if ($currency == "") $currency = get_company_pref("curr_default");
+                    else {
+                        $row = get_currency($currency);
+                        if (!$row) add_currency($currency, "", "", "", "");
+                    }
 
-				$sql = "SELECT * FROM ".TB_PREF."prices	WHERE stock_id='$code' AND sales_type_id={$_POST['sales_type_id']} AND
-					curr_abrev='$currency'";
+                $sql = "SELECT * FROM ".TB_PREF."prices WHERE stock_id='$code' AND sales_type_id={$_POST['sales_type_id']} AND
+                    curr_abrev='$currency'";
 
-				$result = db_query($sql,"price could not be retrieved");
+                $result = db_query($sql,"price could not be retrieved");
 
-				$row = db_fetch_row($result);
-				if (!$row) add_item_price($code, $_POST['sales_type_id'], $currency, $price);
-				else update_item_price($row[0], $_POST['sales_type_id'], $currency, $price);
-				$pr++;
-			    }
-			}
-			if ($type == 'BUY') {
-				$code = db_escape($code);
-				if (check_stock_id($code)) {
-					$supplier_id = get_supplier_id(db_escape($category));
-					if ($supplier_id == 0) display_notification("Supplier $category not found");
-					else {
-						$sql = "SELECT stock_id from ".TB_PREF."purch_data where supplier_id=$supplier_id AND stock_id=$code";
-						$result = db_query($sql, "Could not lookup supplier purchasing data");
-						$row = db_fetch_row($result);
-						$descr = db_escape($description);
-						$units = db_escape($units);
-						$units = (int)$units;
-						if ($units <= 0) $units = 1;
-						if (!$row) $sql = "INSERT INTO ".TB_PREF."purch_data
-							(supplier_id, stock_id, price, suppliers_uom, conversion_factor,
-							supplier_description)
-							VALUES ($supplier_id, $code, $price, $units, $qty, $descr)";
-						else $sql = "UPDATE ".TB_PREF."purch_data SET price = $price,
-							supplier_description = $descr, suppliers_uom = $units,
-							conversion_factor = $qty
-							WHERE supplier_id=$supplier_id AND stock_id=$code";
-						db_query($sql, "Could not update supplier data");
-					}
-					$sql = "SELECT material_cost FROM ".TB_PREF."stock_master WHERE stock_id = $code";
-					$result = db_query($sql);
-					$myrow = db_fetch($result);
-					$material_cost =  $myrow['material_cost'];
-					if ($material_cost == 0 && isset($price) && $price != "") {
-						if ($qty <= 0) $qty = 1;
-						$my_price = $price / $qty;
-						$sql = "UPDATE ".TB_PREF."stock_master SET material_cost = $my_price WHERE stock_id = $code";
-						$result = db_query($sql);
-					}
-					$p++;
-				} else display_notification("Stock Code $code does not exist");
-			}
-		}
-		@fclose($fp);
+                $row = db_fetch_row($result);
+                if (!$row) add_item_price($code, $_POST['sales_type_id'], $currency, $price);
+                else update_item_price($row[0], $_POST['sales_type_id'], $currency, $price);
+                $pr++;
+                }
+            }
+            if ($type == 'BUY') {
+                $code = db_escape($code);
+                if (check_stock_id($code)) {
+                    $supplier_id = get_supplier_id(db_escape($category));
+                    if ($supplier_id == 0) display_notification("Supplier $category not found");
+                    else {
+                        $sql = "SELECT stock_id from ".TB_PREF."purch_data where supplier_id=$supplier_id AND stock_id=$code";
+                        $result = db_query($sql, "Could not lookup supplier purchasing data");
+                        $row = db_fetch_row($result);
+                        $descr = db_escape($description);
+                        $units = db_escape($units);
+                        $units = (int)$units;
+                        if ($units <= 0) $units = 1;
+                        if (!$row) $sql = "INSERT INTO ".TB_PREF."purch_data
+                            (supplier_id, stock_id, price, suppliers_uom, conversion_factor,
+                            supplier_description)
+                            VALUES ($supplier_id, $code, $price, $units, $qty, $descr)";
+                        else $sql = "UPDATE ".TB_PREF."purch_data SET price = $price,
+                            supplier_description = $descr, suppliers_uom = $units,
+                            conversion_factor = $qty
+                            WHERE supplier_id=$supplier_id AND stock_id=$code";
+                        db_query($sql, "Could not update supplier data");
+                    }
+                    $sql = "SELECT material_cost FROM ".TB_PREF."stock_master WHERE stock_id = $code";
+                    $result = db_query($sql);
+                    $myrow = db_fetch($result);
+                    $material_cost =  $myrow['material_cost'];
+                    if ($material_cost == 0 && isset($price) && $price != "") {
+                        if ($qty <= 0) $qty = 1;
+                        $my_price = $price / $qty;
+                        $sql = "UPDATE ".TB_PREF."stock_master SET material_cost = $my_price WHERE stock_id = $code";
+                        $result = db_query($sql);
+                    }
+                    $p++;
+                } else display_notification("Stock Code $code does not exist");
+            }
+        }
+        @fclose($fp);
 
-		if ($i+$j > 0) display_notification("$i item posts created, $j item posts updated.");
-		if ($dim_n > 0) display_notification("$dim_n Item Dimensions added.");
-		if ($k > 0) display_notification("$k sales kit components added or updated.");
-		if ($b > 0) display_notification("$b BOM components added or updated.");
-		if ($u > 0) display_notification("$u Units of Measure added or updated.");
-		if ($p > 0) display_notification("$p Purchasing Data items added or updated.");
-		if ($pr > 0) display_notification("$pr Prices items added or updated for " . $_POST['sales_type_id']);
+        if ($i+$j > 0) display_notification("$i item posts created, $j item posts updated.");
+        if ($dim_n > 0) display_notification("$dim_n Item Dimensions added.");
+        if ($k > 0) display_notification("$k sales kit components added or updated.");
+        if ($b > 0) display_notification("$b BOM components added or updated.");
+        if ($u > 0) display_notification("$u Units of Measure added or updated.");
+        if ($p > 0) display_notification("$p Purchasing Data items added or updated.");
+        if ($pr > 0) display_notification("$pr Prices items added or updated for " . $_POST['sales_type_id']);
 
-	} else display_error("No CSV file selected");
+    } else display_error("No CSV file selected");
 }
 
 if ($action == 'import') echo 'Import';
@@ -389,21 +389,22 @@ if ($action == 'import') {
     $company_record = get_company_prefs();
 
     if (!isset($_POST['inventory_account']) || $_POST['inventory_account'] == "")
-   	$_POST['inventory_account'] = $company_record["default_inventory_act"];
+        $_POST['inventory_account'] = $company_record["default_inventory_act"];
 
     if (!isset($_POST['cogs_account']) || $_POST['cogs_account'] == "")
-   	$_POST['cogs_account'] = $company_record["default_cogs_act"];
+        $_POST['cogs_account'] = $company_record["default_cogs_act"];
 
     if (!isset($_POST['sales_account']) || $_POST['sales_account'] == "")
-	$_POST['sales_account'] = $company_record["default_inv_sales_act"];
+        $_POST['sales_account'] = $company_record["default_inv_sales_act"];
 
     if (!isset($_POST['adjustment_account']) || $_POST['adjustment_account'] == "")
-	$_POST['adjustment_account'] = $company_record["default_adj_act"];
+        $_POST['adjustment_account'] = $company_record["default_adj_act"];
 
     if (!isset($_POST['wip_account']) || $_POST['wip_account'] == "")
-	$_POST['wip_account'] = $company_record["default_wip_act"];
+        $_POST['wip_account'] = $company_record["default_wip_act"];
+
     if (!isset($_POST['sep']))
-	$_POST['sep'] = ",";
+        $_POST['sep'] = ",";
 
     gl_all_accounts_list_row("Sales Account:", 'sales_account', $_POST['sales_account']);
     gl_all_accounts_list_row("Inventory Account:", 'inventory_account', $_POST['inventory_account']);
@@ -459,4 +460,4 @@ if ($action == 'export') {
     end_form();
 }
 
-    end_page();
+end_page();

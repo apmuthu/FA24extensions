@@ -1,16 +1,23 @@
-2017-07-11  Ap.Muthu  osc_orders module: Typos fixed
-2017-07-11  Ap.Muthu  Import Transactions: Whitespace cleanup, beautification
-2017-07-10  Ap.Muthu  asset_register: Date Picker fix
-2017-07-10  Ap.Muthu  rep_tax_cash_basis: Popup Window and Date Picker fix
-2017-07-10  Ap.Muthu  Import Transactions: Popup Window fix
-2017-07-09  Ap.Muthu  import_items module: fixes
-2017-07-09  Ap.Muthu  osc_orders module: fixes ported from FA 2.3.x
-2017-07-07  toHZLjGk  Dashboard Module: Date Picker popup fix
-2017-07-01  Ap.Muthu  Import Transactions: mysql_fetch_assoc => db_fetch_assoc and Filter Fix
-2017-06-24  Ap.Muthu  Charts Finsihed => Finished
-2017-06-24  Ap.Muthu  Single line comment in css not quite a comment
-2017-06-23  Ap.Muthu  Language .po files corrected for '\\n' => '\n' 
-2017-06-21  Ap.Muthu  Corrected GB general Chart of Accounts for FA v2.4.1 
-2017-06-19  Ap.Muthu  Dashboard Theme default.css - removed trailing */
-2017-06-19  Ap.Muthu  Theme greyred => grayred to match code
-2017-06-17  Ap.Muthu  Initial Import from official FA 2.4 extensions distribution repo
+2017-07-19  BraathWaate  osc_orders module: oscId and oscPrefix parameters added
+2017-07-19  Ap.Muthu     osc_orders module: optimised osc db connect calls
+2017-07-19  Ap.Muthu     osc_orders module: osc db access mysql => mysqli
+2017-07-18  Ap.Muthu     osc_orders module: whitespace indenting
+2017-07-17  BraathWaate  import_items module: indent cleanup and separation of ITEM addition
+2017-07-17  Ap.Muthu     import_items module: indent cleanup
+2017-07-17  BraathWaate  import_items module: dbescape and get_item_category_by_name()
+2017-07-11  Ap.Muthu     osc_orders module: Typos fixed
+2017-07-11  Ap.Muthu     Import Transactions: Whitespace cleanup, beautification
+2017-07-10  Ap.Muthu     asset_register: Date Picker fix
+2017-07-10  Ap.Muthu     rep_tax_cash_basis: Popup Window and Date Picker fix
+2017-07-10  Ap.Muthu     Import Transactions: Popup Window fix
+2017-07-09  Ap.Muthu     import_items module: fixes
+2017-07-09  Ap.Muthu     osc_orders module: fixes ported from FA 2.3.x
+2017-07-07  toHZLjGk     Dashboard Module: Date Picker popup fix
+2017-07-01  Ap.Muthu     Import Transactions: mysql_fetch_assoc => db_fetch_assoc and Filter Fix
+2017-06-24  Ap.Muthu     Charts Finsihed => Finished
+2017-06-24  Ap.Muthu     Single line comment in css not quite a comment
+2017-06-23  Ap.Muthu     Language .po files corrected for '\\n' => '\n' 
+2017-06-21  Ap.Muthu     Corrected GB general Chart of Accounts for FA v2.4.1 
+2017-06-19  Ap.Muthu     Dashboard Theme default.css - removed trailing */
+2017-06-19  Ap.Muthu     Theme greyred => grayred to match code
+2017-06-17  Ap.Muthu     Initial Import from official FA 2.4 extensions distribution repo
