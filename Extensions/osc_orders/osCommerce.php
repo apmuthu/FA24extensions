@@ -345,7 +345,8 @@ if (isset($_POST['action'])) {
         $defaultTaxGroup = $default_TaxGroup;
     }
 
-    if ($osc = osc_connect()) {
+    if ( in_array($action, array('c_import', 'o_import', 'p_check', 'p_update')) && ($osc = osc_connect()) ) {
+
         if ($action == 'c_import') {
             if (!check_num('credit_limit', 0)) {
                 display_error(_("The credit limit must be numeric and not less than zero."));
@@ -490,7 +491,6 @@ if (isset($_POST['action'])) {
                     db_query($sql, "Update 'lastoid'");
                 }
             }
-
         }
 
         if ($action == 'p_check') { // Price Check
@@ -536,17 +536,20 @@ if (isset($_POST['action'])) {
             }
             $action = 'pupdate';
         }
-    }
+
+   }
+
 } else {
     $dbHost          = $db_Host;
     $dbUser          = $db_User;
     $dbPassword      = $db_Password;
     $dbName          = $db_Name;
+
     $lastcid         = $last_cid;
     $lastoid         = $last_oid;
     $defaultTaxGroup = $default_TaxGroup;
 
-    if ($osc = osc_connect()) {
+    if ( in_array($action, array('summary', 'cimport', 'oimport')) && ($osc = osc_connect()) ) {
         if ($action == 'cimport' || $action == 'summary') { // Preview Customer Import page
             $min_cid = 0;
             $max_cid = 0;
