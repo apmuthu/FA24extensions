@@ -44,7 +44,9 @@ function osc_dbQuery($sql, $multirow = false) {
     global $osc;
 
     $result = mysqli_query($osc, $sql);
-    $data = ($multirow) ?  $result : mysqli_fetch_assoc($result);
+    if ($multirow)
+	return $result;
+    $data = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     return $data;
 }
@@ -201,6 +203,13 @@ $osc_Prefix       = "";
 $last_cid         = 0;
 $last_oid         = 0;
 $default_TaxGroup = 0;
+
+$min_cid = 0;
+$max_cid = 0;
+$min_oid = 0;
+$max_oid = 0;
+$min_iid = 0;
+$max_iid = 0;
 
 if ($found) {
     // Get Host Name
@@ -393,7 +402,6 @@ if (isset($_POST['action'])) {
             $sql = "SELECT * FROM customers c LEFT JOIN address_book b on c.customers_default_address_id = b.address_book_id where c.customers_id  >= ".osc_escape($min_cid)." AND c.customers_id <= ".osc_escape($max_cid);
             $customers = osc_dbQuery($sql, true);
             display_notification("Found " . db_num_rows($customers) . " new customers");
-            // display_notification("osc " . $sql);
             $i = $j = 0;
             while ($cust = mysqli_fetch_assoc($customers)) {
                 $email     = $cust['customers_email_address'];
@@ -435,6 +443,7 @@ if (isset($_POST['action'])) {
                     db_query($sql, "Update 'lastcid'");
                 }
             }
+            mysqli_free_result($customers);
             display_notification("$i customer posts created, $j customer posts updated.");
         }
 
@@ -459,6 +468,7 @@ if (isset($_POST['action'])) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     if (not_null($row['comments'])) $comments .= $row['comments'] . "\n";
                 }
+                mysqli_free_result($result);
                 $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `name` = ".db_escape($order['customers_name']);
                 $result = db_query($sql, "Could not find customer by name");
                 // echo "Found " . db_num_rows($result);
@@ -512,6 +522,7 @@ if (isset($_POST['action'])) {
                 while ($prod = mysqli_fetch_assoc($result)) {
                     add_to_order($cart, $osc_Prefix . $prod[$osc_Id], $prod['products_quantity'], $prod['products_price'], $customer['pymt_discount']);
                 }
+                mysqli_free_result($result);
                 $order_no = $cart->write(0);
                 display_notification("Added Order Number $order_no for " . $order['customers_name']);
 
@@ -521,6 +532,7 @@ if (isset($_POST['action'])) {
                 }
 
             }
+            mysqli_free_result($result);
             $action = 'oimport';
         }
 
@@ -543,6 +555,7 @@ if (isset($_POST['action'])) {
                     $num_price_errors++;
                 }
             }
+            mysqli_free_result($p_result);
             $action = 'pcheck';
         }
 
@@ -565,6 +578,7 @@ if (isset($_POST['action'])) {
                     $num_price_errors++;
                 }
             }
+            mysqli_free_result($p_result);
             $action = 'pupdate';
         }
 
@@ -621,8 +635,10 @@ if (isset($_POST['action'])) {
                 if (!$row) add_item_code($osc_id, $osc_id, $products_name, $cat, 1);
                 else update_item_code($row[0], $osc_id, $osc_id, $products_name, $cat, 1);
             }
+            mysqli_free_result($p_result);
             $action = 'iimport';
         }
+        if ($osc && !$one_database) mysqli_close($osc);
    }
 
 } else {
@@ -639,8 +655,6 @@ if (isset($_POST['action'])) {
     if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport')) && ($osc = osc_connect()) ) {
 
         if ($action == 'cimport' || $action == 'summary') { // Preview Customer Import page
-            $min_cid = 0;
-            $max_cid = 0;
 
             $sql     = "SELECT `customers_id` FROM `customers` order by `customers_id` asc LIMIT 0,1";
             $cid     = osc_dbQuery($sql);
@@ -652,8 +666,6 @@ if (isset($_POST['action'])) {
         }
 
         if ($action == 'oimport' || $action == 'summary') { // Preview Order Import page
-            $min_oid = 0;
-            $max_oid = 0;
 
             $sql     = "SELECT `orders_id` FROM `orders` order by `orders_id` asc LIMIT 0,1";
             $oid     = osc_dbQuery($sql);
@@ -665,15 +677,13 @@ if (isset($_POST['action'])) {
         }
 
         if ($action == 'iimport' || $action == 'summary') { // Preview Item Import page
-            $min_iid = 0;
-            $max_iid = 0;
 
             // TBD
         }
+        if ($osc && !$one_database) mysqli_close($osc);
     }
-}
 
-if ($osc && !$one_database) mysqli_close($osc);
+}
 
 page("osCommerce Interface");
 if ($action == 'summary') echo 'Summary';
@@ -963,3 +973,4 @@ if ($action == 'iimport') {
     end_form();
     end_page();
 }
+
