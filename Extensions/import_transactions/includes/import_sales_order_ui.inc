@@ -11,7 +11,6 @@
 ***********************************************************************/
 
 include_once($path_to_root . "/modules/import_transactions/includes/import_sales_cart_class.inc");
-include_once($path_to_root . "/includes/manufacturing.inc");
 
 //--------------------------------------------------------------------------------
 function import_add_to_order(&$order, $new_item, $new_item_qty, $price, $discount, $description='')
@@ -216,3 +215,4 @@ function import_sales_order_item_controls(&$order, &$rowcounter, $line_no=-1)
 
 //--------------------------------------------------------------------------------
 
+?>
