@@ -133,7 +133,7 @@ if ((isset($_POST['type']))) {
                 }
                 // display_notification_centered(" --------------------------------------------------------------------------------------------Line $line ------------------------------------------------------------------------------------------");
                 if ($type == ST_JOURNAL) {
-                    list($reference, $date, $memo, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id) = $data;
+                    list($reference, $date, $memo, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $comments) = array_merge($data, array(""));
                     list($next_ref,,,, $next_code,,,,,) = $nextdata;
                     str_replace('"', "", $memo);
                     str_replace('"', "", $person_id);
@@ -286,7 +286,7 @@ display_notification_centered($line . ":" . $bank_account_gl_code);
                 if (!$error) {
                     if (($type == ST_JOURNAL)) {
                         if ($bank_account !== false)
-				journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$type], $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $prev_ref != $reference);
+				journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$type], $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $comments, $prev_ref != $reference);
                         else {
                             if (check_tax_appropriate($code_id, $taxtype, $line) == true) {
                                 journal_inclusive_tax($type, $reference, $date, $line, $curEntryId[$type], $code_id, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id);

@@ -183,7 +183,7 @@ function bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_accou
 }
 
 
-function journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $first) // extra inclusive of tax column in csv
+function journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $comments, $first) // extra inclusive of tax column in csv
 {
     if (($person_type_id == PT_CUSTOMER && !customer_exist($person_id))
 	|| ($person_type_id == PT_SUPPLIER && !supplier_exist($person_id)))
@@ -198,6 +198,9 @@ function journal_bank_trans($type, $reference, $date, $bank_account, $bank_accou
     display_notification_centered(_("Added to table 'bank_trans': $curEntryId, $bank_account, $reference, $date, $amt, $person_type_id, $person_id (line $line in import file '{$_FILES['imp']['name']}')"));
 
     if ($first) {
+        if ($comments != "")
+            add_comments($type, $curEntryId, $date, $comments);
+
 	// To keep customer and supplier accounts at zero after import of transactions, set
 	 	$zero_trans=0;
 	// Otherwise:
