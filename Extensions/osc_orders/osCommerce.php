@@ -682,6 +682,7 @@ if (isset($_POST['action'])) {
         }
         if ($osc && !$one_database) mysqli_close($osc);
     }
+}
 
 page("osCommerce Interface");
 if ($action == 'summary') echo 'Summary';
@@ -971,4 +972,3 @@ if ($action == 'iimport') {
     end_form();
     end_page();
 }
-
