@@ -45,7 +45,7 @@ function osc_dbQuery($sql, $multirow = false) {
 
     $result = mysqli_query($osc, $sql);
     if ($multirow)
-	return $result;
+        return $result;
     $data = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     return $data;
@@ -532,7 +532,7 @@ if (isset($_POST['action'])) {
                 }
 
             }
-            mysqli_free_result($result);
+            mysqli_free_result($oid_result);
             $action = 'oimport';
         }
 
@@ -587,8 +587,8 @@ if (isset($_POST['action'])) {
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
-            $products_name = utf8_decode($pp['products_name']);
-            $osc_id = $osc_Prefix . $pp[$osc_Id];
+                $products_name = utf8_decode($pp['products_name']);
+                $osc_id = $osc_Prefix . $pp[$osc_Id];
 
                 $row = get_item_category_by_name($pp['categories_name']);
                 if (!$row) {
@@ -682,8 +682,6 @@ if (isset($_POST['action'])) {
         }
         if ($osc && !$one_database) mysqli_close($osc);
     }
-
-}
 
 page("osCommerce Interface");
 if ($action == 'summary') echo 'Summary';
