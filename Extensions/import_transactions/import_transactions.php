@@ -64,11 +64,11 @@ ini_set("display_errors", "on");
 //Ensure that your company has no important information in it as these will be deleted by means of all_delete function under import_transactions.inc
 //Warning: Most records will be deleted if '$yes' set to true. Default must stay on false for normal operation.
 //Recommended: Remove this next line after you are happy with testing.
-all_delete($yes=false);
+all_delete($yes = false);
 
 $js = "";
 if ($SysPrefs->use_popup_windows) 
-	$js .= get_js_open_window(800, 500);
+    $js .= get_js_open_window(800, 500);
 $help_context = "Import General Journals  / Deposits / Payments / Bank Statements / Sales Orders / Sales Invoices  <a href='spreadsheet_headers.html'>Help: Formats</a>";
 page(_($help_context), false, false, "", $js);
 
@@ -97,9 +97,7 @@ if ((isset($_POST['type']))) {
             $bank_account_gl_code = get_bank_gl_account($bank_account);
         } //gl_db_bank_accounts.inc
         $fp = @fopen($filename, "r");
-
         $trial = (isset($_POST['trial']) ? $_POST['trial'] : false);
-
         if (!$fp) {
             display_error(_("Error opening file $filename"));
         } else {
@@ -123,6 +121,7 @@ if ((isset($_POST['type']))) {
             $debitsEqualcredits = 1;
             check_db_has_stock_items(_("There are no inventory items defined in the system."));
             check_db_has_customer_branches(_("There are no customers, or there are no customers with branches. Please define customers and customer branches."));   
+
             while ($data = fgetcsv($fp, 4096, $sep)) {
                 if (($line++ == 0) && ($skippedheader == false)) {
                     display_notification_centered(_("Skipped header. (line $line in import file '{$_FILES['imp']['name']}')"));$skippedheader = true;continue;
@@ -145,21 +144,17 @@ if ((isset($_POST['type']))) {
                         $prev_ref = $reference;
                         continue;
                     }
-                }
-
-                if (($type == ST_BANKDEPOSIT) && ($stateformat!=null)) {
-                    //All amounts to the left of amt are ignored since only considering deposits which are to the left of payments on a bank statement.     
-                    list($reference, $date, $memo, $ignore, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref,$person_type_id,$person_id,$BranchNo) = $data;
-                    if ((($ignore == "")||($ignore == null)|| empty($ignore) ) && ($amt > 0.01 )){
+                } else if (($type == ST_BANKDEPOSIT) && ($stateformat != null)) {
+                    //All amounts to the left of amt are ignored since only considering deposits which are to the left of payments on a bank statement.
+                    list($reference, $date, $memo, $ignore, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $BranchNo) = $data;
+                    if ((($ignore == "") || ($ignore == null) || empty($ignore)) && ($amt > 0.01)) {
                     } else {
-                        display_notification_centered(_("Ignoring payment. Use same csv under payment processing.(line $line in import file '{$_FILES['imp']['name']}')"));  
+                        display_notification_centered(_("Ignoring payment. Use same csv under payment processing.(line $line in import file '{$_FILES['imp']['name']}')"));
                         $error = false;
                         $prev_ref = $reference;
                         continue;
                     }
-                }
-
-                if ((($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT)) && ($stateformat==null))
+                } else if ((($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT)) && ($stateformat == null))
                     list($reference, $date, $memo, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $BranchNo) = $data;
 
                 if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
@@ -237,7 +232,7 @@ if ((isset($_POST['type']))) {
                     }
                 }
 
-                if ($reference == '' ) {
+                if ($reference == '') {
                     display_error(_("$line does not have a reference. (line $line in import file '{$_FILES['imp']['name']}')"));
                     $error = true;
                 }
@@ -247,8 +242,8 @@ if ((isset($_POST['type']))) {
                 } elseif (($Refs->exists($type, $reference)) && ($reference == $prev_ref)) { //do nothing $Refs->save($type,$line,$reference);
 
                 } elseif ((($Refs->exists($type, $reference)) == null) && ($reference != $prev_ref)) {
-                   $Refs->save($type,$curEntryId,$reference);
-                   save_next_reference($type, $reference);
+                    $Refs->save($type, $curEntryId, $reference);
+                    save_next_reference($type, $reference);
                 }
                 if (($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT) || ($type == ST_JOURNAL)) {
                     $description = get_gl_account_name($code_id);
