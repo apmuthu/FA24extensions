@@ -5,7 +5,7 @@ class hooks_repgen extends hooks {
 	var $module_name = 'repgen';
 	
 	/*
-		Install additonal menu options provided by module
+		Install additional menu options provided by module
 	*/
 	function install_options($app) {
 		global $path_to_root;

@@ -1,11 +1,11 @@
-# SOME DESCRIPTIVE TITLE.
+# FrontAccounting asset-register module
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Gigih Wahyudi <lowland.bpn@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Module-Asset Register\n"
+"Project-Id-Version: FrontAccounting - Asset Register Module\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-11 12:06+0100\n"
 "PO-Revision-Date: 2014-11-11 05:09+0800\n"

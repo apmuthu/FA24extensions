@@ -13,7 +13,7 @@
 /includes/modules_db.inc: 9b3a2bc862fece6cb0cccf5edcca84227e684c9f
 /sql/update.sql: 5e8d2b37e1b24371acda512cd87c46b8a181b641
 /index.php: 435866102943ef00e38d96927cb5ee20bff20688
-/hooks.php: 9497c1bb0f8dd6caabec42e902e45051d38a198c
+/hooks.php: 80a716c17261a6521dd36809405e66aee7d1e9e0
 /requisitions.php: 33afcd8925fa9cc58bd996c0bf2185ae99abf7ea
 /requisition_allocations.php: f2dc1ea4f3f175c8caae3dfca3f5a7ef34e19a25
 
