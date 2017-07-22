@@ -77,7 +77,7 @@ class import_sales_cart
     //  $trans_no!=0 && $prep_child==false => update with parent constraints for reedition
     //  $trans_no!=0 && $prep_child==true => prepare for child doc entry
     //
-    function import_sales_cart($type, $trans_no = 0, $prep_child = false) {
+    function import_sales_cart($type, $trans_no=0, $prep_child=false) {
         /*Constructor function initialises a new shopping cart */
         $this->line_items = array();
         $this->sales_type = "";
@@ -116,7 +116,7 @@ class import_sales_cart
         return $items;
     }
     //
-    //  Prepare cart to new child document entry, just after initial parent doc read.
+    // Prepare cart to new child document entry, just after initial parent doc read.
     //
     function prepare_child()
     {
@@ -154,7 +154,7 @@ class import_sales_cart
     }
 
     //
-    //  Prepares transaction for reedition updating with parent transaction data 
+    // Prepares transaction for reedition updating with parent transaction data 
     //
     function set_parent_constraints($sodata, $src_no) {
 
@@ -364,9 +364,9 @@ class import_sales_cart
             $this->freight_cost = $freight_cost;
     }
 
-    function add_to_cart($line_no, $stock_id, $qty, $price, $disc, $qty_done = 0, $standard_cost = 0, $description = null, $id = 0, $src_no = 0, $src_id=0)
+    function add_to_cart($line_no, $stock_id, $qty, $price, $disc, $qty_done=0, $standard_cost=0, $description=null, $id=0, $src_no=0, $src_id=0)
     {
-        $line = new import_sales_line_details($stock_id, $qty, $price, $disc, $qty_done,  $standard_cost, $description, $id, $src_no, $src_id);
+        $line = new import_sales_line_details($stock_id, $qty, $price, $disc, $qty_done, $standard_cost, $description, $id, $src_no, $src_id);
 
         if ($line->valid) {
             $this->line_items[$line_no] = $line;
@@ -570,7 +570,7 @@ class import_sales_cart
         return $low_stock;
     }
 
-} /* end of class defintion - import_sales_cart*/
+} // end of class defintion - import_sales_cart
 
 class import_sales_line_details
 {
