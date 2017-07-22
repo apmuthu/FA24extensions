@@ -1,3 +1,7 @@
+2017-07-22  BraathWaate  import_transactions module: FA 2.4.x fixes (not tested by Ap.Muthu)
+2017-07-22  Ap.Muthu     Typos fixed: additonal => additional
+2017-07-22  mane27a      asset_register module: Added es_MX translation
+2017-07-21  Ap.Muthu     import_transactions module: whitespace cleanups and space indentations
 2017-07-19  BraathWaate  osc_orders module: osc_dbQuery() mods, var scoping and mysqli memory optimisation
 2017-07-19  BraathWaate  osc_orders module: oscId and oscPrefix parameters added
 2017-07-19  Ap.Muthu     osc_orders module: optimised osc db connect calls

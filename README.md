@@ -16,7 +16,7 @@ These FA extensions comprise:
 * Themes
 
 ## Methods and Usage
-* All extensions are archived using `ar` and have an `_init` folder having a `config` details file and SHA1 hashes in `file`.
+* All extensions are archived using `ar` and have an `_init` folder having a `config` details file and SHA1 hashes in `files`.
 * These files have been extracted and unarchived in plain text form (for code) / native binary formats (for images) here.
 * FA Developers are encouraged to fork this project and add / update these extensions, providing pull requests here.
 * The FA project devs can use this for preparing their new versions of pkg files for use within the FA web interface.
@@ -25,6 +25,7 @@ These FA extensions comprise:
 `FOR /R %a IN (*.zip) DO "C:\Program Files\7-Zip\7z.exe" x "%a" -y`
 * [Online SHA1 Hash Generator](http://hash.online-convert.com/sha1-generator)
 * [Online SHA1 checksum](https://emn178.github.io/online-tools/sha1_checksum.html)
+* Get all sha1sum values in the extension folder with `find . -type f -exec sha1sum \{\} \; > abc.txt`
 
 ## Caveats
 * This repo will be updated only when I have the time.
