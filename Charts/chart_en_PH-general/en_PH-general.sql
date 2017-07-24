@@ -1,6 +1,6 @@
 # MySQL dump of database 'faupgrade' on host 'localhost'
-# Backup Date and Time: 2016-02-23 17:10
-# Built by FrontAccounting 2.4.RC1
+# Backup Date and Time: 2017-07-24 12:30
+# Built by FrontAccounting 2.4.1
 # http://frontaccounting.com
 # Company: Training Co.
 # User: 
@@ -101,8 +101,8 @@ CREATE TABLE `0_bank_accounts` (
 ### Data of table `0_bank_accounts` ###
 
 INSERT INTO `0_bank_accounts` VALUES
-('1200', '0', 'Current account', '1234-5678-90', 'Bank of the Philippine Islands', 'Malolos Highway', 'USD', '0', '1', '1100', '0000-00-00 00:00:00', '0', '0'),
-('1100', '3', 'Petty Cash account', 'N/A', 'N/A', NULL, 'USD', '0', '2', '1100', '0000-00-00 00:00:00', '0', '0');
+('1200', '0', 'Current account', '1234-5678-90', 'Bank of the Philippine Islands', 'Malolos Highway', 'PHP', '0', '1', '1100', '0000-00-00 00:00:00', '0', '0'),
+('1100', '3', 'Petty Cash account', 'N/A', 'N/A', NULL, 'PHP', '0', '2', '1100', '0000-00-00 00:00:00', '0', '0');
 
 ### Structure of table `0_bank_trans` ###
 
@@ -476,10 +476,11 @@ CREATE TABLE `0_currencies` (
 ### Data of table `0_currencies` ###
 
 INSERT INTO `0_currencies` VALUES
-('CA Dollars', 'CAD', '$', 'Canada', 'Cents', '1', '0'),
-('Euro', 'EUR', '?', 'Europe', 'Cents', '1', '0'),
-('Pounds', 'GBP', '?', 'England', 'Pence', '1', '0'),
-('US Dollars', 'USD', 'P', 'United States', 'Cents', '1', '0');
+('Phillipine Pesos', 'PHP', 'P$', 'Phillipines', 'Sentimo', '1', '0'),
+('US Dollars', 'USD', '$', 'United States', 'Cents', '1', '0'),
+('Euro', 'EUR', '€', 'Europe', 'Cents', '1', '0'),
+('Pounds', 'GBP', '£', 'Great Britain', 'Pence', '1', '0'),
+('CA Dollars', 'CAD', '$', 'Canada', 'Cents', '1', '0');
 
 ### Structure of table `0_cust_allocations` ###
 
@@ -1624,7 +1625,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('coy_name', 'setup.company', 'varchar', '60', 'Marinny Corporation'),
 ('coy_no', 'setup.company', 'varchar', '25', ''),
 ('creditors_act', 'glsetup.purchase', 'varchar', '15', '5020'),
-('curr_default', 'setup.company', 'char', '3', 'USD'),
+('curr_default', 'setup.company', 'char', '3', 'PHP'),
 ('debtors_act', 'glsetup.sales', 'varchar', '15', '2000'),
 ('default_adj_act', 'glsetup.items', 'varchar', '15', '3000'),
 ('default_cogs_act', 'glsetup.items', 'varchar', '15', '8100'),
