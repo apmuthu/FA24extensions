@@ -14819,7 +14819,7 @@ msgstr ""
 "document wordt aangepast"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "U gaat dit document annuleren.\nWilt u verder gaan?"
 
 #: /sales/sales_order_entry.php:754
@@ -14829,7 +14829,7 @@ msgstr "Aanvaard de veranderingen en pas het document aan"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr "U gaat deze extensie verwijderen.\nWilt u verder gaan?"
 

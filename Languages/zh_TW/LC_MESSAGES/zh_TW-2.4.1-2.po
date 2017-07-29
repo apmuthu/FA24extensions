@@ -14287,7 +14287,7 @@ msgid ""
 msgstr "編輯一個舊文件時取消文件輸入或是移除銷貨訂單"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "您正在取消這個文件\n確定繼續？"
 
 #: /sales/sales_order_entry.php:754
@@ -14296,7 +14296,7 @@ msgstr "檢查異動與更新文件"
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr "您將要取消該訂單未交付的一部分。\\ñ你要繼續嗎？"
 

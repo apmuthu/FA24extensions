@@ -14430,7 +14430,7 @@ msgstr ""
 "dokument te vjeter"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "Ju po e anulloni kete dokument. A doni te vazhdoni?"
 
 #: /sales/sales_order_entry.php:754
@@ -14440,7 +14440,7 @@ msgstr "Konfirmo ndryshimet dhe perditeso dokumentin"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr "Ju po e anulloni kete dokument. A doni te vazhdoni?"
 

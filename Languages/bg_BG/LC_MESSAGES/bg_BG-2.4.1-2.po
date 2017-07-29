@@ -14753,7 +14753,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
 #, fuzzy
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "Ще бъде изтрит %s backup файл. <br>Искате ли да продължите?"
 
 #: /sales/sales_order_entry.php:754
@@ -14762,9 +14762,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:758
 #, fuzzy
-msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
-"continue?"
+msgid "You are about to cancel undelivered part of this order.\\nDo you want to continue?"
 msgstr "Ще бъде изтрит %s backup файл. <br>Искате ли да продължите?"
 
 #: /sales/allocations/customer_allocate.php:28

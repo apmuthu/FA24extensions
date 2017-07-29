@@ -14728,7 +14728,7 @@ msgstr ""
 "documento anterior"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "Estás por anular este Documento. \n¿Quiere Continuar?"
 
 #: /sales/sales_order_entry.php:754
@@ -14738,7 +14738,7 @@ msgstr "Confirmar cambios y actualizar documento"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr "Se anulará este Pedido. \nQuiere Continuar?"
 

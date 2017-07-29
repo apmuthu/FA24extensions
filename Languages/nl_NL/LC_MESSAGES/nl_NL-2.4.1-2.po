@@ -14652,7 +14652,7 @@ msgstr ""
 "document wordt gewijzigd."
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr ""
 "U staat op het punt om dit document terug te draaien.\nWeet u zeker dat u "
 "wilt doorgaan?"
@@ -14663,7 +14663,7 @@ msgstr "Valideer uw wijzigingen en voer deze door."
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr ""
 "U staat op het punt om een gedeelte van deze order te annuleren.\nWeet u "

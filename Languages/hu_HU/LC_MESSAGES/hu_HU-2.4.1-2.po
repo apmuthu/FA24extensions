@@ -21673,7 +21673,7 @@ msgid ""
 msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr ""
 
 #: /sales/sales_order_entry.php:754
@@ -21682,7 +21682,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr ""
 
