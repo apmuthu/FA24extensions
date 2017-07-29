@@ -135,7 +135,7 @@ msgstr "La transacción seleccionada ha sido anulada."
 msgid "Select attachment file."
 msgstr "Seleccionar un artículo:"
 
-# c:/Apache2/htdocs/account/inventory/manage/items.php:57
+#: /inventory/manage/items.php:57
 #: /admin/attachments.php:88 /admin/company_preferences.php:42
 #: /inventory/manage/items.php:83
 #, fuzzy
@@ -429,7 +429,7 @@ msgstr "Crear Respaldo"
 msgid "Comments:"
 msgstr "Comentarios"
 
-# c:/Apache2/htdocs/account/admin/backups.php:84
+#: /admin/backups.php:84
 #: /admin/backups.php:187
 #, fuzzy
 msgid "Compression:"
@@ -439,7 +439,7 @@ msgstr "Compresión"
 msgid "Create Backup"
 msgstr "Crear Respaldo"
 
-# c:/Apache2/htdocs/account/admin/backups.php:75
+#: /admin/backups.php:75
 #: /admin/backups.php:191
 #, fuzzy
 msgid "Backup scripts maintenance"
@@ -561,7 +561,7 @@ msgstr "Debe entrar el nombre de la compañía."
 msgid "Error uploading logo file."
 msgstr ""
 
-# c:/Apache2/htdocs/account/inventory/manage/items.php:52
+#: /inventory/manage/items.php:52
 #: /admin/company_preferences.php:60
 #, fuzzy
 msgid ""
@@ -571,7 +571,7 @@ msgstr ""
 "Únicamente archivos JPG son soportados - se espera un archivo con extension "
 "JPG"
 
-# c:/Apache2/htdocs/account/inventory/manage/items.php:57
+#: /inventory/manage/items.php:57
 #: /admin/company_preferences.php:65 /inventory/manage/items.php:109
 msgid ""
 "The file size is over the maximum allowed. The maximum size allowed in KB is"
@@ -579,7 +579,7 @@ msgstr ""
 "El archivo excede el tamaño maximo permitido. El tamaño máximo permitido en "
 "KB es "
 
-# c:/Apache2/htdocs/account/inventory/manage/items.php:62
+#: /inventory/manage/items.php:62
 #: /admin/company_preferences.php:70 /inventory/manage/items.php:99
 #: /inventory/manage/items.php:114
 msgid "Only graphics files can be uploaded"
@@ -613,7 +613,7 @@ msgstr "Nombre (que aparece en los reportes):"
 msgid "Address:"
 msgstr "Dirección:"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:83
+#: /admin/company_preferences.php:83
 #: /admin/company_preferences.php:173
 msgid "Domicile:"
 msgstr "Ubicación"
@@ -674,7 +674,7 @@ msgstr ""
 msgid "Time Zone on Reports"
 msgstr "Reportes de Proyectos"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:255
+#: /admin/create_coy.php:255
 #: /admin/company_preferences.php:191
 #, fuzzy
 msgid "Database Scheme Version"
@@ -685,7 +685,7 @@ msgstr "Script de base de datos"
 msgid "General Ledger Settings"
 msgstr "Reportes Contables"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:75
+#: /admin/company_preferences.php:75
 #: /admin/company_preferences.php:196 /gl/gl_budget.php:62
 msgid "Fiscal Year:"
 msgstr "Ejercicio Fical:"
@@ -694,7 +694,7 @@ msgstr "Ejercicio Fical:"
 msgid "Tax Periods:"
 msgstr "Periodo Fiscal:"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:71
+#: /admin/company_preferences.php:71
 #: /admin/company_preferences.php:197
 msgid "Months."
 msgstr "Meses."
@@ -703,7 +703,7 @@ msgstr "Meses."
 msgid "Tax Last Period:"
 msgstr "Periodo Fiscal Anterior:"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:72
+#: /admin/company_preferences.php:72
 #: /admin/company_preferences.php:198
 msgid "Months back."
 msgstr "Mes(es) atrás."
@@ -752,7 +752,7 @@ msgstr "Manufactura"
 msgid "Fixed Assets"
 msgstr "Emisiones"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:85
+#: /admin/company_preferences.php:85
 #: /admin/company_preferences.php:215
 msgid "Use Dimensions:"
 msgstr "Usar Proyecto:"
@@ -831,12 +831,12 @@ msgid ""
 "same database."
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:115
+#: /admin/create_coy.php:115
 #: /admin/create_coy.php:117
 msgid "Error creating Database: "
 msgstr "Error al crear la base de datos: "
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:79
+#: /admin/create_coy.php:79
 #: /admin/create_coy.php:117
 msgid ", Please create it manually"
 msgstr ", Por favor, creela manualmente"
@@ -845,24 +845,24 @@ msgstr ", Por favor, creela manualmente"
 msgid "Cannot create new company due to bugs in sql file."
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:69
+#: /admin/create_coy.php:69
 #: /admin/create_coy.php:141 /admin/create_coy.php:209
 msgid "Cannot open the configuration file - "
 msgstr "No se puede abrir el archivo de configuración - "
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:76
+#: /admin/create_coy.php:76
 #: /admin/create_coy.php:143 /admin/create_coy.php:211
 msgid "Cannot write to the configuration file - "
 msgstr "No se puede escribir en el archivo de configuración - "
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /admin/create_coy.php:145 /admin/create_coy.php:181
 #: /admin/create_coy.php:213
 msgid "The configuration file "
 msgstr "El archivo de configuración "
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
-# c:/Apache2/htdocs/account/admin/inst_lang.php:131
+#: /admin/create_coy.php:86
+#: /admin/inst_lang.php:131
 #: /admin/create_coy.php:145 /admin/create_coy.php:181
 #: /admin/create_coy.php:213 /admin/db/maintenance_db.inc:251
 msgid ""
@@ -895,12 +895,12 @@ msgstr "No se puede eliminar el directorio de datos de la compañía"
 msgid "Cannot rename company subdirectory"
 msgstr "No se puede eliminar el directorio de datos de la compañía"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:157
+#: /admin/create_coy.php:157
 #: /admin/create_coy.php:202
 msgid "Error removing Database: "
 msgstr "Error al borrar la base de datos: "
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:128
+#: /admin/create_coy.php:128
 #: /admin/create_coy.php:202
 #, fuzzy
 msgid ", please remove it manually"
@@ -916,7 +916,7 @@ msgstr "No se puede eliminar el directorio de datos de la compañía"
 msgid "Selected company has been deleted"
 msgstr "El precio seleccionado ha sido eliminado."
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:180
+#: /admin/create_coy.php:180
 #: /admin/create_coy.php:240
 msgid "Database Host"
 msgstr "Servidor de base de datos"
@@ -931,9 +931,9 @@ msgstr "Usuario de base de datos"
 msgid "Database Name"
 msgstr "Nombre de base de datos"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:152
-# c:/Apache2/htdocs/account/admin/create_coy.php:238
-# c:/Apache2/htdocs/account/admin/create_coy.php:240
+#: /admin/create_coy.php:152
+#: /admin/create_coy.php:238
+#: /admin/create_coy.php:240
 #: /admin/create_coy.php:241 /admin/create_coy.php:325
 #: /admin/create_coy.php:333
 msgid "Table Pref"
@@ -998,7 +998,7 @@ msgstr "Servidor"
 msgid "Database Password"
 msgstr "Contraseña de base de datos"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:180
+#: /admin/create_coy.php:180
 #: /admin/create_coy.php:324
 #, fuzzy
 msgid "Database Collation:"
@@ -1018,12 +1018,12 @@ msgstr "Ninguno"
 msgid "Default Company"
 msgstr "Compañía de Embarque Predeterminada:"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:255
+#: /admin/create_coy.php:255
 #: /admin/create_coy.php:327
 msgid "Database Script"
 msgstr "Script de base de datos"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:253
+#: /admin/create_coy.php:253
 #: /admin/create_coy.php:328
 msgid "New script Admin Password"
 msgstr "Nueva contraseña de Admin en el script"
@@ -1136,7 +1136,7 @@ msgstr "Tasas de Cambio:"
 msgid "Percentages:"
 msgstr "Porcientos:"
 
-# c:/Apache2/htdocs/account/admin/display_prefs.php:45
+#: /admin/display_prefs.php:45
 #: /admin/display_prefs.php:79
 #, fuzzy
 msgid "Date Format and Separators"
@@ -1147,17 +1147,17 @@ msgstr "Formato de fecha y separadores"
 msgid "Date Format:"
 msgstr "Formato Fecha:"
 
-# c:/Apache2/htdocs/account/admin/display_prefs.php:64
+#: /admin/display_prefs.php:64
 #: /admin/display_prefs.php:83
 msgid "Date Separator:"
 msgstr "Separador de fecha:"
 
-# c:/Apache2/htdocs/account/admin/display_prefs.php:83
+#: /admin/display_prefs.php:83
 #: /admin/display_prefs.php:88
 msgid "Thousand Separator:"
 msgstr "Separador de miles:"
 
-# c:/Apache2/htdocs/account/admin/display_prefs.php:102
+#: /admin/display_prefs.php:102
 #: /admin/display_prefs.php:93
 msgid "Decimal Separator:"
 msgstr "Separador decimal:"
@@ -1220,7 +1220,7 @@ msgstr "Mostrar Información Contable:"
 msgid "Show Item Codes:"
 msgstr "Mostrar los Códigos de Artículos:"
 
-# c:/Apache2/htdocs/account/admin/display_prefs.php:144
+#: /admin/display_prefs.php:144
 #: /admin/display_prefs.php:128
 msgid "Page Size:"
 msgstr "Tamaño de página:"
@@ -1265,7 +1265,7 @@ msgid ""
 "default is current date"
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/display_prefs.php:144
+#: /admin/display_prefs.php:144
 #: /admin/display_prefs.php:150
 #, fuzzy
 msgid "Query page size:"
@@ -1284,29 +1284,29 @@ msgstr "Lenguaje:"
 msgid "Language:"
 msgstr "Lenguaje:"
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:17
+#: /admin/fiscalyears.php:7
+#: /applications/Setup.php:17
 #: /admin/fiscalyears.php:25
 msgid "Fiscal Years"
 msgstr "Ejercicios Fiscales"
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:30
+#: /admin/fiscalyears.php:30
 #: /admin/fiscalyears.php:34
 msgid "Invalid BEGIN date in fiscal year."
 msgstr "Fecha INICIAL no válida en ejercicio fiscal."
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:34
+#: /admin/fiscalyears.php:34
 #: /admin/fiscalyears.php:40
 msgid "Invalid END date in fiscal year."
 msgstr "Fecha FINAL no válida en ejercicio fiscal."
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:30
+#: /admin/fiscalyears.php:30
 #: /admin/fiscalyears.php:46
 #, fuzzy
 msgid "Invalid BEGIN or END date in fiscal year."
 msgstr "Fecha INICIAL no válida en ejercicio fiscal."
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:38
+#: /admin/fiscalyears.php:38
 #: /admin/fiscalyears.php:52
 msgid "BEGIN date bigger than END date."
 msgstr "Fecha INICIAL mayor que la fecha FINAL."
@@ -1354,12 +1354,12 @@ msgid ""
 "irreversible!"
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:109
+#: /admin/fiscalyears.php:109
 #: /admin/fiscalyears.php:138
 msgid "Fiscal Year Begin"
 msgstr "Año fiscal inicia"
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:110
+#: /admin/fiscalyears.php:110
 #: /admin/fiscalyears.php:138
 msgid "Fiscal Year End"
 msgstr "Año fiscal termina"
@@ -1386,13 +1386,13 @@ msgid ""
 msgstr ""
 "El ejercicio fiscal marcado es el actual, mismo que no puede ser eliminado."
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:157
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:160
+#: /admin/fiscalyears.php:157
+#: /admin/fiscalyears.php:160
 #: /admin/fiscalyears.php:200 /admin/fiscalyears.php:211
 msgid "Fiscal Year Begin:"
 msgstr "Ejercicio fiscal inicia:"
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:110
+#: /admin/fiscalyears.php:110
 #: /admin/fiscalyears.php:201 /admin/fiscalyears.php:212
 msgid "Fiscal Year End:"
 msgstr "Fin de Ejercicio fiscal:"
@@ -1442,7 +1442,7 @@ msgstr "La configuración de contabilidad general ha sido actualizada."
 msgid "General GL"
 msgstr "Mayor General"
 
-# c:/Apache2/htdocs/account/admin/gl_setup.php:113
+#: /admin/gl_setup.php:113
 #: /admin/gl_setup.php:156
 msgid "Past Due Days Interval:"
 msgstr "Intervalo de dias de vencimiento:"
@@ -1704,8 +1704,8 @@ msgstr "Cuenta de Costo de Ventas:"
 msgid "Inventory Adjustments Account:"
 msgstr "Cuenta de Ajustes de Inventario:"
 
-# c:/Apache2/htdocs/account/admin/gl_setup.php:169
-# c:/Apache2/htdocs/account/inventory/manage/items.php:281
+#: /admin/gl_setup.php:169
+#: /inventory/manage/items.php:281
 #: /admin/gl_setup.php:254 /inventory/manage/item_categories.php:251
 #: /inventory/manage/items.php:490
 msgid "Item Assembly Costs Account:"
@@ -1725,7 +1725,7 @@ msgstr ""
 msgid "Depreciation Period:"
 msgstr "Reporte de Impuestos"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:71
+#: /admin/company_preferences.php:71
 #: /admin/gl_setup.php:262 /gl/accruals.php:198
 #: /gl/manage/gl_quick_entries.php:247 /gl/includes/ui/gl_journal_ui.inc:69
 #: /sales/create_recurrent_invoices.php:203
@@ -1734,12 +1734,12 @@ msgstr "Reporte de Impuestos"
 msgid "Monthly"
 msgstr "Meses."
 
-# c:/Apache2/htdocs/account/reporting/rep705.php:131
-# c:/Apache2/htdocs/account/reporting/rep705.php:143
-# c:/Apache2/htdocs/account/reporting/rep705.php:153
-# c:/Apache2/htdocs/account/reporting/reports_main.php:164
-# c:/Apache2/htdocs/account/reporting/reports_main.php:199
-# c:/Apache2/htdocs/account/reporting/reports_main.php:229
+#: /reporting/rep705.php:131
+#: /reporting/rep705.php:143
+#: /reporting/rep705.php:153
+#: /reporting/reports_main.php:164
+#: /reporting/reports_main.php:199
+#: /reporting/reports_main.php:229
 #: /admin/gl_setup.php:262 /gl/manage/gl_quick_entries.php:247
 #: /gl/includes/ui/gl_journal_ui.inc:69
 #, fuzzy
@@ -1786,8 +1786,8 @@ msgstr ""
 msgid "Available"
 msgstr "Disponible"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:212
-# c:/Apache2/htdocs/account/admin/inst_lang.php:278
+#: /admin/inst_lang.php:212
+#: /admin/inst_lang.php:278
 #: /admin/inst_chart.php:55 /admin/inst_lang.php:35 /admin/inst_lang.php:220
 msgid "Encoding"
 msgstr "Codificación"
@@ -1817,8 +1817,8 @@ msgid ""
 "Do you want to continue ?"
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:28
+#: /admin/inst_lang.php:7
+#: /applications/Setup.php:28
 #: /admin/inst_lang.php:23
 msgid "Install/Update Languages"
 msgstr "Instalar/Actualizar Lenguajes"
@@ -1839,8 +1839,8 @@ msgstr "Instalar/Actualizar Lenguajes"
 msgid "Name"
 msgstr "Nombre"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:213
-# c:/Apache2/htdocs/account/admin/inst_lang.php:280
+#: /admin/inst_lang.php:213
+#: /admin/inst_lang.php:280
 #: /admin/inst_lang.php:35 /admin/inst_lang.php:222
 msgid "Right To Left"
 msgstr "Derecha a Izquierda"
@@ -1914,7 +1914,7 @@ msgstr "Tasa Predeterminada:"
 msgid "Language File"
 msgstr "Archivo de Lenguaje"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:311
+#: /admin/inst_lang.php:311
 #: /admin/inst_lang.php:229
 msgid "Select your language files from your local harddisk."
 msgstr "Seleccione su archivo de lenguaje desde su disco duro local."
@@ -1929,12 +1929,12 @@ msgid "Selected extension has been successfully deleted"
 msgstr ""
 "Los datos de compra de este proveedor han sido eliminados exitosamente."
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /admin/inst_module.php:104 /admin/inst_module.php:167
 #, fuzzy
 msgid "Extension"
@@ -1981,12 +1981,12 @@ msgstr ""
 msgid "Current active extensions set has been saved."
 msgstr "La transacción seleccionada ha sido anulada."
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /admin/inst_module.php:261
 #, fuzzy
 msgid "Extensions:"
@@ -2028,9 +2028,9 @@ msgstr "El precio seleccionado ha sido eliminado."
 msgid "Company upgraded successfully."
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:152
-# c:/Apache2/htdocs/account/admin/create_coy.php:238
-# c:/Apache2/htdocs/account/admin/create_coy.php:240
+#: /admin/create_coy.php:152
+#: /admin/create_coy.php:238
+#: /admin/create_coy.php:240
 #: /admin/inst_upgrade.php:63
 #, fuzzy
 msgid "Table set"
@@ -2559,12 +2559,12 @@ msgstr ""
 msgid "Account Tags"
 msgstr "Cuentas del MG"
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /admin/tags.php:44
 #, fuzzy
 msgid "Dimension Tags"
@@ -2804,7 +2804,7 @@ msgstr "El número final de transacción debe ser numérico y mayor que cero."
 msgid "Date"
 msgstr "Fecha"
 
-# c:/Apache2/htdocs/account/includes/ui/ui_view.inc:51
+#: /includes/ui/ui_view.inc:51
 #: /admin/view_print_transaction.php:130 /admin/void_transaction.php:183
 #: /includes/ui/ui_view.inc:51
 msgid "GL"
@@ -2949,17 +2949,17 @@ msgstr "Transacciones de Cliente"
 msgid "Cannot update extensions list for company '%s'."
 msgstr "No se puede escribir en el archivo del módulo - "
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:114
+#: /admin/inst_lang.php:114
 #: /admin/db/maintenance_db.inc:233
 msgid "Cannot open the languages file - "
 msgstr "No se puede abrir el archivo de lenguajes - "
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:121
+#: /admin/inst_lang.php:121
 #: /admin/db/maintenance_db.inc:240
 msgid "Cannot write to the language file - "
 msgstr "No se puede escribir en el archivo de lenguaje - "
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:131
+#: /admin/inst_lang.php:131
 #: /admin/db/maintenance_db.inc:251
 #, fuzzy
 msgid "The language files folder "
@@ -3182,19 +3182,19 @@ msgstr "Áreas de Venta"
 msgid "Credit &Status Setup"
 msgstr "Configuración del Estado de Crédito"
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /applications/dimensions.php:17
 #, fuzzy
 msgid "&Dimensions"
 msgstr "Proyectos"
 
-# c:/Apache2/htdocs/account/applications/Projects.php:8
-# c:/Apache2/htdocs/account/projects/project_entry.php:8
+#: /applications/Projects.php:8
+#: /projects/project_entry.php:8
 #: /applications/dimensions.php:22
 #, fuzzy
 msgid "Dimension &Entry"
@@ -3215,12 +3215,12 @@ msgstr "Consultar Proyector"
 msgid "Dimension &Reports"
 msgstr "Reportes de Proyectos"
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /applications/dimensions.php:35
 #, fuzzy
 msgid "Dimension &Tags"
@@ -3598,8 +3598,8 @@ msgstr "Tipos de Impuesto sobre Artículos"
 msgid "System and &General GL Setup"
 msgstr "Configuración de Sistema y de Contabilidad General"
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:17
+#: /admin/fiscalyears.php:7
+#: /applications/Setup.php:17
 #: /applications/setup.php:37
 #, fuzzy
 msgid "&Fiscal Years"
@@ -3659,15 +3659,15 @@ msgstr "Administrador de Sistema"
 msgid "&Backup and Restore"
 msgstr "Salva y Restaura"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:27
+#: /admin/create_coy.php:7
+#: /applications/Setup.php:27
 #: /applications/setup.php:66
 #, fuzzy
 msgid "Create/Update &Companies"
 msgstr "Crear/Actualizar Compañías"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:28
+#: /admin/inst_lang.php:7
+#: /applications/Setup.php:28
 #: /applications/setup.php:68
 #, fuzzy
 msgid "Install/Update &Languages"
@@ -3761,8 +3761,8 @@ msgstr "Reportes de Proveedores y Compras"
 msgid "&Suppliers"
 msgstr "Proveedores"
 
-# c:/Apache2/htdocs/account/applications/Projects.php:8
-# c:/Apache2/htdocs/account/projects/project_entry.php:8
+#: /applications/Projects.php:8
+#: /projects/project_entry.php:8
 #: /dimensions/dimension_entry.php:26
 msgid "Dimension Entry"
 msgstr "Introducir Proyecto"
@@ -3975,7 +3975,7 @@ msgstr "Balance"
 msgid "Search Outstanding Dimensions"
 msgstr "Buscar Proyectos Pendientes"
 
-# c:/Apache2/htdocs/account/projects/inquiry/search_projects.php:13
+#: /projects/inquiry/search_projects.php:13
 #: /dimensions/inquiry/search_dimensions.php:34
 msgid "Search Dimensions"
 msgstr "Buscar Proyecto"
@@ -4073,7 +4073,7 @@ msgstr "Fecha de Vencimiento"
 msgid "Marked dimensions are overdue."
 msgstr "Los artículos marcados están vencidos."
 
-# c:/Apache2/htdocs/account/projects/view/view_project.php:8
+#: /projects/view/view_project.php:8
 #: /dimensions/view/view_dimension.php:20
 msgid "View Dimension"
 msgstr "Ver Proyecto"
@@ -4301,7 +4301,7 @@ msgstr "Cuenta de Inventario:"
 msgid "Amount"
 msgstr "Importe"
 
-# c:/Apache2/htdocs/account/projects/inquiry/search_projects.php:13
+#: /projects/inquiry/search_projects.php:13
 #: /gl/accruals.php:224
 #, fuzzy
 msgid "Search Amount"
@@ -4327,7 +4327,7 @@ msgstr "Mostrar GP%"
 msgid "Process Accruals"
 msgstr "Procesar Transferencia"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:204
+#: /admin/inst_lang.php:204
 #: /gl/accruals.php:234
 #, fuzzy
 msgid "Are you sure you want to post accruals?"
@@ -4642,13 +4642,13 @@ msgstr ""
 msgid "The entered date for the payment is invalid."
 msgstr "La fecha introducida para el pago es inválida."
 
-# c:/Apache2/htdocs/account/admin/backups.php:64
+#: /admin/backups.php:64
 #: /gl/gl_bank.php:267
 #, fuzzy
 msgid "You have to select customer and customer branch."
 msgstr "Por favor, seleccione un archivo a cargar"
 
-# c:/Apache2/htdocs/account/admin/backups.php:64
+#: /admin/backups.php:64
 #: /gl/gl_bank.php:271
 #, fuzzy
 msgid "You have to select supplier."
@@ -4913,7 +4913,7 @@ msgstr ""
 msgid "&Tax register"
 msgstr "tasa de Impuesto"
 
-# c:/Apache2/htdocs/account/gl/gl_journal.php:200
+#: /gl/gl_journal.php:200
 #: /gl/gl_journal.php:530
 msgid "Rows"
 msgstr "Renglones"
@@ -4932,13 +4932,13 @@ msgstr "Actualizar"
 msgid "Tax group:"
 msgstr "Grupos de Impuestos"
 
-# c:/Apache2/htdocs/account/reporting/Rep709.php:283
+#: /reporting/Rep709.php:283
 #: /gl/gl_journal.php:546 /gl/inquiry/tax_inquiry.php:102
 #: /reporting/rep709.php:188
 msgid "Input Tax"
 msgstr "Entrada de Impuesto"
 
-# c:/Apache2/htdocs/account/reporting/Rep709.php:283
+#: /reporting/Rep709.php:283
 #: /gl/gl_journal.php:546 /gl/inquiry/tax_inquiry.php:96
 #: /reporting/rep709.php:188
 msgid "Output Tax"
@@ -5001,9 +5001,9 @@ msgstr "Balance General"
 msgid "As at:"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/Rep705.php:234
-# c:/Apache2/htdocs/account/reporting/Rep706.php:177
-# c:/Apache2/htdocs/account/reporting/Rep707.php:214
+#: /reporting/Rep705.php:234
+#: /reporting/Rep706.php:177
+#: /reporting/Rep707.php:214
 #: /gl/inquiry/balance_sheet.php:225 /gl/inquiry/profit_loss.php:298
 #: /reporting/rep705.php:322 /reporting/rep706.php:278
 #: /reporting/rep706.php:303 /reporting/rep707.php:309
@@ -5021,7 +5021,7 @@ msgstr ""
 msgid " and "
 msgstr "Demanda"
 
-# c:/Apache2/htdocs/account/config.php:102
+#: /config.php:102
 #: /gl/inquiry/balance_sheet.php:233 /reporting/rep706.php:290
 #, fuzzy
 msgid "Equities"
@@ -5074,7 +5074,7 @@ msgstr "No se han creado transacciones en el mayor general para"
 msgid "Trial Balance"
 msgstr "Balance de Comprobación"
 
-# c:/Apache2/htdocs/account/gl/inquiry/gl_trial_balance.php:27
+#: /gl/inquiry/gl_trial_balance.php:27
 #: /gl/inquiry/gl_trial_balance.php:60
 msgid "No zero values"
 msgstr "Debe tener valor"
@@ -5117,7 +5117,7 @@ msgstr "Transferido"
 msgid "This Period"
 msgstr "Este Período"
 
-# c:/Apache2/htdocs/account/gl/manage/gl_account_classes.php:82
+#: /gl/manage/gl_account_classes.php:82
 #: /gl/inquiry/gl_trial_balance.php:206 /gl/manage/gl_account_types.php:127
 #: /reporting/rep451.php:70 /reporting/rep451.php:76
 #, fuzzy
@@ -5194,22 +5194,22 @@ msgstr "Usuarios"
 msgid "Profit & Loss Drilldown"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/Rep707.php:54
-# c:/Apache2/htdocs/account/reporting/includes/reports_classes.inc:147
+#: /reporting/Rep707.php:54
+#: /reporting/includes/reports_classes.inc:147
 #: /gl/inquiry/profit_loss.php:30 /reporting/rep707.php:210
 #: /reporting/includes/reports_classes.inc:249
 msgid "Accumulated"
 msgstr "Acumulado"
 
-# c:/Apache2/htdocs/account/reporting/Rep707.php:79
-# c:/Apache2/htdocs/account/reporting/includes/reports_classes.inc:147
+#: /reporting/Rep707.php:79
+#: /reporting/includes/reports_classes.inc:147
 #: /gl/inquiry/profit_loss.php:31 /reporting/rep707.php:255
 #: /reporting/includes/reports_classes.inc:249
 msgid "Period Y-1"
 msgstr "Periodo A-1"
 
-# c:/Apache2/htdocs/account/reporting/Rep707.php:70
-# c:/Apache2/htdocs/account/reporting/includes/reports_classes.inc:147
+#: /reporting/Rep707.php:70
+#: /reporting/includes/reports_classes.inc:147
 #: /gl/inquiry/profit_loss.php:32 /reporting/rep707.php:246
 #: /reporting/includes/reports_classes.inc:249
 msgid "Budget"
@@ -5227,7 +5227,7 @@ msgstr "Comparar con"
 msgid "Group/Account Name"
 msgstr "Nombre de Cuenta"
 
-# c:/Apache2/htdocs/account/reporting/Rep707.php:54
+#: /reporting/Rep707.php:54
 #: /gl/inquiry/profit_loss.php:239 /reporting/rep707.php:210
 msgid "Achieved %"
 msgstr "Completado %"
@@ -5237,12 +5237,12 @@ msgstr "Completado %"
 msgid "Tax Inquiry"
 msgstr "Consultar Pedidos"
 
-# c:/Apache2/htdocs/account/reporting/Rep709.php:283
+#: /reporting/Rep709.php:283
 #: /gl/inquiry/tax_inquiry.php:80 /reporting/rep709.php:188
 msgid "Outputs"
 msgstr "Salidas"
 
-# c:/Apache2/htdocs/account/reporting/Rep709.php:283
+#: /reporting/Rep709.php:283
 #: /gl/inquiry/tax_inquiry.php:80 /reporting/rep709.php:188
 msgid "Inputs"
 msgstr "Entradas"
@@ -5664,7 +5664,7 @@ msgstr ""
 msgid "Selected account class has been deleted"
 msgstr "El precio seleccionado ha sido eliminado."
 
-# c:/Apache2/htdocs/account/gl/manage/gl_account_classes.php:82
+#: /gl/manage/gl_account_classes.php:82
 #: /gl/manage/gl_account_classes.php:110
 msgid "Class ID"
 msgstr "ID Clase"
@@ -5682,8 +5682,8 @@ msgstr "Tipo de Clase"
 msgid "Balance Sheet"
 msgstr "Balance General"
 
-# c:/Apache2/htdocs/account/gl/manage/gl_account_classes.php:122
-# c:/Apache2/htdocs/account/gl/manage/gl_account_classes.php:126
+#: /gl/manage/gl_account_classes.php:122
+#: /gl/manage/gl_account_classes.php:126
 #: /gl/manage/gl_account_classes.php:156 /gl/manage/gl_account_classes.php:162
 msgid "Class ID:"
 msgstr "ID Clase:"
@@ -5915,8 +5915,8 @@ msgstr ""
 msgid "Subgroup Of:"
 msgstr "Subgrupo De:"
 
-# c:/Apache2/htdocs/account/gl/manage/gl_account_classes.php:122
-# c:/Apache2/htdocs/account/gl/manage/gl_account_classes.php:126
+#: /gl/manage/gl_account_classes.php:122
+#: /gl/manage/gl_account_classes.php:126
 #: /gl/manage/gl_account_types.php:191
 #, fuzzy
 msgid "Class:"
@@ -6498,7 +6498,7 @@ msgstr "Configuración de la Compañía"
 msgid "Special maintenance"
 msgstr "Mantenimiento"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /includes/access_levels.inc:63
 #, fuzzy
 msgid "Sales configuration"
@@ -6514,7 +6514,7 @@ msgstr "Transacciones"
 msgid "Sales related reports"
 msgstr "Artículos del Pedido"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /includes/access_levels.inc:66
 #, fuzzy
 msgid "Purchase configuration"
@@ -6545,7 +6545,7 @@ msgstr "Almacén de Inventario"
 msgid "Inventory analytics"
 msgstr "Almacén de Inventario"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /includes/access_levels.inc:72
 #, fuzzy
 msgid "Fixed Assets configuration"
@@ -6576,24 +6576,24 @@ msgstr "Valores Predeterminados de Manufactura"
 msgid "Manufacturing analytics"
 msgstr "Valores Predeterminados de Manufactura"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /includes/access_levels.inc:78
 #, fuzzy
 msgid "Dimensions configuration"
 msgstr "El archivo de configuración "
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /includes/access_levels.inc:79 /inventory/manage/items.php:455
 #: /reporting/reports_main.php:318
 msgid "Dimensions"
 msgstr "Proyectos"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:69
+#: /admin/create_coy.php:69
 #: /includes/access_levels.inc:80
 #, fuzzy
 msgid "Banking & GL configuration"
@@ -6608,15 +6608,15 @@ msgstr "Pendiente"
 msgid "Banking & GL analytics"
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:28
+#: /admin/inst_lang.php:7
+#: /applications/Setup.php:28
 #: /includes/access_levels.inc:100
 #, fuzzy
 msgid "Install/update companies"
 msgstr "Instalar/Actualizar Lenguajes"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:28
+#: /admin/inst_lang.php:7
+#: /applications/Setup.php:28
 #: /includes/access_levels.inc:101
 #, fuzzy
 msgid "Install/update languages"
@@ -7007,7 +7007,7 @@ msgstr ""
 msgid "Depreciation"
 msgstr "Descripción"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:7
+#: /reporting/reports_main.php:7
 #: /includes/access_levels.inc:209
 #, fuzzy
 msgid "Fixed Asset analytical reports and inquiries"
@@ -7060,12 +7060,12 @@ msgstr "Requerimientos de la Orden de Trabajo"
 msgid "Bill of materials reports"
 msgstr "Lista de Materiales"
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /includes/access_levels.inc:229
 #, fuzzy
 msgid "Dimension tags"
@@ -7076,8 +7076,8 @@ msgstr "Proyectos"
 msgid "Dimension view"
 msgstr "Proyecto"
 
-# c:/Apache2/htdocs/account/applications/Projects.php:8
-# c:/Apache2/htdocs/account/projects/project_entry.php:8
+#: /applications/Projects.php:8
+#: /projects/project_entry.php:8
 #: /includes/access_levels.inc:233
 #, fuzzy
 msgid "Dimension entry"
@@ -7127,7 +7127,7 @@ msgstr "tasa de Impuesto"
 msgid "Tax groups"
 msgstr "Grupos de Impuestos"
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:109
+#: /admin/fiscalyears.php:109
 #: /includes/access_levels.inc:248
 #, fuzzy
 msgid "Fiscal years maintenance"
@@ -7214,19 +7214,19 @@ msgstr "Costos Estándares"
 msgid "GL analytical reports and inquiries"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:7
+#: /reporting/reports_main.php:7
 #: /includes/access_levels.inc:269
 #, fuzzy
 msgid "Tax reports and inquiries"
 msgstr "Reportes y Análisis"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:7
+#: /reporting/reports_main.php:7
 #: /includes/access_levels.inc:270
 #, fuzzy
 msgid "Bank reports and inquiries"
 msgstr "Reportes y Análisis"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:7
+#: /reporting/reports_main.php:7
 #: /includes/access_levels.inc:271
 #, fuzzy
 msgid "GL reports and inquiries"
@@ -7627,7 +7627,7 @@ msgstr ""
 msgid "SP"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/Rep204.php:73
+#: /reporting/Rep204.php:73
 #: /includes/sysnames.inc:66 /reporting/rep204.php:84
 #: /reporting/rep305.php:106
 msgid "GRN"
@@ -8049,7 +8049,7 @@ msgstr ""
 msgid "Italian"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/Rep705.php:101
+#: /reporting/Rep705.php:101
 #: /includes/system_tests.inc:15 /includes/ui/ui_view.inc:210
 #: /reporting/rep705.php:251 /reporting/rep705.php:262
 #: /reporting/rep705.php:271
@@ -8193,7 +8193,7 @@ msgstr ""
 msgid "Temporary directory"
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /includes/system_tests.inc:234
 #, fuzzy
 msgid "Language configuration consistency"
@@ -8203,7 +8203,7 @@ msgstr "El archivo de configuración "
 msgid "Languages folder should be writeable."
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /includes/system_tests.inc:252
 #, fuzzy
 msgid "Languages configuration file should be writeable."
@@ -8219,7 +8219,7 @@ msgstr "Anular Transacción"
 msgid "Missing system locale: %s"
 msgstr ""
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:86
+#: /admin/create_coy.php:86
 #: /includes/system_tests.inc:289
 #, fuzzy
 msgid "Main config file"
@@ -8251,12 +8251,12 @@ msgid ""
 "'%s' file should be read-only if you do not plan to add or change companies"
 msgstr ""
 
-# c:/Apache2/htdocs/account/applications/Projects.php:5
-# c:/Apache2/htdocs/account/inventory/manage/items.php:287
-# c:/Apache2/htdocs/account/reporting/reports_main.php:39
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
-# c:/Apache2/htdocs/account/reporting/reports_main.php:41
-# c:/Apache2/htdocs/account/includes/page/header.inc:44
+#: /applications/Projects.php:5
+#: /inventory/manage/items.php:287
+#: /reporting/reports_main.php:39
+#: /reporting/reports_main.php:40
+#: /reporting/reports_main.php:41
+#: /includes/page/header.inc:44
 #: /includes/system_tests.inc:334
 #, fuzzy
 msgid "Extensions system"
@@ -8662,7 +8662,7 @@ msgstr "El nombre de la cuenta no puede estar vacío."
 msgid "Contact reference cannot be empty."
 msgstr "El nombre del cliente no puede ser vacío."
 
-# c:/Apache2/htdocs/account/admin/backups.php:64
+#: /admin/backups.php:64
 #: /includes/ui/contacts_view.inc:138
 #, fuzzy
 msgid "You have to select at least one category."
@@ -8960,7 +8960,7 @@ msgstr "Artículos Anulados"
 msgid "New role"
 msgstr "Agregar Nuevo Cliente"
 
-# c:/Apache2/htdocs/account/reporting/Rep709.php:326
+#: /reporting/Rep709.php:326
 #: /includes/ui/ui_lists.inc:2406
 #, fuzzy
 msgid "No tags defined."
@@ -9905,8 +9905,8 @@ msgstr "Unidades"
 msgid "Sales Act"
 msgstr "Cuenta de Ventas:"
 
-# c:/Apache2/htdocs/account/admin/gl_setup.php:169
-# c:/Apache2/htdocs/account/inventory/manage/items.php:281
+#: /admin/gl_setup.php:169
+#: /inventory/manage/items.php:281
 #: /inventory/manage/item_categories.php:118
 #, fuzzy
 msgid "Asset Account"
@@ -9936,8 +9936,8 @@ msgstr "Cuenta de Costo de Ventas:"
 msgid "Adjustment Account"
 msgstr "Cuenta de Ajustes de Inventario:"
 
-# c:/Apache2/htdocs/account/admin/gl_setup.php:169
-# c:/Apache2/htdocs/account/inventory/manage/items.php:281
+#: /admin/gl_setup.php:169
+#: /inventory/manage/items.php:281
 #: /inventory/manage/item_categories.php:123
 #, fuzzy
 msgid "Assembly Account"
@@ -10061,7 +10061,7 @@ msgstr "Categoría:"
 msgid "Error uploading file."
 msgstr "Identificador de Usuario"
 
-# c:/Apache2/htdocs/account/inventory/manage/items.php:52
+#: /inventory/manage/items.php:52
 #: /inventory/manage/items.php:104
 #, fuzzy
 msgid ""
@@ -10202,7 +10202,7 @@ msgstr "Descripción"
 msgid "Other"
 msgstr "Sobre"
 
-# c:/Apache2/htdocs/account/inventory/manage/items.php:301
+#: /inventory/manage/items.php:301
 #: /inventory/manage/items.php:497
 msgid "Image File (.jpg)"
 msgstr "Archivo Imagen (.jpg)"
@@ -13018,12 +13018,12 @@ msgstr "Saldos de Clientes"
 msgid "Grand Total"
 msgstr "Gran Total "
 
-# c:/Apache2/htdocs/account/reporting/Rep102.php:121
-# c:/Apache2/htdocs/account/reporting/Rep202.php:129
-# c:/Apache2/htdocs/account/reporting/Rep709.php:157
-# c:/Apache2/htdocs/account/reporting/reports_main.php:18
-# c:/Apache2/htdocs/account/reporting/reports_main.php:27
-# c:/Apache2/htdocs/account/reporting/reports_main.php:55
+#: /reporting/Rep102.php:121
+#: /reporting/Rep202.php:129
+#: /reporting/Rep709.php:157
+#: /reporting/reports_main.php:18
+#: /reporting/reports_main.php:27
+#: /reporting/reports_main.php:55
 #: /reporting/rep102.php:98 /reporting/rep106.php:99 /reporting/rep202.php:104
 #: /reporting/rep709.php:99 /reporting/reports_main.php:50
 #: /reporting/reports_main.php:93 /reporting/reports_main.php:167
@@ -13074,17 +13074,17 @@ msgstr "Antiguedad de Saldos de Clientes"
 msgid "All Areas"
 msgstr "Todas las áreas"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:113
+#: /reporting/Rep103.php:113
 #: /reporting/rep103.php:135
 msgid "All Sales Folk"
 msgstr "Todos los vendedores"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:117
+#: /reporting/Rep103.php:117
 #: /reporting/rep103.php:139 /reporting/rep205.php:80
 msgid "Greater than "
 msgstr "Mayor que"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:121
+#: /reporting/Rep103.php:121
 #: /reporting/rep103.php:143 /reporting/rep205.php:84
 msgid "Less than "
 msgstr "Menor que"
@@ -13093,7 +13093,7 @@ msgstr "Menor que"
 msgid "Customer Postal Address"
 msgstr "Dirección Postal del Cliente"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:130
+#: /reporting/Rep103.php:130
 #: /reporting/rep103.php:152
 msgid "Price/Turnover"
 msgstr "Precio/Devolución"
@@ -13106,8 +13106,8 @@ msgstr "Información de Contacto de la Filial:"
 msgid "Branch Delivery Address"
 msgstr "Dirección de Entrega de la Filial"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:136
-# c:/Apache2/htdocs/account/reporting/reports_main.php:19
+#: /reporting/Rep103.php:136
+#: /reporting/reports_main.php:19
 #: /reporting/rep103.php:158 /reporting/rep205.php:99
 #: /reporting/reports_main.php:57 /reporting/reports_main.php:187
 msgid "Activity Since"
@@ -13122,7 +13122,7 @@ msgstr "Áreas de Venta"
 msgid "Sales Folk"
 msgstr "Vendedores"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:139
+#: /reporting/Rep103.php:139
 #: /reporting/rep103.php:161 /reporting/rep205.php:100
 msgid "Activity"
 msgstr "Actividad"
@@ -13139,7 +13139,7 @@ msgstr "Clientes"
 msgid "Price List"
 msgstr "Lista de Precios"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:198
+#: /reporting/Rep103.php:198
 #: /reporting/rep103.php:243 /reporting/rep205.php:155
 msgid "Ph"
 msgstr "Tel"
@@ -13149,7 +13149,7 @@ msgstr "Tel"
 msgid "Gereral Notes:"
 msgstr "Notas de Remisión:"
 
-# c:/Apache2/htdocs/account/reporting/Rep103.php:195
+#: /reporting/Rep103.php:195
 #: /reporting/rep103.php:267 /reporting/rep205.php:93
 #: /reporting/rep205.php:179
 msgid "Turnover"
@@ -13166,7 +13166,7 @@ msgstr "Categoría/Artículos"
 msgid "UOM"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/Rep104.php:89
+#: /reporting/Rep104.php:89
 #: /reporting/rep104.php:109
 msgid "GP %"
 msgstr "UB %"
@@ -13175,8 +13175,8 @@ msgstr "UB %"
 msgid "Show GP %"
 msgstr "Mostrar GP%"
 
-# c:/Apache2/htdocs/account/reporting/Rep104.php:98
-# c:/Apache2/htdocs/account/reporting/reports_main.php:20
+#: /reporting/Rep104.php:98
+#: /reporting/reports_main.php:20
 #: /reporting/rep104.php:124
 msgid "Price Listing"
 msgstr "Precio de Lista"
@@ -13226,8 +13226,8 @@ msgstr "Fecha de Orden"
 msgid "Del Date"
 msgstr "Fecha de Entrega"
 
-# c:/Apache2/htdocs/account/reporting/Rep105.php:99
-# c:/Apache2/htdocs/account/reporting/Rep401.php:62
+#: /reporting/Rep105.php:99
+#: /reporting/Rep401.php:62
 #: /reporting/rep105.php:110 /reporting/rep401.php:71
 msgid "Loc"
 msgstr "Alm"
@@ -13241,8 +13241,8 @@ msgstr "Entregado"
 msgid "Selection"
 msgstr "Selección"
 
-# c:/Apache2/htdocs/account/reporting/Rep105.php:115
-# c:/Apache2/htdocs/account/reporting/reports_main.php:21
+#: /reporting/Rep105.php:115
+#: /reporting/reports_main.php:21
 #: /reporting/rep105.php:125
 msgid "Order Status Listing"
 msgstr "Listado de Estado de Pedidos"
@@ -13308,9 +13308,9 @@ msgstr "CRÉDITO TOTAL"
 msgid "THIS INVOICE"
 msgstr "FACTURA"
 
-# c:/Apache2/htdocs/account/reporting/Rep108.php:74
-# c:/Apache2/htdocs/account/reporting/Rep108.php:101
-# c:/Apache2/htdocs/account/reporting/includes/doctext.inc:33
+#: /reporting/Rep108.php:74
+#: /reporting/Rep108.php:101
+#: /reporting/includes/doctext.inc:33
 #: /reporting/rep108.php:81 /reporting/rep108.php:109
 #: /reporting/includes/doctext.inc:237
 msgid "STATEMENT"
@@ -13488,8 +13488,8 @@ msgstr "Catalogo de Clientes"
 msgid "Tax_Id"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/rep209.php:78
-# c:/Apache2/htdocs/account/reporting/rep209.php:98
+#: /reporting/rep209.php:78
+#: /reporting/rep209.php:98
 #: /reporting/rep209.php:88 /reporting/rep209.php:104
 #: /reporting/includes/doctext.inc:170
 msgid "PURCHASE ORDER"
@@ -13514,7 +13514,7 @@ msgstr "TOTAL DE NOTA DE CRÉDITO"
 msgid "Inventory Valuation Report"
 msgstr "Reporte de Valuación de Inventarios"
 
-# c:/Apache2/htdocs/account/reporting/Rep302.php:173
+#: /reporting/Rep302.php:173
 #: /reporting/rep302.php:123
 msgid "QOH"
 msgstr "EXISTE"
@@ -13527,7 +13527,7 @@ msgstr "# Orden Cliente"
 msgid "Supp Ord"
 msgstr "# Orden Proveedor"
 
-# c:/Apache2/htdocs/account/reporting/Rep302.php:173
+#: /reporting/Rep302.php:173
 #: /reporting/rep302.php:123
 msgid "Sugg Ord"
 msgstr "Ord Sug"
@@ -13554,8 +13554,8 @@ msgstr ""
 msgid "Only Shortage"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/Rep303.php:133
-# c:/Apache2/htdocs/account/reporting/reports_main.php:34
+#: /reporting/Rep303.php:133
+#: /reporting/reports_main.php:34
 #: /reporting/rep303.php:137
 msgid "Stock Check Sheets"
 msgstr "Hoja de Verificacion de Saldo"
@@ -13711,13 +13711,13 @@ msgstr ""
 msgid "Fixed Assets Valuation Report"
 msgstr "Reporte de Valuación de Inventarios"
 
-# c:/Apache2/htdocs/account/reporting/Rep501.php:77
+#: /reporting/Rep501.php:77
 #: /reporting/rep501.php:87
 msgid "YTD"
 msgstr "EA"
 
-# c:/Apache2/htdocs/account/reporting/Rep501.php:84
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
+#: /reporting/Rep501.php:84
+#: /reporting/reports_main.php:40
 #: /reporting/rep501.php:94
 msgid "Dimension Summary"
 msgstr "Resumen de Proyecto"
@@ -13776,12 +13776,12 @@ msgstr "Diario de Polizas"
 msgid "GL Account Transactions"
 msgstr "Transacciones de Cuentas MG"
 
-# c:/Apache2/htdocs/account/reporting/rep705.php:131
-# c:/Apache2/htdocs/account/reporting/rep705.php:143
-# c:/Apache2/htdocs/account/reporting/rep705.php:153
-# c:/Apache2/htdocs/account/reporting/reports_main.php:164
-# c:/Apache2/htdocs/account/reporting/reports_main.php:199
-# c:/Apache2/htdocs/account/reporting/reports_main.php:229
+#: /reporting/rep705.php:131
+#: /reporting/rep705.php:143
+#: /reporting/rep705.php:153
+#: /reporting/reports_main.php:164
+#: /reporting/reports_main.php:199
+#: /reporting/reports_main.php:229
 #: /reporting/rep705.php:244 /reporting/rep705.php:257
 #: /reporting/rep705.php:268 /reporting/reports_main.php:372
 #: /reporting/reports_main.php:425 /reporting/reports_main.php:473
@@ -13797,14 +13797,14 @@ msgstr "Año"
 msgid "Tags"
 msgstr "días"
 
-# c:/Apache2/htdocs/account/reporting/Rep705.php:101
+#: /reporting/Rep705.php:101
 #: /reporting/rep705.php:251 /reporting/rep705.php:262
 #: /reporting/rep705.php:271
 msgid "Amounts in thousands"
 msgstr "Monto en Miles"
 
-# c:/Apache2/htdocs/account/reporting/Rep705.php:104
-# c:/Apache2/htdocs/account/reporting/reports_main.php:51
+#: /reporting/Rep705.php:104
+#: /reporting/reports_main.php:51
 #: /reporting/rep705.php:275
 msgid "Annual Expense Breakdown"
 msgstr "Estructura de Gastos Anuales"
@@ -13868,7 +13868,7 @@ msgstr "Importe Total"
 msgid "Changed"
 msgstr "Cargos"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:7
+#: /reporting/reports_main.php:7
 #: /reporting/reports_main.php:28
 msgid "Reports and Analysis"
 msgstr "Reportes y Análisis"
@@ -13957,14 +13957,14 @@ msgstr "Descripción"
 msgid "&Aged Customer Analysis"
 msgstr "Antiguedad de Saldos de Clientes"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:31
-# c:/Apache2/htdocs/account/reporting/reports_main.php:84
-# c:/Apache2/htdocs/account/reporting/reports_main.php:175
-# c:/Apache2/htdocs/account/reporting/reports_main.php:183
-# c:/Apache2/htdocs/account/reporting/reports_main.php:210
-# c:/Apache2/htdocs/account/reporting/reports_main.php:217
-# c:/Apache2/htdocs/account/reporting/reports_main.php:240
-# c:/Apache2/htdocs/account/reporting/reports_main.php:246
+#: /reporting/reports_main.php:31
+#: /reporting/reports_main.php:84
+#: /reporting/reports_main.php:175
+#: /reporting/reports_main.php:183
+#: /reporting/reports_main.php:210
+#: /reporting/reports_main.php:217
+#: /reporting/reports_main.php:240
+#: /reporting/reports_main.php:246
 #: /reporting/reports_main.php:52 /reporting/reports_main.php:169
 #: /reporting/reports_main.php:386 /reporting/reports_main.php:398
 #: /reporting/reports_main.php:437 /reporting/reports_main.php:448
@@ -13977,12 +13977,12 @@ msgstr "Gráficas"
 msgid "Customer &Detail Listing"
 msgstr "Lista Detallada de Cliente"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:19
+#: /reporting/reports_main.php:19
 #: /reporting/reports_main.php:60 /reporting/reports_main.php:188
 msgid "Activity Greater Than"
 msgstr "Actividad mayor que"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:19
+#: /reporting/reports_main.php:19
 #: /reporting/reports_main.php:61 /reporting/reports_main.php:189
 msgid "Activity Less Than"
 msgstr "Actividad menor que"
@@ -13992,8 +13992,8 @@ msgstr "Actividad menor que"
 msgid "Sales &Summary Report"
 msgstr "Artículos del Pedido"
 
-# c:/Apache2/htdocs/account/reporting/Rep104.php:98
-# c:/Apache2/htdocs/account/reporting/reports_main.php:20
+#: /reporting/Rep104.php:98
+#: /reporting/reports_main.php:20
 #: /reporting/reports_main.php:72
 #, fuzzy
 msgid "&Price Listing"
@@ -14015,8 +14015,8 @@ msgstr "Tipos de Venta"
 msgid "Show Pictures"
 msgstr "Ver Imágenes"
 
-# c:/Apache2/htdocs/account/reporting/Rep105.php:115
-# c:/Apache2/htdocs/account/reporting/reports_main.php:21
+#: /reporting/Rep105.php:115
+#: /reporting/reports_main.php:21
 #: /reporting/reports_main.php:81
 #, fuzzy
 msgid "&Order Status Listing"
@@ -14138,8 +14138,8 @@ msgstr "Reporte de Valuación de Inventarios"
 msgid "Inventory &Planning Report"
 msgstr "Reporte de Planeación de Inventario"
 
-# c:/Apache2/htdocs/account/reporting/Rep303.php:133
-# c:/Apache2/htdocs/account/reporting/reports_main.php:34
+#: /reporting/Rep303.php:133
+#: /reporting/reports_main.php:34
 #: /reporting/reports_main.php:223
 #, fuzzy
 msgid "Stock &Check Sheets"
@@ -14237,19 +14237,19 @@ msgstr ""
 msgid "Fixed Assets Location"
 msgstr "En Almacén"
 
-# c:/Apache2/htdocs/account/reporting/Rep501.php:84
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
+#: /reporting/Rep501.php:84
+#: /reporting/reports_main.php:40
 #: /reporting/reports_main.php:321
 #, fuzzy
 msgid "Dimension &Summary"
 msgstr "Resumen de Proyecto"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
+#: /reporting/reports_main.php:40
 #: /reporting/reports_main.php:322
 msgid "From Dimension"
 msgstr "Proyecto Inicial"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:40
+#: /reporting/reports_main.php:40
 #: /reporting/reports_main.php:323
 msgid "To Dimension"
 msgstr "Proyecto Final"
@@ -14263,7 +14263,7 @@ msgstr "Bancos"
 msgid "Bank &Statement"
 msgstr "Estado de Cuentas"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:54
+#: /reporting/reports_main.php:54
 #: /reporting/reports_main.php:334 /reporting/reports_main.php:405
 #: /reporting/reports_main.php:455 /reporting/reports_main.php:500
 msgid "Zero values"
@@ -14308,8 +14308,8 @@ msgstr "Cuenta Inicial:"
 msgid "To Account"
 msgstr "Cuenta Final:"
 
-# c:/Apache2/htdocs/account/reporting/Rep705.php:104
-# c:/Apache2/htdocs/account/reporting/reports_main.php:51
+#: /reporting/Rep705.php:104
+#: /reporting/reports_main.php:51
 #: /reporting/reports_main.php:371 /reporting/reports_main.php:424
 #: /reporting/reports_main.php:472
 #, fuzzy
@@ -14401,8 +14401,8 @@ msgstr "Nombre de Almacén:"
 msgid "Valid until"
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/rep209.php:78
-# c:/Apache2/htdocs/account/reporting/rep209.php:98
+#: /reporting/rep209.php:78
+#: /reporting/rep209.php:98
 #: /reporting/includes/doctext.inc:64
 #, fuzzy
 msgid "PREPAYMENT ORDER"
@@ -14554,7 +14554,7 @@ msgstr "Requerido Por"
 msgid "Our VAT No."
 msgstr "Nuestro No. de Orden"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:83
+#: /admin/company_preferences.php:83
 #: /reporting/includes/header2.inc:131
 #, fuzzy
 msgid "Domicile"
@@ -14577,12 +14577,12 @@ msgstr "Reporte de Impuestos"
 msgid "You have no email contact defined for this type of document for '%s'."
 msgstr ""
 
-# c:/Apache2/htdocs/account/reporting/rep705.php:131
-# c:/Apache2/htdocs/account/reporting/rep705.php:143
-# c:/Apache2/htdocs/account/reporting/rep705.php:153
-# c:/Apache2/htdocs/account/reporting/reports_main.php:164
-# c:/Apache2/htdocs/account/reporting/reports_main.php:199
-# c:/Apache2/htdocs/account/reporting/reports_main.php:229
+#: /reporting/rep705.php:131
+#: /reporting/rep705.php:143
+#: /reporting/rep705.php:153
+#: /reporting/reports_main.php:164
+#: /reporting/reports_main.php:199
+#: /reporting/reports_main.php:229
 #: /reporting/includes/pdf_report.inc:992
 #, fuzzy
 msgid "Dear"
@@ -14618,7 +14618,7 @@ msgstr ""
 msgid "Report has been sent to network printer "
 msgstr "El depósito ha sido entrado"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:69
+#: /admin/create_coy.php:69
 #: /reporting/includes/printer_class.inc:39
 #, fuzzy
 msgid "Cannot open connection to printer"
@@ -14672,21 +14672,21 @@ msgstr ""
 msgid "No Currency Filter"
 msgstr "Monedas"
 
-# c:/Apache2/htdocs/account/reporting/reports_main.php:31
-# c:/Apache2/htdocs/account/reporting/reports_main.php:84
-# c:/Apache2/htdocs/account/reporting/reports_main.php:175
-# c:/Apache2/htdocs/account/reporting/reports_main.php:183
-# c:/Apache2/htdocs/account/reporting/reports_main.php:210
-# c:/Apache2/htdocs/account/reporting/reports_main.php:217
-# c:/Apache2/htdocs/account/reporting/reports_main.php:240
-# c:/Apache2/htdocs/account/reporting/reports_main.php:246
+#: /reporting/reports_main.php:31
+#: /reporting/reports_main.php:84
+#: /reporting/reports_main.php:175
+#: /reporting/reports_main.php:183
+#: /reporting/reports_main.php:210
+#: /reporting/reports_main.php:217
+#: /reporting/reports_main.php:240
+#: /reporting/reports_main.php:246
 #: /reporting/includes/reports_classes.inc:253
 #, fuzzy
 msgid "No Graphics"
 msgstr "Gráficas"
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:7
-# c:/Apache2/htdocs/account/applications/Setup.php:17
+#: /admin/fiscalyears.php:7
+#: /applications/Setup.php:17
 #: /reporting/includes/reports_classes.inc:253
 #, fuzzy
 msgid "Vertical bars"
@@ -15479,7 +15479,7 @@ msgstr "Registro de Pago de Clientes"
 msgid "There are no customers defined in the system."
 msgstr "No existen clientes definidos en el sistema."
 
-# c:/Apache2/htdocs/account/admin/fiscalyears.php:34
+#: /admin/fiscalyears.php:34
 #: /sales/customer_payments.php:71
 #, fuzzy
 msgid "Invalid sales invoice number."
@@ -15949,7 +15949,7 @@ msgid ""
 msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr ""
 
 #: /sales/sales_order_entry.php:754
@@ -15958,7 +15958,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:758
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr ""
 
@@ -16419,7 +16419,7 @@ msgstr "Año Anterior"
 msgid "Days:"
 msgstr "días"
 
-# c:/Apache2/htdocs/account/admin/company_preferences.php:71
+#: /admin/company_preferences.php:71
 #: /sales/manage/recurrent_invoices.php:204
 #, fuzzy
 msgid "Monthly:"
@@ -16713,9 +16713,9 @@ msgstr ""
 msgid "Sales Type Name"
 msgstr "Nombre de Tipo de Venta:"
 
-# c:/Apache2/htdocs/account/reporting/Rep705.php:234
-# c:/Apache2/htdocs/account/reporting/Rep706.php:177
-# c:/Apache2/htdocs/account/reporting/Rep707.php:214
+#: /reporting/Rep705.php:234
+#: /reporting/Rep706.php:177
+#: /reporting/Rep707.php:214
 #: /sales/manage/sales_types.php:155
 #, fuzzy
 msgid "Calculation factor"
@@ -17531,27 +17531,27 @@ msgstr ""
 #~ msgid "Version Id"
 #~ msgstr "Versión"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:91
+#: /admin/create_coy.php:91
 #~ msgid "Error uploading Database Script, please upload it manually"
 #~ msgstr ""
 #~ "Error cargando el script de la base de datos, favor de cargarlo "
 #~ "manualmente"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:115
+#: /admin/create_coy.php:115
 #, fuzzy
 #~ msgid "Error connecting to Database: "
 #~ msgstr "Error al crear la base de datos: "
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:79
+#: /admin/create_coy.php:79
 #, fuzzy
 #~ msgid ", Please correct it"
 #~ msgstr ", Por favor, creela manualmente"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:173
+#: /admin/create_coy.php:173
 #~ msgid "Are you sure you want to delete company no. "
 #~ msgstr "Éstas seguro de que desear eliminar la compañía no. "
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:261
+#: /admin/create_coy.php:261
 #, fuzzy
 #~ msgid ""
 #~ "Choose from Database scripts in SQL folder. No Database is created "
@@ -17661,15 +17661,15 @@ msgstr ""
 #~ msgid "Package type"
 #~ msgstr "Tipos de Venta"
 
-# c:/Apache2/htdocs/account/reporting/Rep705.php:234
-# c:/Apache2/htdocs/account/reporting/Rep706.php:177
-# c:/Apache2/htdocs/account/reporting/Rep707.php:214
+#: /reporting/Rep705.php:234
+#: /reporting/Rep706.php:177
+#: /reporting/Rep707.php:214
 #, fuzzy
 #~ msgid "Installation path"
 #~ msgstr "Retorno Calculado"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:213
-# c:/Apache2/htdocs/account/admin/inst_lang.php:280
+#: /admin/inst_lang.php:213
+#: /admin/inst_lang.php:280
 #, fuzzy
 #~ msgid "Right to left"
 #~ msgstr "Derecha a Izquierda"
@@ -17678,7 +17678,7 @@ msgstr ""
 #~ msgid "Property"
 #~ msgstr "Imprimir"
 
-# c:/Apache2/htdocs/account/admin/create_coy.php:115
+#: /admin/create_coy.php:115
 #, fuzzy
 #~ msgid "Cannot create database"
 #~ msgstr "Error al crear la base de datos: "
@@ -17698,7 +17698,7 @@ msgstr ""
 #~ msgid "Transfer Type:"
 #~ msgstr "Tipo de Transferencia:"
 
-# c:/Apache2/htdocs/account/inventory/manage/items.php:52
+#: /inventory/manage/items.php:52
 #~ msgid "Only jpg files are supported - a file extension of .jpg is expected"
 #~ msgstr ""
 #~ "Únicamente archivos JPG son soportados - se espera un archivo con "
@@ -17855,7 +17855,7 @@ msgstr ""
 #~ msgid "Password"
 #~ msgstr "Contraseña:"
 
-# c:/Apache2/htdocs/account/admin/inst_lang.php:307
+#: /admin/inst_lang.php:307
 #~ msgid "Create a new language"
 #~ msgstr "Crear un nuevo lenguaje"
 
@@ -18024,7 +18024,7 @@ msgstr ""
 #~ msgid "This extension can not be be viewed: "
 #~ msgstr "Esta extensión no puede ser visualizada:"
 
-# c:/Apache2/htdocs/account/admin/backups.php:54
+#: /admin/backups.php:54
 #~ msgid "Are you sure you want to delete the backup file - "
 #~ msgstr "Esta seguro que desea borrar el archivo de respaldo - "
 

@@ -13,8 +13,6 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Poedit-Basepath: c:\\Apache2\\htdocs\\account228\n"
-"X-Poedit-SearchPath-0: c:\\Apache2\\htdocs\\account228\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -14827,7 +14825,7 @@ msgstr ""
 "Dokuments"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr ""
 "Sie sind dabei dieses0 Dokument zu stornieren.\nWollen Sie fortsetzen?"
 
@@ -14837,9 +14835,7 @@ msgstr "Änderungen überprüfen und Dokument aktualisieren"
 
 #: /sales/sales_order_entry.php:758
 #, fuzzy
-msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
-"continue?"
+msgid "You are about to cancel undelivered part of this order.\\nDo you want to continue?"
 msgstr "Sie sind dabei die Erweiterung zu entfernen.\nWollen Sie fortsetzen?"
 
 #: /sales/allocations/customer_allocate.php:28

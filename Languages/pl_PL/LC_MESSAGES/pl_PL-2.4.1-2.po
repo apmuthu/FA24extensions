@@ -14610,7 +14610,7 @@ msgid ""
 msgstr "Porzuæ wprowadzanie lub usuñ edytowane zamówienie"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "Zamierzasz anulowaæ ten dokument.\nCzy chcesz kontynuowaæ?"
 
 #: /sales/sales_order_entry.php:754
@@ -14620,7 +14620,7 @@ msgstr "Sprawd¼ zmiany i zapisz dokument"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr "Zamierzasz anulowaæ ten dokument.\nCzy chcesz kontynuowaæ?"
 

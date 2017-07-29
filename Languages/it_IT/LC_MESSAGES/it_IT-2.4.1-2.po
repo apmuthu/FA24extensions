@@ -14754,7 +14754,7 @@ msgstr ""
 "rimuove gli ordini di vendita"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "Stai per annullare questo documento.\nVuoi continuare?"
 
 #: /sales/sales_order_entry.php:754
@@ -14764,7 +14764,7 @@ msgstr "Convalida Modifiche e aggiorna il documento"
 #: /sales/sales_order_entry.php:758
 #, fuzzy
 msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
+"You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr "Stai per annullare questo documento.\nVuoi continuare?"
 

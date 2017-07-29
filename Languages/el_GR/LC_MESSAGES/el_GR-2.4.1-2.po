@@ -14735,7 +14735,7 @@ msgstr ""
 "Cancels document entry or removes sales order when editing an old document"
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
-msgid "You are about to void this Document.\nDo you want to continue?"
+msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "Ετοιμάζεστε να ακυρώσετε αυτό το έγγραφο.\nΘέλετε να συνεχίσετε;"
 
 #: /sales/sales_order_entry.php:754
@@ -14743,12 +14743,8 @@ msgid "Validate changes and update document"
 msgstr "Επικύρωση αλλαγών και ανανέωση του εγγράφου"
 
 #: /sales/sales_order_entry.php:758
-msgid ""
-"You are about to cancel undelivered part of this order.\nDo you want to "
-"continue?"
-msgstr ""
-"Ετοιμάζεστε να ακυρώσετε το μη παραδομένο μέρος αυτής της παραγγελίας."
-"\nΘέλετε να συνεχίσετε;"
+msgid "You are about to cancel undelivered part of this order.\\nDo you want to continue?"
+msgstr "Ετοιμάζεστε να ακυρώσετε το μη παραδομένο μέρος αυτής της παραγγελίας.\nΘέλετε να συνεχίσετε;"
 
 #: /sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"
