@@ -1,15 +1,16 @@
 Package: ar_EG
-Version: 2.4.1-2
-Description: Arabic translation file. Version merged from FA 2.3
+Version: 2.4.2-1
+Description: Arabic translation file.
 Author: www.infotechaccountants.com/forums <admin@infotechaccountants.com>
 Maintenance: www.infotechaccountants.com/forums <admin@infotechaccountants.com>
-Homepage: frontaccounting.net
+Homepage: frontaccounting.com
 Language: ar_EG
 Encoding: utf-8
 RTLDir: yes
 Depends: 
 Type: language
-Name: Arabic
+Name: Arabic (Egypt)
+Name-ar_EG: العربية (مصر)
 InstallPath: lang/ar_EG
-Filename: ar_EG-2.4.1-2
+Filename: ar_EG-2.4.2-1
 
