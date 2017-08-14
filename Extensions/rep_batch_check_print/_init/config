@@ -1,0 +1,11 @@
+Package: rep_batch_check_print
+Description: Batch Check Printing based on Braath Waate, USA
+Name: Batch Check Printing based on Braath Waate, USA
+Filename: rep_batch_check_print
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_batch_check_print
+Version: 2.4.0-1
+
