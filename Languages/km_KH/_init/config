@@ -1,0 +1,15 @@
+Package: km_KH
+Version: 2.4.2-1
+Description: Khymer translation for FrontAccounting.
+Author: Ap.Muthu <apmuthu@usa.net>
+Maintenance: Ap.Muthu <apmuthu@usa.net>
+Homepage: https://www.transifex.com/gnuacademy/frontaccounting24/language/km_KH/
+Language: km_KH
+Encoding: UTF-8
+RTLDir: no
+Depends: 
+Type: language
+Name: Greek
+InstallPath: lang/km_KH
+Filename: km_KH-2.4.2-1
+
