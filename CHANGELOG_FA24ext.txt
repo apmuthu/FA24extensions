@@ -1,3 +1,4 @@
+2017-08-15  Ap.Muthu     Added hi_IN (Hindi India) core language
 2017-08-15  Ap.Muthu     Added km_KH (Khymer Cambodia) core language
 2017-08-14  BraathWaate  import_transactions module: templates to reflect supplier=3
 2017-08-14  BraathWaate  Batch Check Printing module added
