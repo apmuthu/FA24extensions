@@ -530,7 +530,7 @@ if (isset($_POST['action'])) {
                 while ($total = mysqli_fetch_assoc($total_result)) {
                     switch ($total['class']) {
                         case 'ot_shipping' :
-                            $total_shiping = $total['value'];
+                            $total_shipping = $total['value'];
                             break;
                         case 'ot_total' :
                             $total_total = round($total['value'],2);
