@@ -1,3 +1,4 @@
+2017-08-16  BraathWaate  osc_orders module: import no quantity osc items like services/charges
 2017-08-16  BraathWaate  osc_orders module: fixed typo $total_shiping => $total_shipping
 2017-08-15  Ap.Muthu     Added hi_IN (Hindi India) core language
 2017-08-15  Ap.Muthu     Added km_KH (Khymer Cambodia) core language

@@ -116,8 +116,7 @@ function osc_get_country($country_id) {
 
 function osc_address_format($data, $pre) {
     $company = $data[$pre . 'company'];
-    if (!empty($data[$pre . 'name'])) $name = $data[$pre . 'name'];
-    else $name = $data[$pre . 'firstname'] . ' ' . $data[$pre . 'lastname'];
+    $name = $data[$pre . 'name'];
     $street_address = $data[$pre . 'street_address'];
     $suburb         = $data[$pre . 'suburb'];
     $city           = $data[$pre . 'city'];
@@ -441,7 +440,7 @@ if (isset($_POST['action'])) {
             $i = $j = 0;
             while ($cust = mysqli_fetch_assoc($customers)) {
                 $email     = $cust['customers_email_address'];
-                $name      = $cust['customers_firstname'] . ' ' . $cust['customers_lastname'];
+                $cust['name'] = $name      = $cust['customers_firstname'] . ' ' . $cust['customers_lastname'];
                 $contact   = $cust['entry_firstname'] . ' ' . $cust['entry_lastname'];
                 $addr      = osc_address_format($cust, 'entry_');
                 $tax_id    = '';
@@ -501,16 +500,6 @@ if (isset($_POST['action'])) {
 
             $customer = null;
             $errors = (int) $_POST['errors'];
-            if ($destCust != 0) {
-                $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
-                $result = db_query($sql, "Could not find customer by name");
-                if (db_num_rows($result) == 0) {
-                    display_notification("Customer id " . $destCust  . " not found");
-                    $last_oid = $first_oid - 1;
-                } else 
-                    $customer = db_fetch_assoc($result);
-            }
-
             $sql        = "SELECT * FROM orders WHERE orders_id >= ".osc_escape($first_oid)." AND orders_id <= ".osc_escape($last_oid);
             if ($statusId != "")
                 $sql .= " AND orders_status = " . $statusId;
@@ -526,6 +515,8 @@ if (isset($_POST['action'])) {
                 $total_total = 0;
                 $total_discount = 0;
                 $total_subtotal = 0;
+                $found_tax = false;
+                $found_subtotal = false;
                 $total_result = osc_dbQuery($sql, true);
                 while ($total = mysqli_fetch_assoc($total_result)) {
                     switch ($total['class']) {
@@ -535,31 +526,27 @@ if (isset($_POST['action'])) {
                         case 'ot_total' :
                             $total_total = round($total['value'],2);
                             break;
-                        case 'ot_discount' :
-                            $total_discount -= $total['value'];
-                            break;
                         case 'ot_subtotal' :
-                            $total_subtotal = $total['value'];
+                            $total_subtotal += $total['value'];
+                            $found_subtotal = true;
                             break;
                         case 'ot_tax' :
+                            $found_tax = true;
                             break;
+                        case 'ot_discount' :
                         default:
-                            if ($total['value'] != 0) {
-                                display_error("osC order " . $oID . " unknown total " . $total['title'] . " value " . $total['value']);
-                                if ($errors == 0) {
-                                    display_error('Skipping order ' . $oID);
-                                    continue;
-                                }
-                            }
+                            if ($found_subtotal == false)
+                                $total_subtotal -= $total['value'];
+                            $total_discount -= $total['value'];
+                            break;
                     }
                 }
                 mysqli_free_result($total_result);
 
                 // calculate the FA line item discount based on order discount
                 $disc_percent = 0;
-                if ($total_discount != 0) {
-                    $disc_percent = $total_discount/($total_discount + $total_subtotal);
-                }
+                if ($total_discount != 0)
+                    $disc_percent = $total_discount/$total_subtotal;
 
                 $sql      = "SELECT comments FROM orders_status_history WHERE orders_id = ".osc_escape($oID);
                 $result   = osc_dbQuery($sql, true);
@@ -570,15 +557,26 @@ if (isset($_POST['action'])) {
                 }
                 mysqli_free_result($result);
 
-                if ($destCust == 0) {
-                    $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `name` = ".db_escape($order['customers_name']);
-                    $result = db_query($sql, "Could not find customer by name");
-                    if (db_num_rows($result) == 0) {
-                        display_notification("Customer " . $order['customers_name'] . " not found");
+                if (empty($order['customers_name']))
+                    $customers_name = $order['customers_company'];
+                else
+                    $customers_name = $order['customers_name'];
+                $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `name` = ".db_escape($customers_name);
+                $result = db_query($sql, "Could not find customer by name");
+                if (db_num_rows($result) == 0) {
+                    if ($destCust == 0) {
+                        display_notification("Customer " . $customers_name . " not found");
                         break;
+                    } else {
+                        $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
+                        $result = db_query($sql, "Could not find customer by name");
+                        if (db_num_rows($result) == 0) {
+                            display_notification("Customer id " . $destCust  . " not found");
+                            break;
+                        }
                     }
-                    $customer = db_fetch_assoc($result);
                 }
+                $customer = db_fetch_assoc($result);
                 $addr     = osc_address_format($order, 'delivery_');
                 $taxgid   = get_tax_group_from_zone_id($order['delivery_state'], $defaultTaxGroup);
                 $sql      = "SELECT * FROM ".TB_PREF."cust_branch WHERE debtor_no = ".db_escape($customer['debtor_no'])." AND br_address = ".db_escape($addr);
@@ -629,7 +627,7 @@ if (isset($_POST['action'])) {
                 $cart->Branch            = $branch['branch_code'];
                 $cart->cust_ref          = "osC Order # $oID";
                 $cart->Comments          = $comments;
-                $cart->document_date     = Today();
+                $cart->document_date     = sql2date($order['date_purchased']);
                 $cart->sales_type        = $customer['sales_type'];
                 $cart->ship_via          = $branch['default_ship_via'];
                 $cart->deliver_to        = $branch['br_name'];
@@ -664,7 +662,7 @@ if (isset($_POST['action'])) {
 
                 if ($_POST['invoice'] == 1) {
                     if (!$SysPrefs->allow_negative_stock() && ($low_stock = $cart->check_qoh())) {
-                        display_error(_("This document cannot be processed because there is insufficient quantity for items."));
+                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . implode(' ', $low_stock)));
                         if ($errors == 0) {
                             display_error('Skipping order ' . $oID);
                             continue;
@@ -685,7 +683,7 @@ if (isset($_POST['action'])) {
                         $order_no = $cart->write(1);
                     else
                         $order_no = $cart->write(0);
-                    display_notification("Added Order Number $order_no for " . $order['customers_name']);
+                    display_notification("Added Order Number $order_no for " . $customers_name);
 
                     $comments="Imported into FA";
                     $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($oID) . "," .  $order['orders_status']. "," . Today() . ", 0, " . osc_escape($comments) . "}";
@@ -751,12 +749,16 @@ if (isset($_POST['action'])) {
             $action = 'pupdate';
         }
         if ($action == 'i_import') { // Item Import
-            $sql = "SELECT p." . $osc_Id . ", pd.products_name, cd.categories_name, p.products_price, tc.tax_class_title FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
+            $sql = "SELECT p." . $osc_Id . ", pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
                 $products_name = utf8_decode($pp['products_name']);
                 $products_price = $pp['products_price'];
+                $products_quantity = $pp['products_quantity'];
+                $mb_flag = 'B';
+                if ($products_quantity == "")
+                    $mb_flag = 'D';
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
                 $tax_class_title = $pp['tax_class_title'];
                 if ($tax_class_title == "")
@@ -799,7 +801,7 @@ if (isset($_POST['action'])) {
                             tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
                             adjustment_account, wip_account, dimension_id, dimension2_id)
                             VALUES ('$osc_id', " . db_escape($products_name) . ", '',
-                            '$cat', '$tax_type_id', '{$_POST['units']}', 'B',
+                            '$cat', '$tax_type_id', '{$_POST['units']}', '$mb_flag',
                             '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
                             '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', '{$_POST['dimension_id']}', '{$_POST['dimension2_id']}')";
 
