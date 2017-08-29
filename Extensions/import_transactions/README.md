@@ -25,5 +25,5 @@ Import transactions from csv in
 * Multiline or singleline invoices can be imported. 
 * Invoices can be either cash or credit. The payment id lookup tool should be used to determine what number you will associate with either cash or credit invoices.  For cash invoices, the payment id of 4 is used, and for credit invoices, arbitrarily 1 is used instead of 2 or 3.
 * Example csv files are provided for each format, both for multiline and single line invoices. These can be used to test the package, and as templates for your own use.
-* Line 65 in **import_transactions.php** (**all_delete($yes=false);**) can be removed after testing.
+* Line 63 in **import_transactions.php** (**all_delete($yes=false);**) can be removed after testing.
 	

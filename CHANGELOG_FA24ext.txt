@@ -1,3 +1,12 @@
+2017-08-16  BraathWaate  osc_orders module: import no quantity osc items like services/charges
+2017-08-16  BraathWaate  osc_orders module: fixed typo $total_shiping => $total_shipping
+2017-08-15  Ap.Muthu     Added hi_IN (Hindi India) core language
+2017-08-15  Ap.Muthu     Added km_KH (Khymer Cambodia) core language
+2017-08-14  BraathWaate  import_transactions module: templates to reflect supplier=3
+2017-08-14  BraathWaate  Batch Check Printing module added
+2017-08-14  BraathWaate  osc_orders module: more import features, create paid invoices
+2017-07-31  Ap.Muthu     Updated Arabic (Egypt) (ar_EG) core language to FA v2.4.2
+2017-07-29  Ap.Muthu     Added Vietnamese (vi_VN) and Tamil (ta_IN) FA 2.4.2 core languages
 2017-07-29  Ap.Muthu     Double escaped all js translation source strings
 2017-07-24  Ap.Muthu     en_PH Chart: Phillipines CoA synched to FA 2.4.1 en_US-new.sql
 2017-07-24  Ap.Muthu     en_PH Chart: Phillipines CoA set to Phillipine Peso (PHP)
