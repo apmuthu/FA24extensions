@@ -85,7 +85,7 @@ if (isset($select))
 
 
 	$url = REPGENDIR."/repgen_select.php";
-	$url= "http://$HTTP_HOST".$url;
+	$url = PROTOCOL.$HTTP_HOST.$url;
 	header("Location: ".$url);  // switches to repgen_select.php
 	exit;
 }
@@ -100,8 +100,8 @@ if (isset($store))
 	{  	// $short == functionname?
 		$info = $short."|".$date_."|".$author."|".$long."|".addslashes($funct) ;
 		store($id_new,$info);
-		$url= REPGENDIR."/repgen_select.php";
-		$url= "http://$HTTP_HOST".$url;
+		$url = REPGENDIR."/repgen_select.php";
+		$url = PROTOCOL.$HTTP_HOST.$url;
 		header("Location: ".$url);  // switches to repgen_strings.php
    	}
    	else
