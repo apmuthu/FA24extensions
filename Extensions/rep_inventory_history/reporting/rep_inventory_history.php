@@ -1,16 +1,14 @@
 <?php
-/**********************************************************************
-Module ini di buat oleh INFOKOM CAMP dalam kotribusi nya dalam Open Source
+/**********************************************
+Author   : Jujuk-Indonesia (INFOKOM CAMP)
+Email    : siji.tux@gmail.com
+Name     : Inventory History
+Date     : 2011-02-28
+Revision : 1.0
+Free software under GNU GPL
+***********************************************/
 
-***********************************************************************/
 $page_security = 'SA_ITEMSVALREP';
-// ----------------------------------------------------------------
-// $ Revision:	1.0 $
-// Creator:	Jujuk-Indonesia
-// Email:	siji.tux@gmail.com
-// date_:	28-02-2011
-// Title:	Inventory History
-// ----------------------------------------------------------------
 $path_to_root="..";
 
 include_once($path_to_root . "/includes/session.inc");
@@ -19,79 +17,88 @@ include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/gl/includes/gl_db.inc");
 include_once($path_to_root . "/inventory/includes/db/items_category_db.inc");
 
-//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 print_inventory_history();
 
 function getTransactions($category, $location, $fromcust, $from, $to)
 {
 	$from = date2sql($from);
-	$to = date2sql($to);
-	$sql = "SELECT 	".TB_PREF."stock_master.category_id,
-		".TB_PREF."stock_category.description AS cat_description,
-		".TB_PREF."stock_master.stock_id,
-		".TB_PREF."stock_master.description,
-		".TB_PREF."stock_master.units,
+	$to   = date2sql($to);
+	$sql  = "SELECT stock_master.category_id,
+		stock_category.description AS cat_description,
+		stock_master.stock_id,
+		stock_master.description,
+		stock_master.units,
 		IFNULL(stokbrg.jml,0) stk_brg,
-		IFNULL(penyesuaian.jml,0) peny_brg,
-		IFNULL(produksi.jml,0) pro_brg,
-		IFNULL(pembelian.jml,0) beli_brg,
+		IFNULL(adjustment.jml,0) peny_brg,
+		IFNULL(production.jml,0) pro_brg,
+		IFNULL(purchase.jml,0) beli_brg,
 		IFNULL(returnspl.jml,0) rtrspl_brg,
 		IFNULL(transfer.jml,0) mutasi_brg,
-		IFNULL(jualan.jml,0) penjualan,
+		IFNULL(jualan.jml,0) sales_qty,
 		IFNULL(kembali.jml,0) retur_brg,
-		(IFNULL(stokbrg.jml,0) + IFNULL(penyesuaian.jml,0) + IFNULL(produksi.jml,0) + IFNULL(pembelian.jml,0)  - 
-		IFNULL(returnspl.jml,0) + IFNULL(transfer.jml,0) + IFNULL(kembali.jml,0) - IFNULL(jualan.jml,0)) saldo
-FROM (".TB_PREF."stock_moves, ".TB_PREF."stock_master, ".TB_PREF."stock_category)
-LEFT JOIN(SELECT stk.stock_id, SUM(IFNULL(stk.qty,0)) jml FROM ".TB_PREF."stock_moves AS stk WHERE stk.tran_date < '$from'";
+		(IFNULL(stokbrg.jml,0) + IFNULL(adjustment.jml,0) + IFNULL(production.jml,0) + IFNULL(purchase.jml,0)  - 
+		IFNULL(returnspl.jml,0) + IFNULL(transfer.jml,0) + IFNULL(kembali.jml,0) - IFNULL(jualan.jml,0)) balance
+FROM (".TB_PREF."stock_moves AS stock_moves, ".TB_PREF."stock_master AS stock_master, ".TB_PREF."stock_category AS stock_category)
+LEFT JOIN (SELECT stk.stock_id, SUM(IFNULL(stk.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS stk WHERE stk.tran_date < '$from'";
 if ($location != 'all')
 	$sql .= " AND stk.loc_code = ".db_escape($location);
-$sql .= " GROUP BY stk.stock_id ORDER BY stk.stock_id) AS stokbrg ON stokbrg.stock_id=".TB_PREF."stock_master.stock_id
+$sql .= " GROUP BY stk.stock_id ORDER BY stk.stock_id) AS stokbrg ON stokbrg.stock_id=stock_master.stock_id
 
-LEFT JOIN(SELECT peny.stock_id, SUM(IFNULL(peny.qty,0)) jml FROM ".TB_PREF."stock_moves AS peny WHERE peny.type='17'
+LEFT JOIN (SELECT peny.stock_id, SUM(IFNULL(peny.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS peny WHERE peny.type='17'
 AND peny.tran_date >= '$from' AND peny.tran_date <= '$to'";
 if ($location != 'all')
 	$sql .= " AND peny.loc_code = ".db_escape($location);
-$sql .= " GROUP BY peny.stock_id ORDER BY peny.stock_id) AS penyesuaian ON penyesuaian.stock_id=".TB_PREF."stock_master.stock_id
-LEFT JOIN(SELECT pro.stock_id, SUM(IFNULL(pro.qty,0)) jml FROM ".TB_PREF."stock_moves AS pro WHERE pro.type='26'
+$sql .= " GROUP BY peny.stock_id ORDER BY peny.stock_id) AS adjustment ON adjustment.stock_id=stock_master.stock_id
+
+LEFT JOIN (SELECT pro.stock_id, SUM(IFNULL(pro.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS pro WHERE pro.type='26'
 AND pro.tran_date >= '$from' AND pro.tran_date <= '$to'";
 if ($location != 'all')
 	$sql .= " AND pro.loc_code = ".db_escape($location);
-$sql .= " GROUP BY pro.stock_id ORDER BY pro.stock_id) AS produksi ON produksi.stock_id=".TB_PREF."stock_master.stock_id
-LEFT JOIN(SELECT beli.stock_id, SUM(IFNULL(beli.qty,0)) jml FROM ".TB_PREF."stock_moves AS beli WHERE beli.type='25'
+$sql .= " GROUP BY pro.stock_id ORDER BY pro.stock_id) AS production ON production.stock_id=stock_master.stock_id
+
+LEFT JOIN (SELECT beli.stock_id, SUM(IFNULL(beli.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS beli WHERE beli.type='25'
 AND beli.tran_date>='$from' AND beli.tran_date<='$to'";
 if ($location != 'all')
 	$sql .= " AND beli.loc_code = ".db_escape($location);
-$sql .= " GROUP BY beli.stock_id ORDER BY beli.stock_id) AS pembelian ON pembelian.stock_id=".TB_PREF."stock_master.stock_id
-LEFT JOIN(SELECT rtrspl.stock_id, SUM(IFNULL(-rtrspl.qty,0)) jml FROM ".TB_PREF."stock_moves AS rtrspl WHERE rtrspl.type='21'
+$sql .= " GROUP BY beli.stock_id ORDER BY beli.stock_id) AS purchase ON purchase.stock_id=stock_master.stock_id
+
+LEFT JOIN (SELECT rtrspl.stock_id, SUM(IFNULL(-rtrspl.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS rtrspl WHERE rtrspl.type='21'
 AND rtrspl.tran_date>='$from' AND rtrspl.tran_date<='$to'";
 if ($location != 'all')
 	$sql .= " AND rtrspl.loc_code = ".db_escape($location);
-$sql .= " GROUP BY rtrspl.stock_id ORDER BY rtrspl.stock_id) AS returnspl ON returnspl.stock_id=".TB_PREF."stock_master.stock_id
+$sql .= " GROUP BY rtrspl.stock_id ORDER BY rtrspl.stock_id) AS returnspl ON returnspl.stock_id=stock_master.stock_id
 
-LEFT JOIN(SELECT mutasi.stock_id, SUM(IFNULL(mutasi.qty,0)) jml FROM ".TB_PREF."stock_moves AS mutasi WHERE mutasi.type='16'
+LEFT JOIN (SELECT mutasi.stock_id, SUM(IFNULL(mutasi.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS mutasi WHERE mutasi.type='16'
 AND mutasi.tran_date>='$from' AND mutasi.tran_date<='$to'";
 if ($location != 'all')
 	$sql .= " AND mutasi.loc_code = ".db_escape($location);
-$sql .= " GROUP BY mutasi.stock_id ORDER BY mutasi.stock_id) AS transfer ON transfer.stock_id=".TB_PREF."stock_master.stock_id
-LEFT JOIN(SELECT jual.stock_id, SUM(IFNULL(-jual.qty,0)) jml FROM ".TB_PREF."stock_moves AS jual WHERE jual.type='13'
+$sql .= " GROUP BY mutasi.stock_id ORDER BY mutasi.stock_id) AS transfer ON transfer.stock_id=stock_master.stock_id
+
+LEFT JOIN (SELECT jual.stock_id, SUM(IFNULL(-jual.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS jual WHERE jual.type='13'
 AND jual.tran_date>='$from' AND jual.tran_date<='$to'";
 if ($location != 'all')
 	$sql .= " AND jual.loc_code = ".db_escape($location);
-$sql .= " GROUP BY jual.stock_id ORDER BY jual.stock_id) AS jualan ON jualan.stock_id=".TB_PREF."stock_master.stock_id
-LEFT JOIN(SELECT retur.stock_id, SUM(IFNULL(retur.qty,0)) jml FROM ".TB_PREF."stock_moves AS retur WHERE retur.type='11'
+$sql .= " GROUP BY jual.stock_id ORDER BY jual.stock_id) AS jualan ON jualan.stock_id=stock_master.stock_id
+
+LEFT JOIN (SELECT retur.stock_id, SUM(IFNULL(retur.qty,0)) AS jml FROM ".TB_PREF."stock_moves AS retur WHERE retur.type='11'
 AND retur.tran_date>='$from' AND retur.tran_date<='$to'";
 if ($location != 'all')
 	$sql .= " AND retur.loc_code = ".db_escape($location);
-$sql .= " GROUP BY retur.stock_id ORDER BY retur.stock_id) AS kembali ON kembali.stock_id=".TB_PREF."stock_master.stock_id
-WHERE ".TB_PREF."stock_master.stock_id=".TB_PREF."stock_moves.stock_id
-AND ".TB_PREF."stock_master.category_id=".TB_PREF."stock_category.category_id AND ".TB_PREF."stock_moves.type>='11'
-AND ".TB_PREF."stock_moves.type<='26' AND ".TB_PREF."stock_moves.tran_date>='$from' AND ".TB_PREF."stock_moves.tran_date<='$to' ";
+$sql .= " GROUP BY retur.stock_id ORDER BY retur.stock_id) AS kembali ON kembali.stock_id=stock_master.stock_id
+
+WHERE stock_master.stock_id=stock_moves.stock_id
+AND stock_master.category_id=stock_category.category_id AND stock_moves.type>='11'
+AND stock_moves.type<='26' AND stock_moves.tran_date>='$from' AND stock_moves.tran_date<='$to' ";
+
 if ($category != 0)
-	$sql .= " AND ".TB_PREF."stock_master.category_id = ".db_escape($category);
+	$sql .= " AND stock_master.category_id = ".db_escape($category);
+
 if ($location != 'all')
-	$sql .= " AND ".TB_PREF."stock_moves.loc_code = ".db_escape($location);
-$sql .= " GROUP BY ".TB_PREF."stock_master.stock_id ORDER BY ".TB_PREF."stock_master.category_id, ".TB_PREF."stock_master.stock_id";
+	$sql .= " AND stock_moves.loc_code = ".db_escape($location);
+
+$sql .= " GROUP BY stock_master.stock_id ORDER BY stock_master.category_id, stock_master.stock_id";
     
     return db_query($sql,"No transactions were returned");
 }
@@ -191,13 +198,13 @@ function print_inventory_history()
 			$rep->AmountCol(5, 6, $trans['beli_brg'], get_qty_dec($trans['stock_id']));
 			$rep->AmountCol(6, 7, -$trans['rtrspl_brg'], get_qty_dec($trans['stock_id']));
 			$rep->AmountCol(7, 8, $trans['mutasi_brg'], get_qty_dec($trans['stock_id']));
-			$rep->AmountCol(8, 9, -$trans['penjualan'], get_qty_dec($trans['stock_id']));
+			$rep->AmountCol(8, 9, -$trans['sales_qty'], get_qty_dec($trans['stock_id']));
 			$rep->AmountCol(9, 10, $trans['retur_brg'], get_qty_dec($trans['stock_id']));
-			$rep->AmountCol(10, 11, $trans['saldo'], get_qty_dec($trans['stock_id']));
+			$rep->AmountCol(10, 11, $trans['balance'], get_qty_dec($trans['stock_id']));
 			$rep->fontSize += 2;
 		}
-		$total += $trans['saldo'];
-		$grandtotal += $trans['saldo'];
+		$total += $trans['balance'];
+		$grandtotal += $trans['balance'];
 	}
 	if ($detail)
 	{
