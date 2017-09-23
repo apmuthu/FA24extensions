@@ -3,7 +3,7 @@
 $path_to_root = "../..";
 $page_security = 'SA_OPEN';
 
-include_once($path_to_root . "/includes/session.inc"); // loggen in user credentials for use in the script
+include_once($path_to_root . "/includes/session.inc"); // logged in user credentials for use in the script
 include_once($path_to_root . "/includes/ui/ui_main.inc"); // page(), end_page(), includes ui_controls.inc that has start_table(),  end_table(), br()
 include_once($path_to_root . "/includes/ui/ui_input.inc"); // label_cell()
 // include_once($path_to_root . "/includes/date_functions.inc");
