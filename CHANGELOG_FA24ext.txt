@@ -1,3 +1,4 @@
+2017-09-29  Ap.Muthu     Recurring Sales Order module by Cambell added
 2017-09-23  Ap.Muthu     Hello World module added
 2017-09-20  Ap.Muthu     Inventory History report: cleaned up sql and substituted some English variables
 2017-09-15  Ap.Muthu     repgen module: auto http / https

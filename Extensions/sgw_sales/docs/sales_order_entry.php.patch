@@ -1,0 +1,190 @@
+--- ../../sales/sales_order_entry.php	2016-02-08 05:30:57.782346600 +0700
++++ sales_order_entry.php	2016-08-26 21:02:03.663389400 +0700
+@@ -1,4 +1,6 @@
+ <?php
++use SGW_Sales\db\SalesRecurringModel;
++use SGW_Sales\controller\GenerateRecurring;
+ /**********************************************************************
+     Copyright (C) FrontAccounting, LLC.
+ 	Released under the terms of the GNU General Public License, GPL, 
+@@ -17,13 +19,19 @@
+ //	Entry Direct Invoice
+ //
+ 
+-$path_to_root = "..";
+ $page_security = 'SA_SALESORDER';
+ 
++include_once(__DIR__ . '/vendor/autoload.php');
++
++$path_to_root = "../..";
++$path_to_module = __DIR__;
++
+ include_once($path_to_root . "/sales/includes/cart_class.inc");
+ include_once($path_to_root . "/includes/session.inc");
+ include_once($path_to_root . "/sales/includes/sales_ui.inc");
+-include_once($path_to_root . "/sales/includes/ui/sales_order_ui.inc");
++include_once($path_to_module . "/includes/ui/sales_order_ui.inc");
++include_once($path_to_module . "/includes/ui/sales_recurring_ui.inc");
++include_once($path_to_module . "/includes/ui/sales_recurring_ui.inc");
+ include_once($path_to_root . "/sales/includes/sales_db.inc");
+ include_once($path_to_root . "/sales/includes/db/sales_types_db.inc");
+ include_once($path_to_root . "/reporting/includes/reporting.inc");
+@@ -74,12 +82,17 @@
+   	} else
+ 		$_SESSION['page_title'] = _($help_context = "Direct Sales Invoice");
+ 
+-} elseif (isset($_GET['ModifyOrderNumber']) && is_numeric($_GET['ModifyOrderNumber'])) {
+-
++} elseif ((isset($_GET['ModifyOrderNumber']) && is_numeric($_GET['ModifyOrderNumber']))) {
++	$_POST['trans_no'] = $_GET['ModifyOrderNumber'];
+ 	$help_context = 'Modifying Sales Order';
+-	$_SESSION['page_title'] = sprintf( _("Modifying Sales Order # %d"), $_GET['ModifyOrderNumber']);
++	$_SESSION['page_title'] = sprintf( _("Modifying Sales Order # %d"), $_POST['trans_no']);
+ 	create_cart(ST_SALESORDER, $_GET['ModifyOrderNumber']);
+-
++	$model = new SalesRecurringModel();
++	$model->_mapper->read($model, $_POST['trans_no'], 'transNo');
++	if ($model->id) {
++		$_POST['sale_recurring'] = 1;
++		copy_from_recurring($model);
++	}
+ } elseif (isset($_GET['ModifyQuotationNumber']) && is_numeric($_GET['ModifyQuotationNumber'])) {
+ 
+ 	$help_context = 'Modifying Sales Quotation';
+@@ -336,6 +349,25 @@
+ }
+ //--------------------------------------------------------------------------------
+ 
++/**
++ * @param SaleRecurringModel $model
++ */
++function copy_from_recurring($model) {
++	$model->_mapper->writeArray($model, $_POST, array('dtStart', 'dtEnd', 'dtLast', 'occur'));
++	$map = $model->_mapper->map;
++	$_POST[$map['dtStart']] = sql2date($model->dtStart);
++	$_POST[$map['dtEnd']] = sql2date($model->dtEnd);
++	switch ($model->repeats) {
++		case SalesRecurringModel::REPEAT_YEARLY:
++			$_POST['occur_year'] = sql2date(sprintf('9999-%s', $model->occur));
++			break;
++		case SalesRecurringModel::REPEAT_MONTHLY:
++			$_POST['occur_month'] = $model->occur;
++			break;
++	}
++}
++
++
+ function line_start_focus() {
+   	global 	$Ajax;
+ 
+@@ -448,6 +480,36 @@
+ 		display_error("Invoice total amount cannot be less than zero.");
+ 		return false;
+ 	}
++	if (check_value('sale_recurring')) {
++		if (!is_date($_POST['dt_start'])) {
++			display_error(_("Recurring Order 'Start Date' is invalid."));
++			set_focus('dt_start');
++			return false;
++		}
++		if (!is_numeric($_POST['every'])) {
++			display_error(_("Recurring Order 'Every' must be a number."));
++			set_focus('every');
++			return false;
++		}
++		switch ($_POST['repeats']) {
++			case 'year':
++				if (!is_date($_POST['occur_year'])) {
++					display_error(_("Recurring Order 'On' date is invalid."));
++					set_focus('occur_year');
++					return false;
++				}
++				break;
++			case 'month':
++				if (!is_numeric($_POST['occur_month'])) {
++					display_error(_("Recurring Order 'On' must be a number."));
++					set_focus('occur_month');
++					return false;
++				}
++				break;
++			case 'week': // Week is a combo box, so nothing special
++				break;
++		}
++	}
+ 	return true;
+ }
+ 
+@@ -484,6 +546,32 @@
+ 		}
+ 		$trans_no = key($_SESSION['Items']->trans_no);
+ 		$trans_type = $_SESSION['Items']->trans_type;
++		if ($trans_type == ST_SALESORDER && check_value('sale_recurring')) {
++			$model = new SalesRecurringModel();
++			if (isset($_POST['trans_no'])) {
++				$model->_mapper->read($model, $_POST['trans_no'], 'transNo');
++			}
++			$model->_mapper->readArray($model, $_POST, array('dtLast', 'dtStart', 'dtEnd'));
++			$model->transNo = $trans_no;
++			$model->dtStart = date2sql($_POST['dt_start']);
++			$model->dtEnd = date2sql($_POST['dt_end']);
++			switch ($model->repeats) {
++				case SalesRecurringModel::REPEAT_YEARLY:
++					$parts = explode('-', date2sql($_POST['occur_year']));
++					$model->occur = $parts[1] . '-' . $parts[2];
++					break;
++				case SalesRecurringModel::REPEAT_MONTHLY:
++					$model->occur = sprintf('%d', $_POST['occur_month']);
++					break;
++			}
++			if (!$model->dtNext || $model->dtNext == '0000-00-00') {
++				// Only update dtNext if we've not set it before otherwise the dtNext will be pushed out
++				// another period each time the Sales Order is saved.
++				$nextDate = GenerateRecurring::nextDate($model);
++				$model->dtNext = $nextDate->format('Y-m-d');
++			}
++			$model->_mapper->write($model);
++		}
+ 		new_doc_date($_SESSION['Items']->document_date);
+ 		processing_end();
+ 		if ($modified) {
+@@ -730,18 +818,39 @@
+ start_form();
+ 
+ hidden('cart_id');
+-$customer_error = display_order_header($_SESSION['Items'], !$_SESSION['Items']->is_started(), $idate);
++if (isset($_POST['trans_no'])) {
++	hidden('trans_no', $_POST['trans_no']);
++}
++
++$customer_error = display_order_header($_SESSION['Items'], check_value('sale_recurring') || !$_SESSION['Items']->is_started(), $idate);
+ 
+ if ($customer_error == "") {
+ 	start_table(TABLESTYLE, "width='80%'", 10);
+ 	echo "<tr><td>";
+ 	display_order_summary($orderitems, $_SESSION['Items'], true);
+ 	echo "</td></tr>";
++
+ 	echo "<tr><td>";
+ 	display_delivery_details($_SESSION['Items']);
+ 	echo "</td></tr>";
++	
+ 	end_table(1);
+ 
++	div_start('recurring');
++	//	var_dump('z', @$_POST['sale_recurring']);
++	if (check_value('sale_recurring')) {
++		start_table(TABLESTYLE, "width='80%'", 10);
++		echo "<tr><td>";
++		sales_recurring_display();
++		echo "</td></tr>";
++		end_table(1);
++	} else {
++		//		echo 'boo';
++	}
++	
++	div_end();
++	
++	
+ 	if ($_SESSION['Items']->trans_no == 0) {
+ 
+ 		submit_center_first('ProcessOrder', $porder,
