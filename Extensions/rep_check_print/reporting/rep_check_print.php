@@ -200,5 +200,39 @@ function print_check()
 }
 
 //--------------------------------------------------------------------------------
+// Copied from FA 2.3.x's purchasing/includes/db/suppalloc_db.inc
+// Equivalent FA 2.4.x function get_allocatable_from_supp_sql() does not have the extra arguments needed.
+// Ref: http://frontaccounting.com/punbb/viewtopic.php?pid=28784#p28784
+function get_alloc_supp_sql($extra_fields=null, $extra_conditions=null, $extra_tables=null)
+{
+	$sql = "SELECT
+		trans.type,
+		trans.trans_no,
+		IF(trans.supp_reference='',trans.reference,trans.supp_reference) as reference,
+ 		trans.tran_date,
+		supplier.supp_name, 
+		supplier.curr_code, 
+		ov_amount+ov_gst+ov_discount AS Total,
+		trans.alloc,
+		trans.due_date,
+		trans.supplier_id,
+		supplier.address";
+
+	if ($extra_fields)
+		$sql .= ", $extra_fields ";
+
+	$sql .= " FROM ".TB_PREF."supp_trans as trans, ".TB_PREF."suppliers as supplier";
+	if ($extra_tables)
+		$sql .= " ,$extra_tables ";
+
+	$sql .= " WHERE trans.supplier_id=supplier.supplier_id";
+
+	if ($extra_conditions)
+		$sql .= " AND $extra_conditions";
+	
+	return $sql;
+}
+
+//-------------------------------------------------------------------------------------------------------------
 
 
