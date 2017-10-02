@@ -160,7 +160,7 @@ if (isset($_POST['import']))
 
 					// Check that the reference is not in use
 					global $Refs;
-					if ($Refs->exists($type, $reference)) {
+					if (!($Refs->is_new_reference($reference, $type))) {
 						display_error("Error: reference '$reference' is already in use (line $line in import file '{$_FILES['imp']['name']}')");
 						$error = true;
 					}
