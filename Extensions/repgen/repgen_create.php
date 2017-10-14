@@ -90,7 +90,7 @@ if (isset($select))
 {
 	// go to the page for selection of an old report without storing the content of this page
 	$url = REPGENDIR."/repgen_select.php";
-	header("Location: http://$HTTP_HOST".$url);  // switches to repgen_del.php
+	header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_del.php
 	exit;
 }
 if (isset($page_strings))
@@ -118,7 +118,7 @@ if (isset($page_strings))
 		store($id_new,$info,$sql,$group,$group_type);
 		$url=REPGENDIR."/repgen_strings.php";
 		$url .= "?id_new=".$id_new."&long=".urlencode($long)."&report_type=".$report_type."&sql=".urlencode($sql);
-		header("Location: http://$HTTP_HOST".$url);  // switches to repgen_strings.php
+		header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_strings.php
 		exit;
 	}
 	else
@@ -144,7 +144,7 @@ if (isset($page_graphics))
 		$info = $short."|".$date_."|".$author."|".$long."|".$print_format."|".$print_size."|".$report_type ;
 		store($id_new,$info,$sql,$group,$group_type);
 		$url = REPGENDIR."/repgen_graphics.php?id_new=".$id_new."&long=".urlencode($long);
-		header("Location: http://$HTTP_HOST".$url);  // switches to repgen_graphics.php
+		header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_graphics.php
 		exit;
 	}
 }

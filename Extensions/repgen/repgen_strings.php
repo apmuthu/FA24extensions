@@ -114,7 +114,7 @@ while (is_array($_POST) && list($key, $val) = each($_POST))
       	// go back
   		case "back":
             $url=REPGENDIR."/repgen_select.php";
-            header("Location: http://$HTTP_HOST".$url);  // switches to page 'select a report'
+            header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to page 'select a report'
             exit;
           	break;
   		case "delete":

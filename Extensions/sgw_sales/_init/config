@@ -1,0 +1,16 @@
+Package: sgw_sales
+Name: Recurring Sales Orders Generator
+Description: This module helps generate recurring sales orders
+ A modified Sales Order Entry screen that allows for orders to be marked as recurring.
+ Start and optional end date can be specified.
+ Yearly and Monthly recurring intervals.
+ Set the date in the year, or date in month on which the recurring invoice should be triggered.
+Author: Cambell Prince <cambell.prince@gmail.com>
+Maintenance: Cambell Prince <cambell.prince@gmail.com>
+Homepage: github.com/cambell-prince
+Depends: 
+Type: extension
+InstallPath: modules/sgw_sales
+Filename: sgw_sales-2.4.2-1
+Version: 2.4.2-1
+

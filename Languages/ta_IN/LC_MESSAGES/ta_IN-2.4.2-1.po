@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: FrontAccounting 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-27 20:21+0200\n"
-"PO-Revision-Date: 2017-07-29 16:30+0530\n"
+"PO-Revision-Date: 2017-10-12 21:02+0530\n"
 "Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2017\n"
 "Language-Team: Tamil (https://www.transifex.com/gnuacademy/teams/55037/ta/)\n"
 "MIME-Version: 1.0\n"
@@ -378,6 +378,8 @@ msgstr "நீங்கள் * .sql காப்பு கோப்புக
 #: admin/backups.php:170
 msgid "Filename contains forbidden chars. Please rename file and try again."
 msgstr ""
+"கோப்பு பெயரில் தடை செய்யப்பட்ட எழுத்துகள் உள்ளன. கோப்பு மறுபெயரிட்டு "
+"மீண்டும் முயற்சிக்கவும்."
 
 #: admin/backups.php:173
 msgid "File uploaded to backup directory"
@@ -447,7 +449,7 @@ msgstr "பாதுகாப்பு அமைப்புகளைப் ப�
 
 #: admin/backups.php:211
 msgid "Protect security settings"
-msgstr ""
+msgstr "பாதுகாப்பு அமைப்புகளை பாதுகாக்கவும்"
 
 #: admin/backups.php:215
 msgid "Upload file"
@@ -517,7 +519,7 @@ msgstr "நிறுவனத்தின் பெயர் உள்ளிட 
 
 #: admin/company_preferences.php:46
 msgid "Error uploading logo file."
-msgstr ""
+msgstr "லோகோ பட கோப்பைப் பதிவேற்றுவதில் பிழை."
 
 #: admin/company_preferences.php:60
 msgid ""
@@ -552,7 +554,7 @@ msgstr "நிறுவனத்தின் அமைப்பு மேம்�
 
 #: admin/company_preferences.php:169
 msgid "General settings"
-msgstr ""
+msgstr "பொது அமைப்புகள்"
 
 #: admin/company_preferences.php:171
 msgid "Name (to appear on reports):"
@@ -622,11 +624,11 @@ msgstr "அறிக்கைகளில் நேர மண்டலம்"
 
 #: admin/company_preferences.php:191
 msgid "Database Scheme Version"
-msgstr ""
+msgstr "டேட்டாபேஸ் அமைப்பியல் பதிப்பு"
 
 #: admin/company_preferences.php:195
 msgid "General Ledger Settings"
-msgstr ""
+msgstr "பொது பேரேடு அமைப்புகள்"
 
 #: admin/company_preferences.php:196 gl/gl_budget.php:62
 msgid "Fiscal Year:"
@@ -658,7 +660,7 @@ msgstr ""
 
 #: admin/company_preferences.php:202
 msgid "Sales Pricing"
-msgstr ""
+msgstr "விற்பனை விலை முறை"
 
 #: admin/company_preferences.php:203
 msgid "Base for auto price calculations:"
@@ -678,17 +680,17 @@ msgstr ""
 
 #: admin/company_preferences.php:212
 msgid "Optional Modules"
-msgstr ""
+msgstr "விருப்ப தொகுதிகள்"
 
 #: admin/company_preferences.php:213 includes/dashboard.inc:118
 #: reporting/reports_main.php:285
 msgid "Manufacturing"
-msgstr ""
+msgstr "தயாரிப்பு"
 
 #: admin/company_preferences.php:214 includes/dashboard.inc:116
 #: inventory/manage/items.php:24 reporting/reports_main.php:308
 msgid "Fixed Assets"
-msgstr ""
+msgstr "நிலையான சொத்துக்கள்"
 
 #: admin/company_preferences.php:215
 msgid "Use Dimensions:"
@@ -940,7 +942,7 @@ msgstr "எதுவும் இல்லை"
 
 #: admin/create_coy.php:338 admin/create_coy.php:349 admin/create_coy.php:351
 msgid "Default Company"
-msgstr ""
+msgstr "இயல்புநிலை நிறுவனம்"
 
 #: admin/create_coy.php:339
 msgid "Database Script"
@@ -1074,7 +1076,7 @@ msgstr ""
 
 #: admin/display_prefs.php:103
 msgid "Reports"
-msgstr ""
+msgstr "அறிக்கைகள்"
 
 #: admin/display_prefs.php:105
 msgid "Save Report Selection Days:"
@@ -1392,7 +1394,7 @@ msgstr ""
 #: admin/gl_setup.php:182 gl/manage/bank_accounts.php:110
 #: includes/ui/ui_view.inc:546
 msgid "Number"
-msgstr ""
+msgstr "எண்"
 
 #: admin/gl_setup.php:182 admin/view_print_transaction.php:127
 #: admin/void_transaction.php:181 dimensions/inquiry/search_dimensions.php:125
@@ -1459,7 +1461,7 @@ msgstr ""
 
 #: admin/gl_setup.php:193
 msgid "Not used"
-msgstr ""
+msgstr "பயன்படுத்துவதில்லை"
 
 #: admin/gl_setup.php:197
 msgid "Customers and Sales Defaults"

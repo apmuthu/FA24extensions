@@ -1,3 +1,10 @@
+2017-10-12  Ap.Muthu     Updated Tamil (ta_IN) core translation with 14 more strings from Transifex
+2017-10-02  Albertolima  module import_multijournalentries is_new_reference() method fix
+2017-09-30  Ap.Muthu     rep_check_print module fixed by frontporting function get_alloc_supp_sql()
+2017-09-29  Ap.Muthu     Recurring Sales Order module by Cambell added
+2017-09-23  Ap.Muthu     Hello World module added
+2017-09-20  Ap.Muthu     Inventory History report: cleaned up sql and substituted some English variables
+2017-09-15  Ap.Muthu     repgen module: auto http / https
 2017-08-16  BraathWaate  osc_orders module: import no quantity osc items like services/charges
 2017-08-16  BraathWaate  osc_orders module: fixed typo $total_shiping => $total_shipping
 2017-08-15  Ap.Muthu     Added hi_IN (Hindi India) core language

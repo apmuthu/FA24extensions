@@ -79,7 +79,7 @@ if (isset($select))
 {
 	// go to the page for selection of an old block without storing the content of this page
 	$url = REPGENDIR."/repgen_select.php";
-	header("Location: http://$HTTP_HOST".$url);  // switches to repgen_select.php
+	header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_select.php
 	exit;
 }
 if (isset($page_strings))
@@ -97,7 +97,7 @@ if (isset($page_strings))
 		store($id_new,$info);
 		$url=REPGENDIR."/repgen_strings.php";
 		$url .= "?id_new=".$id_new."&long=".urlencode($long)."&report_type=".$report_type;
-		header("Location: http://$HTTP_HOST".$url);  // switches to repgen_strings.php
+		header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_strings.php
 		exit;
    	}
 }
@@ -114,7 +114,7 @@ if (isset($page_graphics))
 		$info = $short."|".$date_."|".$author."|".$long ;
 		store($id_new,$info);
 		$url=REPGENDIR."/repgen_graphics.php?id_new=".$id_new;;
-		header("Location: http://$HTTP_HOST".$url);  // switches to repgen_graphics.php
+		header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_graphics.php
 		 exit;
    	}
 }

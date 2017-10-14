@@ -1,0 +1,12 @@
+Package: hello_world
+Name: Hello World
+Description: An unlisted Hello World Extension for FA for manual install
+Author: Ap.Muthu
+Maintenance: Ap.Muthu
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/hello_world
+Type: extension
+Filename: hello_world
+Version: -
+

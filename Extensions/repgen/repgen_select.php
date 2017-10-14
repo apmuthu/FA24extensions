@@ -112,7 +112,7 @@ if (isset($change))
             $url .= "&group=".trim($h[0])."&group_type=".trim($h[1]);
 	}
 	//echo $url; exit;
-	header("Location: http://$HTTP_HOST".$url);  // switches to repgen_create.php
+	header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_create.php
     exit;
 }
 if (isset($delete))
@@ -120,7 +120,7 @@ if (isset($delete))
     // deletes report(all records) with id from table reports
     $url = REPGENDIR."/repgen_del.php";
     $url .= "?id=".trim($id)."&attr=".urlencode($attr);
-    header("Location: http://$HTTP_HOST".$url);  // switches to repgen_del.php
+    header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_del.php
     exit;
 }
 if (isset($copy))
@@ -187,7 +187,7 @@ if (isset($new_))
     $n++;
     $url = REPGENDIR . "/repgen_create.php";
     $url .= "?id_new=$n&short=&long=&author=&group=&sql=&print_format=&print_size=&report_type=&id=&group_type=";
-    header("Location: http://$HTTP_HOST".$url);  // switches to repgen_create.php
+    header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_create.php
     exit;
 }
 if (isset($newblock))
@@ -204,7 +204,7 @@ if (isset($newblock))
 	$n = 'B'.$n;
     $url = REPGENDIR . "/repgen_createblock.php";
     $url .= "?id_new=$n&short=&long=&author=&group=&sqlf=&print_format=&print_size=&report_type=&id=&group_type=";
-    header("Location: http://$HTTP_HOST".$url);  // switches to repgen_createblock.php
+    header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_createblock.php
     exit;
 }
 if (isset($newfunct))
@@ -221,7 +221,7 @@ if (isset($newfunct))
 	$n = 'F'.$n;
     $url = REPGENDIR."/repgen_createfunct.php";
     $url .= "?id_new=$n&short=&long=&author=&group=&sql=&print_format=&print_size=&report_type=&id=&group_type=";
-    header("Location: http://$HTTP_HOST".$url);  // switches to repgen_createfunct.php
+    header("Location: ".PROTOCOL.$HTTP_HOST.$url);  // switches to repgen_createfunct.php
     exit;
 }
 page("Report Generator REPGEN");

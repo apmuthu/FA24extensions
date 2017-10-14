@@ -46,7 +46,7 @@ require_once("includes/repgen_def.inc");
 if (isset($back))
 {
 	$url=REPGENDIR."/repgen_select.php";
-	header("Location: http://$HTTP_HOST".$url);
+	header("Location: ".PROTOCOL.$HTTP_HOST.$url);
 	exit;
 }
 if (isset($delete))
@@ -55,7 +55,7 @@ if (isset($delete))
 	$query="DELETE FROM xx_reports WHERE id = '".$id."'";
 	db_query($query);
 	$url=REPGENDIR."/repgen_select.php?id=".$id;
-	$url ="http://$HTTP_HOST".$url;
+	$url = PROTOCOL.$HTTP_HOST.$url;
 	header("Location: ".$url);  // switches to repgen_select.php
 	exit;
 }
