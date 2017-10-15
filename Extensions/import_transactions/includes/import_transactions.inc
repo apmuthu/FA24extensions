@@ -390,6 +390,7 @@ function determinetax($taxtype, $amt) {
         return;
     }
 
+    $taxper = $row['rate'];
     //determine the VAT accounts associated with the taxtype eg. standard VAT
     $salestaxaccount = $row['sales_gl_code'];
     $purchasetaxaccount = $row['purchasing_gl_code'];
