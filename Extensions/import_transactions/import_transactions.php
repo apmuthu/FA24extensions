@@ -107,10 +107,10 @@ if ((isset($_POST['type']))) {
             display_error(_("Error opening file $filename"));
         } else {
             begin_transaction();
-            $curEntryId[ST_JOURNAL] = last_transno(ST_JOURNAL)+1;
-            $curEntryId[ST_BANKTRANSFER] = last_transno(ST_BANKTRANSFER)+1;
-            $curEntryId[ST_BANKDEPOSIT] = last_transno(ST_BANKDEPOSIT)+1;
-            $curEntryId[ST_BANKPAYMENT] = last_transno(ST_BANKPAYMENT)+1;
+            $curEntryId[ST_JOURNAL] = get_next_trans_no(ST_JOURNAL);
+            $curEntryId[ST_BANKTRANSFER] = get_next_trans_no(ST_BANKTRANSFER);
+            $curEntryId[ST_BANKDEPOSIT] = get_next_trans_no(ST_BANKDEPOSIT);
+            $curEntryId[ST_BANKPAYMENT] = get_next_trans_no(ST_BANKPAYMENT);
             $line = 0;
             $description = "";
             $i = 0;
@@ -294,6 +294,7 @@ if ((isset($_POST['type']))) {
 
                 // validation for
                 if (($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT) || ($type == ST_JOURNAL)) {
+
                     $i = journal_display($i, $type, $taxtype, $amt, $entry, $code_id, $dim1, $dim2, $memo, $description, $bank_account_gl_code, $bank_desc);
                 }
                 if (!$error) {

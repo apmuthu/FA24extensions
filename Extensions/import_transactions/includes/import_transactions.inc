@@ -373,6 +373,9 @@ function customer_name($person_id) {
     $result = db_query($sql, _("Could not query debtors master table"));
     $row = db_fetch($result);
     $custname = $row['name'];
+    if (!$row) {
+        display_error(_("Person id $person_id not found"));
+    }
     return $custname;
 }
 
@@ -382,7 +385,11 @@ function determinetax($taxtype, $amt) {
     $sql = "SELECT * FROM " . TB_PREF . "tax_types WHERE id=" . db_escape($taxtype);
     $result = db_query($sql, _("Could not query tax type table"));
     $row = db_fetch($result);
-    $taxper = $row['rate'];
+    if (!$row) {
+        display_error(_("Tax type $taxtype not found"));
+        return;
+    }
+
     //determine the VAT accounts associated with the taxtype eg. standard VAT
     $salestaxaccount = $row['sales_gl_code'];
     $purchasetaxaccount = $row['purchasing_gl_code'];
@@ -606,9 +613,9 @@ function journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $co
         $person_type_id = $person[0];
         $person_id = $person[1];
     }
-    list($return_amt, $inclusive_amt, $exclusive_amt, $taxamt, $taxaccount, $salestaxaccount, $purchasetaxaccount) = determinetax($taxtype, $amt);
     if (($taxtype > 0)) //amt inclusive of tax
     {
+        list($return_amt, $inclusive_amt, $exclusive_amt, $taxamt, $taxaccount, $salestaxaccount, $purchasetaxaccount) = determinetax($taxtype, $amt);
         add_gl_trans($type, $curEntryId, $date, $taxaccount, $dim1, $dim2, $memo, $taxamt, $currency = null, $person_type_id, $person_id, $err_msg = "", $rate = 0); //credit tax control account
         if ($return_amt < 0)
             display_notification_centered(_("Added tax to table 'gl_trans' Credit: $curEntryId, $date, $taxaccount, $dim1, $dim2, $taxamt, $memo, $person_type_id, $person_id (line $line in import file '{$_FILES['imp']['name']}')"));
@@ -616,6 +623,11 @@ function journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $co
             display_notification_centered(_("Added tax to table 'gl_trans' Debit: $curEntryId, $date, $taxaccount, $dim1, $dim2, $taxamt, $memo, $person_type_id, $person_id (line $line in import file '{$_FILES['imp']['name']}')"));
         add_gl_tax_details($taxaccount, ST_JOURNAL, $curEntryId, $taxamt, 1, $date, $memo, 1, $inclusive_amt);
     }
+    else
+    {
+        $return_amt = $exclusive_amt = $amt;
+    }
+
     add_gl_trans($type, $curEntryId, $date, $code, $dim1, $dim2, $memo, $exclusive_amt, $currency = null, $person_type_id, $person_id, $err_msg = "", $rate = 0);
     if ($return_amt > 0) {
         display_notification_centered(_("Added to table 'gl_trans' Debit: $curEntryId, $date, $code, $dim1, $dim2, $exclusive_amt, $memo, $person_type_id, $person_id (line $line in import file '{$_FILES['imp']['name']}')"));
@@ -623,35 +635,6 @@ function journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $co
     if ($return_amt < 0) {
         display_notification_centered(_("Added to table 'gl_trans' Credit: $curEntryId, $date, $code, $dim1, $dim2, $exclusive_amt, $memo, $person_type_id, $person_id (line $line in import file '{$_FILES['imp']['name']}')"));
     }
-}
-
-//Output the last transno for bank related transactions using table bank_trans.
-//Output the last typeno for general ledger related transactions using table gl_trans.
-
-function last_transno($type) {
-    $rowtrans = 0; // empty file
-
-    //'get last row's typeno since type_no is the trans no'
-    if ($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT || $type == ST_BANKTRANSFER) {
-        $sql = "SELECT id, `type`, trans_no, amount FROM ".TB_PREF."bank_trans WHERE `type` =".$type." ORDER BY id DESC LIMIT 1";
-        $result = db_query($sql, _("Cannot locate last entry"));
-        $row = db_fetch_assoc($result);
-        $rowtrans = $row['trans_no'];
-    } else if ($type == ST_JOURNAL) {
-        $sql = "SELECT counter, type, type_no, amount FROM " . TB_PREF . "gl_trans ORDER BY counter DESC LIMIT 1";
-        $result = db_query($sql, _("Cannot locate last entry"));
-        $row = db_fetch_assoc($result);
-        $rowtrans = $row['type_no'];        
-    } else if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
-        $sql = "SELECT trans_no, `type` FROM " . TB_PREF . "debtor_trans WHERE `type` =".$type." ORDER BY trans_no DESC LIMIT 1";
-        $result = db_query($sql, _("Cannot locate last entry"));
-        $row = db_fetch_assoc($result);
-        $rowtrans = $row['trans_no'];     
-    } else {
-        // process other $type values
-    }
-
-    return $rowtrans;
 }
 
 function reference_type_list_cell($label, $name, $selected = null, $submit_on_change = false) {
