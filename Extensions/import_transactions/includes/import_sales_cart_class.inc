@@ -655,3 +655,5 @@ class import_sales_line_details
         return $this->price;
     }
 }
+
+?>
