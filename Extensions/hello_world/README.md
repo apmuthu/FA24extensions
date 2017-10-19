@@ -18,6 +18,7 @@ Increment the `$next_extension_id` variable and append a stanza like the followi
 * Install the `hello_world` extension.
 * Choose to `activate` it for a specific company.
 * Logout and now login to the specific company that has the `Hello World` extension activated
-* Navigate to `Sales => Hello World`
+* Navigate to the `Hello World` tab
+* Now under section `Inquiries and Reports`, click the `Hello World` menu link in the right column.
 
-You have now successfully deployed the `Hello World` Extension for FA!
+You have now successfully deployed the `Hello World` Extension in a separate tab in FA!

@@ -1,3 +1,4 @@
+2017-10-19  Ap.Muthu     Hello World module extended into a separate tab
 2017-10-19  BraathWaate  import_transactions module: fixed Journal Import next ref
 2017-10-12  Ap.Muthu     Updated Tamil (ta_IN) core translation with 14 more strings from Transifex
 2017-10-02  Albertolima  module import_multijournalentries is_new_reference() method fix
