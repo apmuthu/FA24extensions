@@ -16,6 +16,9 @@ class helloworld_app extends application
 		$this->add_module(_("Transactions"));
 
 		$this->add_module(_("Inquiries and Reports"));
+				$this->add_rapp_function(1, "",""); // provide a menu spacer in right menu of second (1) section
+				$this->add_rapp_function(1, _('Hello World'), 
+					$path_to_root.'/modules/hello_world/hello_world.php', 'SA_OPEN', MENU_INQUIRY); // menu icons defined in applications/application.php
 
 		$this->add_module(_("Maintenance"));
 
