@@ -1,3 +1,4 @@
+2017-10-24  Ap.Muthu     zh_CN Chinese Simplified Standard Chart of Accounts updated to FA 2.4.2
 2017-10-21  Ap.Muthu     Hello World module on specific tab position
 2017-10-19  Ap.Muthu     Hello World module extended into a separate tab
 2017-10-19  BraathWaate  import_transactions module: fixed Journal Import next ref
