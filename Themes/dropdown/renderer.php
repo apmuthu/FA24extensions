@@ -71,7 +71,7 @@
 		}
 		function menu_header($title, $no_menu, $is_index)
 		{
-			global $path_to_root, $SysPrefs, $version;
+			global $path_to_root, $SysPrefs, $version, $db_connections, $installed_extensions;
 
 			$sel_app = $_SESSION['sel_app'];
 			echo "<div class='fa-main'>\n";
@@ -202,19 +202,21 @@
 
 		function display_applications(&$waapp)
 		{
-			global $path_to_root, $use_popup_windows;
+			global $path_to_root, $SysPrefs;
 			include_once("$path_to_root/includes/ui.inc");
 			include_once($path_to_root . "/reporting/includes/class.graphic.inc");
 			include($path_to_root . "/includes/system_tests.inc");
 
-			if ($use_popup_windows)
+			if ($SysPrefs->use_popup_windows)
 			{
-				echo "<script language='javascript'>\n";
-				echo get_js_open_window(900, 500);
-				echo "</script>\n"; 
+				$js = get_js_open_window(900, 500);
+	  			add_js_source($js);
 			}
+			if (!defined('FLOAT_COMP_DELTA'))	
+				define('FLOAT_COMP_DELTA', 0.004);
+
 			$selected_app = $waapp->get_selected_application();
-			if (!$_SESSION["wa_current_user"]->check_application_access($selected_app))
+			if (!$this->check_application_access($selected_app))
 				return;
 			// first have a look through the directory, 
 			// and remove old temporary pdfs and pngs

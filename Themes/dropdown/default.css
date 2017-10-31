@@ -1,5 +1,5 @@
 /*--------------------------------------------------\
-| Dynamic       |               | default.css       |
+| Dropdown based on Dynamic |   | default.css       |
 |---------------------------------------------------|
 | For use with:                                     |
 | FrontAccounting   								|
@@ -31,7 +31,6 @@ body,td,th {
 
 /* Main */
 .fa-main {
-  /*width: 98%;*/
   width: 99%;
   margin: 0 auto;
   text-align: left;
@@ -190,7 +189,6 @@ hr {
 
 .tableheader {
 	font-weight: bold;
-	/*background-color: #7895ac;*/
 	background-color: #697789;
 	color: #fff;
 	text-align: center;
@@ -198,7 +196,6 @@ hr {
 
 .tableheader2 {
 	font-weight: bold;
-	/*background-color: #7895ac;*/
 	background-color: #697789;
 	color: #fff;
 	text-align: left;
@@ -328,7 +325,6 @@ table.tablestyle_inner td {
 }
 
 .label {
-	/*background-color: #ebf0f3*/;
 	background-color: #d9d9d9;
 	color: black;
 }

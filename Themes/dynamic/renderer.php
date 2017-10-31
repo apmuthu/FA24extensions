@@ -95,7 +95,6 @@
 				echo "<h1>$SysPrefs->power_by $version<span style='padding-left:300px;'><img id='ajaxmark' src='$indicator' align='center' style='visibility:hidden;'></span></h1>\n";
 				echo "</div>\n"; // header
 				
-				
 				echo "<div id='ddtopmenubar' class='mattblackmenu'>";
 				echo "<ul>\n";
 				$i = 0;
@@ -326,7 +325,6 @@
             }
         }
 	}
-	
 	
 	function display_customer_topten()
 	{
@@ -718,4 +716,3 @@
 		}
 		end_table(2);
 	}
-
