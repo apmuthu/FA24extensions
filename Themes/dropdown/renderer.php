@@ -71,17 +71,20 @@
 		}
 		function menu_header($title, $no_menu, $is_index)
 		{
-			global $path_to_root, $SysPrefs, $version, $db_connections, $installed_extensions;
+			global $path_to_root, $SysPrefs, $version, $db_connections;
 
 			$sel_app = $_SESSION['sel_app'];
 			echo "<div class='fa-main'>\n";
 			if (!$no_menu)
 			{
-				echo "<script type='text/javascript' src='$path_to_root/themes/dynamic/ddmenu/ddlevelsmenu.js'></script>\n";
-				$applications = $_SESSION['App']->applications;
 				$local_path_to_root = $path_to_root;
-				$img = "<img src='$local_path_to_root/themes/dynamic/images/login.gif' width='14' height='14' border='0' alt='"._('Logout')."'>&nbsp;&nbsp;";
-				$himg = "<img src='$local_path_to_root/themes/dynamic/images/help.gif' width='14' height='14' border='0' alt='"._('Help')."'>&nbsp;&nbsp;";
+				$local_path_to_theme = $local_path_to_root . '/themes/' . user_theme();
+
+				echo "<script type='text/javascript' src='$local_path_to_theme/ddmenu/ddlevelsmenu.js'></script>\n";
+				$applications = $_SESSION['App']->applications;
+				$img = "<img src='$local_path_to_theme/images/login.gif' width='14' height='14' border='0' alt='"._('Logout')."'>&nbsp;&nbsp;";
+				$himg = "<img src='$local_path_to_theme/images/help.gif' width='14' height='14' border='0' alt='"._('Help')."'>&nbsp;&nbsp;";
+
 				echo "<div id='header'>\n";
 				echo "<ul>\n";
 				echo "  <li><a href='$local_path_to_root/admin/display_prefs.php?'>" . _("Preferences") . "</a></li>\n";
@@ -91,13 +94,16 @@
 						help_url()."'>$himg" . _("Help") . "</a></li>";
 				echo "  <li><a href='$path_to_root/access/logout.php?'>$img" . _("Logout") . "</a></li>";
 				echo "</ul>\n";
-				$indicator = "$path_to_root/themes/".user_theme(). "/images/ajax-loader.gif";
+				$indicator = "$local_path_to_theme/images/ajax-loader.gif";
 				echo "<h1>$SysPrefs->power_by $version<span style='padding-left:300px;'><img id='ajaxmark' src='$indicator' align='center' style='visibility:hidden;'></span></h1>\n";
 				echo "</div>\n"; // header
 								
 				echo "<div id='cssmenu'>\n";
 				echo "<ul>\n";
 				$account = $this->wa_get_apps($title, $applications, $sel_app);
+
+                add_access_extensions();
+
 				foreach($applications as $app)
 				{
                     if ($this->check_application_access($app))
@@ -146,7 +152,7 @@
 										echo "          <li><a href='$path_to_root/$application->link'><span>$lnk[0]</span></a></li>\n";
 									}
 								}
-								elseif (!$this->hide_inaccessible_menu_items())	
+								elseif (!$_SESSION["wa_current_user"]->hide_inaccessible_menu_items())	
 									echo "          <li><a href='#'><span><font color='gray'>$lnk[0]</font></span></a>/li>\n";
 							}
 							if ($n)

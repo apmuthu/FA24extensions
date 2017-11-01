@@ -1,3 +1,7 @@
+/ddmenu/arrow-down.gif: d4ef780b5ba26bab6640f75f74490cf3bae92428
+/ddmenu/arrow-right.gif: 7f03e16ca69f707f929bc8a87cf3a2f0b8510f4e
+/ddmenu/ddlevelsmenu.js: c60b59a78b0d42e66cedae42cdecdca819715e8e
+/ddmenu/listmenu_o.png: c65592378fe2858aeb2d96779df52f05d00d519c
 /default.css: d2fbd0877cc2e94fd1edabd146ea4ad02eddf3ff
 /images/add.png: b6244b0027a8c9f702b311cb5b2ab8cc64f3b5f2
 /images/ajax-loader.gif: ef47828b1486f046b91c762adc71dcaca2d51676
@@ -25,6 +29,7 @@
 /images/invoice.gif: 6a815451e432bc8a6abdda2a5a542cce49de3d38
 /images/link_bg.png: dd15f04b313150198d0e415975a8830eafe4a8b4
 /images/locate.png: 0bca3a9af6de7a13f02d9b00ba7b86792554cff4
+/images/lock.gif: 9e692661bac5f87f826e0fe6800a41baf9ef3c4b
 /images/login.gif: 7da19c80b3b19ff0001ce4e026ff1565e985acd2
 /images/logo_frontaccounting.jpg: ac597b171608e609ffbab5e505772c8ee1c2823b
 /images/logo_frontaccounting.png: 2e4e2d498933972bfbf0142cc00952eb520ac340
@@ -32,8 +37,10 @@
 /images/money.png: 969d87b5f1cbefdd6791f5a673545b0ab42ec1d5
 /images/news.gif: e0254c978c0ad0a6378a678290ce8b55ce340dac
 /images/ok.gif: cb7e0cf0c969a85ab3a569c6af1b66d7a9c1d02e
+/images/on_off.png: 92fca0470ed24fd1e0d9bffb74dd1198bb535b67
 /images/page_edit.png: e25fb883611d467ce7ad9c4dc2ea76c733b0b926
 /images/pdf.gif: cb072575d3cde0b3fdd365bc41315da0023dc5e1
+/images/preferences.gif: f4cf2c987952d1371a5dc73745aeb07b30582ede
 /images/print.png: f2ee3924658f6968d1f832696b24f9e43adca378
 /images/progressbar.gif: ef47828b1486f046b91c762adc71dcaca2d51676
 /images/receive.gif: a676c8f7c1c6afc71c3e722d0e830638e8bd07a8
@@ -52,5 +59,5 @@
 /images/view.gif: 12f885f6330228559840fe1e8e6718cd2267db51
 /images/warning.png: e959c7f49c03976426b8759413c1c6604dd11d3c
 /index.php: ecaa5f0560883d40dc7508073f57abef01cb438b
-/renderer.php: 4ed1b7ec296fe4519e6b3aea0219951ec811064e
+/renderer.php: ee87ce135ce4ac02f07ee3fa73aa47a048a95e9c
 /_init/config: c66ecfbcfed271324c29c150b107463bc42611b7
