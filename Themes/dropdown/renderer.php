@@ -102,8 +102,6 @@
 				echo "<ul>\n";
 				$account = $this->wa_get_apps($title, $applications, $sel_app);
 
-                add_access_extensions();
-
 				foreach($applications as $app)
 				{
                     if ($this->check_application_access($app))
@@ -167,6 +165,8 @@
 				echo "</div>\n"; // menu
 			}
 			echo "<div class='fa-body'>\n";
+			if (!$no_menu)
+                add_access_extensions();
 			echo "<div class='fa-content'>\n";
 			if ($no_menu)
 				echo "<br>";
