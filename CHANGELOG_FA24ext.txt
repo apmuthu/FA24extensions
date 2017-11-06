@@ -1,3 +1,4 @@
+2017-11-05  Ap.Muthu     Tamil (ta_IN) core language typo fix
 2017-11-05  Ap.Muthu     Hindi (hi_IN) core language strings fully translated
 2017-11-03  Ap.Muthu     Tamil (ta_IN) core language strings fully translated
 2017-11-02  Ap.Muthu     Tamil (ta_IN) core translations 1247/3302 strings translated
