@@ -1,16 +1,16 @@
-# FrontAccounting 2.4.x.
-# Copyright (C) 2017 frontaccounting.com
+# FrontAccounting 2.4
+# Copyright (C) 2007-2017 FrontAccounting, LLC.
 # This file is distributed under the same license as the FrontAccounting package.
 # InfoTechAccountants <admin@infotechaccountants.com>, 2017.
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: FrontAccounting 2.4.2\n"
+"Project-Id-Version: FrontAccounting 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-27 20:21+0200\n"
-"PO-Revision-Date: 2017-07-31 20:21+0400\n"
-"Last-Translator: InfoTechAccountants <admin@infotechaccountants.com>, 2017\n"
+"POT-Creation-Date: 2017-10-13 17:38+0200\n"
+"PO-Revision-Date: 2017-11-10 11:33+0400\n"
+"Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2017\n"
 "Language-Team: Arabic (Egypt) (https://www.transifex.com/gnuacademy/teams/55037/ar_EG/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,6 +50,8 @@ msgstr "طلب كلمة مرور جديدة"
 #: access/login.php:39
 msgid "Too many failed login attempts.<br>Please wait a while or try later."
 msgstr ""
+"هناك عدد كبير جدا من محاولات تسجيل الدخول الفاشلة. <br> يرجى الانتظار لبعض "
+"الوقت أو المحاولة لاحقا."
 
 #: access/login.php:53 access/login.php:84
 msgid "Authorization timeout"
@@ -107,7 +109,7 @@ msgstr "البريد الألكتروني"
 
 #: access/password_reset.php:81
 msgid "Send password -->"
-msgstr ""
+msgstr "إرسال كلمة المرور ->"
 
 #: admin/attachments.php:71
 msgid "Attach Documents"
@@ -119,16 +121,16 @@ msgstr "إرفاق المستندات"
 #: admin/db/voiding_db.inc:90 admin/db/voiding_db.inc:97
 #: admin/db/voiding_db.inc:103 admin/db/voiding_db.inc:111
 msgid "Selected transaction does not exists."
-msgstr ""
+msgstr "المعاملة المحددة غير موجودة."
 
 #: admin/attachments.php:85 admin/attachments.php:90
 msgid "Select attachment file."
-msgstr ""
+msgstr "حدد ملف المرفق."
 
 #: admin/attachments.php:88 admin/company_preferences.php:42
 #: inventory/manage/items.php:83
 msgid "The file size is over the maximum allowed."
-msgstr ""
+msgstr "حجم الملف أكبر من الحد الأقصى المسموح به."
 
 #: admin/attachments.php:131
 msgid "Attachment has been inserted."
@@ -245,18 +247,18 @@ msgstr "حذف"
 #: purchasing/inquiry/po_search_completed.php:110
 #: purchasing/inquiry/po_search.php:117
 #: purchasing/inquiry/supplier_allocation_inquiry.php:137
-#: purchasing/inquiry/supplier_inquiry.php:171
+#: purchasing/inquiry/supplier_inquiry.php:174
 #: purchasing/allocations/supplier_allocation_main.php:95
 #: reporting/rep101.php:132 reporting/rep201.php:107 reporting/rep203.php:88
 #: reporting/rep306.php:141 reporting/rep601.php:79 reporting/rep602.php:80
 #: reporting/rep704.php:82 reporting/rep704.php:85 reporting/rep704.php:88
 #: reporting/rep710.php:78 reporting/includes/doctext.inc:166
 #: reporting/includes/doctext.inc:207 reporting/includes/doctext.inc:245
-#: sales/allocations/customer_allocation_main.php:88
+#: sales/allocations/customer_allocation_main.php:93
 #: sales/view/view_sales_order.php:109 sales/view/view_sales_order.php:142
 #: sales/view/view_sales_order.php:179
 #: sales/inquiry/customer_allocation_inquiry.php:147
-#: sales/inquiry/customer_inquiry.php:193
+#: sales/inquiry/customer_inquiry.php:194
 msgid "#"
 msgstr "الرقم "
 
@@ -286,7 +288,7 @@ msgstr "الرقم "
 msgid "Description"
 msgstr "الوصف"
 
-#: admin/attachments.php:210 admin/backups.php:67 admin/backups.php:152
+#: admin/attachments.php:210 admin/backups.php:67 admin/backups.php:153
 msgid "Filename"
 msgstr "أسم الملف"
 
@@ -311,7 +313,7 @@ msgid "Attached File"
 msgstr "ارفق الملف"
 
 #: admin/backups.php:21 admin/backups.php:40 admin/backups.php:118
-#: admin/backups.php:145 admin/backups.php:158 admin/backups.php:178
+#: admin/backups.php:146 admin/backups.php:159 admin/backups.php:179
 msgid "Select backup file first."
 msgstr "أختار ملف النسخة الأحتياطية أولاً ."
 
@@ -346,7 +348,7 @@ msgstr "فشلت عملية النسخ الأحتياطي لقاعدة البي�
 #: gl/manage/gl_account_classes.php:126 gl/manage/gl_quick_entries.php:237
 #: includes/system_tests.inc:38 includes/system_tests.inc:113
 #: includes/system_tests.inc:126 includes/ui/class.reflines_crud.inc:56
-#: includes/ui/ui_lists.inc:1852 purchasing/manage/suppliers.php:122
+#: includes/ui/ui_lists.inc:1867 purchasing/manage/suppliers.php:122
 #: reporting/rep101.php:128 reporting/rep102.php:110 reporting/rep102.php:112
 #: reporting/rep104.php:103 reporting/rep106.php:81 reporting/rep114.php:74
 #: reporting/rep201.php:103 reporting/rep202.php:116 reporting/rep202.php:118
@@ -358,68 +360,69 @@ msgstr "فشلت عملية النسخ الأحتياطي لقاعدة البي�
 msgid "No"
 msgstr "لا"
 
-#: admin/backups.php:142
+#: admin/backups.php:143
 msgid "Restore backup completed."
 msgstr "تمت أستعادة النسخة الأحتياطية"
 
-#: admin/backups.php:151
+#: admin/backups.php:152
 msgid "File successfully deleted."
 msgstr "تم حذف الملف بنجاح"
 
-#: admin/backups.php:156
+#: admin/backups.php:157
 msgid "Can't delete backup file."
 msgstr "لا يمكن حذف ملف النسخة الأحتياطية "
 
-#: admin/backups.php:168
+#: admin/backups.php:169
 msgid "You can only upload *.sql backup files"
 msgstr "يمكنك فقط رفع ملفات النسخ الأحتياطي ذات الأمتداد SQL"
 
-#: admin/backups.php:170
+#: admin/backups.php:171
 msgid "Filename contains forbidden chars. Please rename file and try again."
 msgstr ""
+"يحتوي اسم الملف على أحرف ممنوع. يرجى إعادة تسمية الملف وإعادة المحاولة."
 
-#: admin/backups.php:173
+#: admin/backups.php:174
 msgid "File uploaded to backup directory"
-msgstr ""
+msgstr "تم تحميل الملف إلى دليل النسخ الاحتياطي"
 
-#: admin/backups.php:176
+#: admin/backups.php:177
 msgid "File was not uploaded into the system."
 msgstr "لم يتم رفع الملف في النظام"
 
-#: admin/backups.php:185
+#: admin/backups.php:186
 msgid "Create backup"
 msgstr "إنشاء نسخة أحتياطية"
 
-#: admin/backups.php:186 sales/includes/ui/sales_order_ui.inc:581
+#: admin/backups.php:187 sales/includes/ui/sales_order_ui.inc:581
 #: sales/includes/ui/sales_order_ui.inc:637
 msgid "Comments:"
 msgstr "الملاحظات :"
 
-#: admin/backups.php:187
+#: admin/backups.php:188
 msgid "Compression:"
 msgstr "ضغط :"
 
-#: admin/backups.php:189
+#: admin/backups.php:190
 msgid "Create Backup"
 msgstr "إنشاء نسخة أحتياطية"
 
-#: admin/backups.php:191
+#: admin/backups.php:192
 msgid "Backup scripts maintenance"
 msgstr "صيانة النصوص البرمجية للنسخ الأحتياطي"
 
-#: admin/backups.php:197
+#: admin/backups.php:198
 msgid "View Backup"
 msgstr "عرض النسخة الأحتياطية"
 
-#: admin/backups.php:198
+#: admin/backups.php:199
 msgid "Download Backup"
 msgstr "تنزيل النسخة الأحتياطية"
 
-#: admin/backups.php:199
+#: admin/backups.php:200
 msgid "Restore Backup"
 msgstr "أستعادة النسخة الأحتياطية"
 
-#: admin/backups.php:200
+#: admin/backups.php:201
 msgid ""
 "You are about to restore database from backup file.\n"
 "Do you want to continue?"
@@ -427,26 +430,26 @@ msgstr ""
 " أنت بصدد أسترجاع قاعدة البيانات من ملف النسخة الأحتياطي . هل تريد الأستمرار"
 " ؟"
 
-#: admin/backups.php:202
+#: admin/backups.php:203
 msgid "Delete Backup"
 msgstr "حذف النسخة الأحتياطية"
 
-#: admin/backups.php:204
+#: admin/backups.php:205
 #, php-format
 msgid ""
 "You are about to remove selected backup file.\n"
 "Do you want to continue ?"
 msgstr "أنت بصدد حذف ملف النسخة الأحتياطية المؤشر عليه . هل تريد الأستمرار ؟"
 
-#: admin/backups.php:210
-msgid "Update security settings"
-msgstr ""
-
 #: admin/backups.php:211
-msgid "Protect security settings"
-msgstr ""
+msgid "Update security settings"
+msgstr "تحديث إعدادات الأمان"
 
-#: admin/backups.php:215
+#: admin/backups.php:212
+msgid "Protect security settings"
+msgstr "حماية إعدادات الأمان"
+
+#: admin/backups.php:216
 msgid "Upload file"
 msgstr "رفع الملف"
 
@@ -457,7 +460,7 @@ msgstr "تغيير كلمة المرور"
 
 #: admin/change_current_user_password.php:33
 msgid "Invalid password entered."
-msgstr ""
+msgstr "تم إدخال كلمة مرور غير صالحة."
 
 #: admin/change_current_user_password.php:40 admin/users.php:40
 msgid "The password entered must be at least 4 characters long."
@@ -486,15 +489,15 @@ msgstr "أسم دخول المستخدم :"
 
 #: admin/change_current_user_password.php:91
 msgid "Current Password:"
-msgstr ""
+msgstr "كلمة السر الحالية:"
 
 #: admin/change_current_user_password.php:92
 msgid "New Password:"
-msgstr ""
+msgstr "كلمة السر الجديدة:"
 
 #: admin/change_current_user_password.php:93
 msgid "Repeat New Password:"
-msgstr ""
+msgstr "كرر كلمة المرور الجديدة:"
 
 #: admin/change_current_user_password.php:95
 msgid "Enter your new password in the fields."
@@ -514,7 +517,7 @@ msgstr "يجب أن يتم إدخال أسم الشركة"
 
 #: admin/company_preferences.php:46
 msgid "Error uploading logo file."
-msgstr ""
+msgstr "حدث خطأ أثناء تحميل ملف الشعار."
 
 #: admin/company_preferences.php:60
 msgid ""
@@ -549,175 +552,183 @@ msgstr "خطأ في رفع ملف الشعار"
 msgid "Company setup has been updated."
 msgstr "تم تحديث إعدادات الشركة"
 
-#: admin/company_preferences.php:169
+#: admin/company_preferences.php:181
 msgid "General settings"
-msgstr ""
+msgstr "الاعدادات العامة"
 
-#: admin/company_preferences.php:171
+#: admin/company_preferences.php:183
 msgid "Name (to appear on reports):"
 msgstr "الإسم ( المطلوب إظهاره في التقارير ) :"
 
-#: admin/company_preferences.php:172 admin/shipping_companies.php:142
+#: admin/company_preferences.php:184 admin/shipping_companies.php:142
 #: includes/ui/contacts_view.inc:106 inventory/manage/locations.php:212
 #: sales/manage/customers.php:234 sales/includes/ui/sales_order_ui.inc:628
 msgid "Address:"
 msgstr "العنوان :"
 
-#: admin/company_preferences.php:173
+#: admin/company_preferences.php:185
 msgid "Domicile:"
 msgstr "محل الأقامة :"
 
-#: admin/company_preferences.php:175 admin/shipping_companies.php:138
+#: admin/company_preferences.php:187 admin/shipping_companies.php:138
 #: purchasing/manage/suppliers.php:135 sales/manage/customer_branches.php:253
 msgid "Phone Number:"
 msgstr "رقم الهاتف :"
 
-#: admin/company_preferences.php:176 includes/ui/contacts_view.inc:101
+#: admin/company_preferences.php:188 includes/ui/contacts_view.inc:101
 #: purchasing/manage/suppliers.php:138 sales/manage/customer_branches.php:255
 #: sales/manage/customers.php:258
 msgid "Fax Number:"
 msgstr "رقم الفاكس :"
 
-#: admin/company_preferences.php:177 admin/users.php:211
+#: admin/company_preferences.php:189 admin/users.php:211
 msgid "Email Address:"
 msgstr "عنوان البريد الألكتروني :"
 
-#: admin/company_preferences.php:179
+#: admin/company_preferences.php:191
 msgid "BCC Address for all outgoing mails:"
-msgstr ""
+msgstr "عنوان بسك لجميع الرسائل الصادرة:"
 
-#: admin/company_preferences.php:181
+#: admin/company_preferences.php:193
 msgid "Official Company Number:"
 msgstr "رقم الشركة الرسمي :"
 
-#: admin/company_preferences.php:182 purchasing/manage/suppliers.php:95
+#: admin/company_preferences.php:194 purchasing/manage/suppliers.php:95
 #: sales/manage/customers.php:236
 msgid "GSTNo:"
 msgstr "رقم ملف ضريبة البضائع و الخدمات : "
 
-#: admin/company_preferences.php:183
+#: admin/company_preferences.php:195
 msgid "Home Currency:"
 msgstr "عملة الدولة :"
 
-#: admin/company_preferences.php:185
+#: admin/company_preferences.php:197
 msgid "Company Logo:"
 msgstr "شعار الشركة :"
 
-#: admin/company_preferences.php:186
+#: admin/company_preferences.php:198
 msgid "New Company Logo (.jpg)"
 msgstr "شعار جديد للشركة بصيغة JPG"
 
-#: admin/company_preferences.php:187
+#: admin/company_preferences.php:199
 msgid "Delete Company Logo:"
 msgstr "أحذف شعار الشركة :"
 
-#: admin/company_preferences.php:189
+#: admin/company_preferences.php:201
 msgid "Automatic Revaluation Currency Accounts"
 msgstr "حسابات التحديث التلقائي لقيمة العملة"
 
-#: admin/company_preferences.php:190
+#: admin/company_preferences.php:202
 msgid "Time Zone on Reports"
 msgstr "المنطقة الزمنية في التقرير"
 
-#: admin/company_preferences.php:191
+#: admin/company_preferences.php:203
+msgid "Company Logo on Reports"
+msgstr "شعار الشركة على التقارير"
+
+#: admin/company_preferences.php:204
 msgid "Database Scheme Version"
-msgstr ""
+msgstr "إصدار نظام قاعدة البيانات"
 
-#: admin/company_preferences.php:195
+#: admin/company_preferences.php:208
 msgid "General Ledger Settings"
-msgstr ""
+msgstr "إعدادات دفتر الأستاذ العام"
 
-#: admin/company_preferences.php:196 gl/gl_budget.php:62
+#: admin/company_preferences.php:209 gl/gl_budget.php:62
 msgid "Fiscal Year:"
 msgstr "السنة المالية :"
 
-#: admin/company_preferences.php:197
+#: admin/company_preferences.php:210
 msgid "Tax Periods:"
 msgstr "الفترات الضريبية :"
 
-#: admin/company_preferences.php:197
+#: admin/company_preferences.php:210
 msgid "Months."
 msgstr "الشهور ."
 
-#: admin/company_preferences.php:198
+#: admin/company_preferences.php:211
 msgid "Tax Last Period:"
 msgstr "أخر فترة ضريبية :"
 
-#: admin/company_preferences.php:198
+#: admin/company_preferences.php:211
 msgid "Months back."
 msgstr "الشهور السابقة ."
 
-#: admin/company_preferences.php:199
+#: admin/company_preferences.php:212
 msgid "Put alternative Tax Include on Docs"
-msgstr ""
+msgstr "وضع تضمين ضريبي بديل على محرر المستندات"
 
-#: admin/company_preferences.php:200
+#: admin/company_preferences.php:213
 msgid "Suppress Tax Rates on Docs"
-msgstr ""
+msgstr "قم بخفض معدلات الضرائب على محرر المستندات"
 
-#: admin/company_preferences.php:202
+#: admin/company_preferences.php:215
 msgid "Sales Pricing"
 msgstr "التسعير البيعي"
 
-#: admin/company_preferences.php:203
+#: admin/company_preferences.php:216
 msgid "Base for auto price calculations:"
 msgstr "قائمة التسعير الأساسية للتسعير التلقائي :"
 
-#: admin/company_preferences.php:204
+#: admin/company_preferences.php:217
 msgid "No base price list"
 msgstr "لا توجد قائمة أسعار أساسية"
 
-#: admin/company_preferences.php:206
+#: admin/company_preferences.php:219
 msgid "Add Price from Std Cost:"
 msgstr "إضافة السعر من التكلفة المعيارية :"
 
-#: admin/company_preferences.php:208
+#: admin/company_preferences.php:221
 msgid "Round calculated prices to nearest:"
-msgstr ""
+msgstr "جولة الأسعار المحسوبة إلى أقرب:"
 
-#: admin/company_preferences.php:212
+#: admin/company_preferences.php:225
 msgid "Optional Modules"
-msgstr ""
+msgstr "وحدات اختيارية"
 
-#: admin/company_preferences.php:213 includes/dashboard.inc:118
+#: admin/company_preferences.php:226 includes/dashboard.inc:118
 #: reporting/reports_main.php:285
 msgid "Manufacturing"
 msgstr "العمليات التصنيعية"
 
-#: admin/company_preferences.php:214 includes/dashboard.inc:116
+#: admin/company_preferences.php:227 includes/dashboard.inc:116
 #: inventory/manage/items.php:24 reporting/reports_main.php:308
 msgid "Fixed Assets"
-msgstr ""
+msgstr "أصول ثابتة"
 
-#: admin/company_preferences.php:215
+#: admin/company_preferences.php:228
 msgid "Use Dimensions:"
 msgstr "أستخدم القطاعات التحليلية :"
 
-#: admin/company_preferences.php:217
+#: admin/company_preferences.php:230
 msgid "User Interface Options"
-msgstr ""
+msgstr "خيارات واجهة المستخدم"
 
-#: admin/company_preferences.php:219
+#: admin/company_preferences.php:232
+msgid "Short Name and Name in List"
+msgstr "اسم قصير واسم في القائمة"
+
+#: admin/company_preferences.php:233
 msgid "Search Item List"
 msgstr "البحث في قائمة البنود المخزنية"
 
-#: admin/company_preferences.php:220
+#: admin/company_preferences.php:234
 msgid "Search Customer List"
 msgstr "البحث في قائمة العملاء"
 
-#: admin/company_preferences.php:221
+#: admin/company_preferences.php:235
 msgid "Search Supplier List"
 msgstr "البحث في قائمة الموردين"
 
-#: admin/company_preferences.php:222
+#: admin/company_preferences.php:236
 msgid "Login Timeout:"
 msgstr "صلاحية وقت الدخول :"
 
-#: admin/company_preferences.php:222
+#: admin/company_preferences.php:236
 msgid "seconds"
 msgstr "الثواني"
 
-#: admin/company_preferences.php:227 admin/display_prefs.php:160
+#: admin/company_preferences.php:241 admin/display_prefs.php:160
 #: admin/gl_setup.php:274 admin/inst_chart.php:77 admin/inst_lang.php:103
 #: admin/inst_module.php:136 admin/inst_module.php:154
 #: admin/inst_module.php:197 admin/inst_theme.php:81
@@ -726,7 +737,7 @@ msgstr "الثواني"
 #: gl/includes/ui/gl_journal_ui.inc:267 includes/ui/class.crud_view.inc:289
 #: includes/ui/db_pager_view.inc:180 includes/ui/simple_crud_class.inc:56
 #: includes/ui/simple_crud_class.inc:225 includes/ui/ui_input.inc:226
-#: includes/ui/ui_input.inc:961 inventory/adjustments.php:255
+#: includes/ui/ui_input.inc:959 inventory/adjustments.php:255
 #: inventory/cost_update.php:150 inventory/reorder_level.php:111
 #: inventory/transfers.php:237 inventory/includes/item_adjustments_ui.inc:190
 #: inventory/includes/stock_transfers_ui.inc:150
@@ -752,7 +763,7 @@ msgstr "إعدادات قاعدة اليانات لم يتم تحديدها"
 
 #: admin/create_coy.php:48
 msgid "Database port has to be numeric or empty."
-msgstr ""
+msgstr "يجب أن يكون منفذ قاعدة البيانات رقميا أو فارغا."
 
 #: admin/create_coy.php:59
 msgid "This database settings are already used by another company."
@@ -846,7 +857,7 @@ msgstr "مضيف قاعدة البيانات"
 
 #: admin/create_coy.php:247
 msgid "Database Port"
-msgstr ""
+msgstr "منفذ قاعدة البيانات"
 
 #: admin/create_coy.php:247 admin/create_coy.php:333 admin/create_coy.php:344
 msgid "Database User"
@@ -862,7 +873,7 @@ msgstr "البادئة الإسمية للجدول"
 
 #: admin/create_coy.php:248
 msgid "Charset"
-msgstr ""
+msgstr "محارف"
 
 #: admin/create_coy.php:248 admin/inst_lang.php:36
 #: admin/print_profiles.php:161 includes/ui/class.reflines_crud.inc:38
@@ -879,7 +890,7 @@ msgstr "الأفتراضي"
 #: gl/manage/gl_account_classes.php:126 gl/manage/gl_quick_entries.php:237
 #: includes/system_tests.inc:38 includes/system_tests.inc:113
 #: includes/system_tests.inc:126 includes/ui/class.reflines_crud.inc:56
-#: includes/ui/class.reflines_crud.inc:101 includes/ui/ui_lists.inc:1853
+#: includes/ui/class.reflines_crud.inc:101 includes/ui/ui_lists.inc:1868
 #: purchasing/manage/suppliers.php:122 reporting/rep101.php:127
 #: reporting/rep102.php:109 reporting/rep102.php:111 reporting/rep104.php:105
 #: reporting/rep106.php:83 reporting/rep114.php:76 reporting/rep201.php:102
@@ -897,6 +908,8 @@ msgid ""
 "You are about to remove company \\'%s\\'.\n"
 "Do you want to continue ?"
 msgstr ""
+"أنت على وشك إزالة الشركة \\'%s\\'. \n"
+"هل تريد المتابعة؟"
 
 #: admin/create_coy.php:282
 msgid "The marked company is the current company which cannot be deleted."
@@ -908,10 +921,12 @@ msgid ""
 "If no Admin Password is entered, the new Admin Password will be "
 "'<b>password</b>' by default "
 msgstr ""
+"إذا لم يتم إدخال كلمة مرور المشرف، فستكون كلمة مرور المشرف الجديدة '<b> كلمة"
+" المرور </b>' بشكل افتراضي"
 
 #: admin/create_coy.php:284
 msgid "Set Only Port value if you cannot use the default port 3306."
-msgstr ""
+msgstr "تعيين قيمة المنفذ فقط إذا لم تتمكن من استخدام المنفذ الافتراضي 3306."
 
 #: admin/create_coy.php:331 admin/create_coy.php:342 admin/printers.php:84
 msgid "Host"
@@ -927,7 +942,7 @@ msgstr "كلمة السر لقاعدة البيانات"
 
 #: admin/create_coy.php:336 admin/create_coy.php:346
 msgid "Database Collation:"
-msgstr ""
+msgstr "تجميع قاعدة البيانات:"
 
 #: admin/create_coy.php:337 admin/inst_chart.php:71 admin/inst_chart.php:73
 #: admin/inst_lang.php:87 admin/inst_lang.php:90 admin/inst_module.php:125
@@ -939,7 +954,7 @@ msgstr "لا شئ"
 
 #: admin/create_coy.php:338 admin/create_coy.php:349 admin/create_coy.php:351
 msgid "Default Company"
-msgstr ""
+msgstr "الشركة الافتراضية"
 
 #: admin/create_coy.php:339
 msgid "Database Script"
@@ -975,11 +990,11 @@ msgstr "تمت عملية حذف التصنيف"
 
 #: admin/crm_categories.php:88
 msgid "Category Type"
-msgstr ""
+msgstr "نوع الفئة"
 
 #: admin/crm_categories.php:88
 msgid "Category Subtype"
-msgstr ""
+msgstr "الفئة الفرعية"
 
 #: admin/crm_categories.php:88 purchasing/inquiry/suppliers_list.php:53
 #: sales/manage/customer_branches.php:283 sales/inquiry/customers_list.php:54
@@ -1005,7 +1020,7 @@ msgstr "وصف التصنيف:"
 #: admin/dashboard.php:27 themes/default/renderer.php:70
 #: themes/default/renderer.php:78
 msgid "Dashboard"
-msgstr ""
+msgstr "لوحة القيادة"
 
 #: admin/display_prefs.php:16
 msgid "Display Setup"
@@ -1049,11 +1064,11 @@ msgstr "النسب :"
 
 #: admin/display_prefs.php:79
 msgid "Date Format and Separators"
-msgstr ""
+msgstr "تنسيق التاريخ والفواصل"
 
 #: admin/display_prefs.php:81
 msgid "Date Format:"
-msgstr ""
+msgstr "صيغة التاريخ:"
 
 #: admin/display_prefs.php:83
 msgid "Date Separator:"
@@ -1069,23 +1084,23 @@ msgstr "الفواصل العشرية :"
 
 #: admin/display_prefs.php:98
 msgid "Use Date Picker"
-msgstr ""
+msgstr "استخدم منتقي التاريخ"
 
 #: admin/display_prefs.php:103
 msgid "Reports"
-msgstr ""
+msgstr "تقارير"
 
 #: admin/display_prefs.php:105
 msgid "Save Report Selection Days:"
-msgstr ""
+msgstr "حفظ أيام تحديد التقرير:"
 
 #: admin/display_prefs.php:107
 msgid "Default Report Destination:"
-msgstr ""
+msgstr "الوجهة الافتراضية للتقرير:"
 
 #: admin/display_prefs.php:108
 msgid "Excel"
-msgstr ""
+msgstr "تفوق"
 
 #: admin/display_prefs.php:108 reporting/includes/reports_classes.inc:235
 msgid "PDF/Printer"
@@ -1093,15 +1108,15 @@ msgstr "طابعة / PDF"
 
 #: admin/display_prefs.php:110
 msgid "Default Report Orientation:"
-msgstr ""
+msgstr "توجيه التقرير الافتراضي:"
 
 #: admin/display_prefs.php:111 reporting/includes/reports_classes.inc:242
 msgid "Landscape"
-msgstr ""
+msgstr "المناظر الطبيعيه"
 
 #: admin/display_prefs.php:111 reporting/includes/reports_classes.inc:242
 msgid "Portrait"
-msgstr ""
+msgstr "صورة"
 
 #: admin/display_prefs.php:115 applications/setup.php:42
 #: includes/sysnames.inc:99
@@ -1172,7 +1187,7 @@ msgstr "حجم صفحة الأستعلام :"
 
 #: admin/display_prefs.php:152
 msgid "Transaction days:"
-msgstr ""
+msgstr "أيام المعاملة:"
 
 #: admin/display_prefs.php:154 admin/inst_lang.php:35
 msgid "Language"
@@ -1216,7 +1231,7 @@ msgstr "تمت إضافة سنة مالية جديدة"
 
 #: admin/fiscalyears.php:102
 msgid "Cannot delete this fiscal year because there are fiscal years before."
-msgstr ""
+msgstr "لا يمكن حذف هذه السنة المالية لأن هناك سنوات مالية قبل."
 
 #: admin/fiscalyears.php:107
 msgid "Cannot delete this fiscal year because the fiscal year is not closed."
@@ -1243,7 +1258,7 @@ msgid "Fiscal Year End"
 msgstr "نهاية السنة المالية"
 
 #: admin/fiscalyears.php:138 dimensions/inquiry/search_dimensions.php:130
-#: dimensions/inquiry/search_dimensions.php:136 includes/ui/ui_lists.inc:743
+#: dimensions/inquiry/search_dimensions.php:136 includes/ui/ui_lists.inc:758
 #: includes/ui/ui_view.inc:1546 manufacturing/search_work_orders.php:114
 #: reporting/rep402.php:103 reporting/rep501.php:87 reporting/rep710.php:113
 #: reporting/includes/excel_report.inc:231
@@ -1280,7 +1295,7 @@ msgstr "مغلقة :"
 
 #: admin/forms_setup.php:20
 msgid "Transaction References"
-msgstr ""
+msgstr "مراجع المعاملات"
 
 #: admin/gl_setup.php:20
 msgid "System and General GL Setup"
@@ -1341,7 +1356,7 @@ msgstr "الأيام"
 
 #: admin/gl_setup.php:158
 msgid "Accounts Type:"
-msgstr ""
+msgstr "نوع الحسابات:"
 
 #: admin/gl_setup.php:160
 msgid "Retained Earnings:"
@@ -1361,7 +1376,7 @@ msgstr "حساب المصاريف البنكية :"
 
 #: admin/gl_setup.php:168
 msgid "Tax Algorithm:"
-msgstr ""
+msgstr "الخوارزمية الضريبية:"
 
 #: admin/gl_setup.php:172
 msgid "Dimension Defaults"
@@ -1381,7 +1396,7 @@ msgstr "حد الأئتمان الأفتراضي :"
 
 #: admin/gl_setup.php:182
 msgid "Invoice Identification:"
-msgstr ""
+msgstr "تعريف الفاتورة:"
 
 #: admin/gl_setup.php:182 gl/manage/bank_accounts.php:110
 #: includes/ui/ui_view.inc:546
@@ -1412,18 +1427,18 @@ msgstr "الرقم"
 #: purchasing/inquiry/po_search_completed.php:111
 #: purchasing/inquiry/po_search.php:118
 #: purchasing/inquiry/supplier_allocation_inquiry.php:138
-#: purchasing/inquiry/supplier_inquiry.php:172
+#: purchasing/inquiry/supplier_inquiry.php:175
 #: purchasing/allocations/supplier_allocation_main.php:96
 #: reporting/rep501.php:87 reporting/rep601.php:79 reporting/rep602.php:80
 #: reporting/rep702.php:53 reporting/includes/doctext.inc:220
 #: sales/customer_credit_invoice.php:241 sales/customer_credit_invoice.php:246
 #: sales/customer_delivery.php:333 sales/customer_delivery.php:338
 #: sales/customer_invoice.php:445 sales/customer_invoice.php:450
-#: sales/allocations/customer_allocation_main.php:89
+#: sales/allocations/customer_allocation_main.php:94
 #: sales/view/view_dispatch.php:85 sales/view/view_invoice.php:85
 #: sales/view/view_receipt.php:39 sales/view/view_sales_order.php:94
 #: sales/inquiry/customer_allocation_inquiry.php:148
-#: sales/inquiry/customer_inquiry.php:195
+#: sales/inquiry/customer_inquiry.php:196
 #: sales/inquiry/sales_deliveries_view.php:173
 #: sales/includes/ui/sales_credit_ui.inc:81
 #: sales/includes/ui/sales_credit_ui.inc:83
@@ -1437,7 +1452,7 @@ msgstr " شحن مجمع تراكمي"
 
 #: admin/gl_setup.php:186
 msgid "Print Item Image on Quote:"
-msgstr ""
+msgstr "طباعة صورة البند على اقتباس:"
 
 #: admin/gl_setup.php:188
 msgid "Legal Text on Invoice:"
@@ -1449,11 +1464,11 @@ msgstr "حساب تكاليف الشحن :"
 
 #: admin/gl_setup.php:192
 msgid "Deferred Income Account:"
-msgstr ""
+msgstr "حساب الدخل المؤجل:"
 
 #: admin/gl_setup.php:193
 msgid "Not used"
-msgstr ""
+msgstr "غير مستعمل"
 
 #: admin/gl_setup.php:197
 msgid "Customers and Sales Defaults"
@@ -1479,7 +1494,7 @@ msgstr "حساب الخصم الفوري للمبالغ المدفوعة :"
 
 #: admin/gl_setup.php:208
 msgid "Quote Valid Days:"
-msgstr ""
+msgstr "اقتباس الأيام الصالحة:"
 
 #: admin/gl_setup.php:210
 msgid "Delivery Required By:"
@@ -1519,11 +1534,11 @@ msgstr "لا توجد أية ترحيلات لإشعارات البضائع ال
 
 #: admin/gl_setup.php:230
 msgid "Receival Required By:"
-msgstr ""
+msgstr "ريسيفال ريكيرد بي:"
 
 #: admin/gl_setup.php:232
 msgid "Show PO item codes:"
-msgstr ""
+msgstr "إظهار رموز عناصر أمر الشراء:"
 
 #: admin/gl_setup.php:234 reporting/reports_main.php:208
 msgid "Inventory"
@@ -1539,15 +1554,15 @@ msgstr "تحذير : هذا الإجراء سوف يتسبب في تأخير ف�
 
 #: admin/gl_setup.php:239
 msgid "No zero-amounts (Service):"
-msgstr ""
+msgstr "لا مبالغ صفرية (الخدمة):"
 
 #: admin/gl_setup.php:241
 msgid "Location Notifications:"
-msgstr ""
+msgstr "الموقع الإخطارات:"
 
 #: admin/gl_setup.php:243
 msgid "Allow Negative Prices:"
-msgstr ""
+msgstr "السماح بالأسعار السلبية:"
 
 #: admin/gl_setup.php:245
 msgid "Items Defaults"
@@ -1571,19 +1586,19 @@ msgstr "حساب تسويات المخزون :"
 
 #: admin/gl_setup.php:254 inventory/manage/items.php:490
 msgid "WIP Account:"
-msgstr ""
+msgstr "حساب ويب:"
 
 #: admin/gl_setup.php:258 sql/alter2.4rc1.php:34
 msgid "Fixed Assets Defaults"
-msgstr ""
+msgstr "الأصول الافتراضية"
 
 #: admin/gl_setup.php:260 sql/alter2.4rc1.php:35
 msgid "Loss On Asset Disposal Account:"
-msgstr ""
+msgstr "الخسارة في حساب التخلص من الأصول:"
 
 #: admin/gl_setup.php:262
 msgid "Depreciation Period:"
-msgstr ""
+msgstr "فترة الاستهلاك:"
 
 #: admin/gl_setup.php:262 gl/accruals.php:198
 #: gl/manage/gl_quick_entries.php:247 gl/includes/ui/gl_journal_ui.inc:69
@@ -1615,7 +1630,7 @@ msgstr "تم حذف خريطة الحسابات المؤشر عليها"
 
 #: admin/inst_chart.php:52
 msgid "No optional chart of accounts is currently available."
-msgstr ""
+msgstr "لا يتوفر مخطط اختياري للحسابات حاليا."
 
 #: admin/inst_chart.php:55
 msgid "Chart"
@@ -1667,7 +1682,7 @@ msgstr "تثبيت / تحديث اللغات"
 #: admin/inst_lang.php:35 admin/printers.php:84
 #: admin/shipping_companies.php:91 dimensions/dimension_entry.php:261
 #: dimensions/inquiry/search_dimensions.php:126
-#: dimensions/view/view_dimension.php:55 gl/gl_journal.php:546
+#: dimensions/view/view_dimension.php:55 gl/gl_journal.php:548
 #: inventory/manage/item_categories.php:117
 #: inventory/manage/item_categories.php:121
 #: manufacturing/manage/work_centres.php:101
@@ -1777,8 +1792,8 @@ msgstr "الخيارات المتاحة"
 msgid "Install third-party extension."
 msgstr "قم بتثبيت إضافة برمجية خاصة بطرف ثالث"
 
-#: admin/inst_module.php:167 includes/ui/ui_lists.inc:743
-#: includes/ui/ui_lists.inc:2330 reporting/includes/excel_report.inc:229
+#: admin/inst_module.php:167 includes/ui/ui_lists.inc:758
+#: includes/ui/ui_lists.inc:2345 reporting/includes/excel_report.inc:229
 #: reporting/includes/pdf_report.inc:265
 msgid "Active"
 msgstr "نشط"
@@ -1788,12 +1803,12 @@ msgstr "نشط"
 msgid ""
 "Package '%s' is incompatible with current application version and cannot be "
 "activated.\n"
-msgstr ""
+msgstr "الحزمة 's s' غير متوافقة مع إصدار التطبيق الحالي ولا يمكن تفعيلها. \n"
 
 #: admin/inst_module.php:218
 #, php-format
 msgid "Check Install/Activate page for newer package version."
-msgstr ""
+msgstr "تحقق من تثبيت / تنشيط الصفحة للحصول على أحدث إصدار الحزمة."
 
 #: admin/inst_module.php:234
 msgid "Status change for some extensions failed."
@@ -1809,7 +1824,7 @@ msgstr "الأمتدادات البرمجية :"
 
 #: admin/inst_module.php:267
 msgid "No optional extension module is currently available."
-msgstr ""
+msgstr "لا تتوفر وحدة تمديد اختيارية حاليا."
 
 #: admin/inst_theme.php:23
 msgid "Install Themes"
@@ -1825,7 +1840,7 @@ msgstr "التنسيق :"
 
 #: admin/inst_theme.php:61
 msgid "No optional theme is currently available."
-msgstr ""
+msgstr "لا يتوفر موضوع اختياري حاليا."
 
 #: admin/inst_upgrade.php:19
 msgid "Software Upgrade"
@@ -1833,55 +1848,55 @@ msgstr "تحديث البرنامج"
 
 #: admin/inst_upgrade.php:35
 msgid "Select company to be upgraded."
-msgstr ""
+msgstr "حدد الشركة المراد ترقيتها."
 
 #: admin/inst_upgrade.php:43
 msgid "Company upgraded successfully."
-msgstr ""
+msgstr "تمت ترقية الشركة بنجاح."
 
 #: admin/inst_upgrade.php:63
 msgid "Table set"
-msgstr ""
+msgstr "مجموعة الجدول"
 
 #: admin/inst_upgrade.php:63
 msgid "Current version"
-msgstr ""
+msgstr "النسخة الحالية"
 
 #: admin/inst_upgrade.php:63
 msgid "Last log"
-msgstr ""
+msgstr "السجل الأخير"
 
 #: admin/inst_upgrade.php:63 admin/inst_upgrade.php:116
 msgid "Upgrade"
-msgstr ""
+msgstr "تطوير"
 
 #: admin/inst_upgrade.php:83
 msgid "View log"
-msgstr ""
+msgstr "سجل عرض"
 
 #: admin/inst_upgrade.php:84
 msgid "Clear"
-msgstr ""
+msgstr "واضح"
 
 #: admin/inst_upgrade.php:84
 msgid "Clear log"
-msgstr ""
+msgstr "سجل نظيف"
 
 #: admin/inst_upgrade.php:85
 msgid "Do you really want to clear this upgrade log?"
-msgstr ""
+msgstr "هل تريد حقا مسح سجل الترقية هذا؟"
 
 #: admin/inst_upgrade.php:95
 msgid "Up to date"
-msgstr ""
+msgstr "حتى الآن"
 
 #: admin/inst_upgrade.php:112
 msgid "All company database schemes are up to date."
-msgstr ""
+msgstr "جميع مخططات قاعدة بيانات الشركة محدثة."
 
 #: admin/inst_upgrade.php:115
 msgid "Select company for incremental upgrade."
-msgstr ""
+msgstr "حدد الشركة للترقية الإضافية."
 
 #: admin/inst_upgrade.php:116
 msgid "Save database and perform upgrade"
@@ -1945,7 +1960,7 @@ msgstr "تم حذف شروط الدفع المؤشر عليها"
 #: manufacturing/includes/manufacturing_ui.inc:295
 #: manufacturing/includes/manufacturing_ui.inc:346
 #: purchasing/inquiry/supplier_allocation_inquiry.php:136
-#: purchasing/inquiry/supplier_inquiry.php:170 reporting/rep102.php:130
+#: purchasing/inquiry/supplier_inquiry.php:173 reporting/rep102.php:130
 #: reporting/rep202.php:137 reporting/rep402.php:103 reporting/rep501.php:87
 #: reporting/rep601.php:79 reporting/rep602.php:80 reporting/rep702.php:60
 #: reporting/rep704.php:82 reporting/rep704.php:85 reporting/rep704.php:88
@@ -1954,7 +1969,7 @@ msgstr "تم حذف شروط الدفع المؤشر عليها"
 #: reporting/includes/doctext.inc:161 reporting/includes/doctext.inc:202
 #: reporting/includes/doctext.inc:221
 #: sales/inquiry/customer_allocation_inquiry.php:146
-#: sales/inquiry/customer_inquiry.php:192
+#: sales/inquiry/customer_inquiry.php:193
 msgid "Type"
 msgstr "النوع"
 
@@ -2149,7 +2164,7 @@ msgid "Role:"
 msgstr "الدور الوظيفي :"
 
 #: admin/security_roles.php:177 gl/manage/gl_accounts.php:202
-#: inventory/inquiry/stock_movements.php:67 inventory/manage/items.php:562
+#: inventory/inquiry/stock_movements.php:67 inventory/manage/items.php:563
 #: purchasing/manage/suppliers.php:292 sales/manage/customers.php:331
 msgid "Show inactive:"
 msgstr "عرض الغير نشط :"
@@ -2197,7 +2212,7 @@ msgstr "حذف الدور الوظيفي الحالي"
 #: includes/ui/ui_controls.inc:645 includes/ui/ui_input.inc:229
 #: inventory/includes/item_adjustments_ui.inc:192
 #: inventory/includes/stock_transfers_ui.inc:152
-#: inventory/manage/items.php:545
+#: inventory/manage/items.php:546
 #: manufacturing/includes/work_order_issue_ui.inc:134
 #: purchasing/includes/ui/po_ui.inc:438
 #: sales/create_recurrent_invoices.php:190
@@ -2206,7 +2221,7 @@ msgstr "حذف الدور الوظيفي الحالي"
 msgid "Cancel"
 msgstr "إلغاء"
 
-#: admin/security_roles.php:244 inventory/manage/items.php:545
+#: admin/security_roles.php:244 inventory/manage/items.php:546
 msgid "Cancel Edition"
 msgstr "إلغاء التحرير"
 
@@ -2362,7 +2377,7 @@ msgstr "تم إضافة مستخدم جديد"
 
 #: admin/users.php:100
 msgid "Cannot delete this user because entries are associated with this user."
-msgstr ""
+msgstr "لا يمكن حذف هذا المستخدم لأن الإدخالات مقترنة بهذا المستخدم."
 
 #: admin/users.php:105
 msgid "User has been deleted."
@@ -2429,7 +2444,7 @@ msgstr "عرض أو طباعة الحركات"
 #: admin/view_print_transaction.php:43 admin/view_print_transaction.php:45
 #: admin/view_print_transaction.php:129 includes/ui/ui_controls.inc:213
 #: purchasing/inquiry/po_search_completed.php:43
-#: purchasing/inquiry/po_search.php:94 sales/inquiry/customer_inquiry.php:176
+#: purchasing/inquiry/po_search.php:94 sales/inquiry/customer_inquiry.php:97
 #: sales/inquiry/sales_deliveries_view.php:148
 #: sales/inquiry/sales_orders_view.php:102
 msgid "Print"
@@ -2455,11 +2470,11 @@ msgstr "إلى رقم :"
 #: purchasing/inquiry/po_search_completed.php:99
 #: purchasing/inquiry/po_search.php:78
 #: purchasing/inquiry/supplier_allocation_inquiry.php:57
-#: purchasing/inquiry/supplier_inquiry.php:56
+#: purchasing/inquiry/supplier_inquiry.php:147
 #: purchasing/inquiry/suppliers_list.php:42
 #: sales/inquiry/customer_allocation_inquiry.php:51
 #: sales/inquiry/customer_branches_list.php:38
-#: sales/inquiry/customer_inquiry.php:54 sales/inquiry/customers_list.php:42
+#: sales/inquiry/customer_inquiry.php:164 sales/inquiry/customers_list.php:42
 #: sales/inquiry/sales_deliveries_view.php:116
 #: sales/inquiry/sales_orders_view.php:236
 msgid "Search"
@@ -2502,7 +2517,7 @@ msgstr "رقم الحركة الختامي من المتوقع أن يكون ر�
 #: purchasing/includes/ui/invoice_ui.inc:114
 #: purchasing/includes/ui/po_ui.inc:312 purchasing/view/view_po.php:140
 #: purchasing/inquiry/supplier_allocation_inquiry.php:141
-#: purchasing/inquiry/supplier_inquiry.php:175
+#: purchasing/inquiry/supplier_inquiry.php:178
 #: purchasing/allocations/supplier_allocation_main.php:97
 #: reporting/rep101.php:132 reporting/rep107.php:203 reporting/rep201.php:107
 #: reporting/rep306.php:141 reporting/rep402.php:103 reporting/rep501.php:87
@@ -2512,11 +2527,11 @@ msgstr "رقم الحركة الختامي من المتوقع أن يكون ر�
 #: reporting/includes/doctext.inc:207 reporting/includes/doctext.inc:245
 #: reporting/includes/header2.inc:137 sales/customer_delivery.php:366
 #: sales/customer_invoice.php:485
-#: sales/allocations/customer_allocation_main.php:90
+#: sales/allocations/customer_allocation_main.php:95
 #: sales/view/view_credit.php:69 sales/view/view_sales_order.php:109
 #: sales/view/view_sales_order.php:142 sales/view/view_sales_order.php:179
 #: sales/inquiry/customer_allocation_inquiry.php:150
-#: sales/inquiry/customer_inquiry.php:196
+#: sales/inquiry/customer_inquiry.php:197
 msgid "Date"
 msgstr "التاريخ "
 
@@ -2621,7 +2636,7 @@ msgstr "التاريخ المدخل غير مقبول ."
 #: sales/sales_order_entry.php:378
 msgid ""
 "The entered date is out of fiscal year or is closed for further data entry."
-msgstr ""
+msgstr "تاريخ الدخول هو من السنة المالية أو مغلقة لمزيد من إدخال البيانات."
 
 #: admin/void_transaction.php:260
 msgid ""
@@ -2638,7 +2653,7 @@ msgstr "الحركة المؤشر عليها تم إلغاؤها ."
 
 #: admin/db/attachments_db.inc:67
 msgid "Attached File:"
-msgstr ""
+msgstr "الملف المرفق:"
 
 #: admin/db/fiscalyears_db.inc:137
 msgid ""
@@ -2694,6 +2709,8 @@ msgid ""
 "This is new format backup file which cannot be restored on database not "
 "migrated to utf8."
 msgstr ""
+"هذا هو ملف النسخ الاحتياطي تنسيق جديد التي لا يمكن استعادتها على قاعدة "
+"البيانات التي لم يتم ترحيلها إلى utf8."
 
 #: admin/db/maintenance_db.inc:486
 #, php-format
@@ -2710,47 +2727,49 @@ msgstr "مستخدمين موجودين"
 
 #: admin/db/voiding_db.inc:23
 msgid "This transaction was already voided before."
-msgstr ""
+msgstr "تم إلغاء هذه المعاملة من قبل."
 
 #: admin/db/voiding_db.inc:30
 #, php-format
 msgid ""
 "This transaction cannot be voided because it is part of Work Order %s costs."
-msgstr ""
+msgstr "لا يمكن إلغاء هذه المعاملة لأنها جزء من تكاليف أمر العمل %s."
 
 #: admin/db/voiding_db.inc:37 admin/db/voiding_db.inc:46
 msgid ""
 "This transaction cannot be voided because the operation would decrease "
 "account balance below allowed limit in some point of account history."
 msgstr ""
+"لا يمكن إلغاء هذه المعاملة لأن العملية ستخفض رصيد الحساب دون الحد المسموح به"
+" في بعض نقاط سجل الحساب."
 
 #: admin/db/voiding_db.inc:49
 msgid "This invoice cannot be voided because it was already credited."
-msgstr ""
+msgstr "لا يمكن إلغاء هذه الفاتورة لأنها تم قيدها من قبل."
 
 #: admin/db/voiding_db.inc:58
 msgid "This delivery cannot be voided because it was already invoiced."
-msgstr ""
+msgstr "لا يمكن إلغاء هذا التسليم لأنه تم إصدار فواتير له بالفعل."
 
 #: admin/db/voiding_db.inc:76 admin/db/voiding_db.inc:119
 #: admin/db/voiding_db.inc:122
 msgid "This transaction type cannot be voided."
-msgstr ""
+msgstr "لا يمكن إلغاء هذا النوع من المعاملات."
 
 #: admin/db/voiding_db.inc:81
 msgid "This GRN cannot be voided because it was already invoiced."
-msgstr ""
+msgstr "لا يمكن إلغاء غن لأنه تم إصدار فواتير له بالفعل."
 
 #: admin/db/voiding_db.inc:83 admin/db/voiding_db.inc:92
 msgid "Error encountered when voiding transaction."
-msgstr ""
+msgstr "حدث خطأ أثناء إلغاء المعاملة."
 
 #: admin/db/voiding_db.inc:105 admin/db/voiding_db.inc:113
 #, php-format
 msgid ""
 "Selected document cannot be voided because related Work Order %s is already "
 "closed."
-msgstr ""
+msgstr "لا يمكن إلغاء المستند المحدد لأن أمر العمل %s ذي الصلة مغلق بالفعل."
 
 #: admin/db/voiding_db.inc:127 sales/includes/db/sales_invoice_db.inc:250
 msgid "Voided."
@@ -2809,7 +2828,7 @@ msgstr "مقبوضات العملاء"
 
 #: applications/customers.php:42
 msgid "Invoice &Prepaid Orders"
-msgstr ""
+msgstr "الفاتورة وأوامر الدفع المسبق"
 
 #: applications/customers.php:44
 msgid "Customer &Credit Notes"
@@ -2911,55 +2930,55 @@ msgstr "القطاعات التحليلية و الكلمات الدلالية"
 
 #: applications/fixed_assets.php:16
 msgid "&Fixed Assets"
-msgstr ""
+msgstr "أصول ثابتة"
 
 #: applications/fixed_assets.php:19
 msgid "Fixed Assets &Purchase"
-msgstr ""
+msgstr "الأصول الثابتة وشراء"
 
 #: applications/fixed_assets.php:21
 msgid "Fixed Assets Location &Transfers"
-msgstr ""
+msgstr "الأصول الثابتة الموقع والتحويلات"
 
 #: applications/fixed_assets.php:23
 msgid "Fixed Assets &Disposal"
-msgstr ""
+msgstr "الأصول الثابتة والتخلص منها"
 
 #: applications/fixed_assets.php:25
 msgid "Fixed Assets &Sale"
-msgstr ""
+msgstr "الأصول الثابتة وبيع"
 
 #: applications/fixed_assets.php:27
 msgid "Process &Depreciation"
-msgstr ""
+msgstr "العملية والاستهلاك"
 
 #: applications/fixed_assets.php:34
 msgid "Fixed Assets &Movements"
-msgstr ""
+msgstr "الأصول الثابتة والحركات"
 
 #: applications/fixed_assets.php:36
 msgid "Fixed Assets In&quiry"
-msgstr ""
+msgstr "الأصول الثابتة في & كيري"
 
 #: applications/fixed_assets.php:40
 msgid "Fixed Assets &Reports"
-msgstr ""
+msgstr "الأصول الثابتة والتقارير"
 
 #: applications/fixed_assets.php:45
 msgid "Fixed &Assets"
-msgstr ""
+msgstr "أصول ثابتة"
 
 #: applications/fixed_assets.php:47
 msgid "Fixed Assets &Locations"
-msgstr ""
+msgstr "الأصول الثابتة والمواقع"
 
 #: applications/fixed_assets.php:49
 msgid "Fixed Assets &Categories"
-msgstr ""
+msgstr "الأصول الثابتة والفئات"
 
 #: applications/fixed_assets.php:51
 msgid "Fixed Assets Cl&asses"
-msgstr ""
+msgstr "الأصول الثابتة كل & الحمار"
 
 #: applications/generalledger.php:16
 msgid "&Banking and General Ledger"
@@ -3064,7 +3083,7 @@ msgstr "التصنيفات الرئيسية لحسابات الأستاذ الع
 
 #: applications/generalledger.php:74
 msgid "&Closing GL Transactions"
-msgstr ""
+msgstr "وإغلاق المعاملات غل"
 
 #: applications/generalledger.php:76
 msgid "&Revaluation of Currency Accounts"
@@ -3118,7 +3137,7 @@ msgstr "مواقع التخزين للمخزون"
 msgid "&Units of Measure"
 msgstr "وحدات القياس"
 
-#: applications/inventory.php:45 inventory/manage/items.php:591
+#: applications/inventory.php:45 inventory/manage/items.php:592
 msgid "&Reorder Levels"
 msgstr "مستويات إعادة الطلب"
 
@@ -3134,7 +3153,7 @@ msgstr "التسعير البيعي"
 msgid "Purchasing &Pricing"
 msgstr "التسعير الشرائي"
 
-#: applications/inventory.php:53 inventory/manage/items.php:590
+#: applications/inventory.php:53 inventory/manage/items.php:591
 msgid "Standard &Costs"
 msgstr "التكاليف المعيارية"
 
@@ -3197,7 +3216,7 @@ msgstr "إعدادات العرض"
 
 #: applications/setup.php:27
 msgid "Transaction &References"
-msgstr ""
+msgstr "المعاملات والمراجع"
 
 #: applications/setup.php:29
 msgid "&Taxes"
@@ -3305,7 +3324,7 @@ msgstr "عمليات التسليم المباشرة"
 
 #: applications/suppliers.php:25
 msgid "Direct Supplier &Invoice"
-msgstr ""
+msgstr "المورد مباشرة والفاتورة"
 
 #: applications/suppliers.php:28
 msgid "&Payments to Suppliers"
@@ -3476,7 +3495,7 @@ msgid "Balance for this Dimension"
 msgstr "الرصيد للقطاع التحليلي الحالي"
 
 #: dimensions/includes/dimensions_ui.inc:31 gl/accruals.php:104
-#: gl/inquiry/gl_account_inquiry.php:129 gl/inquiry/gl_trial_balance.php:184
+#: gl/inquiry/gl_account_inquiry.php:129 gl/inquiry/gl_trial_balance.php:215
 #: gl/manage/gl_quick_entries.php:248 gl/manage/gl_quick_entries.php:342
 #: includes/dashboard.inc:606 includes/sysnames.inc:179
 #: purchasing/includes/ui/invoice_ui.inc:278
@@ -3490,8 +3509,8 @@ msgstr "الحساب"
 #: dimensions/includes/dimensions_ui.inc:31 gl/accruals.php:112
 #: gl/bank_account_reconcile.php:234 gl/inquiry/bank_inquiry.php:72
 #: gl/inquiry/gl_account_inquiry.php:141 gl/inquiry/gl_account_inquiry.php:143
-#: gl/inquiry/gl_trial_balance.php:190 gl/inquiry/gl_trial_balance.php:192
-#: gl/inquiry/gl_trial_balance.php:194 gl/view/accrual_trans.php:60
+#: gl/inquiry/gl_trial_balance.php:221 gl/inquiry/gl_trial_balance.php:223
+#: gl/inquiry/gl_trial_balance.php:225 gl/view/accrual_trans.php:60
 #: gl/view/gl_trans_view.php:96 gl/view/gl_trans_view.php:99
 #: gl/view/gl_trans_view.php:102 gl/includes/ui/gl_journal_ui.inc:103
 #: gl/includes/ui/gl_journal_ui.inc:106 gl/includes/ui/gl_journal_ui.inc:109
@@ -3507,8 +3526,8 @@ msgstr "مدين"
 #: dimensions/includes/dimensions_ui.inc:31 gl/accruals.php:112
 #: gl/bank_account_reconcile.php:235 gl/inquiry/bank_inquiry.php:72
 #: gl/inquiry/gl_account_inquiry.php:141 gl/inquiry/gl_account_inquiry.php:143
-#: gl/inquiry/gl_trial_balance.php:191 gl/inquiry/gl_trial_balance.php:193
-#: gl/inquiry/gl_trial_balance.php:195 gl/view/accrual_trans.php:60
+#: gl/inquiry/gl_trial_balance.php:222 gl/inquiry/gl_trial_balance.php:224
+#: gl/inquiry/gl_trial_balance.php:226 gl/view/accrual_trans.php:60
 #: gl/view/gl_trans_view.php:96 gl/view/gl_trans_view.php:99
 #: gl/view/gl_trans_view.php:102 gl/includes/ui/gl_journal_ui.inc:103
 #: gl/includes/ui/gl_journal_ui.inc:106 gl/includes/ui/gl_journal_ui.inc:109
@@ -3523,14 +3542,18 @@ msgstr "دائن"
 
 #: dimensions/includes/dimensions_ui.inc:45
 #: dimensions/inquiry/search_dimensions.php:131 gl/inquiry/bank_inquiry.php:72
-#: gl/inquiry/gl_account_inquiry.php:141 gl/inquiry/gl_trial_balance.php:188
+#: gl/inquiry/gl_account_inquiry.php:141 gl/inquiry/gl_trial_balance.php:219
 #: includes/dashboard.inc:606
 #: purchasing/inquiry/supplier_allocation_inquiry.php:147
-#: reporting/rep101.php:136 reporting/rep201.php:111 reporting/rep203.php:89
-#: reporting/rep204.php:84 reporting/rep307.php:114 reporting/rep601.php:80
-#: reporting/rep602.php:81 reporting/rep701.php:110 reporting/rep704.php:83
-#: reporting/rep704.php:86 reporting/rep704.php:89 reporting/rep708.php:185
+#: purchasing/inquiry/supplier_inquiry.php:182
+#: purchasing/inquiry/supplier_inquiry.php:195 reporting/rep101.php:136
+#: reporting/rep201.php:111 reporting/rep203.php:89 reporting/rep204.php:84
+#: reporting/rep307.php:114 reporting/rep601.php:80 reporting/rep602.php:81
+#: reporting/rep701.php:110 reporting/rep704.php:83 reporting/rep704.php:86
+#: reporting/rep704.php:89 reporting/rep708.php:185
 #: sales/inquiry/customer_allocation_inquiry.php:157
+#: sales/inquiry/customer_inquiry.php:203
+#: sales/inquiry/customer_inquiry.php:216
 msgid "Balance"
 msgstr "الرصيد"
 
@@ -3561,7 +3584,7 @@ msgid "Reference:"
 msgstr "الإشارة المرجعية :"
 
 #: dimensions/inquiry/search_dimensions.php:74
-#: includes/ui/allocation_cart.inc:314 includes/ui/ui_lists.inc:2100
+#: includes/ui/allocation_cart.inc:314 includes/ui/ui_lists.inc:2115
 #: reporting/rep101.php:114 reporting/rep102.php:92 reporting/rep104.php:95
 #: reporting/rep104.php:99 reporting/rep105.php:95 reporting/rep105.php:99
 #: reporting/rep201.php:89 reporting/rep202.php:98 reporting/rep203.php:69
@@ -3578,21 +3601,21 @@ msgid "All"
 msgstr "الكل"
 
 #: dimensions/inquiry/search_dimensions.php:75 gl/inquiry/bank_inquiry.php:50
-#: gl/inquiry/gl_trial_balance.php:54 gl/inquiry/journal_inquiry.php:48
+#: gl/inquiry/gl_trial_balance.php:55 gl/inquiry/journal_inquiry.php:48
 #: gl/inquiry/profit_loss.php:175 gl/includes/ui/gl_bank_ui.inc:52
 #: gl/includes/ui/gl_bank_ui.inc:114 inventory/inquiry/stock_movements.php:85
 #: purchasing/inquiry/supplier_allocation_inquiry.php:50
-#: purchasing/inquiry/supplier_inquiry.php:51
-#: sales/inquiry/customer_inquiry.php:46
+#: purchasing/inquiry/supplier_inquiry.php:143
+#: sales/inquiry/customer_inquiry.php:160
 msgid "From:"
 msgstr "من :"
 
 #: dimensions/inquiry/search_dimensions.php:76 gl/inquiry/bank_inquiry.php:51
-#: gl/inquiry/gl_trial_balance.php:55 gl/inquiry/journal_inquiry.php:49
+#: gl/inquiry/gl_trial_balance.php:56 gl/inquiry/journal_inquiry.php:49
 #: gl/inquiry/profit_loss.php:176 inventory/inquiry/stock_movements.php:86
 #: purchasing/inquiry/supplier_allocation_inquiry.php:51
-#: purchasing/inquiry/supplier_inquiry.php:52
-#: sales/inquiry/customer_inquiry.php:47
+#: purchasing/inquiry/supplier_inquiry.php:144
+#: sales/inquiry/customer_inquiry.php:161
 msgid "To:"
 msgstr "إلى :"
 
@@ -3613,7 +3636,7 @@ msgstr "المفتوح فقط : "
 #: purchasing/view/view_supp_credit.php:48
 #: purchasing/view/view_supp_invoice.php:52
 #: purchasing/inquiry/supplier_allocation_inquiry.php:142
-#: purchasing/inquiry/supplier_inquiry.php:176 reporting/rep101.php:132
+#: purchasing/inquiry/supplier_inquiry.php:179 reporting/rep101.php:132
 #: reporting/rep201.php:107 reporting/rep203.php:88 reporting/rep501.php:87
 #: reporting/includes/doctext.inc:111 reporting/includes/doctext.inc:143
 #: reporting/includes/doctext.inc:164 reporting/includes/doctext.inc:166
@@ -3621,7 +3644,7 @@ msgstr "المفتوح فقط : "
 #: sales/customer_invoice.php:492 sales/view/view_dispatch.php:97
 #: sales/view/view_invoice.php:96
 #: sales/inquiry/customer_allocation_inquiry.php:151
-#: sales/inquiry/customer_inquiry.php:197
+#: sales/inquiry/customer_inquiry.php:198
 #: sales/includes/ui/sales_order_ui.inc:588
 msgid "Due Date"
 msgstr "تاريخ الأستحقاق"
@@ -3684,6 +3707,8 @@ msgid ""
 "Some of the period dates are outside the fiscal year or are closed for "
 "further data entry. Create a new fiscal year first!"
 msgstr ""
+"بعض تواريخ الفترة هي خارج السنة المالية أو تكون مغلقة لمزيد من إدخال "
+"البيانات. إنشاء السنة المالية الجديدة أولا!"
 
 #: gl/accruals.php:96
 #, php-format
@@ -3695,8 +3720,8 @@ msgstr "الأستحقاقات الخاصة بـ  '%s'"
 #: gl/gl_budget.php:75 gl/inquiry/balance_sheet.php:127
 #: gl/inquiry/balance_sheet.php:129 gl/inquiry/gl_account_inquiry.php:79
 #: gl/inquiry/gl_account_inquiry.php:81 gl/inquiry/gl_account_inquiry.php:134
-#: gl/inquiry/gl_account_inquiry.php:136 gl/inquiry/gl_trial_balance.php:57
-#: gl/inquiry/gl_trial_balance.php:59 gl/inquiry/profit_loss.php:184
+#: gl/inquiry/gl_account_inquiry.php:136 gl/inquiry/gl_trial_balance.php:58
+#: gl/inquiry/gl_trial_balance.php:60 gl/inquiry/profit_loss.php:184
 #: gl/inquiry/profit_loss.php:186 gl/manage/gl_quick_entries.php:268
 #: gl/manage/gl_quick_entries.php:270 gl/manage/gl_quick_entries.php:353
 #: gl/manage/gl_quick_entries.php:355 gl/view/accrual_trans.php:54
@@ -3813,19 +3838,19 @@ msgstr "حساب الإيراد أو التكلفة"
 #: includes/dashboard.inc:189 includes/dashboard.inc:226
 #: includes/dashboard.inc:294 includes/dashboard.inc:336
 #: includes/dashboard.inc:448 includes/sysnames.inc:138
-#: includes/ui/allocation_cart.inc:290 includes/ui/ui_lists.inc:1349
+#: includes/ui/allocation_cart.inc:290 includes/ui/ui_lists.inc:1364
 #: manufacturing/includes/manufacturing_ui.inc:253
 #: purchasing/includes/ui/invoice_ui.inc:278
 #: purchasing/includes/ui/invoice_ui.inc:280
 #: purchasing/includes/ui/invoice_ui.inc:282
 #: purchasing/view/view_supp_payment.php:60
 #: purchasing/view/view_supp_payment.php:72
-#: purchasing/inquiry/supplier_inquiry.php:178 reporting/rep102.php:242
+#: purchasing/inquiry/supplier_inquiry.php:181 reporting/rep102.php:242
 #: reporting/rep107.php:205 reporting/rep107.php:270 reporting/rep109.php:197
 #: reporting/rep110.php:194 reporting/rep111.php:194 reporting/rep113.php:183
 #: reporting/rep202.php:250 reporting/rep209.php:199 reporting/rep706.php:308
-#: reporting/rep707.php:326 reporting/rep710.php:78
-#: sales/view/view_receipt.php:44 sales/inquiry/customer_inquiry.php:201
+#: reporting/rep707.php:328 reporting/rep710.php:78
+#: sales/view/view_receipt.php:44 sales/inquiry/customer_inquiry.php:202
 msgid "Amount"
 msgstr "قيمة"
 
@@ -3926,11 +3951,11 @@ msgstr "قم بالتسوية"
 
 #: gl/bank_transfer.php:30
 msgid "Modify Bank Account Transfer"
-msgstr ""
+msgstr "تعديل تحويل الحساب المصرفي"
 
 #: gl/bank_transfer.php:32
 msgid "Bank Account Transfer Entry"
-msgstr ""
+msgstr "إدخال تحويل الحساب المصرفي"
 
 #: gl/bank_transfer.php:46 gl/manage/revaluate_currencies.php:35
 msgid "Transfer has been entered"
@@ -3968,11 +3993,11 @@ msgstr "المصاريف البنكية :"
 
 #: gl/bank_transfer.php:129
 msgid "Incoming Amount:"
-msgstr ""
+msgstr "المبلغ الوارد:"
 
 #: gl/bank_transfer.php:143
 msgid "Modify Transfer"
-msgstr ""
+msgstr "تعديل النقل"
 
 #: gl/bank_transfer.php:145
 msgid "Enter Transfer"
@@ -3993,6 +4018,8 @@ msgid ""
 "This bank transfer change would result in exceeding authorized overdraft "
 "limit (%s) of the account '%s'"
 msgstr ""
+"سيؤدي تغيير التحويل المصرفي إلى تجاوز الحد المسموح به للسحب على المكشوف (%s)"
+" من الحساب '%s'"
 
 #: gl/bank_transfer.php:198
 #, php-format
@@ -4000,6 +4027,8 @@ msgid ""
 "This bank transfer change would result in exceeding authorized overdraft "
 "limit on '%s' for transaction: %s #%s on %s."
 msgstr ""
+"سيؤدي تغيير التحويل المصرفي هذا إلى تجاوز الحد المسموح به للسحب على المكشوف "
+"في '%s' للمعاملة: %s #%s في %s."
 
 #: gl/bank_transfer.php:210
 #, php-format
@@ -4007,6 +4036,8 @@ msgid ""
 "This bank transfer would result in exceeding authorized overdraft limit of "
 "the account (%s)"
 msgstr ""
+"سيؤدي هذا التحويل المصرفي إلى تجاوز الحد المسموح به للسحب على المكشوف من "
+"الحساب (%s)"
 
 #: gl/bank_transfer.php:215
 #, php-format
@@ -4014,6 +4045,8 @@ msgid ""
 "This bank transfer would result in exceeding authorized overdraft limit for "
 "transaction: %s #%s on %s."
 msgstr ""
+"سيؤدي هذا التحويل المصرفي إلى تجاوز الحد المسموح به للسحب على المكشوف "
+"للمعاملة: %s #%s في %s."
 
 #: gl/bank_transfer.php:231 purchasing/supplier_payment.php:158
 #: sales/customer_payments.php:181
@@ -4027,7 +4060,7 @@ msgstr "حسابات البنوك المحول منها و المحول إليه
 
 #: gl/bank_transfer.php:255
 msgid "The incomming bank amount cannot be 0."
-msgstr ""
+msgstr "مبلغ البنك إنكومينغ لا يمكن أن يكون 0."
 
 #: gl/gl_bank.php:34
 msgid "Bank Account Payment Entry"
@@ -4074,7 +4107,7 @@ msgstr "إضافة مرفق"
 #: gl/gl_bank.php:95
 #, php-format
 msgid "Payment %d has been modified"
-msgstr ""
+msgstr "تم تعديل الدفعة %d"
 
 #: gl/gl_bank.php:111
 #, php-format
@@ -4096,7 +4129,7 @@ msgstr "إدخال دفعة"
 #: gl/gl_bank.php:126
 #, php-format
 msgid "Deposit %d has been modified"
-msgstr ""
+msgstr "تم تعديل الإيداع %d"
 
 #: gl/gl_bank.php:128
 msgid "&View the GL Postings for this Deposit"
@@ -4141,7 +4174,7 @@ msgstr "يجب عليك أخيار مورد"
 
 #: gl/gl_bank.php:279
 msgid "Settled amount have to be positive number."
-msgstr ""
+msgstr "يجب أن يكون المبلغ المستقر رقم إيجابي."
 
 #: gl/gl_bank.php:325
 msgid "The amount entered is not a valid number or is less than zero."
@@ -4221,12 +4254,12 @@ msgstr "السنة الماضية"
 
 #: gl/gl_budget.php:126 gl/inquiry/balance_sheet.php:98
 #: gl/inquiry/balance_sheet.php:202 gl/inquiry/balance_sheet.php:233
-#: gl/inquiry/gl_trial_balance.php:220 gl/inquiry/profit_loss.php:120
-#: gl/inquiry/profit_loss.php:287 gl/view/gl_deposit_view.php:137
-#: gl/view/gl_payment_view.php:136 gl/view/gl_trans_view.php:144
-#: gl/includes/ui/gl_bank_ui.inc:195 gl/includes/ui/gl_journal_ui.inc:169
-#: includes/dashboard.inc:487 includes/dashboard.inc:571
-#: inventory/includes/item_adjustments_ui.inc:60
+#: gl/inquiry/gl_trial_balance.php:174 gl/inquiry/gl_trial_balance.php:251
+#: gl/inquiry/profit_loss.php:120 gl/inquiry/profit_loss.php:287
+#: gl/view/gl_deposit_view.php:137 gl/view/gl_payment_view.php:136
+#: gl/view/gl_trans_view.php:144 gl/includes/ui/gl_bank_ui.inc:195
+#: gl/includes/ui/gl_journal_ui.inc:169 includes/dashboard.inc:487
+#: includes/dashboard.inc:571 inventory/includes/item_adjustments_ui.inc:60
 #: inventory/includes/item_adjustments_ui.inc:114
 #: manufacturing/includes/manufacturing_ui.inc:195
 #: purchasing/includes/ui/invoice_ui.inc:341
@@ -4234,7 +4267,7 @@ msgstr "السنة الماضية"
 #: purchasing/includes/ui/invoice_ui.inc:575
 #: purchasing/po_receive_items.php:63 purchasing/view/view_po.php:140
 #: purchasing/allocations/supplier_allocation_main.php:100
-#: reporting/rep101.php:249 reporting/rep106.php:90 reporting/rep106.php:125
+#: reporting/rep101.php:255 reporting/rep106.php:90 reporting/rep106.php:125
 #: reporting/rep106.php:172 reporting/rep114.php:161 reporting/rep201.php:222
 #: reporting/rep203.php:89 reporting/rep203.php:166 reporting/rep204.php:113
 #: reporting/rep204.php:141 reporting/rep301.php:192 reporting/rep301.php:240
@@ -4246,11 +4279,11 @@ msgstr "السنة الماضية"
 #: reporting/rep451.php:120 reporting/rep451.php:155 reporting/rep702.php:142
 #: reporting/rep705.php:152 reporting/rep705.php:312 reporting/rep706.php:106
 #: reporting/rep706.php:255 reporting/rep706.php:290 reporting/rep707.php:115
-#: reporting/rep707.php:297 reporting/rep708.php:253
+#: reporting/rep707.php:299 reporting/rep708.php:253
 #: reporting/includes/doctext.inc:32 reporting/includes/doctext.inc:191
 #: sales/customer_credit_invoice.php:276 sales/customer_delivery.php:421
 #: sales/customer_invoice.php:519 sales/customer_invoice.php:522
-#: sales/allocations/customer_allocation_main.php:93
+#: sales/allocations/customer_allocation_main.php:98
 #: sales/view/view_credit.php:91 sales/view/view_dispatch.php:113
 #: sales/view/view_invoice.php:116 sales/view/view_sales_order.php:109
 #: sales/view/view_sales_order.php:142 sales/view/view_sales_order.php:179
@@ -4324,20 +4357,24 @@ msgid ""
 "Check tax register records before processing transaction or switch off "
 "'Include in tax register' option."
 msgstr ""
+"تحقق من سجلات السجل الضريبي قبل معالجة المعاملة أو إيقاف خيار 'تضمين في سجل "
+"الضرائب'"
 
 #: gl/gl_journal.php:287
 msgid ""
 "Cannot determine tax register to be used. You have to make at least one "
 "posting either to tax or customer/supplier account to use tax register."
 msgstr ""
+"لا يمكن تحديد السجل الضريبي لاستخدامها. عليك أن تجعل على الأقل نشر واحد إما "
+"لحساب الضرائب أو العملاء / المورد لاستخدام السجل الضريبي."
 
 #: gl/gl_journal.php:347 gl/manage/gl_quick_entries.php:121
 msgid "You must select GL account."
-msgstr ""
+msgstr "يجب تحديد حساب غل."
 
 #: gl/gl_journal.php:353
 msgid "You must select subledger account."
-msgstr ""
+msgstr "يجب تحديد حساب دفتر فرعي."
 
 #: gl/gl_journal.php:361 gl/gl_journal.php:368
 msgid "Dimension is closed."
@@ -4372,47 +4409,43 @@ msgstr ""
 
 #: gl/gl_journal.php:520
 msgid "&GL postings"
-msgstr ""
+msgstr " غل بوستنغز"
 
 #: gl/gl_journal.php:521
 msgid "&Tax register"
-msgstr ""
+msgstr " سجل الضرائب"
 
 #: gl/gl_journal.php:530
 msgid "Rows"
 msgstr "السجلات"
 
-#: gl/gl_journal.php:539
+#: gl/gl_journal.php:540
 msgid "Tax register record"
-msgstr ""
+msgstr "سجل السجل الضريبي"
 
-#: gl/gl_journal.php:541
+#: gl/gl_journal.php:543
 msgid "VAT date:"
-msgstr ""
+msgstr "تاريخ ضريبة القيمة المضافة:"
 
-#: gl/gl_journal.php:542
-msgid "Tax group:"
-msgstr ""
-
-#: gl/gl_journal.php:546 gl/inquiry/tax_inquiry.php:102
+#: gl/gl_journal.php:548 gl/inquiry/tax_inquiry.php:102
 #: reporting/rep709.php:189
 msgid "Input Tax"
 msgstr "ضريبة المشتريات"
 
-#: gl/gl_journal.php:546 gl/inquiry/tax_inquiry.php:96
+#: gl/gl_journal.php:548 gl/inquiry/tax_inquiry.php:96
 #: reporting/rep709.php:189
 msgid "Output Tax"
 msgstr "ضريبة المبيعات"
 
-#: gl/gl_journal.php:546
+#: gl/gl_journal.php:548
 msgid "Net amount"
-msgstr ""
+msgstr "كمية الشبكة"
 
-#: gl/gl_journal.php:561
+#: gl/gl_journal.php:563
 msgid "Process Journal Entry"
 msgstr "تنفيذ قيد اليومية العامة"
 
-#: gl/gl_journal.php:562
+#: gl/gl_journal.php:564
 msgid "Process journal entry only if debits equal to credits"
 msgstr ""
 "ترحيل قيود اليومية العامة فقط في حالة تساوي الجانب المدين مع الجانب الدائن"
@@ -4422,9 +4455,9 @@ msgstr ""
 msgid "GL Accounts"
 msgstr "حسابات الأستاذ العام"
 
-#: gl/inquiry/accounts_list.php:40 includes/ui/ui_lists.inc:346
+#: gl/inquiry/accounts_list.php:40 includes/ui/ui_lists.inc:349
 msgid "Search GL accounts"
-msgstr ""
+msgstr "البحث في حسابات غل"
 
 #: gl/inquiry/accounts_list.php:52 gl/view/gl_deposit_view.php:104
 #: gl/view/gl_deposit_view.php:107 gl/view/gl_deposit_view.php:110
@@ -4458,8 +4491,8 @@ msgstr "كما في :"
 
 #: gl/inquiry/balance_sheet.php:225 gl/inquiry/profit_loss.php:298
 #: includes/dashboard.inc:394 reporting/rep705.php:322
-#: reporting/rep706.php:278 reporting/rep706.php:303 reporting/rep707.php:309
-#: reporting/rep707.php:315
+#: reporting/rep706.php:278 reporting/rep706.php:303 reporting/rep707.php:311
+#: reporting/rep707.php:317
 msgid "Calculated Return"
 msgstr "أرباح و خسائر السنة الحالية"
 
@@ -4486,7 +4519,7 @@ msgid "Opening Balance"
 msgstr "الرصيد الأفتتاحي"
 
 #: gl/inquiry/bank_inquiry.php:130 gl/inquiry/gl_account_inquiry.php:213
-#: gl/inquiry/gl_trial_balance.php:230 reporting/rep601.php:157
+#: gl/inquiry/gl_trial_balance.php:261 reporting/rep601.php:157
 #: reporting/rep602.php:157 reporting/rep704.php:191 reporting/rep708.php:262
 msgid "Ending Balance"
 msgstr "الرصيد الختامي"
@@ -4516,28 +4549,28 @@ msgstr "لا يوجد حركات أستاذ عام تم إنشائها للمع�
 msgid "Trial Balance"
 msgstr "ميزان المراجعة"
 
-#: gl/inquiry/gl_trial_balance.php:60
+#: gl/inquiry/gl_trial_balance.php:61
 msgid "No zero values"
 msgstr "القيم الصفرية غير مسموح بها"
 
-#: gl/inquiry/gl_trial_balance.php:61 reporting/reports_main.php:406
+#: gl/inquiry/gl_trial_balance.php:62 reporting/reports_main.php:406
 #: reporting/reports_main.php:456 reporting/reports_main.php:501
 msgid "Only balances"
 msgstr "الأرصدة فقط"
 
-#: gl/inquiry/gl_trial_balance.php:93 gl/inquiry/gl_trial_balance.php:154
+#: gl/inquiry/gl_trial_balance.php:104 gl/inquiry/gl_trial_balance.php:165
 #: includes/dashboard.inc:526 reporting/rep706.php:307
-#: reporting/rep707.php:325 reporting/rep708.php:51 reporting/rep708.php:126
+#: reporting/rep707.php:327 reporting/rep708.php:51 reporting/rep708.php:126
 #: sales/create_recurrent_invoices.php:203
 #: sales/manage/recurrent_invoices.php:128
 msgid "Group"
 msgstr "مجموعة"
 
-#: gl/inquiry/gl_trial_balance.php:172
+#: gl/inquiry/gl_trial_balance.php:203
 msgid "The from date cannot be bigger than the fiscal year end."
 msgstr "تاريخ البداية لا يمكن أن يكون أكبر من نهاية السنة المالية"
 
-#: gl/inquiry/gl_trial_balance.php:185 gl/manage/bank_accounts.php:109
+#: gl/inquiry/gl_trial_balance.php:216 gl/manage/bank_accounts.php:109
 #: gl/view/gl_trans_view.php:95 gl/view/gl_trans_view.php:98
 #: gl/view/gl_trans_view.php:101 manufacturing/view/wo_costs_view.php:60
 #: reporting/rep701.php:110 reporting/rep702.php:53 reporting/rep705.php:235
@@ -4545,21 +4578,21 @@ msgstr "تاريخ البداية لا يمكن أن يكون أكبر من نه
 msgid "Account Name"
 msgstr "أسم الحساب "
 
-#: gl/inquiry/gl_trial_balance.php:186 reporting/rep708.php:185
+#: gl/inquiry/gl_trial_balance.php:217 reporting/rep708.php:185
 msgid "Brought Forward"
 msgstr "ما قبله"
 
-#: gl/inquiry/gl_trial_balance.php:187 reporting/rep708.php:185
+#: gl/inquiry/gl_trial_balance.php:218 reporting/rep708.php:185
 msgid "This Period"
 msgstr "الفترة الحالية"
 
-#: gl/inquiry/gl_trial_balance.php:206 gl/manage/gl_account_types.php:127
+#: gl/inquiry/gl_trial_balance.php:237 gl/manage/gl_account_types.php:127
 #: includes/dashboard.inc:147 includes/dashboard.inc:170
 #: reporting/rep451.php:80 reporting/rep451.php:86
 msgid "Class"
 msgstr "التصنيف الرئيسي"
 
-#: gl/inquiry/gl_trial_balance.php:238 reporting/rep708.php:283
+#: gl/inquiry/gl_trial_balance.php:269 reporting/rep708.php:283
 msgid ""
 "The Opening Balance is not in balance, probably due to a non closed Previous"
 " Fiscalyear."
@@ -4581,11 +4614,11 @@ msgstr "ادخل مقطع تذكيري أو أتركها فارغة"
 
 #: gl/inquiry/journal_inquiry.php:54
 msgid "User:"
-msgstr ""
+msgstr "المستعمل:"
 
 #: gl/inquiry/journal_inquiry.php:56
 msgid "Dimension:"
-msgstr ""
+msgstr "البعد:"
 
 #: gl/inquiry/journal_inquiry.php:57
 msgid "Show closed:"
@@ -4598,7 +4631,7 @@ msgstr "رقم القيد"
 #: gl/inquiry/journal_inquiry.php:110 gl/view/gl_trans_view.php:44
 #: gl/includes/ui/gl_journal_ui.inc:113
 msgid "Counterparty"
-msgstr ""
+msgstr "المقابل"
 
 #: gl/inquiry/journal_inquiry.php:111 gl/inquiry/journal_inquiry.php:126
 #: purchasing/includes/ui/grn_ui.inc:34 purchasing/includes/ui/grn_ui.inc:77
@@ -4607,7 +4640,7 @@ msgstr ""
 #: purchasing/view/view_supp_invoice.php:48
 #: purchasing/inquiry/po_search_completed.php:114
 #: purchasing/inquiry/po_search.php:121
-#: purchasing/inquiry/supplier_inquiry.php:174
+#: purchasing/inquiry/supplier_inquiry.php:177
 #: reporting/includes/doctext.inc:163 reporting/includes/doctext.inc:186
 msgid "Supplier's Reference"
 msgstr "الإشارة المرجعية للمورد"
@@ -4626,7 +4659,7 @@ msgstr "القائمة المختصرة للأرباح و الخسائر"
 msgid "Accumulated"
 msgstr "تراكمي"
 
-#: gl/inquiry/profit_loss.php:31 reporting/rep707.php:255
+#: gl/inquiry/profit_loss.php:31 reporting/rep707.php:257
 #: reporting/includes/reports_classes.inc:249
 msgid "Period Y-1"
 msgstr "فترة السنة الأولى"
@@ -4691,6 +4724,7 @@ msgid ""
 "The GL account selected is already in use or has transactions. Select "
 "another empty GL account."
 msgstr ""
+"حساب غل المحدد قيد الاستخدام بالفعل أو لديه معاملات. حدد حساب غل فارغ آخر."
 
 #: gl/manage/bank_accounts.php:52
 msgid "Bank account has been updated"
@@ -4729,9 +4763,9 @@ msgstr "تم حذف الحساب البنكي المؤشر عليه"
 #: purchasing/inquiry/po_search.php:123
 #: purchasing/inquiry/supplier_allocation_inquiry.php:143
 #: purchasing/inquiry/supplier_allocation_inquiry.php:153
-#: purchasing/inquiry/supplier_inquiry.php:74
-#: purchasing/inquiry/supplier_inquiry.php:177
-#: purchasing/inquiry/supplier_inquiry.php:188
+#: purchasing/inquiry/supplier_inquiry.php:50
+#: purchasing/inquiry/supplier_inquiry.php:180
+#: purchasing/inquiry/supplier_inquiry.php:192
 #: purchasing/allocations/supplier_allocation_main.php:99
 #: purchasing/allocations/supplier_allocation_main.php:107
 #: reporting/rep101.php:142 reporting/rep102.php:129 reporting/rep102.php:135
@@ -4739,15 +4773,15 @@ msgstr "تم حذف الحساب البنكي المؤشر عليه"
 #: reporting/rep202.php:136 reporting/rep203.php:96 reporting/rep205.php:141
 #: sales/customer_credit_invoice.php:236 sales/customer_delivery.php:328
 #: sales/customer_invoice.php:455
-#: sales/allocations/customer_allocation_main.php:92
-#: sales/allocations/customer_allocation_main.php:100
+#: sales/allocations/customer_allocation_main.php:97
+#: sales/allocations/customer_allocation_main.php:105
 #: sales/view/view_credit.php:70 sales/view/view_dispatch.php:86
 #: sales/view/view_invoice.php:86
 #: sales/inquiry/customer_allocation_inquiry.php:153
 #: sales/inquiry/customer_allocation_inquiry.php:163
-#: sales/inquiry/customer_inquiry.php:76
-#: sales/inquiry/customer_inquiry.php:200
-#: sales/inquiry/customer_inquiry.php:212
+#: sales/inquiry/customer_inquiry.php:121
+#: sales/inquiry/customer_inquiry.php:201
+#: sales/inquiry/customer_inquiry.php:213
 #: sales/inquiry/sales_deliveries_view.php:178
 #: sales/inquiry/sales_orders_view.php:262
 #: sales/inquiry/sales_orders_view.php:276
@@ -4805,27 +4839,27 @@ msgstr "عنوان البنك :"
 
 #: gl/manage/close_period.php:25
 msgid "Closing GL Transactions"
-msgstr ""
+msgstr "إغلاق معاملات غل"
 
 #: gl/manage/close_period.php:40
 msgid "Selected date is not in fiscal year or the year is closed."
-msgstr ""
+msgstr "التاريخ المحدد ليس في السنة المالية أو السنة مغلقة."
 
 #: gl/manage/close_period.php:47
 msgid ""
 "The entered date is earlier than date already selected as closing date."
-msgstr ""
+msgstr "التاريخ الذي تم إدخاله أقدم من التاريخ المحدد بالفعل كتاريخ الإغلاق."
 
 #: gl/manage/close_period.php:51
 msgid "You are not allowed to reopen already closed transactions."
-msgstr ""
+msgstr "لا يسمح لك بإعادة فتح المعاملات المغلقة بالفعل."
 
 #: gl/manage/close_period.php:69
 #, php-format
 msgid ""
 "All transactions resulting in GL accounts changes up to %s has been closed "
 "for further edition."
-msgstr ""
+msgstr "تم إغلاق جميع المعاملات مما أدى إلى حسابات غل تصل إلى % ق لطبعة أخرى."
 
 #: gl/manage/close_period.php:88
 msgid ""
@@ -4833,14 +4867,17 @@ msgid ""
 "\tand disable edition of already entered transactions up to specified date.<br>\n"
 "\tOnly transactions which can generate GL postings are subject to the constraint."
 msgstr ""
+"باستخدام هذه الميزة، يمكنك منع إدخال معاملات جديدة <br> \n"
+" \\ تاند تعطيل إصدار المعاملات التي تم إدخالها بالفعل حتى تاريخ محدد. <br> \n"
+" \\ تونلي المعاملات التي يمكن أن تولد غل الوظائف تخضع للقيود."
 
 #: gl/manage/close_period.php:101
 msgid "End date of closing period:"
-msgstr ""
+msgstr "تاريخ انتهاء فترة الإقفال:"
 
 #: gl/manage/close_period.php:104
 msgid "Close Transactions"
-msgstr ""
+msgstr "إغلاق المعاملات"
 
 #: gl/manage/currencies.php:16 includes/access_levels.inc:244
 msgid "Currencies"
@@ -4975,7 +5012,7 @@ msgstr "سعر التبادل :"
 
 #: gl/manage/exchange_rates.php:143
 msgid "Get current rate from"
-msgstr ""
+msgstr "الحصول على معدل الحالي من"
 
 #: gl/manage/exchange_rates.php:149
 msgid "Exchange rates are entered against the company currency."
@@ -5096,7 +5133,7 @@ msgstr "تمت إضافة حساب جديد"
 
 #: gl/manage/gl_accounts.php:106
 msgid "Account not added, possible duplicate Account Code."
-msgstr ""
+msgstr "لم تتم إضافة الحساب، رمز الحساب المكرر المحتمل."
 
 #: gl/manage/gl_accounts.php:121
 msgid ""
@@ -5262,7 +5299,7 @@ msgstr "مجموعة فرعية من :"
 
 #: gl/manage/gl_account_types.php:191
 msgid "Class:"
-msgstr ""
+msgstr "صف دراسي:"
 
 #: gl/manage/gl_quick_entries.php:16
 msgid "Quick Entries"
@@ -5320,7 +5357,7 @@ msgstr "قيمة الأساس"
 
 #: gl/manage/gl_quick_entries.php:190 gl/manage/gl_quick_entries.php:231
 msgid "Usage"
-msgstr ""
+msgstr "استعمال"
 
 #: gl/manage/gl_quick_entries.php:233
 msgid "Entry Type"
@@ -5367,7 +5404,7 @@ msgstr "الجزء"
 
 #: gl/manage/gl_quick_entries.php:350
 msgid "Line memo"
-msgstr ""
+msgstr "خط المذكرة"
 
 #: gl/manage/revaluate_currencies.php:23
 msgid "Revaluation of Currency Accounts"
@@ -5442,11 +5479,11 @@ msgstr "من"
 
 #: gl/view/gl_deposit_view.php:74 gl/view/gl_payment_view.php:72
 msgid "Settle currency"
-msgstr ""
+msgstr "تسوية العملة"
 
 #: gl/view/gl_deposit_view.php:75 gl/view/gl_payment_view.php:73
 msgid "Settled amount"
-msgstr ""
+msgstr "مبلغ مستقر"
 
 #: gl/view/gl_deposit_view.php:77
 msgid "Deposit Type"
@@ -5466,7 +5503,7 @@ msgstr "بنود الإيداع الحالي"
 
 #: gl/view/gl_deposit_view.php:99 gl/view/gl_payment_view.php:97
 msgid "Item Amounts are Shown in:"
-msgstr ""
+msgstr "البند المبالغ المعروضة في:"
 
 #: gl/view/gl_deposit_view.php:104 gl/view/gl_deposit_view.php:107
 #: gl/view/gl_deposit_view.php:110 gl/view/gl_payment_view.php:103
@@ -5512,35 +5549,35 @@ msgstr "تفاصيل حركات الأستاذ العام"
 
 #: gl/view/gl_trans_view.php:39
 msgid "Transaction Date"
-msgstr ""
+msgstr "تاريخ الصفقة"
 
 #: gl/view/gl_trans_view.php:39
 msgid "Journal #"
-msgstr ""
+msgstr "مجلة #"
 
 #: gl/view/gl_trans_view.php:42
 msgid "Document Date"
-msgstr ""
+msgstr "تاريخ المستند"
 
 #: gl/view/gl_trans_view.php:42
 msgid "Event Date"
-msgstr ""
+msgstr "تاريخ الحدث"
 
 #: gl/view/gl_trans_view.php:48
 msgid "Supplier Reference"
-msgstr ""
+msgstr "المورد المرجعية"
 
 #: gl/view/gl_trans_view.php:70
 msgid "Entered By"
-msgstr ""
+msgstr "تم إدخالها بواسطة"
 
 #: gl/view/gl_trans_view.php:75
 msgid "Exchange rate"
-msgstr ""
+msgstr "سعر الصرف"
 
 #: gl/view/gl_trans_view.php:76
 msgid "Source document"
-msgstr ""
+msgstr "مصدر وثائق"
 
 #: gl/view/gl_trans_view.php:86
 msgid "No general ledger transactions have been created for"
@@ -5553,7 +5590,7 @@ msgstr "الرقم"
 #: gl/view/gl_trans_view.php:95 gl/view/gl_trans_view.php:98
 #: gl/view/gl_trans_view.php:101
 msgid "Journal Date"
-msgstr ""
+msgstr "تاريخ المجلة"
 
 #: gl/view/gl_trans_view.php:158
 msgid "This transaction has been voided."
@@ -5581,7 +5618,7 @@ msgstr "تم أعادة إدخال المستند"
 #: gl/includes/db/gl_db_trans.inc:97 includes/ui/items_cart.inc:359
 #, php-format
 msgid "Rounding error %s encountered for trans_type:%s,trans_no:%s"
-msgstr ""
+msgstr "حدث خطأ تقريب %s ل trans_type: %s، trans_no: %s"
 
 #: gl/includes/ui/gl_bank_ui.inc:24
 #: inventory/includes/item_adjustments_ui.inc:35
@@ -5589,7 +5626,7 @@ msgstr ""
 #: manufacturing/work_order_add_finished.php:186
 #: manufacturing/work_order_costs.php:133
 #: purchasing/allocations/supplier_allocate.php:56
-#: sales/allocations/customer_allocate.php:54
+#: sales/allocations/customer_allocate.php:59
 #: sales/includes/ui/sales_credit_ui.inc:117
 msgid "Date:"
 msgstr "التاريخ :"
@@ -5636,7 +5673,7 @@ msgstr "أذهب"
 
 #: gl/includes/ui/gl_bank_ui.inc:114
 msgid "Into:"
-msgstr ""
+msgstr "إلى:"
 
 #: gl/includes/ui/gl_bank_ui.inc:180 includes/ui/class.crud_view.inc:281
 #: includes/ui/simple_crud_class.inc:52
@@ -5706,15 +5743,15 @@ msgstr "إضافة بند جديد للمستند"
 
 #: gl/includes/ui/gl_bank_ui.inc:299
 msgid "Settled AR Amount:"
-msgstr ""
+msgstr "استقر أر المبلغ:"
 
 #: gl/includes/ui/gl_bank_ui.inc:299
 msgid "Settled AP Amount:"
-msgstr ""
+msgstr "مبلغ أب المستقر:"
 
 #: gl/includes/ui/gl_journal_ui.inc:26
 msgid "Journal Date:"
-msgstr ""
+msgstr "جورنال ديت:"
 
 #: gl/includes/ui/gl_journal_ui.inc:33 inventory/prices.php:193
 msgid "Currency:"
@@ -5722,15 +5759,15 @@ msgstr "العملة :"
 
 #: gl/includes/ui/gl_journal_ui.inc:43
 msgid "Document Date:"
-msgstr ""
+msgstr "تاريخ المستند:"
 
 #: gl/includes/ui/gl_journal_ui.inc:44
 msgid "Event Date:"
-msgstr ""
+msgstr "تاريخ الحدث:"
 
 #: gl/includes/ui/gl_journal_ui.inc:45
 msgid "Source ref:"
-msgstr ""
+msgstr "مرجع المصدر:"
 
 #: gl/includes/ui/gl_journal_ui.inc:57 includes/sysnames.inc:103
 msgid "Quick Entry"
@@ -5742,11 +5779,11 @@ msgstr "الرصيد من حساب"
 
 #: gl/includes/ui/gl_journal_ui.inc:74
 msgid "Additional info:"
-msgstr ""
+msgstr "معلومات إضافية:"
 
 #: gl/includes/ui/gl_journal_ui.inc:81
 msgid "Include in tax register:"
-msgstr ""
+msgstr "تضمين في السجل الضريبي:"
 
 #: gl/includes/ui/gl_journal_ui.inc:151
 msgid "Edit journal line"
@@ -5758,7 +5795,7 @@ msgstr "حذف سجل من سند قيد اليومية"
 
 #: gl/includes/ui/gl_journal_ui.inc:216 gl/includes/ui/gl_journal_ui.inc:234
 msgid "[Select account]"
-msgstr ""
+msgstr "[سيليكت أكونت]"
 
 #: gl/includes/ui/gl_journal_ui.inc:275
 msgid "Add new line to journal"
@@ -5814,15 +5851,15 @@ msgstr "تحليلات المخزون"
 
 #: includes/access_levels.inc:72
 msgid "Fixed Assets configuration"
-msgstr ""
+msgstr "تكوين الأصول الثابتة"
 
 #: includes/access_levels.inc:73
 msgid "Fixed Assets operations"
-msgstr ""
+msgstr "عمليات الأصول الثابتة"
 
 #: includes/access_levels.inc:74
 msgid "Fixed Assets analytics"
-msgstr ""
+msgstr "تحليلات الأصول الثابتة"
 
 #: includes/access_levels.inc:75
 msgid "Manufacturing configuration"
@@ -5955,7 +5992,7 @@ msgstr "تغييرات كلمة المرور"
 
 #: includes/access_levels.inc:130
 msgid "Edit other users transactions"
-msgstr ""
+msgstr "تعديل المعاملات الأخرى للمستخدمين"
 
 #: includes/access_levels.inc:134
 msgid "Sales types"
@@ -6155,35 +6192,35 @@ msgstr "تقرير تقييم المخزون"
 
 #: includes/access_levels.inc:200
 msgid "Fixed Asset items add/edit"
-msgstr ""
+msgstr "بنود الأصول الثابتة إضافة / تحرير"
 
 #: includes/access_levels.inc:201
 msgid "Fixed Asset categories"
-msgstr ""
+msgstr "فئات الأصول الثابتة"
 
 #: includes/access_levels.inc:202
 msgid "Fixed Asset classes"
-msgstr ""
+msgstr "فئات الأصول الثابتة"
 
 #: includes/access_levels.inc:204
 msgid "Fixed Asset transactions view"
-msgstr ""
+msgstr "عرض الأصول الثابتة عرض"
 
 #: includes/access_levels.inc:205
 msgid "Fixed Asset location transfers"
-msgstr ""
+msgstr "نقل الأصول الثابتة"
 
 #: includes/access_levels.inc:206
 msgid "Fixed Asset disposals"
-msgstr ""
+msgstr "استبعاد الأصول الثابتة"
 
 #: includes/access_levels.inc:207 inventory/manage/items.php:411
 msgid "Depreciation"
-msgstr ""
+msgstr "الاستهلاك"
 
 #: includes/access_levels.inc:209
 msgid "Fixed Asset analytical reports and inquiries"
-msgstr ""
+msgstr "تقارير وتحليلات الأصول الثابتة التحليلية"
 
 #: includes/access_levels.inc:214
 msgid "Bill of Materials"
@@ -6287,11 +6324,11 @@ msgstr "الكلمات الدلالية لحساب الأستاذ العام"
 
 #: includes/access_levels.inc:251
 msgid "Closing GL transactions"
-msgstr ""
+msgstr "إغلاق المعاملات غل"
 
 #: includes/access_levels.inc:252
 msgid "Reopening GL transactions"
-msgstr ""
+msgstr "إعادة فتح معاملات غل"
 
 #: includes/access_levels.inc:253
 msgid "Allow entry on non closed Fiscal years"
@@ -6385,7 +6422,7 @@ msgstr "النظام متاح لمدير الموقع فقط حتى يتم تر�
 
 #: includes/current_user.inc:162
 msgid "New password for"
-msgstr ""
+msgstr "كلمة مرور جديدة ل"
 
 #: includes/current_user.inc:616
 msgid "Requesting data..."
@@ -6403,13 +6440,13 @@ msgstr "طلب بيانات ..."
 #: sales/create_recurrent_invoices.php:203
 #: sales/customer_credit_invoice.php:234 sales/customer_delivery.php:326
 #: sales/customer_invoice.php:431
-#: sales/allocations/customer_allocation_main.php:91
-#: sales/allocations/customer_allocation_main.php:99
+#: sales/allocations/customer_allocation_main.php:96
+#: sales/allocations/customer_allocation_main.php:104
 #: sales/manage/recurrent_invoices.php:128 sales/view/view_credit.php:47
 #: sales/inquiry/customer_allocation_inquiry.php:152
 #: sales/inquiry/customer_allocation_inquiry.php:162
-#: sales/inquiry/customer_inquiry.php:198
-#: sales/inquiry/customer_inquiry.php:211 sales/inquiry/customers_list.php:41
+#: sales/inquiry/customer_inquiry.php:199
+#: sales/inquiry/customer_inquiry.php:212 sales/inquiry/customers_list.php:41
 #: sales/inquiry/customers_list.php:54
 #: sales/inquiry/sales_deliveries_view.php:169
 #: sales/inquiry/sales_orders_view.php:254
@@ -6437,8 +6474,8 @@ msgstr "المبيعات"
 #: purchasing/inquiry/po_search.php:119
 #: purchasing/inquiry/supplier_allocation_inquiry.php:139
 #: purchasing/inquiry/supplier_allocation_inquiry.php:152
-#: purchasing/inquiry/supplier_inquiry.php:173
-#: purchasing/inquiry/supplier_inquiry.php:187
+#: purchasing/inquiry/supplier_inquiry.php:176
+#: purchasing/inquiry/supplier_inquiry.php:191
 #: purchasing/inquiry/suppliers_list.php:41
 #: purchasing/inquiry/suppliers_list.php:53
 #: purchasing/allocations/supplier_allocation_main.php:98
@@ -6454,7 +6491,7 @@ msgstr "المورد"
 
 #: includes/dashboard.inc:103
 msgid "Purchase"
-msgstr ""
+msgstr "شراء"
 
 #: includes/dashboard.inc:120 includes/dashboard.inc:165
 #: includes/ui/ui_controls.inc:512 includes/ui/ui_controls.inc:514
@@ -6472,7 +6509,7 @@ msgstr "تكاليف"
 
 #: includes/dashboard.inc:134
 msgid "Performance"
-msgstr ""
+msgstr "أداء"
 
 #: includes/dashboard.inc:162
 msgid "Purchases"
@@ -6481,27 +6518,27 @@ msgstr "المشتريات"
 #: includes/dashboard.inc:187
 #, php-format
 msgid "Top %s customers in fiscal year"
-msgstr ""
+msgstr "أعلى %s العملاء في السنة المالية"
 
 #: includes/dashboard.inc:224
 #, php-format
 msgid "Top %s suppliers in fiscal year"
-msgstr ""
+msgstr "أعلى %s الموردين في السنة المالية"
 
 #: includes/dashboard.inc:285
 #, php-format
 msgid "Top %s Manufactured Items in fiscal year"
-msgstr ""
+msgstr "أعلى %s البنود المصنعة في السنة المالية"
 
 #: includes/dashboard.inc:287
 #, php-format
 msgid "Top %s Fixed Assets"
-msgstr ""
+msgstr "أعلى %s الأصول الثابتة"
 
 #: includes/dashboard.inc:289
 #, php-format
 msgid "Top %s Sold Items in fiscal year"
-msgstr ""
+msgstr "أعلى %s تباع البنود في السنة المالية"
 
 #: includes/dashboard.inc:292 includes/dashboard.inc:294
 #: manufacturing/search_work_orders.php:161
@@ -6541,23 +6578,23 @@ msgstr "الكمية "
 #: includes/dashboard.inc:334
 #, php-format
 msgid "Top %s Dimensions in fiscal year"
-msgstr ""
+msgstr "أعلى %s الأبعاد في السنة المالية"
 
 #: includes/dashboard.inc:372
 msgid "Class Balances"
-msgstr ""
+msgstr "أرصدة الدرجة"
 
 #: includes/dashboard.inc:438
 msgid "Week"
-msgstr ""
+msgstr "أسبوع"
 
 #: includes/dashboard.inc:484
 msgid " overdue Sales Invoices"
-msgstr ""
+msgstr " فاتورة المبيعات المتأخرة"
 
 #: includes/dashboard.inc:486 includes/dashboard.inc:571
 msgid "Ref."
-msgstr ""
+msgstr "المرجع."
 
 #: includes/dashboard.inc:486 includes/dashboard.inc:526
 #: reporting/rep105.php:109 reporting/rep106.php:89 reporting/rep112.php:180
@@ -6567,7 +6604,7 @@ msgstr ""
 #: sales/manage/customers.php:295 sales/manage/recurrent_invoices.php:128
 #: sales/view/view_credit.php:58 sales/inquiry/customer_branches_list.php:37
 #: sales/inquiry/customer_branches_list.php:49
-#: sales/inquiry/customer_inquiry.php:199
+#: sales/inquiry/customer_inquiry.php:200
 #: sales/inquiry/sales_deliveries_view.php:171
 #: sales/inquiry/sales_orders_view.php:255
 #: sales/inquiry/sales_orders_view.php:269
@@ -6580,23 +6617,24 @@ msgid "Remainder"
 msgstr "راكد"
 
 #: includes/dashboard.inc:487 includes/dashboard.inc:572
-#: purchasing/inquiry/supplier_inquiry.php:68
-#: purchasing/inquiry/supplier_inquiry.php:69
-#: purchasing/inquiry/supplier_inquiry.php:70 reporting/rep102.php:116
+#: purchasing/inquiry/supplier_inquiry.php:44
+#: purchasing/inquiry/supplier_inquiry.php:45
+#: purchasing/inquiry/supplier_inquiry.php:46 reporting/rep102.php:116
 #: reporting/rep102.php:117 reporting/rep102.php:118 reporting/rep102.php:241
-#: reporting/rep108.php:150 reporting/rep108.php:151 reporting/rep108.php:152
+#: reporting/rep108.php:151 reporting/rep108.php:152 reporting/rep108.php:153
 #: reporting/rep202.php:122 reporting/rep202.php:123 reporting/rep202.php:124
 #: reporting/rep202.php:156 reporting/rep202.php:157 reporting/rep202.php:158
 #: reporting/rep202.php:249 sales/create_recurrent_invoices.php:203
 #: sales/manage/recurrent_invoices.php:128
-#: sales/inquiry/customer_inquiry.php:71 sales/inquiry/customer_inquiry.php:72
-#: sales/inquiry/customer_inquiry.php:73
+#: sales/inquiry/customer_inquiry.php:116
+#: sales/inquiry/customer_inquiry.php:117
+#: sales/inquiry/customer_inquiry.php:118
 msgid "Days"
 msgstr "الأيام"
 
 #: includes/dashboard.inc:524
 msgid "Overdue Recurrent Invoices"
-msgstr ""
+msgstr "الفواتير المتكررة المتأخرة"
 
 #: includes/dashboard.inc:526 sales/create_recurrent_invoices.php:203
 #: sales/manage/recurrent_invoices.php:128
@@ -6605,28 +6643,30 @@ msgstr "رقم النموذج"
 
 #: includes/dashboard.inc:526 sales/create_recurrent_invoices.php:203
 msgid "Next invoice"
-msgstr ""
+msgstr "الفاتورة التالية"
 
 #: includes/dashboard.inc:569
 msgid " overdue Purchase Invoices"
-msgstr ""
+msgstr " فاتورة الشراء المتأخرة"
 
 #: includes/dashboard.inc:604
 msgid "Bank Account Balances"
-msgstr ""
+msgstr "أرصدة الحسابات المصرفية"
 
 #: includes/data_checks.inc:612
 #, php-format
 msgid "%s #%s is closed for further edition."
-msgstr ""
+msgstr "%s #%s مغلق للإصدار الجديد."
 
 #: includes/data_checks.inc:654
 msgid "You have no edit access to transactions created by other users."
 msgstr ""
+"ليس لديك أي حق الوصول للتعديل إلى المعاملات التي تم إنشاؤها بواسطة مستخدمين "
+"آخرين."
 
 #: includes/data_checks.inc:669
 msgid "The entered reference is invalid."
-msgstr ""
+msgstr "الإشارة المدخلة غير صالحة."
 
 #: includes/data_checks.inc:673 sales/credit_note_entry.php:181
 #: sales/customer_credit_invoice.php:204 sales/customer_delivery.php:298
@@ -6668,27 +6708,35 @@ msgstr "لا يوجد حقل مفتاحي '%s' في الملف '%s'"
 
 #: includes/packages.inc:294
 msgid "Cannot download repo index file."
-msgstr ""
+msgstr "يتعذر تنزيل ملف فهرس إعادة التصدير."
 
-#: includes/packages.inc:306 includes/packages.inc:343
+#: includes/packages.inc:303 includes/system_tests.inc:398
+msgid ""
+"OpenSSL have to be available on your server to use extension repository "
+"system."
+msgstr ""
+"OpenSSL يجب أن يكون متاح على الخادم حتى يمكنك أستخدام مستودع الإضافات "
+"البرمجية للنظام"
+
+#: includes/packages.inc:310 includes/packages.inc:347
 #, php-format
 msgid "Cannot delete outdated '%s' file."
 msgstr "لا يمكن حذف الملف القديم  %s"
 
-#: includes/packages.inc:310
+#: includes/packages.inc:314
 msgid "Release file in repository is invalid, or public key is outdated."
 msgstr "ملف الإصدار الموجود في المستودع غير صالح أو أن المفتاح العام غير محدث"
 
-#: includes/packages.inc:327
+#: includes/packages.inc:331
 msgid "Repository version does not match application version."
 msgstr "الإصدار الموجود في المستودع لا يتطابق مع ال"
 
-#: includes/packages.inc:335 includes/packages.inc:377
+#: includes/packages.inc:339 includes/packages.inc:381
 #, php-format
 msgid "Cannot download '%s' file."
-msgstr ""
+msgstr "يتعذر تنزيل الملف '%s'."
 
-#: includes/packages.inc:347
+#: includes/packages.inc:351
 #, php-format
 msgid ""
 "Security alert: broken index file in repository '%s'. Please inform "
@@ -6697,7 +6745,7 @@ msgstr ""
 "تحذير أمني : ملف فهرس غير صالح في المستودع '%s' الرجاء إبلاغ مدير المستودع "
 "عن هذه المشكلة"
 
-#: includes/packages.inc:383
+#: includes/packages.inc:387
 #, php-format
 msgid ""
 "Security alert: broken package '%s' in repository. Please inform repository "
@@ -6706,23 +6754,23 @@ msgstr ""
 "تحذير أمني : إضافة برمجية غير صالحة '%s' في المستودع الرجاء إبلاغ مدير "
 "المستودع عن هذه المشكلة"
 
-#: includes/packages.inc:641 includes/packages.inc:696
+#: includes/packages.inc:645 includes/packages.inc:700
 #, php-format
 msgid "Package '%s' not found."
-msgstr "الإضافة البرمجية غير موجودة  %s"
+msgstr "لم يتم العثور على الحزمة '%s'."
 
 #: includes/references.inc:103
 msgid "Invalid refline template."
-msgstr ""
+msgstr "نموذج إعادة توجيه غير صالح."
 
 #: includes/references.inc:113
 #, php-format
 msgid "Missing refline context data: '%s'"
-msgstr ""
+msgstr "بيانات سياق الخط المفقود: '%s'"
 
 #: includes/references.inc:156
 msgid "Missing numeric placeholder in refline definition."
-msgstr ""
+msgstr "العنصر النائب الرقمي مفقود في تعريف الخط."
 
 #: includes/session.inc:136
 msgid "Incorrect Password"
@@ -6746,30 +6794,32 @@ msgstr "حاول مرة أخرى "
 
 #: includes/session.inc:151
 msgid "Incorrect Email"
-msgstr ""
+msgstr "غير صحيح البريد الإلكتروني"
 
 #: includes/session.inc:152
 msgid ""
 "The email address does not exist in the system, or is used by more than one "
 "user."
 msgstr ""
+"عنوان البريد الإلكتروني غير موجود في النظام، أو يستخدمه أكثر من مستخدم واحد."
 
 #: includes/session.inc:154
 msgid ""
 "Plase try again or contact your system administrator to obtain new password."
 msgstr ""
+"الرجاء إعادة المحاولة أو الاتصال بمشرف النظام للحصول على كلمة مرور جديدة."
 
 #: includes/session.inc:166
 msgid "New password sent"
-msgstr ""
+msgstr "تم إرسال كلمة مرور جديدة"
 
 #: includes/session.inc:167
 msgid "A new password has been sent to your mailbox."
-msgstr ""
+msgstr "تم إرسال كلمة مرور جديدة إلى صندوق البريد."
 
 #: includes/session.inc:169
 msgid "Login here"
-msgstr ""
+msgstr "تسجيل الدخول هنا"
 
 #: includes/session.inc:219
 #, php-format
@@ -6777,6 +6827,8 @@ msgid ""
 "Brute force attack on account '%s' detected. Access for non-logged users "
 "temporarily blocked."
 msgstr ""
+"هجوم القوة الغاشمة على حساب '%s' الكشف عن. تم حظ%خول المستخدمين غير المسجلين"
+" مؤقتا."
 
 #: includes/session.inc:251
 msgid "Security settings have not been defined for your user account."
@@ -6891,7 +6943,7 @@ msgstr "إنتاج أمر التشغيل"
 msgid "Sales Order"
 msgstr "طلب المبيعات"
 
-#: includes/sysnames.inc:41 sales/sales_order_entry.php:656
+#: includes/sysnames.inc:41 sales/sales_order_entry.php:655
 msgid "Sales Quotation"
 msgstr "خطاب تسعير مبيعات"
 
@@ -6901,11 +6953,11 @@ msgstr "تحديث التكلفة"
 
 #: includes/sysnames.inc:47 inventory/adjustments.php:32
 msgid "Fixed Assets Disposal"
-msgstr ""
+msgstr "التخلص من الأصول الثابتة"
 
 #: includes/sysnames.inc:48
 msgid "Fixed Assets Revaluation"
-msgstr ""
+msgstr "إعادة تقييم الأصول الثابتة"
 
 #: includes/sysnames.inc:52
 msgid "GJ"
@@ -6989,7 +7041,7 @@ msgstr "SQ"
 
 #: includes/sysnames.inc:72
 msgid "CU"
-msgstr "SU"
+msgstr "CU"
 
 #: includes/sysnames.inc:73
 msgid "Dim"
@@ -7045,7 +7097,7 @@ msgstr "تكلفة الأعباء الإضافية"
 
 #: includes/sysnames.inc:118
 msgid "Materials"
-msgstr ""
+msgstr "المواد"
 
 #: includes/sysnames.inc:125
 msgid "Assets"
@@ -7117,19 +7169,19 @@ msgstr "فاتورة / أشعار دائن المورد"
 
 #: includes/sysnames.inc:162
 msgid "Declining balance"
-msgstr ""
+msgstr "الرصيد المتناقص"
 
 #: includes/sysnames.inc:163
 msgid "Straight line"
-msgstr ""
+msgstr "خط مستقيم"
 
 #: includes/sysnames.inc:164
 msgid "Sum of the Year Digits"
-msgstr ""
+msgstr "مجموع أرقام السنة"
 
 #: includes/sysnames.inc:165
 msgid "One-time"
-msgstr ""
+msgstr "مره واحده"
 
 #: includes/sysnames.inc:171 manufacturing/search_work_orders.php:163
 #: manufacturing/includes/manufacturing_ui.inc:293 reporting/rep402.php:103
@@ -7170,27 +7222,27 @@ msgstr "الأيام أو اليوم من الشهر التالي"
 
 #: includes/sysnames.inc:201
 msgid "Sum per line taxes"
-msgstr ""
+msgstr "المبلغ الإجمالي للضرائب على الخط"
 
 #: includes/sysnames.inc:202
 msgid "Taxes from totals"
-msgstr ""
+msgstr "الضرائب من المجاميع"
 
 #: includes/sysnames.inc:214
 msgid "Jan"
-msgstr ""
+msgstr "يناير"
 
 #: includes/sysnames.inc:214
 msgid "Feb"
-msgstr ""
+msgstr "فبراير"
 
 #: includes/sysnames.inc:214
 msgid "Mar"
-msgstr ""
+msgstr "مارس"
 
 #: includes/sysnames.inc:214
 msgid "Apr"
-msgstr ""
+msgstr "أبريل"
 
 #: includes/sysnames.inc:214 includes/ui/ui_view.inc:982
 msgid "May"
@@ -7198,107 +7250,107 @@ msgstr "مايو"
 
 #: includes/sysnames.inc:214
 msgid "Jun"
-msgstr ""
+msgstr "يونيو"
 
 #: includes/sysnames.inc:214
 msgid "Jul"
-msgstr ""
+msgstr "يوليو"
 
 #: includes/sysnames.inc:214
 msgid "Aug"
-msgstr ""
+msgstr "أغسطس"
 
 #: includes/sysnames.inc:214
 msgid "Sep"
-msgstr ""
+msgstr "سبتمبر"
 
 #: includes/sysnames.inc:214
 msgid "Oct"
-msgstr ""
+msgstr "أكتوبر"
 
 #: includes/sysnames.inc:214
 msgid "Nov"
-msgstr ""
+msgstr "نوفمبر"
 
 #: includes/sysnames.inc:214
 msgid "Dec"
-msgstr ""
+msgstr "ديسمبر"
 
 #: includes/sysnames.inc:220
 msgid "Unicode (multilanguage)"
-msgstr ""
+msgstr "ونيكود (متعدد اللغات)"
 
 #: includes/sysnames.inc:221
 msgid "Icelandic"
-msgstr ""
+msgstr "أيسلندي"
 
 #: includes/sysnames.inc:222
 msgid "Latvian"
-msgstr ""
+msgstr "اللاتفية"
 
 #: includes/sysnames.inc:223
 msgid "Romanian"
-msgstr ""
+msgstr "روماني"
 
 #: includes/sysnames.inc:224
 msgid "Slovenian"
-msgstr ""
+msgstr "سلوفيني"
 
 #: includes/sysnames.inc:225
 msgid "Polish"
-msgstr ""
+msgstr "البولندي"
 
 #: includes/sysnames.inc:226
 msgid "Estonian"
-msgstr ""
+msgstr "الإستونية"
 
 #: includes/sysnames.inc:227
 msgid "Spanish"
-msgstr ""
+msgstr "الأسبانية"
 
 #: includes/sysnames.inc:228
 msgid "Swedish"
-msgstr ""
+msgstr "اللغة السويدية"
 
 #: includes/sysnames.inc:229
 msgid "Turkish"
-msgstr ""
+msgstr "اللغة التركية"
 
 #: includes/sysnames.inc:230
 msgid "Czech"
-msgstr ""
+msgstr "تشيكي"
 
 #: includes/sysnames.inc:231
 msgid "Danish"
-msgstr ""
+msgstr "دانماركي"
 
 #: includes/sysnames.inc:232
 msgid "Lithuanian"
-msgstr ""
+msgstr "اللتوانية"
 
 #: includes/sysnames.inc:233
 msgid "Slovak"
-msgstr ""
+msgstr "السلوفاكية"
 
 #: includes/sysnames.inc:234
 msgid "Spanish (alternative)"
-msgstr ""
+msgstr "الإسبانية (البديلة)"
 
 #: includes/sysnames.inc:235
 msgid "Persian"
-msgstr ""
+msgstr "اللغة الفارسية"
 
 #: includes/sysnames.inc:236
 msgid "Hungarian"
-msgstr ""
+msgstr "الهنغارية"
 
 #: includes/sysnames.inc:237
 msgid "French"
-msgstr ""
+msgstr "الفرنسية"
 
 #: includes/sysnames.inc:238
 msgid "Italian"
-msgstr ""
+msgstr "الإيطالي"
 
 #: includes/system_tests.inc:15 includes/ui/ui_view.inc:210
 #: reporting/rep705.php:251 reporting/rep705.php:262 reporting/rep705.php:271
@@ -7339,7 +7391,7 @@ msgstr "إصدار PHP"
 
 #: includes/system_tests.inc:50
 msgid "Upgrade PHP to version at least 5.0.0"
-msgstr ""
+msgstr "ترقية فب إلى الإصدار 5.0.0 على الأقل"
 
 #: includes/system_tests.inc:57
 msgid "Server system"
@@ -7507,14 +7559,6 @@ msgstr ""
 "نظام الروابط البرمجية OpenSSL لـ PHP يجب أن يكون مفعل لأستخدام مستودع "
 "الإضافات البرمجية للنظام"
 
-#: includes/system_tests.inc:398
-msgid ""
-"OpenSSL have to be available on your server to use extension repository "
-"system."
-msgstr ""
-"OpenSSL يجب أن يكون متاح على الخادم حتى يمكنك أستخدام مستودع الإضافات "
-"البرمجية للنظام"
-
 #: includes/system_tests.inc:421
 msgid "Test"
 msgstr "الأختبار"
@@ -7558,7 +7602,7 @@ msgstr "القيمة"
 #: reporting/reports_main.php:502 reporting/reports_main.php:510
 #: reporting/reports_main.php:518 reporting/includes/excel_report.inc:292
 #: reporting/includes/excel_report.inc:425
-#: reporting/includes/pdf_report.inc:347 reporting/includes/pdf_report.inc:608
+#: reporting/includes/pdf_report.inc:358 reporting/includes/pdf_report.inc:619
 #: sales/view/view_sales_order.php:98
 msgid "Comments"
 msgstr "ملاحظات"
@@ -7577,87 +7621,88 @@ msgstr ""
 
 #: includes/db/class.data_set.inc:77
 msgid "Invalid validator string"
-msgstr ""
+msgstr "سلسلة أداة مصادقة غير صالحة"
 
 #: includes/db/class.data_set.inc:113
 #, php-format
 msgid "Input parameter '%s' have to be set."
-msgstr ""
+msgstr "يجب تعيين معلمة الإدخال '%s'."
 
 #: includes/db/class.data_set.inc:121
 #, php-format
 msgid "Parameter '%s' cannot be empty."
-msgstr ""
+msgstr "لا يمكن أن تكون المعلمة '%s' فارغة."
 
 #: includes/db/class.data_set.inc:128
 #, php-format
 msgid "Parameter '%s' contains invalid characters."
-msgstr ""
+msgstr "تحتوي المعلمة '%s' على أحرف غير صالحة."
 
 #: includes/db/class.data_set.inc:134
 #, php-format
 msgid "Parameter '%s' has invalid value."
-msgstr ""
+msgstr "المعلمة '%s' لها قيمة غير صالحة."
 
 #: includes/db/class.data_set.inc:277
 #, php-format
 msgid "Invalid key passed reading '%s'"
-msgstr ""
+msgstr "تمرير المفتاح غير صالح '%s'"
 
 #: includes/db/class.data_set.inc:329
 msgid "Empty update data for table "
-msgstr ""
+msgstr "بيانات التحديث الفارغة للجدول"
 
 #: includes/db/class.data_set.inc:339 includes/db/class.data_set.inc:368
 #, php-format
 msgid "Invalid key for update '%s'"
-msgstr ""
+msgstr "مفتاح غير صالح للتحديث '%s'"
 
 #: includes/db/class.data_set.inc:376
 msgid "Cannot update record in "
-msgstr ""
+msgstr "لا يمكن تحديث السجل في"
 
 #: includes/db/class.data_set.inc:395
 msgid "Empty data set for insertion into "
-msgstr ""
+msgstr "مجموعة بيانات فارغة للإدراج في"
 
 #: includes/db/class.data_set.inc:401
 msgid "Cannot insert record into "
-msgstr ""
+msgstr "لا يمكن إدراج سجل في"
 
 #: includes/db/class.data_set.inc:482
 msgid "Empty update data for array "
-msgstr ""
+msgstr "بيانات التحديث الفارغة للمصفوفة"
 
 #: includes/db/class.data_set.inc:510
 msgid "Empty data for array "
-msgstr ""
+msgstr "بيانات فارغة للمصفوفة"
 
 #: includes/db/class.reflines_db.inc:22
 msgid ""
 "This prefix conflicts with another one already defined. Prefix have to be "
 "unambigous."
 msgstr ""
+"تتعارض هذه البادئة مع تعريف آخر بالفعل. يجب أن تكون البادئة غير واضحة."
 
 #: includes/db/class.reflines_db.inc:23
 msgid "Invalid template format."
-msgstr ""
+msgstr "تنسيق قالب غير صالح."
 
 #: includes/db/class.reflines_db.inc:24
 msgid "Transaction type cannot be empty."
-msgstr ""
+msgstr "لا يمكن أن يكون نوع المعاملة فارغا."
 
 #: includes/db/class.reflines_db.inc:25
 msgid "Next reference cannot be empty."
-msgstr ""
+msgstr "المرجع التالي لا يمكن أن يكون فارغا."
 
 #: includes/db/class.reflines_db.inc:50
 msgid "You cannot use placeholders in refline prefix."
-msgstr ""
+msgstr "لا يمكنك استخدام العناصر النائبة في بادئة ريفلين."
 
 #: includes/db/class.reflines_db.inc:53
 msgid "Curly brackets does not balance."
-msgstr ""
+msgstr "أقواس مجعد لا توازن."
 
 #: includes/db/class.reflines_db.inc:67
 #, php-format
@@ -7665,21 +7710,25 @@ msgid ""
 "Invalid placeholder '%s'. Placeholders allowed for this transaction type "
 "are: %s."
 msgstr ""
+"عنصر نائب غير صالح '%s'. العناصر النائبة المسموح بها لنوع المعاملة هذا هي: "
+"%s."
 
 #: includes/db/class.reflines_db.inc:73
 msgid ""
 "Missing numeric placeholder. If you want to use template based references, "
 "you have to define numeric placeholder too."
 msgstr ""
+"عنصر نائب رقمي مفقود. إذا كنت ترغب في استخدام مراجع تستند إلى قالب، يجب عليك"
+" تحديد العنصر النائب الرقمي أيضا."
 
 #: includes/db/class.reflines_db.inc:99
 msgid ""
 "Reference line which is default for any transaction type cannot be deleted."
-msgstr ""
+msgstr "لا يمكن حذف السطر المرجعي الذي هو افتراضي لأي نوع من المعاملات."
 
 #: includes/db/class.reflines_db.inc:102
 msgid "Reference line cannot be deleted because it is already in use."
-msgstr ""
+msgstr "لا يمكن حذف السطر المرجعي لأنه قيد الاستخدام بالفعل."
 
 #: includes/db/inventory_db.inc:321
 msgid "Cost was "
@@ -7700,17 +7749,17 @@ msgstr "إدارة المخزون ذو الأرصدة الصفرية أو الأ
 #: includes/ui/allocation_cart.inc:288
 #, php-format
 msgid "Allocated amounts in %s:"
-msgstr ""
+msgstr "المبالغ المخصصة في %s:"
 
 #: includes/ui/allocation_cart.inc:290
 #: purchasing/allocations/supplier_allocation_main.php:94
-#: sales/allocations/customer_allocation_main.php:87
+#: sales/allocations/customer_allocation_main.php:92
 msgid "Transaction Type"
 msgstr "نوع الحركة"
 
 #: includes/ui/allocation_cart.inc:290
 msgid "Supplier Ref"
-msgstr ""
+msgstr "المورد المرجع"
 
 #: includes/ui/allocation_cart.inc:290 reporting/rep704.php:82
 #: reporting/rep704.php:85 reporting/rep704.php:88 reporting/rep709.php:116
@@ -7732,7 +7781,7 @@ msgstr "تخصيصات أخرى"
 #: purchasing/allocations/supplier_allocation_main.php:101
 #: reporting/rep112.php:150 reporting/rep210.php:157
 #: reporting/includes/doctext.inc:166 reporting/includes/doctext.inc:207
-#: sales/allocations/customer_allocation_main.php:94
+#: sales/allocations/customer_allocation_main.php:99
 msgid "Left to Allocate"
 msgstr "الباقي المتاح للتخصيص"
 
@@ -7774,27 +7823,27 @@ msgstr "أستنسخ"
 
 #: includes/ui/class.reflines_crud.inc:37
 msgid "Transaction type"
-msgstr ""
+msgstr "نوع المعاملة"
 
 #: includes/ui/class.reflines_crud.inc:37
 msgid "Prefix"
-msgstr ""
+msgstr "اختصار"
 
 #: includes/ui/class.reflines_crud.inc:38
 msgid "Pattern"
-msgstr ""
+msgstr "نمط"
 
 #: includes/ui/class.reflines_crud.inc:98
 msgid "Reference Pattern:"
-msgstr ""
+msgstr "نمط المرجع:"
 
 #: includes/ui/class.reflines_crud.inc:101
 msgid "Default for This Type:"
-msgstr ""
+msgstr "الافتراضي لهذا النوع:"
 
 #: includes/ui/class.reflines_crud.inc:103
 msgid "Set as Default for This Type:"
-msgstr ""
+msgstr "تعيين كقيمة افتراضية لهذا النوع:"
 
 #: includes/ui/contacts_view.inc:40
 msgid "Assignment"
@@ -7865,7 +7914,7 @@ msgstr "لا يمكن ترك إشارة الاتصال المرجعية فارغ
 msgid "You have to select at least one category."
 msgstr "يجب عليك أختيار تصنيف واحد على الأقل"
 
-#: includes/ui/db_pager_view.inc:172 includes/ui/ui_input.inc:959
+#: includes/ui/db_pager_view.inc:172 includes/ui/ui_input.inc:957
 msgid "Show also Inactive"
 msgstr "عرض الغير نشط أيضاً"
 
@@ -7896,7 +7945,7 @@ msgstr "لا توجد سجلات"
 
 #: includes/ui/items_cart.inc:395
 msgid "Exchange rate roundings"
-msgstr ""
+msgstr "تقلبات أسعار الصرف"
 
 #: includes/ui/simple_crud_class.inc:227 includes/ui/ui_input.inc:228
 msgid "Edit new record with current data"
@@ -7953,12 +8002,14 @@ msgid ""
 "Entered data has not been saved yet.\n"
 "Do you want to abandon changes?"
 msgstr ""
+"لم يتم حفظ البيانات التي تم إدخالها بعد. \n"
+" هل تريد التخلي عن التغييرات؟"
 
-#: includes/ui/ui_input.inc:656 reporting/includes/reports_classes.inc:223
+#: includes/ui/ui_input.inc:654 reporting/includes/reports_classes.inc:223
 msgid "Click Here to Pick up the date"
 msgstr "أضغط هنا حتى يتم جلب البيانات"
 
-#: includes/ui/ui_input.inc:971 includes/ui/ui_lists.inc:2330
+#: includes/ui/ui_input.inc:969 includes/ui/ui_lists.inc:2345
 #: reporting/rep301.php:224 reporting/rep302.php:168 reporting/rep303.php:178
 #: reporting/rep304.php:184 reporting/rep304.php:188 reporting/rep306.php:235
 #: reporting/rep306.php:242 reporting/rep451.php:143
@@ -7966,11 +8017,11 @@ msgstr "أضغط هنا حتى يتم جلب البيانات"
 msgid "Inactive"
 msgstr "غير نشط"
 
-#: includes/ui/ui_input.inc:981 includes/ui/ui_input.inc:993
+#: includes/ui/ui_input.inc:979 includes/ui/ui_input.inc:991
 msgid "Current Credit:"
 msgstr "الائتمان الحالي:"
 
-#: includes/ui/ui_input.inc:1007
+#: includes/ui/ui_input.inc:1005
 msgid "Bank Balance:"
 msgstr "رصيد البنك:"
 
@@ -7990,180 +8041,183 @@ msgstr "إدخل مقطع التكويد البرمجي للبحث أو إدخل
 msgid "Enter description fragment to search or * for all"
 msgstr "إدخل المقطع الوصفي للبحث أو إدخل علامة * للبحث عن الكل"
 
-#: includes/ui/ui_lists.inc:305 includes/ui/ui_lists.inc:309
-#: includes/ui/ui_lists.inc:313 includes/ui/ui_lists.inc:317
-#: includes/ui/ui_lists.inc:321 includes/ui/ui_lists.inc:326
-#: includes/ui/ui_lists.inc:330 inventory/inquiry/stock_list.php:42
+#: includes/ui/ui_lists.inc:308 includes/ui/ui_lists.inc:312
+#: includes/ui/ui_lists.inc:316 includes/ui/ui_lists.inc:320
+#: includes/ui/ui_lists.inc:324 includes/ui/ui_lists.inc:329
+#: includes/ui/ui_lists.inc:333 inventory/inquiry/stock_list.php:42
 msgid "Search items"
-msgstr ""
+msgstr "البحث عن العناصر"
 
-#: includes/ui/ui_lists.inc:334 sales/inquiry/customers_list.php:42
+#: includes/ui/ui_lists.inc:337 sales/inquiry/customers_list.php:42
 msgid "Search customers"
-msgstr ""
+msgstr "البحث عن العملاء"
 
-#: includes/ui/ui_lists.inc:338 sales/inquiry/customer_branches_list.php:38
+#: includes/ui/ui_lists.inc:341 sales/inquiry/customer_branches_list.php:38
 msgid "Search branches"
-msgstr ""
+msgstr "بحث الفروع"
 
-#: includes/ui/ui_lists.inc:342 purchasing/inquiry/suppliers_list.php:42
+#: includes/ui/ui_lists.inc:345 purchasing/inquiry/suppliers_list.php:42
 msgid "Search suppliers"
-msgstr ""
+msgstr "البحث عن الموردين"
 
-#: includes/ui/ui_lists.inc:526 includes/ui/ui_lists.inc:1528
+#: includes/ui/ui_lists.inc:538 includes/ui/ui_lists.inc:1543
 msgid "All Suppliers"
 msgstr "كل الموردين"
 
-#: includes/ui/ui_lists.inc:530
+#: includes/ui/ui_lists.inc:542
 msgid "Press Space tab to filter by name fragment"
 msgstr "إضغط على مفتاح المسافات حتى يتم الفرز بواسطة مقطع الأسم"
 
-#: includes/ui/ui_lists.inc:531
+#: includes/ui/ui_lists.inc:543
 msgid "Select supplier"
 msgstr "أختيار المورد"
 
-#: includes/ui/ui_lists.inc:577
+#: includes/ui/ui_lists.inc:592
 msgid "All Customers"
 msgstr "كل العملاء"
 
-#: includes/ui/ui_lists.inc:581
+#: includes/ui/ui_lists.inc:596
 msgid "Press Space tab to filter by name fragment; F2 - entry new customer"
 msgstr ""
 "إضغط على مفتاح المسافات حتى يتم الفرز بواسطة مقطع الأسم - F2 لإدخال عميل "
 "جديد"
 
-#: includes/ui/ui_lists.inc:582
+#: includes/ui/ui_lists.inc:597
 msgid "Select customer"
 msgstr "أختيار العميل"
 
-#: includes/ui/ui_lists.inc:627
+#: includes/ui/ui_lists.inc:642
 msgid "All branches"
 msgstr "جميع الفروع"
 
-#: includes/ui/ui_lists.inc:630
+#: includes/ui/ui_lists.inc:645
 msgid "Select customer branch"
 msgstr "أختيار فرع العميل"
 
-#: includes/ui/ui_lists.inc:666
+#: includes/ui/ui_lists.inc:681
 msgid "All Locations"
 msgstr "كل المواقع التخزينية"
 
-#: includes/ui/ui_lists.inc:823 includes/ui/ui_lists.inc:907
+#: includes/ui/ui_lists.inc:838 includes/ui/ui_lists.inc:922
 msgid "All Items"
 msgstr "كل البنود المخزنية"
 
-#: includes/ui/ui_lists.inc:1460
+#: includes/ui/ui_lists.inc:1475
 msgid "All Sales Types"
 msgstr "جميع أنواع المبيعات"
 
-#: includes/ui/ui_lists.inc:1807
+#: includes/ui/ui_lists.inc:1822
 msgid "Use Item Sales Accounts"
 msgstr "أستخدام حسابات مبيعات البنود المخزنية"
 
-#: includes/ui/ui_lists.inc:2116 includes/ui/ui_lists.inc:2132
-#: includes/ui/ui_lists.inc:2148
+#: includes/ui/ui_lists.inc:2131 includes/ui/ui_lists.inc:2147
+#: includes/ui/ui_lists.inc:2163
 msgid "All Types"
 msgstr "كل الأنواع"
 
-#: includes/ui/ui_lists.inc:2117 sales/view/view_sales_order.php:140
+#: includes/ui/ui_lists.inc:2132 sales/view/view_sales_order.php:140
 msgid "Sales Invoices"
 msgstr "فواتير المبيعات"
 
-#: includes/ui/ui_lists.inc:2118 includes/ui/ui_lists.inc:2134
-#: includes/ui/ui_lists.inc:2151
-msgid "Overdue Invoices"
-msgstr "الفواتير المستحقة"
+#: includes/ui/ui_lists.inc:2133 includes/ui/ui_lists.inc:2166
+msgid "Unsettled transactions"
+msgstr "المعاملات غير المستقرة"
 
-#: includes/ui/ui_lists.inc:2119 includes/ui/ui_lists.inc:2135
-#: includes/ui/ui_lists.inc:2152 includes/ui/ui_view.inc:609
+#: includes/ui/ui_lists.inc:2134 includes/ui/ui_lists.inc:2150
+#: includes/ui/ui_lists.inc:2167 includes/ui/ui_view.inc:609
 #: includes/ui/ui_view.inc:613
 msgid "Payments"
 msgstr "الدفعات"
 
-#: includes/ui/ui_lists.inc:2120 includes/ui/ui_lists.inc:2136
-#: includes/ui/ui_lists.inc:2153 sales/view/view_sales_order.php:176
+#: includes/ui/ui_lists.inc:2135 includes/ui/ui_lists.inc:2151
+#: includes/ui/ui_lists.inc:2168 sales/view/view_sales_order.php:176
 msgid "Credit Notes"
 msgstr "الإشعارات الدائنة"
 
-#: includes/ui/ui_lists.inc:2121 sales/view/view_sales_order.php:106
+#: includes/ui/ui_lists.inc:2136 sales/view/view_sales_order.php:106
 msgid "Delivery Notes"
 msgstr "سندات التسليم"
 
-#: includes/ui/ui_lists.inc:2133 includes/ui/ui_lists.inc:2150
+#: includes/ui/ui_lists.inc:2148 includes/ui/ui_lists.inc:2165
 msgid "Invoices"
 msgstr "الفواتير "
 
-#: includes/ui/ui_lists.inc:2137 includes/ui/ui_lists.inc:2154
+#: includes/ui/ui_lists.inc:2149
+msgid "Overdue Invoices"
+msgstr "الفواتير المستحقة"
+
+#: includes/ui/ui_lists.inc:2152 includes/ui/ui_lists.inc:2169
 msgid "Overdue Credit Notes"
 msgstr "الإشعارات الدائنة المستحقة"
 
-#: includes/ui/ui_lists.inc:2149
+#: includes/ui/ui_lists.inc:2164
 msgid "GRNs"
 msgstr "إشعارات المواد المخزنية المستلمة"
 
-#: includes/ui/ui_lists.inc:2167
+#: includes/ui/ui_lists.inc:2182
 msgid "Automatically put balance on back order"
 msgstr "ضع الرصيد بشكل تلقائي على طلبات المبيعات الخلفي"
 
-#: includes/ui/ui_lists.inc:2168
+#: includes/ui/ui_lists.inc:2183
 msgid "Cancel any quantites not delivered"
 msgstr "إلغاء الكميات التي لم تصرف بعد"
 
-#: includes/ui/ui_lists.inc:2185
+#: includes/ui/ui_lists.inc:2200
 msgid "Items Returned to Inventory Location"
 msgstr "البنود المخزنية المرتجعة إلى موقع التخزين"
 
-#: includes/ui/ui_lists.inc:2186
+#: includes/ui/ui_lists.inc:2201
 msgid "Items Written Off"
 msgstr "البنود المخزنية المحذوفة"
 
-#: includes/ui/ui_lists.inc:2355
+#: includes/ui/ui_lists.inc:2370
 msgid "New role"
 msgstr "دور وظيفي جديد"
 
-#: includes/ui/ui_lists.inc:2407
+#: includes/ui/ui_lists.inc:2422
 msgid "No tags defined."
 msgstr "لا توجد كلمات دلالية معرفة"
 
-#: includes/ui/ui_lists.inc:2407
+#: includes/ui/ui_lists.inc:2422
 msgid "No active tags defined."
 msgstr "لا توجد كلمات دلالية نشطة معرفة ."
 
-#: includes/ui/ui_lists.inc:2445
+#: includes/ui/ui_lists.inc:2460
 #, php-format
 msgid "Activated for '%s'"
 msgstr "مفعل من خلال  '%s'"
 
-#: includes/ui/ui_lists.inc:2448
+#: includes/ui/ui_lists.inc:2463
 msgid "Available and/or installed"
 msgstr "متاح و / أو مثبت"
 
-#: includes/ui/ui_lists.inc:2518
+#: includes/ui/ui_lists.inc:2533
 msgid "Standard new company American COA (4 digit)"
 msgstr "شركة جديدة بخريطة حسابات رباعية الأرقام"
 
-#: includes/ui/ui_lists.inc:2520
+#: includes/ui/ui_lists.inc:2535
 msgid "Standard American COA (4 digit) with demo data"
 msgstr "خريطة حسابات أمريكية معيارية قياسية رباعية الأرقام "
 
-#: includes/ui/ui_lists.inc:2541
+#: includes/ui/ui_lists.inc:2556
 msgid "No payment Link"
 msgstr "عدم إدراج روابط للدفعات"
 
-#: includes/ui/ui_lists.inc:2661
+#: includes/ui/ui_lists.inc:2676
 msgid "Numeric"
-msgstr ""
+msgstr "رقمية"
 
-#: includes/ui/ui_lists.inc:2661
+#: includes/ui/ui_lists.inc:2676
 msgid "Alpha Numeric"
-msgstr ""
+msgstr "ألفا رقمية"
 
-#: includes/ui/ui_lists.inc:2661
+#: includes/ui/ui_lists.inc:2676
 msgid "ALPHA NUMERIC"
-msgstr ""
+msgstr "ألفا نوميريك"
 
-#: includes/ui/ui_lists.inc:2677
+#: includes/ui/ui_lists.inc:2692
 msgid "All users"
-msgstr ""
+msgstr "جميع المستخدمين"
 
 #: includes/ui/ui_msgs.inc:68
 msgid "in units of : "
@@ -8175,6 +8229,7 @@ msgid ""
 "Cannot retrieve exchange rate for currency %s. Please adjust approximate "
 "rate if needed."
 msgstr ""
+"لا يمكن استرداد سعر الصرف للعملة %s. يرجى ضبط المعدل التقريبي إذا لزم الأمر."
 
 #: includes/ui/ui_view.inc:342
 msgid "Date Voided:"
@@ -8213,7 +8268,7 @@ msgstr "تخصيصات"
 
 #: includes/ui/ui_view.inc:609 includes/ui/ui_view.inc:613
 msgid "Pre-Payments"
-msgstr ""
+msgstr "المدفوعات المسبقة"
 
 #: includes/ui/ui_view.inc:629
 msgid "No Quick Entries are defined."
@@ -8309,19 +8364,19 @@ msgstr "سند قيود تعديل بنود مخزنية"
 
 #: inventory/adjustments.php:50
 msgid "Fixed Assets disposal has been processed"
-msgstr ""
+msgstr "وقد تمت معالجة التخلص من الأصول الثابتة"
 
 #: inventory/adjustments.php:51
 msgid "&View this disposal"
-msgstr ""
+msgstr " عرض هذا التصرف"
 
 #: inventory/adjustments.php:53
 msgid "View the GL &Postings for this Disposal"
-msgstr ""
+msgstr "عرض غل & بوستنغس لهذا التخلص"
 
 #: inventory/adjustments.php:54
 msgid "Enter &Another Disposal"
-msgstr ""
+msgstr "أدخل وآخر التخلص منها"
 
 #: inventory/adjustments.php:57
 msgid "Items adjustment has been processed"
@@ -8353,19 +8408,21 @@ msgid ""
 "The adjustment cannot be processed because it would cause negative inventory"
 " balance for marked items as of document date or later."
 msgstr ""
+"لا يمكن معالجة التعديل لأنه سيسبب رصيد مخزون سلبي للعناصر المميزة اعتبارا من"
+" تاريخ المستند أو أحدث."
 
 #: inventory/adjustments.php:166
 msgid "The quantity entered is invalid."
-msgstr ""
+msgstr "الكمية المدخلة غير صالحة."
 
 #: inventory/adjustments.php:173 manufacturing/work_order_issue.php:136
 msgid "The entered standard cost is negative or invalid."
 msgstr "التكلفة المعيارية المدخلة سالبة أو غير مقبولة"
 
 #: inventory/adjustments.php:228 inventory/cost_update.php:42
-#: inventory/transfers.php:216 sales/sales_order_entry.php:702
+#: inventory/transfers.php:216 sales/sales_order_entry.php:701
 msgid "There are no fixed assets defined in the system."
-msgstr ""
+msgstr "لا توجد أصول ثابتة محددة في النظام."
 
 #: inventory/adjustments.php:230
 msgid ""
@@ -8377,11 +8434,11 @@ msgstr ""
 
 #: inventory/adjustments.php:239
 msgid "Disposal Items"
-msgstr ""
+msgstr "عناصر التخلص"
 
 #: inventory/adjustments.php:240
 msgid "Process Disposal"
-msgstr ""
+msgstr "عملية التخلص"
 
 #: inventory/adjustments.php:242
 msgid "Adjustment Items"
@@ -8393,7 +8450,7 @@ msgstr "تنفيذ التسوية"
 
 #: inventory/cost_update.php:32
 msgid "FA Revaluation"
-msgstr ""
+msgstr "إعادة تقييم فا"
 
 #: inventory/cost_update.php:35
 msgid "Inventory Item Cost Update"
@@ -8437,7 +8494,7 @@ msgstr "البند المخزني :"
 
 #: inventory/cost_update.php:133
 msgid "Unit cost"
-msgstr ""
+msgstr "تكلفة الوحدة"
 
 #: inventory/cost_update.php:137
 msgid "Standard Labour Cost Per Unit"
@@ -8449,7 +8506,7 @@ msgstr "التكاليف الصناعية الغير مباشرة المعيار
 
 #: inventory/cost_update.php:145
 msgid "Reference line:"
-msgstr ""
+msgstr "السطر المرجعي:"
 
 #: inventory/prices.php:29
 msgid "Inventory Item Sales prices"
@@ -8478,7 +8535,7 @@ msgstr "السعر المدخل يجب أن يكون عددي"
 msgid ""
 "The sales pricing for this item, sales type and currency has already been "
 "added."
-msgstr ""
+msgstr "تم بالفعل إضافة تسعير المبيعات لهذا العنصر، ونوع المبيعات والعملة."
 
 #: inventory/prices.php:101
 msgid "This price has been updated."
@@ -8566,7 +8623,7 @@ msgstr ""
 
 #: inventory/purchasing_data.php:66
 msgid "The purchasing data for this supplier has already been added."
-msgstr ""
+msgstr "وقد تم بالفعل إضافة بيانات الشراء لهذا المورد."
 
 #: inventory/purchasing_data.php:75
 msgid "This supplier purchasing data has been added."
@@ -8660,7 +8717,7 @@ msgstr "تمت عملية تحديث مستويات إعادة الطلب."
 
 #: inventory/transfers.php:32
 msgid "Fixed Assets Location Transfers"
-msgstr ""
+msgstr "نقل الأصول الثابتة الموقع"
 
 #: inventory/transfers.php:35
 msgid "Inventory Location Transfers"
@@ -8676,7 +8733,7 @@ msgstr "عرض التحويل الحالي"
 
 #: inventory/transfers.php:57
 msgid "Enter &Another Fixed Assets Transfer"
-msgstr ""
+msgstr "أدخل وآخر نقل الأصول الثابتة"
 
 #: inventory/transfers.php:59
 msgid "Enter &Another Inventory Transfer"
@@ -8684,7 +8741,7 @@ msgstr "ادخال تحويل مخزني آخر"
 
 #: inventory/transfers.php:109
 msgid "The entered transfer date is invalid."
-msgstr ""
+msgstr "تاريخ النقل الذي تم إدخاله غير صالح."
 
 #: inventory/transfers.php:121
 msgid "The locations to transfer from and to must be different."
@@ -8695,6 +8752,8 @@ msgid ""
 "The transfer cannot be processed because it would cause negative inventory "
 "balance in source location for marked items as of document date or later."
 msgstr ""
+"لا يمكن معالجة عملية النقل لأنها ستؤدي إلى وجود رصيد مخزون سلبي في موقع "
+"المصدر للعناصر المميزة اعتبارا من تاريخ المستند أو في وقت لاحق."
 
 #: inventory/transfers.php:161
 msgid "The quantity entered must be a positive number."
@@ -8792,12 +8851,12 @@ msgstr "تكلفة الوحدات"
 #: inventory/includes/item_adjustments_ui.inc:57
 #: inventory/manage/items.php:525
 msgid "Initial Value"
-msgstr ""
+msgstr "القيمة البدائية"
 
 #: inventory/includes/item_adjustments_ui.inc:118
 msgid ""
 "Marked items have insufficient quantities in stock as on day of adjustment."
-msgstr ""
+msgstr "البنود ملحوظ لديها كميات كافية في المخزون كما في يوم من التكيف."
 
 #: inventory/includes/stock_transfers_ui.inc:35
 #: inventory/inquiry/stock_movements.php:83
@@ -8812,7 +8871,7 @@ msgstr "إلى موقع التخزين :"
 #: inventory/includes/stock_transfers_ui.inc:98
 msgid ""
 "Marked items have insufficient quantities in stock as on day of transfer."
-msgstr ""
+msgstr "البنود ملحوظ لديها كميات كافية في المخزون كما في يوم النقل."
 
 #: inventory/includes/db/items_db.inc:139
 msgid ""
@@ -8852,11 +8911,11 @@ msgstr ""
 #: inventory/includes/db/items_trans_db.inc:63
 #, php-format
 msgid "Cost was %s changed to %s x quantity on hand of %s"
-msgstr ""
+msgstr "تم تغيير التكلفة %s إلى %s × كمية على يد %s"
 
 #: inventory/inquiry/stock_movements.php:30
 msgid "Fixed Assets Movement"
-msgstr ""
+msgstr "حركة الأصول الثابتة"
 
 #: inventory/inquiry/stock_movements.php:32
 msgid "Inventory Item Movement"
@@ -8864,7 +8923,7 @@ msgstr "حركة البند المخزني"
 
 #: inventory/inquiry/stock_movements.php:39
 msgid "There are no fixed asset defined in the system."
-msgstr ""
+msgstr "لا يوجد أصل ثابت محدد في النظام."
 
 #: inventory/inquiry/stock_movements.php:88
 msgid "Show Movements"
@@ -8873,9 +8932,9 @@ msgstr "عرض الحركات"
 #: inventory/inquiry/stock_movements.php:88
 #: purchasing/includes/ui/invoice_ui.inc:483
 #: purchasing/inquiry/supplier_allocation_inquiry.php:57
-#: purchasing/inquiry/supplier_inquiry.php:56
+#: purchasing/inquiry/supplier_inquiry.php:147
 #: sales/inquiry/customer_allocation_inquiry.php:51
-#: sales/inquiry/customer_inquiry.php:54
+#: sales/inquiry/customer_inquiry.php:164
 msgid "Refresh Inquiry"
 msgstr "تجديد الأستعلام"
 
@@ -8968,15 +9027,15 @@ msgstr "حساب المبيعات :"
 
 #: inventory/manage/item_categories.php:118
 msgid "Asset Account"
-msgstr ""
+msgstr "حساب الأصول"
 
 #: inventory/manage/item_categories.php:118
 msgid "Deprecation Cost Account"
-msgstr ""
+msgstr "حساب تكلفة الإيقاف"
 
 #: inventory/manage/item_categories.php:119
 msgid "Depreciation/Disposal Account"
-msgstr ""
+msgstr "حساب الاستهلاك / التخلص"
 
 #: inventory/manage/item_categories.php:122
 msgid "Inventory Account"
@@ -9020,19 +9079,19 @@ msgstr "الأستبعاد من المبيعات :"
 
 #: inventory/manage/item_categories.php:226 inventory/manage/items.php:408
 msgid "Exclude from purchases:"
-msgstr ""
+msgstr "استبعاد من المشتريات:"
 
 #: inventory/manage/item_categories.php:238 inventory/manage/items.php:471
 msgid "Asset account:"
-msgstr ""
+msgstr "حساب الأصول:"
 
 #: inventory/manage/item_categories.php:239 inventory/manage/items.php:472
 msgid "Depreciation cost account:"
-msgstr ""
+msgstr "حساب تكلفة االستهالك:"
 
 #: inventory/manage/item_categories.php:240 inventory/manage/items.php:473
 msgid "Depreciation/Disposal account:"
-msgstr ""
+msgstr "حساب االستهالك / التخلص:"
 
 #: inventory/manage/item_categories.php:251
 msgid "Item Assembly Costs Account:"
@@ -9042,13 +9101,13 @@ msgstr "حساب تكاليف تجميع البنود المخزنية - تكا�
 msgid "Foreign Item Codes"
 msgstr "أكواد البنود المخزنية الأجنبية"
 
-#: inventory/manage/item_codes.php:26 sales/sales_order_entry.php:704
+#: inventory/manage/item_codes.php:26 sales/sales_order_entry.php:703
 msgid "There are no inventory items defined in the system."
 msgstr "لا يوجد بنود مخزنية معرفة على النظام"
 
 #: inventory/manage/item_codes.php:44
 msgid "The quantity entered was not positive number."
-msgstr ""
+msgstr "الكمية المدخلة لم تكن ايجابية."
 
 #: inventory/manage/item_codes.php:50 inventory/manage/sales_kits.php:74
 msgid "Item code description cannot be empty."
@@ -9102,7 +9161,7 @@ msgstr "التقسيمة :"
 
 #: inventory/manage/items.php:87
 msgid "Error uploading file."
-msgstr ""
+msgstr "حدث خطأ أثناء تحميل الملف."
 
 #: inventory/manage/items.php:104
 msgid ""
@@ -9117,12 +9176,16 @@ msgid ""
 "There are no fixed asset categories defined in the system. At least one "
 "fixed asset category is required to add a fixed asset."
 msgstr ""
+"لا توجد فئات الأصول الثابتة المحددة في النظام. مطلوب فئة واحدة على الأقل من "
+"الأصول الثابتة لإضافة أصل ثابت."
 
 #: inventory/manage/items.php:137
 msgid ""
 "There are no fixed asset classes defined in the system. At least one fixed "
 "asset class is required to add a fixed asset."
 msgstr ""
+"لا توجد فئات الأصول الثابتة المحددة في النظام. مطلوب فئة واحدة على الأقل من "
+"الأصول الثابتة لإضافة أصل ثابت."
 
 #: inventory/manage/items.php:139
 msgid ""
@@ -9156,7 +9219,7 @@ msgstr "كود البند المخزني لا يمكن أن يحتوى على ه
 
 #: inventory/manage/items.php:207
 msgid "The depracation cannot start before the fixed asset purchase date"
-msgstr ""
+msgstr "لا يمكن بدء عملية الاستبعاد قبل تاريخ شراء الأصول الثابتة"
 
 #: inventory/manage/items.php:239
 msgid "Item has been updated."
@@ -9172,7 +9235,7 @@ msgstr "تم حذف البند المخزني المؤشر عليه"
 
 #: inventory/manage/items.php:314
 msgid "General Settings"
-msgstr ""
+msgstr "الاعدادات العامة"
 
 #: inventory/manage/items.php:319 inventory/manage/items.php:360
 msgid "Item Code:"
@@ -9184,39 +9247,39 @@ msgstr "وصف قابل للتعديل:"
 
 #: inventory/manage/items.php:413
 msgid "Fixed Asset Class"
-msgstr ""
+msgstr "فئة الأصول الثابتة"
 
 #: inventory/manage/items.php:415
 msgid "Depreciation Method"
-msgstr ""
+msgstr "طريقة الاستهلاك"
 
 #: inventory/manage/items.php:426 inventory/manage/items.php:435
 msgid "Depreciation Rate"
-msgstr ""
+msgstr "معدل الاستهلاك"
 
 #: inventory/manage/items.php:430
 msgid "Depreciation Years"
-msgstr ""
+msgstr "الاستهلاك سنوات"
 
 #: inventory/manage/items.php:430
 msgid "years"
-msgstr ""
+msgstr "سنوات"
 
 #: inventory/manage/items.php:433
 msgid "Base Rate"
-msgstr ""
+msgstr "سعر الأساس"
 
 #: inventory/manage/items.php:438
 msgid "Rate multiplier"
-msgstr ""
+msgstr "معدل مضاعف"
 
 #: inventory/manage/items.php:442 inventory/manage/items.php:445
 msgid "Depreciation Start"
-msgstr ""
+msgstr "الاستهلاك بدء"
 
 #: inventory/manage/items.php:446
 msgid "Last Depreciation"
-msgstr ""
+msgstr "آخر استهلاك"
 
 #: inventory/manage/items.php:494
 msgid "Other"
@@ -9240,64 +9303,64 @@ msgstr "حالة البند المخزني:"
 
 #: inventory/manage/items.php:521
 msgid "Values"
-msgstr ""
+msgstr "القيم"
 
 #: inventory/manage/items.php:526 reporting/rep451.php:80
 msgid "Depreciations"
-msgstr ""
+msgstr "انخفاض قيمة"
 
 #: inventory/manage/items.php:527
 msgid "Current Value"
-msgstr ""
+msgstr "القيمة الحالية"
 
 #: inventory/manage/items.php:535
 msgid "Insert New Item"
 msgstr "أضافة بند مخزني جديد"
 
-#: inventory/manage/items.php:539
+#: inventory/manage/items.php:540
 msgid "Update Item"
 msgstr "تحديث البند المخزني"
 
-#: inventory/manage/items.php:542
+#: inventory/manage/items.php:543
 msgid "Select this items and return to document entry."
 msgstr "أختر هذه البنود المخزنية ثم أرجع إلى نموذج الإدخال"
 
-#: inventory/manage/items.php:543
+#: inventory/manage/items.php:544
 msgid "Clone This Item"
 msgstr "أستنسخ البند المخزني الحالي "
 
-#: inventory/manage/items.php:544
+#: inventory/manage/items.php:545
 msgid "Delete This Item"
 msgstr "أحذف البند المخزني الحالي"
 
-#: inventory/manage/items.php:559
+#: inventory/manage/items.php:560
 msgid "Select an item:"
 msgstr "أختيار البند المخزني :"
 
-#: inventory/manage/items.php:560
+#: inventory/manage/items.php:561
 msgid "New item"
 msgstr "بند مخزني جديد"
 
-#: inventory/manage/items.php:584 inventory/manage/items.php:587
+#: inventory/manage/items.php:585 inventory/manage/items.php:588
 #: purchasing/manage/suppliers.php:309 sales/manage/customer_branches.php:310
 #: sales/manage/customers.php:350
 msgid "&General settings"
 msgstr "الإعدادات العامة"
 
-#: inventory/manage/items.php:585 inventory/manage/items.php:593
+#: inventory/manage/items.php:586 inventory/manage/items.php:594
 #: purchasing/manage/suppliers.php:311 sales/manage/customers.php:352
 msgid "&Transactions"
 msgstr "المعاملات"
 
-#: inventory/manage/items.php:588
-msgid "S&ales Pricing"
-msgstr ""
-
 #: inventory/manage/items.php:589
-msgid "&Purchasing Pricing"
-msgstr ""
+msgid "S&ales Pricing"
+msgstr "تسعير المبيعات"
 
-#: inventory/manage/items.php:594
+#: inventory/manage/items.php:590
+msgid "&Purchasing Pricing"
+msgstr "تسعير الشراء"
+
+#: inventory/manage/items.php:595
 msgid "&Status"
 msgstr "الحالة"
 
@@ -9691,7 +9754,7 @@ msgstr "البنود المخزنية المرتجعة إلى أمر الشرا�
 
 #: manufacturing/work_order_add_finished.php:200
 #: purchasing/allocations/supplier_allocate.php:75
-#: sales/allocations/customer_allocate.php:73
+#: sales/allocations/customer_allocate.php:78
 msgid "Process"
 msgstr "تنفيذ"
 
@@ -9744,11 +9807,11 @@ msgstr "تم إضافة أمر التشغيل"
 
 #: manufacturing/work_order_entry.php:61
 msgid "&Print This Work Order"
-msgstr ""
+msgstr "وطباعة هذا العمل النظام"
 
 #: manufacturing/work_order_entry.php:62
 msgid "&Email This Work Order"
-msgstr ""
+msgstr "البريد الإلكتروني هذا أمر العمل"
 
 #: manufacturing/work_order_entry.php:79
 msgid "The work order been updated."
@@ -9879,6 +9942,8 @@ msgid ""
 "The issue cannot be processed because it would cause negative inventory "
 "balance for marked items as of document date or later."
 msgstr ""
+"لا يمكن معالجة المشكلة لأنها ستؤدي إلى رصيد مخزون سلبي للعناصر المميزة "
+"اعتبارا من تاريخ المستند أو أحدث."
 
 #: manufacturing/work_order_issue.php:112
 msgid ""
@@ -9951,19 +10016,19 @@ msgstr "إصدار أمر التشغيل "
 
 #: manufacturing/view/wo_costs_view.php:20
 msgid "View Work Order Costs"
-msgstr ""
+msgstr "عرض تكاليف أمر العمل"
 
 #: manufacturing/view/wo_costs_view.php:60
 msgid "Transaction"
-msgstr ""
+msgstr "عملية تجارية"
 
 #: manufacturing/view/wo_costs_view.php:66
 msgid "Finished Product Requirements"
-msgstr ""
+msgstr "متطلبات المنتج النهائي"
 
 #: manufacturing/view/wo_costs_view.php:69
 msgid "Additional Material Issues"
-msgstr ""
+msgstr "قضايا مادية إضافية"
 
 #: manufacturing/view/wo_costs_view.php:72
 #: manufacturing/view/work_order_view.php:66
@@ -9973,12 +10038,12 @@ msgstr "التكاليف الإضافية"
 
 #: manufacturing/view/wo_costs_view.php:75
 msgid "Finished Product Receival"
-msgstr ""
+msgstr "استلام المنتج النهائي"
 
 #: manufacturing/view/wo_costs_view.php:80
 #, php-format
 msgid "Production Costs for Work Order # %d"
-msgstr ""
+msgstr "تكاليف الإنتاج للعمل # %d"
 
 #: manufacturing/view/wo_issue_view.php:19
 msgid "View Work Order Issue"
@@ -10202,11 +10267,11 @@ msgstr "التكلفة"
 
 #: manufacturing/includes/manufacturing_ui.inc:66
 msgid "Standard Labour Cost"
-msgstr ""
+msgstr "تكلفة العمالة القياسية"
 
 #: manufacturing/includes/manufacturing_ui.inc:74
 msgid "Standard Overhead Cost"
-msgstr ""
+msgstr "التكلفة العامة القياسية"
 
 #: manufacturing/includes/manufacturing_ui.inc:78
 msgid "Total Cost"
@@ -10277,7 +10342,7 @@ msgstr "أمر التشغيل الحالي مغلق ."
 
 #: manufacturing/includes/work_order_issue_ui.inc:78
 msgid "Marked items have insufficient quantities in stock as on day of issue."
-msgstr ""
+msgstr "البنود ملحوظ لديها كميات كافية في المخزون كما في يوم من القضية."
 
 #: manufacturing/includes/work_order_issue_ui.inc:157
 msgid "Issue Date:"
@@ -10298,12 +10363,12 @@ msgstr "صرف البنود المخزنية إلى أمر التشغيل "
 #: manufacturing/includes/db/work_order_costing_db.inc:98
 #, php-format
 msgid "COGS changed from %s to %s for %d %s of '%s'"
-msgstr ""
+msgstr "تم تغيير COGS من %s إلى %s ل %d%s من '%s'"
 
 #: manufacturing/includes/db/work_order_costing_db.inc:235
 #, php-format
 msgid "Voided WO #%s"
-msgstr ""
+msgstr "فوادد و #%s"
 
 #: manufacturing/includes/db/work_order_issues_db.inc:66
 msgid "Issue of"
@@ -10313,7 +10378,7 @@ msgstr "صادر لغرض"
 msgid "Issue to"
 msgstr "صادر إلى"
 
-#: manufacturing/includes/db/work_order_produce_items_db.inc:94
+#: manufacturing/includes/db/work_order_produce_items_db.inc:95
 msgid "Production."
 msgstr "الأنتاج"
 
@@ -10334,7 +10399,7 @@ msgstr "تمت عملية الإصدار"
 
 #: purchasing/includes/purchasing_db.inc:216
 msgid "Payment for:"
-msgstr ""
+msgstr "الدفع ل:"
 
 #: purchasing/includes/db/invoice_db.inc:339
 msgid "Supplier invoice adjustment for zero inventory of "
@@ -10386,7 +10451,7 @@ msgstr "تاريخ أستلام البنود المخزنية"
 
 #: purchasing/includes/ui/invoice_ui.inc:121
 msgid "Source Invoices:"
-msgstr ""
+msgstr "فواتير المصدر:"
 
 #: purchasing/includes/ui/invoice_ui.inc:123
 msgid "Supplier's Ref.:"
@@ -10399,7 +10464,7 @@ msgstr "الشروط :"
 #: purchasing/includes/ui/invoice_ui.inc:143
 #: purchasing/includes/ui/po_ui.inc:174
 msgid "Dimension 2"
-msgstr ""
+msgstr "البعد 2"
 
 #: purchasing/includes/ui/invoice_ui.inc:155
 #: purchasing/manage/suppliers.php:100 purchasing/manage/suppliers.php:105
@@ -10479,6 +10544,9 @@ msgid ""
 "This operation also irreversibly changes related order line. Do you want to "
 "continue ?"
 msgstr ""
+"أنت على وشك إزالة جميع العناصر التي لم يتم تحرير فواتير بها من سطر التسليم "
+"#%d. هذه العملية أيضا لا رجعة فيه يتغير خط النظام ذات الصلة. هل تريد "
+"الاستمرار ؟"
 
 #: purchasing/includes/ui/invoice_ui.inc:458
 msgid "Items Received Yet to be Invoiced"
@@ -10573,15 +10641,15 @@ msgstr ""
 "الإشعارات الدائنة يتم تطبيقها على البنود المخزنية المستلمة و التي تم فوترتها"
 " "
 
-#: purchasing/includes/ui/po_ui.inc:135 sales/sales_order_entry.php:728
+#: purchasing/includes/ui/po_ui.inc:135 sales/sales_order_entry.php:727
 msgid "Order Date:"
 msgstr "تاريخ الأمر أو الطلب :"
 
-#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:715
+#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:714
 msgid "Delivery Date:"
 msgstr "تاريخ عملية التسليم :"
 
-#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:709
+#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:708
 msgid "Invoice Date:"
 msgstr "تاريخ الفاتورة :"
 
@@ -10650,18 +10718,18 @@ msgstr "إجمالي القيمة"
 
 #: purchasing/includes/ui/po_ui.inc:283
 #: purchasing/allocations/supplier_allocate.php:74
-#: sales/allocations/customer_allocate.php:72
+#: sales/allocations/customer_allocate.php:77
 #: sales/includes/ui/sales_order_ui.inc:231
 msgid "Refresh"
 msgstr "تجديد"
 
 #: purchasing/includes/ui/po_ui.inc:338 sales/view/view_sales_order.php:83
 msgid "Required Pre-Payment"
-msgstr ""
+msgstr "الدفع المسبق المطلوب"
 
 #: purchasing/includes/ui/po_ui.inc:339
 msgid "Pre-Payments Allocated"
-msgstr ""
+msgstr "تم تخصيص الدفع المسبق"
 
 #: purchasing/includes/ui/po_ui.inc:461 purchasing/po_entry_items.php:483
 #: sales/customer_invoice.php:439 sales/includes/ui/sales_order_ui.inc:396
@@ -10677,7 +10745,7 @@ msgstr "متأخرة"
 #: sales/includes/ui/sales_order_ui.inc:614
 #: sales/includes/ui/sales_order_ui.inc:616
 msgid "Pre-Payment Required:"
-msgstr ""
+msgstr "الدفع المسبق مطلوب:"
 
 #: purchasing/po_entry_items.php:41
 msgid "Modify Purchase Order #"
@@ -10693,7 +10761,7 @@ msgstr "قيد مباشر لإشعار المواد المخزنية المست�
 
 #: purchasing/po_entry_items.php:60
 msgid "Fixed Asset Purchase Invoice Entry"
-msgstr ""
+msgstr "شراء الأصول الثابتة شراء الفواتير"
 
 #: purchasing/po_entry_items.php:63
 msgid "Direct Purchase Invoice Entry"
@@ -10775,7 +10843,7 @@ msgstr "إدخال فاتورة فورية جديدة"
 
 #: purchasing/po_entry_items.php:147
 msgid "There are no purchasable fixed assets defined in the system."
-msgstr ""
+msgstr "ولا توجد أصول ثابتة مشتراة محددة في النظام."
 
 #: purchasing/po_entry_items.php:178
 msgid ""
@@ -10809,7 +10877,7 @@ msgstr "تم إلغاء امر الشراء الحالي"
 msgid "Enter a new purchase order"
 msgstr "ادخال امر شراء جديد"
 
-#: purchasing/po_entry_items.php:228 sales/sales_order_entry.php:519
+#: purchasing/po_entry_items.php:228 sales/sales_order_entry.php:518
 msgid "Item description cannot be empty."
 msgstr "وصف أكواد البنود المخزنية لا يمكن تركه فارغاً"
 
@@ -10890,9 +10958,9 @@ msgstr "لا يمكن إدراج أمر الشراء بسبب أنه لا توج
 
 #: purchasing/po_entry_items.php:406
 msgid "Required prepayment is greater than total invoice value."
-msgstr ""
+msgstr "الدفع المسبق المطلوب أكبر من إجمالي قيمة الفاتورة."
 
-#: purchasing/po_entry_items.php:491 sales/sales_order_entry.php:732
+#: purchasing/po_entry_items.php:491 sales/sales_order_entry.php:731
 msgid "Place Order"
 msgstr "إدراج الأمر"
 
@@ -10900,7 +10968,7 @@ msgstr "إدراج الأمر"
 msgid "Update Order"
 msgstr "تحديث الأمر"
 
-#: purchasing/po_entry_items.php:493 sales/sales_order_entry.php:731
+#: purchasing/po_entry_items.php:493 sales/sales_order_entry.php:730
 msgid "Cancel Order"
 msgstr "إلغاء الأمر"
 
@@ -10924,7 +10992,7 @@ msgstr "تنفيذ الفاتورة"
 msgid "Update Invoice"
 msgstr "تحديث الفاتورة"
 
-#: purchasing/po_entry_items.php:502 sales/sales_order_entry.php:712
+#: purchasing/po_entry_items.php:502 sales/sales_order_entry.php:711
 msgid "Cancel Invoice"
 msgstr "إلغاء الفاتورة"
 
@@ -11096,7 +11164,7 @@ msgstr "إدخال فاتورة مورد"
 #: purchasing/supplier_invoice.php:48
 #, php-format
 msgid "Modifying Purchase Invoice # %d"
-msgstr ""
+msgstr "تعديل فاتورة الشراء # %d"
 
 #: purchasing/supplier_invoice.php:66
 msgid "Supplier invoice has been processed."
@@ -11189,7 +11257,7 @@ msgstr "إرسال التحويل المالي الحالي بالبريد ال�
 
 #: purchasing/supplier_payment.php:101
 msgid "View this Payment"
-msgstr ""
+msgstr "عرض هذا الدفع"
 
 #: purchasing/supplier_payment.php:102
 msgid "View the GL &Journal Entries for this Payment"
@@ -11201,19 +11269,19 @@ msgstr "إدخال دفعة مورد أخرى"
 
 #: purchasing/supplier_payment.php:105 sales/customer_payments.php:107
 msgid "Enter Other &Payment"
-msgstr ""
+msgstr "أدخل دفعات أخرى"
 
 #: purchasing/supplier_payment.php:106
 msgid "Enter &Customer Payment"
-msgstr ""
+msgstr "أدخل دفع العميل"
 
 #: purchasing/supplier_payment.php:107 sales/customer_payments.php:105
 msgid "Enter Other &Deposit"
-msgstr ""
+msgstr "أدخل إيداع آخر"
 
 #: purchasing/supplier_payment.php:108 sales/customer_payments.php:108
 msgid "Bank Account &Transfer"
-msgstr ""
+msgstr "تحويل الحساب المصرفي"
 
 #: purchasing/supplier_payment.php:171
 msgid "The entered discount is invalid or less than zero."
@@ -11227,7 +11295,7 @@ msgstr "إجمالي القيمة و الخصم صفر أو قيم سالبة ،
 
 #: purchasing/supplier_payment.php:186
 msgid "The entered bank amount is zero or negative."
-msgstr ""
+msgstr "مبلغ البنك الذي تم إدخاله هو صفر أو سلبي."
 
 #: purchasing/supplier_payment.php:276
 msgid "Payment To:"
@@ -11244,7 +11312,7 @@ msgstr "تاريخ الدفع"
 
 #: purchasing/supplier_payment.php:316
 msgid "Bank Amount:"
-msgstr ""
+msgstr "مبلغ البنك:"
 
 #: purchasing/supplier_payment.php:329 sales/customer_payments.php:374
 msgid "Amount of Discount:"
@@ -11306,9 +11374,9 @@ msgstr "تم الطلب بواسطة "
 
 #: purchasing/view/view_po.php:100
 #: purchasing/inquiry/supplier_allocation_inquiry.php:158
-#: purchasing/inquiry/supplier_inquiry.php:193
+#: purchasing/inquiry/supplier_inquiry.php:199
 #: sales/inquiry/customer_allocation_inquiry.php:167
-#: sales/inquiry/customer_inquiry.php:218
+#: sales/inquiry/customer_inquiry.php:219
 #: sales/inquiry/sales_deliveries_view.php:195
 #: sales/inquiry/sales_orders_view.php:311
 msgid "Marked items are overdue."
@@ -11362,7 +11430,7 @@ msgstr "فاتورة المورد"
 msgid "TOTAL INVOICE"
 msgstr "إجمالي الفاتورة"
 
-#: purchasing/view/view_supp_invoice.php:77 sales/view/view_invoice.php:172
+#: purchasing/view/view_supp_invoice.php:77 sales/view/view_invoice.php:175
 msgid "This invoice has been voided."
 msgstr "الفاتورة الحالية ملغاة"
 
@@ -11576,7 +11644,7 @@ msgstr "إلى موقع التخزين :"
 
 #: purchasing/inquiry/po_search_completed.php:97
 msgid "Also closed:"
-msgstr ""
+msgstr "مغلقة أيضا:"
 
 #: purchasing/inquiry/po_search_completed.php:115
 #: purchasing/inquiry/po_search.php:122 reporting/includes/doctext.inc:187
@@ -11631,47 +11699,47 @@ msgstr "تم تخصيصها"
 msgid "Supplier Inquiry"
 msgstr "الإستعلام عن المورد"
 
-#: purchasing/inquiry/supplier_inquiry.php:49
-msgid "Select a supplier:"
-msgstr "أختيار المورد :"
-
-#: purchasing/inquiry/supplier_inquiry.php:70 reporting/rep102.php:118
-#: reporting/rep108.php:152 reporting/rep202.php:124 reporting/rep202.php:158
-#: sales/inquiry/customer_inquiry.php:73
+#: purchasing/inquiry/supplier_inquiry.php:46 reporting/rep102.php:118
+#: reporting/rep108.php:153 reporting/rep202.php:124 reporting/rep202.php:158
+#: sales/inquiry/customer_inquiry.php:118
 msgid "Over"
 msgstr "أكثر "
 
-#: purchasing/inquiry/supplier_inquiry.php:74
-#: sales/inquiry/customer_inquiry.php:76
+#: purchasing/inquiry/supplier_inquiry.php:50
+#: sales/inquiry/customer_inquiry.php:121
 msgid "Terms"
 msgstr "الشروط"
 
-#: purchasing/inquiry/supplier_inquiry.php:74 reporting/rep102.php:121
-#: reporting/rep102.php:239 reporting/rep108.php:154 reporting/rep202.php:128
+#: purchasing/inquiry/supplier_inquiry.php:50 reporting/rep102.php:121
+#: reporting/rep102.php:239 reporting/rep108.php:155 reporting/rep202.php:128
 #: reporting/rep202.php:247 reporting/rep451.php:80
-#: sales/inquiry/customer_inquiry.php:76
+#: sales/inquiry/customer_inquiry.php:121
 msgid "Current"
 msgstr "الحالي"
 
-#: purchasing/inquiry/supplier_inquiry.php:75 reporting/rep102.php:122
-#: reporting/rep108.php:154 reporting/rep202.php:129
-#: sales/inquiry/customer_inquiry.php:77
+#: purchasing/inquiry/supplier_inquiry.php:51 reporting/rep102.php:122
+#: reporting/rep108.php:155 reporting/rep202.php:129
+#: sales/inquiry/customer_inquiry.php:122
 msgid "Total Balance"
 msgstr "إجمالي الرصيد"
 
-#: purchasing/inquiry/supplier_inquiry.php:133
-#: sales/inquiry/customer_inquiry.php:153
+#: purchasing/inquiry/supplier_inquiry.php:94
+#: sales/inquiry/customer_inquiry.php:74
 msgid "Credit This"
 msgstr "عمل إشعار دائن للسجل الحالي"
 
-#: purchasing/inquiry/supplier_inquiry.php:148
+#: purchasing/inquiry/supplier_inquiry.php:109
 msgid "Print Remittance"
 msgstr "طباعة التحويل المالي"
+
+#: purchasing/inquiry/supplier_inquiry.php:137
+msgid "Select a supplier:"
+msgstr "أختيار المورد :"
 
 #: purchasing/inquiry/suppliers_list.php:53
 #: sales/inquiry/customers_list.php:54
 msgid "Tax ID"
-msgstr ""
+msgstr "الرقم الضريبي"
 
 #: purchasing/allocations/supplier_allocate.php:29
 msgid "Allocate Supplier Payment or Credit Note"
@@ -11682,41 +11750,41 @@ msgid "Allocation of"
 msgstr "التخصيص لـ"
 
 #: purchasing/allocations/supplier_allocate.php:58
-#: sales/allocations/customer_allocate.php:55
+#: sales/allocations/customer_allocate.php:60
 msgid "Total:"
 msgstr "الإجمالي :"
 
 #: purchasing/allocations/supplier_allocate.php:62
-#: sales/allocations/customer_allocate.php:59
+#: sales/allocations/customer_allocate.php:64
 msgid "Amount ot be settled:"
-msgstr ""
+msgstr "المبلغ الذي سيتم تسويته:"
 
 #: purchasing/allocations/supplier_allocate.php:74
-#: sales/allocations/customer_allocate.php:72
+#: sales/allocations/customer_allocate.php:77
 msgid "Start again allocation of selected amount"
 msgstr "البدء مرة أخرى في تخصيص القيم المؤشر عليها"
 
 #: purchasing/allocations/supplier_allocate.php:75
-#: sales/allocations/customer_allocate.php:73
+#: sales/allocations/customer_allocate.php:78
 msgid "Process allocations"
 msgstr "تنفيذ عملية التخصيص"
 
 #: purchasing/allocations/supplier_allocate.php:76
 #: purchasing/allocations/supplier_allocate.php:82
-#: sales/allocations/customer_allocate.php:74
-#: sales/allocations/customer_allocate.php:80
+#: sales/allocations/customer_allocate.php:79
+#: sales/allocations/customer_allocate.php:85
 msgid "Back to Allocations"
 msgstr "الرجوع إلى التخصيصات"
 
 #: purchasing/allocations/supplier_allocate.php:77
 #: purchasing/allocations/supplier_allocate.php:83
-#: sales/allocations/customer_allocate.php:74
-#: sales/allocations/customer_allocate.php:81
+#: sales/allocations/customer_allocate.php:79
+#: sales/allocations/customer_allocate.php:86
 msgid "Abandon allocations and return to selection of allocatable amounts"
 msgstr "إهمال التخصيصات و العودة إلى أختيار القيم المراد تخصيصها"
 
 #: purchasing/allocations/supplier_allocate.php:81
-#: sales/allocations/customer_allocate.php:78
+#: sales/allocations/customer_allocate.php:83
 msgid "There are no unsettled transactions to allocate."
 msgstr "لا توجد حركات غير مسددة حتى يتم تخصيصها"
 
@@ -11739,7 +11807,7 @@ msgid "Allocate"
 msgstr "تخصيص"
 
 #: purchasing/allocations/supplier_allocation_main.php:111
-#: sales/allocations/customer_allocation_main.php:104
+#: sales/allocations/customer_allocation_main.php:109
 msgid "Marked items are settled."
 msgstr "البنود المؤشر عليها تم تخصيصها"
 
@@ -11776,7 +11844,7 @@ msgstr "متضمنة على أصفار"
 msgid "Customer Balances"
 msgstr "أرصدة العميل"
 
-#: reporting/rep101.php:256 reporting/rep102.php:226 reporting/rep106.php:181
+#: reporting/rep101.php:262 reporting/rep102.php:226 reporting/rep106.php:181
 #: reporting/rep201.php:232 reporting/rep202.php:233 reporting/rep203.php:176
 #: reporting/rep204.php:148 reporting/rep301.php:249 reporting/rep304.php:212
 #: reporting/rep305.php:193 reporting/rep306.php:293 reporting/rep309.php:157
@@ -11896,7 +11964,7 @@ msgstr "الهاتف"
 
 #: reporting/rep103.php:258
 msgid "Gereral Notes:"
-msgstr ""
+msgstr "جيرال ملاحظات:"
 
 #: reporting/rep103.php:267 reporting/rep205.php:93 reporting/rep205.php:179
 msgid "Turnover"
@@ -11938,7 +12006,7 @@ msgstr "طلبات المبيعات الخلفية فقط"
 
 #: reporting/rep105.php:109 reporting/rep204.php:84
 #: sales/inquiry/customer_allocation_inquiry.php:149
-#: sales/inquiry/customer_inquiry.php:194
+#: sales/inquiry/customer_inquiry.php:195
 msgid "Order"
 msgstr "الطلب أو الأمر"
 
@@ -12000,15 +12068,15 @@ msgstr "فاتورة"
 
 #: reporting/rep107.php:197
 msgid "Prepayments invoiced to this order up to day:"
-msgstr ""
+msgstr "الدفعات المسبقة التي يتم إرسال فواتير بها إلى هذا الطلب حتى اليوم:"
 
 #: reporting/rep107.php:204
 msgid "Invoice reference"
-msgstr ""
+msgstr "مرجع الفاتورة"
 
 #: reporting/rep107.php:221
 msgid "Total payments:"
-msgstr ""
+msgstr "إجمالي الدفعات:"
 
 #: reporting/rep107.php:238 reporting/rep109.php:160 reporting/rep110.php:162
 #: reporting/rep111.php:157 reporting/rep113.php:151
@@ -12024,7 +12092,7 @@ msgstr "مشتملة على إجمالي ضريبة القيمة المضافة 
 
 #: reporting/rep107.php:291
 msgid "THIS INVOICE"
-msgstr ""
+msgstr "هذه الفاتورة"
 
 #: reporting/rep108.php:81 reporting/rep108.php:109
 #: reporting/includes/doctext.inc:237
@@ -12035,11 +12103,11 @@ msgstr "كشف حساب"
 msgid "Outstanding Transactions"
 msgstr "الحركات المتأخرة"
 
-#: reporting/rep108.php:169
+#: reporting/rep108.php:170
 msgid "Statement"
 msgstr "كشف الحساب"
 
-#: reporting/rep108.php:169
+#: reporting/rep108.php:170
 msgid "as of"
 msgstr "كما في"
 
@@ -12173,19 +12241,19 @@ msgstr "تقرير سندات البنود المخزنية المستلمة ا�
 
 #: reporting/rep205.php:93
 msgid "Contact Information"
-msgstr ""
+msgstr "معلومات الاتصال"
 
 #: reporting/rep205.php:94
 msgid "Physical Address"
-msgstr ""
+msgstr "العنوان الفعلي"
 
 #: reporting/rep205.php:102
 msgid "Supplier Details Listing"
-msgstr ""
+msgstr "تفاصيل المورد قائمة"
 
 #: reporting/rep205.php:130
 msgid "Tax_Id"
-msgstr ""
+msgstr "الرقم الضريبي"
 
 #: reporting/rep209.php:88 reporting/rep209.php:104
 #: reporting/includes/doctext.inc:170
@@ -12260,7 +12328,7 @@ msgstr "العائد"
 
 #: reporting/rep304.php:138 reporting/reports_main.php:240
 msgid "Show Service Items"
-msgstr ""
+msgstr "عرض عناصر الخدمة"
 
 #: reporting/rep304.php:140
 msgid "Inventory Sales Report"
@@ -12288,15 +12356,15 @@ msgstr "تقرير تقييم المواد المخزنية المستلمة"
 
 #: reporting/rep306.php:141 reporting/rep309.php:99
 msgid "Unit Price"
-msgstr ""
+msgstr "سعر الوحدة"
 
 #: reporting/rep306.php:154
 msgid "Inventory Purchasing Report"
-msgstr ""
+msgstr "تقرير المشتريات المخزون"
 
 #: reporting/rep307.php:114
 msgid "Opening"
-msgstr ""
+msgstr "افتتاح"
 
 #: reporting/rep307.php:123
 msgid "Inventory Movements"
@@ -12304,19 +12372,19 @@ msgstr "حركات المخزون"
 
 #: reporting/rep308.php:223
 msgid "OpeningStock"
-msgstr ""
+msgstr "OpeningStock"
 
 #: reporting/rep308.php:223
 msgid "StockIn"
-msgstr ""
+msgstr "جوارب"
 
 #: reporting/rep308.php:223
 msgid "ClosingStock"
-msgstr ""
+msgstr "الأسهم تغلق"
 
 #: reporting/rep308.php:224
 msgid "QTY"
-msgstr ""
+msgstr "الكمية"
 
 #: reporting/rep308.php:224 reporting/rep709.php:117
 #: taxes/item_tax_types.php:185
@@ -12325,23 +12393,23 @@ msgstr "المعدل"
 
 #: reporting/rep308.php:233
 msgid "Costed Inventory Movements"
-msgstr ""
+msgstr "حركات المخزون المكلفة"
 
 #: reporting/rep309.php:99
 msgid "Item/Category"
-msgstr ""
+msgstr "العنصر فئة"
 
 #: reporting/rep309.php:99
 msgid "Remark"
-msgstr ""
+msgstr "تعليق"
 
 #: reporting/rep309.php:107
 msgid "Item Sales Summary Report"
-msgstr ""
+msgstr "البند تقرير ملخص المبيعات"
 
 #: reporting/rep309.php:146
 msgid "Gift"
-msgstr ""
+msgstr "هدية مجانية"
 
 #: reporting/rep401.php:71
 msgid "Wrk Ctr"
@@ -12353,11 +12421,11 @@ msgstr "قائمة قوائم تركيبة المواد"
 
 #: reporting/rep402.php:110
 msgid "Open Only"
-msgstr ""
+msgstr "فتح فقط"
 
 #: reporting/rep402.php:112
 msgid "Work Order Listing"
-msgstr ""
+msgstr "قائمة أوامر العمل"
 
 #: reporting/rep409.php:59 reporting/rep409.php:71
 #: reporting/includes/doctext.inc:213
@@ -12366,11 +12434,11 @@ msgstr "أمر تشغيل"
 
 #: reporting/rep451.php:80
 msgid "Initial"
-msgstr ""
+msgstr "مبدئي"
 
 #: reporting/rep451.php:89
 msgid "Fixed Assets Valuation Report"
-msgstr ""
+msgstr "تقرير تقييم األصول الثابتة"
 
 #: reporting/rep501.php:87
 msgid "YTD"
@@ -12395,19 +12463,19 @@ msgstr "صافي التغيير"
 
 #: reporting/rep602.php:73
 msgid "Bank Statement w/Reconcile"
-msgstr ""
+msgstr "بيان البنك ث / التوفيق"
 
 #: reporting/rep602.php:81
 msgid "Reco Date"
-msgstr ""
+msgstr "تاريخ ريكو"
 
 #: reporting/rep602.php:81
 msgid "Narration"
-msgstr ""
+msgstr "رواية"
 
 #: reporting/rep602.php:195
 msgid "Bank Balance"
-msgstr ""
+msgstr "رصيد البنك"
 
 #: reporting/rep702.php:53
 msgid "Type/Account"
@@ -12453,7 +12521,7 @@ msgstr "تصنيف التكاليف السنوية"
 msgid "Close Balance"
 msgstr "الرصيد الختامي"
 
-#: reporting/rep707.php:258
+#: reporting/rep707.php:260
 msgid "Profit and Loss Statement"
 msgstr "قائمة الأرباح و الخسائر"
 
@@ -12479,7 +12547,7 @@ msgstr "صافي الضريبة"
 
 #: reporting/rep709.php:207
 msgid "Exempt"
-msgstr ""
+msgstr "معفى"
 
 #: reporting/rep710.php:77
 msgid "Time"
@@ -12553,7 +12621,7 @@ msgstr "فرز العملة"
 #: reporting/reports_main.php:503 reporting/reports_main.php:511
 #: reporting/reports_main.php:519
 msgid "Orientation"
-msgstr ""
+msgstr "اتجاه"
 
 #: reporting/reports_main.php:44 reporting/reports_main.php:55
 #: reporting/reports_main.php:64 reporting/reports_main.php:71
@@ -12708,7 +12776,7 @@ msgstr "تقرير سندات البنود المخزنية المفترض إس�
 
 #: reporting/reports_main.php:186
 msgid "Supplier &Detail Listing"
-msgstr ""
+msgstr "المورد وقائمة التفاصيل"
 
 #: reporting/reports_main.php:193
 msgid "Print Purchase &Orders"
@@ -12716,11 +12784,11 @@ msgstr "طباعة أوامر الشراء"
 
 #: reporting/reports_main.php:197 reporting/reports_main.php:204
 msgid "Email Suppliers"
-msgstr ""
+msgstr "البريد الإلكتروني الموردين"
 
 #: reporting/reports_main.php:200
 msgid "Print Remi&ttances"
-msgstr ""
+msgstr "طباعة التحويلات"
 
 #: reporting/reports_main.php:209
 msgid "Inventory &Valuation Report"
@@ -12744,7 +12812,7 @@ msgstr "أظهار العجز"
 
 #: reporting/reports_main.php:230
 msgid "Item Like"
-msgstr ""
+msgstr "البند مثل"
 
 #: reporting/reports_main.php:234
 msgid "Inventory &Sales Report"
@@ -12756,19 +12824,19 @@ msgstr "تقرير تقييم المواد المخزنية المستلمة"
 
 #: reporting/reports_main.php:250
 msgid "Inventory P&urchasing Report"
-msgstr ""
+msgstr "تقرير المشتريات المخزون"
 
 #: reporting/reports_main.php:260
 msgid "Inventory &Movement Report"
-msgstr ""
+msgstr "تقرير حركة المخزون"
 
 #: reporting/reports_main.php:268
 msgid "C&osted Inventory Movement Report"
-msgstr ""
+msgstr "تقرير حركة المخزون المقدر"
 
 #: reporting/reports_main.php:276
 msgid "Item &Sales Summary Report"
-msgstr ""
+msgstr "البند تقرير ملخص المبيعات"
 
 #: reporting/reports_main.php:286
 msgid "&Bill of Material Listing"
@@ -12784,11 +12852,11 @@ msgstr "إلى المنتج"
 
 #: reporting/reports_main.php:292
 msgid "Work Order &Listing"
-msgstr ""
+msgstr "قائمة أوامر العمل"
 
 #: reporting/reports_main.php:295
 msgid "Outstanding Only"
-msgstr ""
+msgstr "المعلقة فقط"
 
 #: reporting/reports_main.php:299
 msgid "Print &Work Orders"
@@ -12800,15 +12868,15 @@ msgstr "إرسال المواقع المخزنية بالبريد الألكتر
 
 #: reporting/reports_main.php:309
 msgid "&Fixed Assets Valuation"
-msgstr ""
+msgstr "تقييم الأصول الثابتة"
 
 #: reporting/reports_main.php:311
 msgid "Fixed Assets Class"
-msgstr ""
+msgstr "فئة الأصول الثابتة"
 
 #: reporting/reports_main.php:312
 msgid "Fixed Assets Location"
-msgstr ""
+msgstr "موقع الأصول الثابتة"
 
 #: reporting/reports_main.php:321
 msgid "Dimension &Summary"
@@ -12837,7 +12905,7 @@ msgstr "القيم الصفرية"
 
 #: reporting/reports_main.php:338
 msgid "Bank Statement w/ &Reconcile"
-msgstr ""
+msgstr "بيان البنك ث / والتوفيق"
 
 #: reporting/reports_main.php:345
 msgid "General Ledger"
@@ -12925,7 +12993,7 @@ msgstr "التسعير رقم "
 #: reporting/includes/doctext.inc:183 reporting/includes/doctext.inc:201
 #: reporting/includes/doctext.inc:239
 msgid "Customer's Reference"
-msgstr ""
+msgstr "مرجع العميل"
 
 #: reporting/includes/doctext.inc:56 reporting/includes/doctext.inc:73
 #: reporting/includes/doctext.inc:94 reporting/includes/doctext.inc:108
@@ -12954,7 +13022,7 @@ msgstr "صالح لغاية"
 
 #: reporting/includes/doctext.inc:64
 msgid "PREPAYMENT ORDER"
-msgstr ""
+msgstr "أمر الدفع المسبق"
 
 #: reporting/includes/doctext.inc:65
 msgid "Order No."
@@ -12985,11 +13053,11 @@ msgstr "الرجاء تحديد رقم الإشعار الدائن عند عمل
 
 #: reporting/includes/doctext.inc:116
 msgid "PREPAYMENT INVOICE"
-msgstr ""
+msgstr "فاتورة الدفع المسبق"
 
 #: reporting/includes/doctext.inc:117
 msgid "FINAL INVOICE"
-msgstr ""
+msgstr "الفاتورة النهائية"
 
 #: reporting/includes/doctext.inc:118
 msgid "Invoice No."
@@ -13001,11 +13069,11 @@ msgstr "الرجاء تحديد رقم الفاتورة عند عملية الد
 
 #: reporting/includes/doctext.inc:136
 msgid "Date of Payment"
-msgstr ""
+msgstr "تاريخ السداد"
 
 #: reporting/includes/doctext.inc:142
 msgid "Date of Sale"
-msgstr ""
+msgstr "الموعد للبيع"
 
 #: reporting/includes/doctext.inc:151
 msgid "Remittance No."
@@ -13039,7 +13107,7 @@ msgstr "أمر التشغيل رقم"
 msgid "DueDate"
 msgstr "تاريخ الأستحقاق"
 
-#: reporting/includes/doctext.inc:271 reporting/includes/pdf_report.inc:1006
+#: reporting/includes/doctext.inc:271 reporting/includes/pdf_report.inc:1017
 msgid "You can pay through"
 msgstr "يمكنك الدفع من خلال"
 
@@ -13053,12 +13121,12 @@ msgid ""
 msgstr "إعدادات الأمن لحسابك لا تسمح لك أن تطبع هذا التقرير"
 
 #: reporting/includes/excel_report.inc:259
-#: reporting/includes/pdf_report.inc:317
+#: reporting/includes/pdf_report.inc:328
 msgid "Print Out Date"
 msgstr "تاريخ الطباعة"
 
 #: reporting/includes/excel_report.inc:265
-#: reporting/includes/pdf_report.inc:326
+#: reporting/includes/pdf_report.inc:337
 msgid "Fiscal Year"
 msgstr "السنة المالية"
 
@@ -13067,12 +13135,12 @@ msgid "Report Date"
 msgstr "تاريخ التقرير"
 
 #: reporting/includes/excel_report.inc:410
-#: reporting/includes/pdf_report.inc:590
+#: reporting/includes/pdf_report.inc:601
 msgid "Generated At"
 msgstr "أصدرت في"
 
 #: reporting/includes/excel_report.inc:416
-#: reporting/includes/pdf_report.inc:599
+#: reporting/includes/pdf_report.inc:610
 msgid "Generated By"
 msgstr "أصدرت بواسطة"
 
@@ -13084,47 +13152,48 @@ msgstr "رقم ملف ضريبة القيمة المضافة الداخلي"
 msgid "Domicile"
 msgstr "محل الأقامة"
 
-#: reporting/includes/header2.inc:146 reporting/includes/pdf_report.inc:353
-#: reporting/includes/pdf_report.inc:491 reporting/includes/pdf_report.inc:618
+#: reporting/includes/header2.inc:146 reporting/includes/pdf_report.inc:364
+#: reporting/includes/pdf_report.inc:502 reporting/includes/pdf_report.inc:629
 msgid "Page"
 msgstr "الصفحة"
 
-#: reporting/includes/pdf_report.inc:573
+#: reporting/includes/pdf_report.inc:584
 msgid "Report Period"
 msgstr "فترة التقرير"
 
-#: reporting/includes/pdf_report.inc:973
-#: reporting/includes/pdf_report.inc:1021
+#: reporting/includes/pdf_report.inc:984
+#: reporting/includes/pdf_report.inc:1032
 #, php-format
 msgid "You have no email contact defined for this type of document for '%s'."
 msgstr ""
+"لم يتم تحديد أي جهة اتصال للبريد الإلكتروني لهذا النوع من المستندات ل '%s'."
 
-#: reporting/includes/pdf_report.inc:992
+#: reporting/includes/pdf_report.inc:1003
 msgid "Dear"
 msgstr "عزيزي"
 
-#: reporting/includes/pdf_report.inc:993
+#: reporting/includes/pdf_report.inc:1004
 msgid "Attached you will find "
 msgstr "المرفقات التي سوف تجدها"
 
-#: reporting/includes/pdf_report.inc:1009
+#: reporting/includes/pdf_report.inc:1020
 msgid "Kindest regards"
 msgstr "مع خالص الشكر "
 
-#: reporting/includes/pdf_report.inc:1024
+#: reporting/includes/pdf_report.inc:1035
 msgid "Sending document by email failed"
 msgstr "لقد فشلت عملية إرسال المستند بالبريد الألكتروني"
 
-#: reporting/includes/pdf_report.inc:1024
-#: reporting/includes/pdf_report.inc:1027
+#: reporting/includes/pdf_report.inc:1035
+#: reporting/includes/pdf_report.inc:1038
 msgid "Email:"
 msgstr "البريد الألكتروني"
 
-#: reporting/includes/pdf_report.inc:1027
+#: reporting/includes/pdf_report.inc:1038
 msgid "has been sent by email to destination."
 msgstr "تمت عملية الإرسال بواسطة البريد الألكتروني"
 
-#: reporting/includes/pdf_report.inc:1056
+#: reporting/includes/pdf_report.inc:1067
 msgid "Report has been sent to network printer "
 msgstr "تمت عملية إرسال التقرير إلى الطابعة الموصلة بالشبكة"
 
@@ -13239,7 +13308,7 @@ msgstr "عدم الفرز بالتصنيف"
 
 #: reporting/includes/reports_classes.inc:428
 msgid "No Class Filter"
-msgstr ""
+msgstr "لا تصفية فئة"
 
 #: reporting/includes/reports_classes.inc:436
 msgid "No Sales Folk Filter"
@@ -13271,19 +13340,22 @@ msgstr "إرسال الفواتير الدورية # %s - # %s. بالبريد �
 #: sales/create_recurrent_invoices.php:168
 msgid ""
 "Recurrent invoice cannot be generated before last day of covered period."
-msgstr ""
+msgstr "لا يمكن إنشاء فاتورة متكررة قبل اليوم الأخير من الفترة المشمولة."
 
 #: sales/create_recurrent_invoices.php:170
 msgid ""
 "Recurrent invoices cannot be generated because some items have no price "
 "defined in customer currency."
 msgstr ""
+"لا يمكن إنشاء فواتير متكررة لأن بعض العناصر ليس لها سعر محدد بعملة العميل."
 
 #: sales/create_recurrent_invoices.php:172
 msgid ""
 "Recurrent invoices cannot be generated because selected sales order template"
 " uses prepayment sales terms. Change payment terms and try again."
 msgstr ""
+"لا يمكن إنشاء فواتير متكررة لأن نموذج طلب المبيعات المحدد يستخدم شروط "
+"المبيعات المسبقة. تغيير شروط الدفع والمحاولة مرة أخرى."
 
 #: sales/create_recurrent_invoices.php:180
 #: sales/manage/recurrent_invoices.php:193
@@ -13292,15 +13364,15 @@ msgstr "التنسيق :"
 
 #: sales/create_recurrent_invoices.php:181
 msgid "Number of invoices:"
-msgstr ""
+msgstr "عدد الفواتير:"
 
 #: sales/create_recurrent_invoices.php:182
 msgid "Invoice date:"
-msgstr ""
+msgstr "تاريخ الفاتورة:"
 
 #: sales/create_recurrent_invoices.php:183
 msgid "Invoice notice:"
-msgstr ""
+msgstr "إشعار الفاتورة:"
 
 #: sales/create_recurrent_invoices.php:183
 #, php-format
@@ -13309,15 +13381,15 @@ msgstr "الفاتورة الدورية تغطي الفترة  %s - %s."
 
 #: sales/create_recurrent_invoices.php:189
 msgid "Create"
-msgstr ""
+msgstr "خلق"
 
 #: sales/create_recurrent_invoices.php:189
 msgid "Create recurrent invoices"
-msgstr ""
+msgstr "إنشاء الفواتير المتكررة"
 
 #: sales/create_recurrent_invoices.php:190
 msgid "Return to recurrent invoices"
-msgstr ""
+msgstr "ارجع إلى الفواتير المتكررة"
 
 #: sales/create_recurrent_invoices.php:191
 #, php-format
@@ -13325,6 +13397,8 @@ msgid ""
 "You are about to issue %s invoices.\n"
 " Do you want to continue?"
 msgstr ""
+"أنت على وشك إصدار فواتير %s. \n"
+" هل تريد المتابعة؟"
 
 #: sales/create_recurrent_invoices.php:203
 #: sales/manage/recurrent_invoices.php:128
@@ -13339,7 +13413,7 @@ msgstr "تاريخ النهاية"
 #: sales/create_recurrent_invoices.php:240
 #, php-format
 msgid "Create %s Invoice(s)"
-msgstr ""
+msgstr "إنشاء%s فواتير"
 
 #: sales/create_recurrent_invoices.php:252
 msgid "Marked items are due."
@@ -13354,7 +13428,7 @@ msgstr "لا توجد فواتير دورية مستحقة"
 msgid "Modifying Customer Credit Note #%d"
 msgstr "تعديل الإشعار الدائن #%d الخاص بالعميل"
 
-#: sales/credit_note_entry.php:51 sales/sales_order_entry.php:706
+#: sales/credit_note_entry.php:51 sales/sales_order_entry.php:705
 msgid ""
 "There are no customers, or there are no customers with branches. Please "
 "define customers and customer branches."
@@ -13590,7 +13664,7 @@ msgstr "اختيار عملية تسليم مختلفة"
 msgid ""
 "You have to set Deferred Income Account in GL Setup to entry prepayment "
 "invoices."
-msgstr ""
+msgstr "لديك لتعيين حساب الدخل المؤجل في إعداد غل لدخول فواتير الدفع المسبق."
 
 #: sales/customer_delivery.php:97 sales/customer_delivery.php:102
 msgid "Select a different sales order to delivery"
@@ -13604,7 +13678,7 @@ msgstr "طلب المبيعات الحالي لا توجد به بنود مخز�
 msgid ""
 "This prepayment order is not yet ready for delivery due to insufficient "
 "amount received."
-msgstr ""
+msgstr "هذا أمر الدفع المسبق ليست جاهزة للتسليم بسبب عدم كفاية كمية وردت."
 
 #: sales/customer_delivery.php:121
 msgid "Select a different delivery"
@@ -13660,7 +13734,7 @@ msgstr "لا توجد كميات للبنود المخزنية في سند ال�
 msgid ""
 "This document cannot be processed because there is insufficient quantity for"
 " items marked."
-msgstr ""
+msgstr "لا يمكن معالجة هذه الوثيقة نظرا لعدم وجود كمية كافية للعناصر المميزة."
 
 #: sales/customer_delivery.php:341
 msgid "For Sales Order"
@@ -13717,18 +13791,18 @@ msgstr "تجديد صفحة المستند"
 
 #: sales/customer_delivery.php:530
 msgid "Reset quantity"
-msgstr ""
+msgstr "إعادة تعيين الكمية"
 
 #: sales/customer_delivery.php:533
 msgid "Clear quantity"
-msgstr ""
+msgstr "كمية واضحة"
 
 #: sales/customer_delivery.php:535
 msgid "Process Dispatch"
 msgstr "تنفيذ عملية ا لإرسال"
 
 #: sales/customer_delivery.php:536 sales/customer_invoice.php:665
-#: sales/sales_order_entry.php:753
+#: sales/sales_order_entry.php:752
 msgid "Check entered data and save document"
 msgstr "فحص البيانات المدخلة و حفظ المستند"
 
@@ -13747,7 +13821,7 @@ msgstr "إصدار فاتورة مجمعة لسندات التسليم"
 
 #: sales/customer_invoice.php:44
 msgid "Prepayment or Final Invoice Entry"
-msgstr ""
+msgstr "الدفع المسبق أو الفاتورة النهائية"
 
 #: sales/customer_invoice.php:57
 msgid "Selected deliveries has been processed"
@@ -13776,7 +13850,7 @@ msgstr "أختيار عملية تسليم أخرى للفوترة"
 
 #: sales/customer_invoice.php:69 sales/sales_order_entry.php:248
 msgid "Entry &customer payment for this invoice"
-msgstr ""
+msgstr "دخول العميل للدفع لهذه الفاتورة"
 
 #: sales/customer_invoice.php:81
 #, php-format
@@ -13809,6 +13883,7 @@ msgstr ""
 msgid ""
 "Please select correct Sales Order Prepayment to be invoiced and try again."
 msgstr ""
+"يرجى تحديد الصحيح ترتيب المبيعات الدفع المسبق للفوترة والمحاولة مرة أخرى."
 
 #: sales/customer_invoice.php:178
 msgid ""
@@ -13847,12 +13922,14 @@ msgid ""
 "There is no non-invoiced payments for this order. If you want to issue final"
 " invoice, select delayed or cash payment terms."
 msgstr ""
+"لا توجد مدفوعات غير مفوترة لهذا الطلب. إذا كنت ترغب في إصدار الفاتورة "
+"النهائية، حدد تأخير أو نقدا شروط الدفع."
 
 #: sales/customer_invoice.php:436
 msgid "Payment terms:"
 msgstr "شروط الدفع"
 
-#: sales/customer_invoice.php:512 sales/sales_order_entry.php:729
+#: sales/customer_invoice.php:512 sales/sales_order_entry.php:728
 msgid "Sales Order Items"
 msgstr "البنود المخزنية لطلب المبيعات"
 
@@ -13874,19 +13951,19 @@ msgstr "إجمالي الفاتورة"
 
 #: sales/customer_invoice.php:641
 msgid "Sales order:"
-msgstr ""
+msgstr "طلب المبيعات:"
 
 #: sales/customer_invoice.php:653
 msgid "Payments received:"
-msgstr ""
+msgstr "الدفعات المستلمة:"
 
 #: sales/customer_invoice.php:654
 msgid "Invoiced here:"
-msgstr ""
+msgstr "تم إرسال الفواتير هنا:"
 
 #: sales/customer_invoice.php:655
 msgid "Left to be invoiced:"
-msgstr ""
+msgstr "اليسار إلى الفاتورة:"
 
 #: sales/customer_payments.php:32
 msgid "Customer Payment Entry"
@@ -13910,7 +13987,7 @@ msgstr "طباعة الإيصال الحالي"
 
 #: sales/customer_payments.php:102
 msgid "&View this Customer Payment"
-msgstr ""
+msgstr "عرض دفع العميل هذا"
 
 #: sales/customer_payments.php:104 sales/customer_payments.php:127
 msgid "Enter Another &Customer Payment"
@@ -13918,7 +13995,7 @@ msgstr "إدخال مقبوضات عميل أخرى"
 
 #: sales/customer_payments.php:106
 msgid "Enter Payment to &Supplier"
-msgstr ""
+msgstr "أدخل الدفع إلى المورد"
 
 #: sales/customer_payments.php:110 sales/customer_payments.php:121
 msgid "&View the GL Journal Entries for this Customer Payment"
@@ -13930,7 +14007,7 @@ msgstr "تمت عملية تحديث مقبوضات العميل"
 
 #: sales/customer_payments.php:125
 msgid "Select Another Customer Payment for &Edition"
-msgstr ""
+msgstr "حدد دفع عميل آخر للتعديل"
 
 #: sales/customer_payments.php:140 sales/sales_order_entry.php:360
 msgid "There is no customer selected."
@@ -13957,11 +14034,11 @@ msgstr "الخصم المدخل رقم غير مقبول"
 msgid ""
 "The balance of the amount and discount is zero or negative. Please enter "
 "valid amounts."
-msgstr ""
+msgstr "رصيد المبلغ والخصم هو صفر أو سلبي. الرجاء إدخال مبالغ صالحة."
 
 #: sales/customer_payments.php:206
 msgid "The entered payment amount is zero or negative."
-msgstr ""
+msgstr "مبلغ الدفعة المدخلة هو صفر أو سلبي."
 
 #: sales/customer_payments.php:308
 msgid "Into Bank Account:"
@@ -13977,7 +14054,7 @@ msgstr "تاريخ الإيداع :"
 
 #: sales/customer_payments.php:359
 msgid "Payment Amount:"
-msgstr ""
+msgstr "مبلغ الدفعة:"
 
 #: sales/customer_payments.php:372
 msgid "Customer prompt payment discount :"
@@ -13997,7 +14074,7 @@ msgstr "عملية تسليم مبيعات مباشرة"
 
 #: sales/sales_order_entry.php:72
 msgid "Fixed Assets Sale"
-msgstr ""
+msgstr "بيع الأصول الثابتة"
 
 #: sales/sales_order_entry.php:75
 msgid "Direct Sales Invoice"
@@ -14030,6 +14107,8 @@ msgid ""
 "This order cannot be edited because there are invoices or payments related "
 "to it, and prepayment terms were used."
 msgstr ""
+"لا يمكن تعديل هذا الطلب نظرا لوجود فواتير أو دفعات ذات صلة به، كما تم "
+"استخدام شروط الدفع المسبق."
 
 #: sales/sales_order_entry.php:125
 #, php-format
@@ -14134,7 +14213,7 @@ msgstr "إدخال فاتورة فورية جديدة"
 
 #: sales/sales_order_entry.php:395
 msgid "Pre-payment required have to be positive and less than total amount."
-msgstr ""
+msgstr "ويجب أن يكون الدفع المسبق موجبا وأقل من المبلغ الإجمالي."
 
 #: sales/sales_order_entry.php:400
 msgid ""
@@ -14173,13 +14252,13 @@ msgstr "تاريخ عملية التسليم المطلوب قبل تاريخ ط
 msgid "You need to define a cash account for your Sales Point."
 msgstr "يجب عليك تعريف حساب النقدية لنقطة البيع الخاصة بك"
 
-#: sales/sales_order_entry.php:478
+#: sales/sales_order_entry.php:479
 msgid ""
 "The reference number field has been increased. Please save the document "
 "again."
-msgstr ""
+msgstr "تمت زيادة حقل الرقم المرجعي. الرجاء حفظ المستند مرة أخرى."
 
-#: sales/sales_order_entry.php:524
+#: sales/sales_order_entry.php:523
 msgid ""
 "The item could not be updated because you are attempting to set the quantity"
 " ordered to less than 0, or the discount percent to more than 100."
@@ -14187,11 +14266,11 @@ msgstr ""
 "لم يكن في الإمكان تحديث البند المخزني بسبب أنك تحاول أن تجعل الكمية المطلوبة"
 " أقل من الصفر أو نسبة الخصم أكبر من المائة"
 
-#: sales/sales_order_entry.php:528
+#: sales/sales_order_entry.php:527
 msgid "Price for inventory item must be entered and can not be less than 0"
 msgstr "سعر البند المخزني يجب أن يدخل و لا يمكن أن يكون أقل من الصفر"
 
-#: sales/sales_order_entry.php:535
+#: sales/sales_order_entry.php:534
 msgid ""
 "You attempting to make the quantity ordered a quantity less than has already"
 " been delivered. The quantity delivered cannot be modified retrospectively."
@@ -14199,140 +14278,140 @@ msgstr ""
 "أنت تحاول جعل الكمية المطلوبة كمية أقل من تلك التي تم صرفها ، الكمية "
 "المنصرفة لا يمكن تعديلها بأثر رجعي"
 
-#: sales/sales_order_entry.php:553
+#: sales/sales_order_entry.php:552
 #, php-format
 msgid "Price %s is below Standard Cost %s"
 msgstr "السعر %s أقل من التكلفة القياسية %s"
 
-#: sales/sales_order_entry.php:578
+#: sales/sales_order_entry.php:577
 msgid ""
 "This item cannot be deleted because some of it has already been delivered."
 msgstr "لا يمكن حذف البند المخزني الحالي بسبب أن هناك بعضا منه تم صرفه بالفعل"
 
-#: sales/sales_order_entry.php:607
+#: sales/sales_order_entry.php:606
 msgid "Direct delivery entry has been cancelled as requested."
 msgstr "مدخلات عملية التسليم المباشرة تم إلغاءها كما هو مطلوب"
 
-#: sales/sales_order_entry.php:608
+#: sales/sales_order_entry.php:607
 msgid "Enter a New Sales Delivery"
 msgstr "إدخال عملية تسليم مبيعات جديدة"
 
-#: sales/sales_order_entry.php:610
+#: sales/sales_order_entry.php:609
 msgid "Direct invoice entry has been cancelled as requested."
 msgstr "مدخلات الفاتورة الفورية تم إلغاءها كما هو مطلوب"
 
-#: sales/sales_order_entry.php:611
+#: sales/sales_order_entry.php:610
 msgid "Enter a New Sales Invoice"
 msgstr "إدخال فاتور مبيعات جديدة"
 
-#: sales/sales_order_entry.php:616
+#: sales/sales_order_entry.php:615
 msgid "This sales quotation has been cancelled as requested."
 msgstr "خطاب تسعير المبيعات الحالي تم إلغاؤه كما هو مطلوب"
 
-#: sales/sales_order_entry.php:617
+#: sales/sales_order_entry.php:616
 msgid "Enter a New Sales Quotation"
 msgstr "إدخال خطاب تسعير مبيعات جديد"
 
-#: sales/sales_order_entry.php:624
+#: sales/sales_order_entry.php:623
 msgid "Undelivered part of order has been cancelled as requested."
-msgstr ""
+msgstr "تم إلغاء الجزء غير المسلمة من الطلب كما هو مطلوب."
 
-#: sales/sales_order_entry.php:625
+#: sales/sales_order_entry.php:624
 msgid "Select Another Sales Order for Edition"
-msgstr ""
+msgstr "حدد أمر مبيعات آخر للإصدار"
 
-#: sales/sales_order_entry.php:629
+#: sales/sales_order_entry.php:628
 msgid "This sales order has been cancelled as requested."
 msgstr "طلب المبيعات الحالي تم إلغاؤه كما هو مطلوب"
 
-#: sales/sales_order_entry.php:630
+#: sales/sales_order_entry.php:629
 msgid "Enter a New Sales Order"
 msgstr "إدخال طلب مبيعات جديد"
 
-#: sales/sales_order_entry.php:710
+#: sales/sales_order_entry.php:709
 msgid "Sales Invoice Items"
 msgstr "البنود المخزنية لفاتورة المبيعات"
 
-#: sales/sales_order_entry.php:711
+#: sales/sales_order_entry.php:710
 msgid "Enter Delivery Details and Confirm Invoice"
 msgstr "إدخال تفاصيل عملية التسليم و تأكيد الفاتورة"
 
-#: sales/sales_order_entry.php:713
+#: sales/sales_order_entry.php:712
 msgid "Place Invoice"
 msgstr "إدراج فاتورة"
 
-#: sales/sales_order_entry.php:716
+#: sales/sales_order_entry.php:715
 msgid "Delivery Note Items"
 msgstr "البنود المخزنية لسند التسليم"
 
-#: sales/sales_order_entry.php:717
+#: sales/sales_order_entry.php:716
 msgid "Enter Delivery Details and Confirm Dispatch"
 msgstr "إدخال تفاصيل عملية التسليم و تأكيد عملية الإرسال"
 
-#: sales/sales_order_entry.php:718
+#: sales/sales_order_entry.php:717
 msgid "Cancel Delivery"
 msgstr "إلغاء عملية التسليم"
 
-#: sales/sales_order_entry.php:719
+#: sales/sales_order_entry.php:718
 msgid "Place Delivery"
 msgstr "إدراج عملية التسليم"
 
-#: sales/sales_order_entry.php:721
+#: sales/sales_order_entry.php:720
 msgid "Quotation Date:"
 msgstr "تاريخ التسعير :"
 
-#: sales/sales_order_entry.php:722
+#: sales/sales_order_entry.php:721
 msgid "Sales Quotation Items"
 msgstr "البنود المخزنية لخطاب تسعير المبيعات"
 
-#: sales/sales_order_entry.php:723
+#: sales/sales_order_entry.php:722
 msgid "Enter Delivery Details and Confirm Quotation"
 msgstr "إدخال تفاصيل عملية التسليم و تأكيد خطاب التسعير"
 
-#: sales/sales_order_entry.php:724
+#: sales/sales_order_entry.php:723
 msgid "Cancel Quotation"
 msgstr "إلغاء خطاب التسعير"
 
-#: sales/sales_order_entry.php:725
+#: sales/sales_order_entry.php:724
 msgid "Place Quotation"
 msgstr "إدراج خطاب تسعير"
 
-#: sales/sales_order_entry.php:726
+#: sales/sales_order_entry.php:725
 msgid "Commit Quotations Changes"
 msgstr "تنفيذ التغيرات في خطابات التسعير"
 
-#: sales/sales_order_entry.php:730
+#: sales/sales_order_entry.php:729
 msgid "Enter Delivery Details and Confirm Order"
 msgstr "إدخال تفاصيل عملية التسليم و تأكيد طلب المبيعات"
 
-#: sales/sales_order_entry.php:733
+#: sales/sales_order_entry.php:732
 msgid "Commit Order Changes"
 msgstr "تنفيذ التغيرات في طلب المبيعات"
 
-#: sales/sales_order_entry.php:755 sales/sales_order_entry.php:761
+#: sales/sales_order_entry.php:754 sales/sales_order_entry.php:760
 msgid ""
 "Cancels document entry or removes sales order when editing an old document"
 msgstr "إلغاء إدخال المستند أو حذف طلب المبيعات عندما يتم تحرير مستند قديم"
 
-#: sales/sales_order_entry.php:756 sales/sales_order_entry.php:765
+#: sales/sales_order_entry.php:755 sales/sales_order_entry.php:764
 msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr "أنت بصدد إلغاء هذا المستند . هل تريد أن تستمر ؟"
 
-#: sales/sales_order_entry.php:759
+#: sales/sales_order_entry.php:758
 msgid "Validate changes and update document"
 msgstr "المصادقة على التغييرات و تحديث المستند"
 
-#: sales/sales_order_entry.php:763
+#: sales/sales_order_entry.php:762
 msgid ""
 "You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
-msgstr ""
+msgstr "أنت على وشك إلغاء جزء لم يتم تسليمه من هذا الطلب. \\\\n هل تريد المتابعة؟"
 
 #: sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"
 msgstr "تخصيص مقبوضات العميل أو الإشعارات الدائنة"
 
-#: sales/allocations/customer_allocate.php:50
+#: sales/allocations/customer_allocate.php:55
 #, php-format
 msgid "Allocation of %s # %d"
 msgstr "التخصيص لـ %s # %d"
@@ -14344,7 +14423,7 @@ msgstr "تخصيصات العميل"
 #: sales/allocations/customer_allocation_main.php:32
 #: sales/manage/customer_branches.php:270 sales/manage/customers.php:329
 #: sales/inquiry/customer_allocation_inquiry.php:42
-#: sales/inquiry/customer_inquiry.php:44
+#: sales/inquiry/customer_inquiry.php:154
 #: sales/inquiry/sales_deliveries_view.php:114
 #: sales/inquiry/sales_orders_view.php:232
 msgid "Select a customer: "
@@ -14709,24 +14788,27 @@ msgid ""
 "There is no template order in database.\n"
 "\tYou have to create at least one sales order marked as template to be able to define recurrent invoices."
 msgstr ""
+"لا يوجد طلب نموذج في قاعدة البيانات. \\n \\tيجب عليك إنشاء أمر مبيعات واحد "
+"على الأقل تم وضع علامة عليه كقالب ليتمكن من تحديد الفواتير المتكررة."
 
 #: sales/manage/recurrent_invoices.php:40
 msgid ""
 "This customer has no branches. Please define at least one branch for this "
 "customer first."
 msgstr ""
+"هذا العميل ليس لديه فروع. يرجى تحديد فرع واحد على الأقل لهذا العميل أولا."
 
 #: sales/manage/recurrent_invoices.php:48
 msgid "The invoice description cannot be empty."
-msgstr ""
+msgstr "لا يمكن أن يكون وصف الفاتورة فارغا."
 
 #: sales/manage/recurrent_invoices.php:54
 msgid "This recurrent invoice description is already in use."
-msgstr ""
+msgstr "هذا الوصف المتكرر للفاتورة قيد الاستخدام بالفعل."
 
 #: sales/manage/recurrent_invoices.php:77
 msgid "No recurence interval has been entered."
-msgstr ""
+msgstr "لم يتم إدخال أي فترة تكرار."
 
 #: sales/manage/recurrent_invoices.php:89
 msgid "Selected recurrent invoice has been updated"
@@ -14799,7 +14881,7 @@ msgstr "مجموعات المبيعات"
 
 #: sales/manage/sales_groups.php:30
 msgid "The sales group description cannot be empty."
-msgstr ""
+msgstr "لا يمكن أن يكون وصف مجموعة المبيعات فارغا."
 
 #: sales/manage/sales_groups.php:39
 msgid "Selected sales group has been updated"
@@ -14882,7 +14964,7 @@ msgstr "رقم الفاكس :"
 
 #: sales/manage/sales_people.php:160
 msgid "Turnover Break Pt Level:"
-msgstr ""
+msgstr "دوران برياك بت المستوى:"
 
 #: sales/manage/sales_points.php:16
 msgid "POS settings"
@@ -15074,12 +15156,12 @@ msgstr "عرض فاتورة المبيعات"
 #: sales/view/view_invoice.php:45
 #, php-format
 msgid "FINAL INVOICE #%d"
-msgstr ""
+msgstr "الفاتورة النهائية #%d"
 
 #: sales/view/view_invoice.php:45
 #, php-format
 msgid "PREPAYMENT INVOICE #%d"
-msgstr ""
+msgstr "فاتورة الدفع المسبق #%d"
 
 #: sales/view/view_invoice.php:45
 #, php-format
@@ -15089,6 +15171,10 @@ msgstr "فاتورة المبيعات #%d"
 #: sales/view/view_invoice.php:154
 msgid "There are no line items on this invoice."
 msgstr "لا توجد سجلات بنود مخزنية في الفاتورة الحالية"
+
+#: sales/view/view_invoice.php:171
+msgid "PREPAYMENT AMOUNT INVOICED"
+msgstr "مبلغ الدفع المسبق إنفواسد"
 
 #: sales/view/view_receipt.php:24
 msgid "View Customer Payment"
@@ -15109,7 +15195,7 @@ msgstr "تاريخ الإيداع"
 
 #: sales/view/view_receipt.php:43
 msgid "Customer Currency"
-msgstr ""
+msgstr "عملة العميل"
 
 #: sales/view/view_receipt.php:48
 msgid "Into Bank Account"
@@ -15117,7 +15203,7 @@ msgstr "في حساب البنك"
 
 #: sales/view/view_receipt.php:49
 msgid "Bank Amount"
-msgstr ""
+msgstr "مبلغ البنك"
 
 #: sales/view/view_receipt.php:56
 msgid "This customer payment has been voided."
@@ -15163,11 +15249,11 @@ msgstr "التسليم من موقع التخزين "
 
 #: sales/view/view_sales_order.php:86
 msgid "Non-Invoiced Prepayments"
-msgstr ""
+msgstr "المبالغ المدفوعة مقدما التي لم يتم تحرير فواتير بها"
 
 #: sales/view/view_sales_order.php:87
 msgid "All Payments Allocated"
-msgstr ""
+msgstr "تم تعيين جميع الدفعات"
 
 #: sales/view/view_sales_order.php:95
 msgid "Telephone"
@@ -15193,18 +15279,13 @@ msgstr "التخصيص"
 msgid "Customer Transactions"
 msgstr "الحركات الخاصة بالعميل"
 
-#: sales/inquiry/customer_inquiry.php:68
-msgid "CUSTOMER ACCOUNT IS ON HOLD"
-msgstr "حساب العميل معلق"
-
-#: sales/inquiry/customer_inquiry.php:172
+#: sales/inquiry/customer_inquiry.php:93
 msgid "Print Receipt"
 msgstr "طباعة إيصال"
 
-#: sales/inquiry/customer_inquiry.php:202
-#: sales/inquiry/customer_inquiry.php:215
-msgid "RB"
-msgstr "RB"
+#: sales/inquiry/customer_inquiry.php:113
+msgid "CUSTOMER ACCOUNT IS ON HOLD"
+msgstr "حساب العميل معلق"
 
 #: sales/inquiry/sales_deliveries_view.php:29
 msgid "Search Not Invoiced Deliveries"
@@ -15262,7 +15343,7 @@ msgstr "أختيار نموذج عملية التسليم"
 
 #: sales/inquiry/sales_orders_view.php:59
 msgid "Invoicing Prepayment Orders"
-msgstr ""
+msgstr "الفواتير الدفع المسبق أوامر"
 
 #: sales/inquiry/sales_orders_view.php:64
 msgid "Search All Sales Orders"
@@ -15284,11 +15365,11 @@ msgstr ""
 
 #: sales/inquiry/sales_orders_view.php:176
 msgid "Prepayment Invoice"
-msgstr ""
+msgstr "فاتورة الدفع المسبق"
 
 #: sales/inquiry/sales_orders_view.php:176
 msgid "Final Invoice"
-msgstr ""
+msgstr "الفاتورة النهائية"
 
 #: sales/inquiry/sales_orders_view.php:234
 msgid "Show All:"
@@ -15336,7 +15417,7 @@ msgstr ""
 "جلسة التحرير هذه تمت إلغاؤها بفتح مستند البيع في كارت أخر في نفس المتصفح ، "
 "لا يمكنك تحرير أكثر من مستند مبيعات في نفس الجلسة"
 
-#: sales/includes/db/custalloc_db.inc:381
+#: sales/includes/db/custalloc_db.inc:382
 msgid ""
 "Unsuspected overallocation happened due to sparse credit notes exists for this invoice.\n"
 " Check all credit notes allocated to this invoice for summarized freight charges."
@@ -15348,7 +15429,7 @@ msgstr ""
 #: sales/includes/db/recurrent_invoices_db.inc:158
 #, php-format
 msgid "Unknown %s price for '%s' in pricelist '%s'"
-msgstr ""
+msgstr "غير معروف %s سعر '%s' في قائمة الأسعار '%s'"
 
 #: sales/includes/db/sales_credit_db.inc:185
 msgid "Return"
@@ -15356,7 +15437,7 @@ msgstr "الرجوع"
 
 #: sales/includes/db/sales_credit_db.inc:187
 msgid "Ex Inv:"
-msgstr ""
+msgstr "مساهمة سابقة:"
 
 #: sales/includes/db/sales_invoice_db.inc:206
 msgid "Cash invoice"
@@ -15420,7 +15501,7 @@ msgstr "تاريخ أستلام طلب المبيعات"
 
 #: sales/includes/ui/sales_order_ui.inc:503
 msgid "[Select item]"
-msgstr ""
+msgstr "[تحديد العنصر]"
 
 #: sales/includes/ui/sales_order_ui.inc:574
 msgid "Cash payment"
@@ -15679,7 +15760,7 @@ msgstr "الإعدادات المفضلة"
 
 #: themes/default/renderer.php:72
 msgid "Change Password"
-msgstr ""
+msgstr "تغيير كلمة السر"
 
 #: themes/default/renderer.php:74 themes/default/renderer.php:85
 msgid "Help"
@@ -15741,44 +15822,46 @@ msgid "Upgrade from version 2.2 to 2.3"
 msgstr "الترقية من الإصدار 2.2 إلى الإصدار 2.3"
 
 #: sql/alter2.4.php:23
-msgid "Upgrade from version 2.3 to 2.4RC1"
-msgstr ""
+msgid "Upgrade from version 2.3 to 2.4"
+msgstr "الترقية من الإصدار 2.3 إلى 2.4"
 
 #: sql/alter2.4.php:31 sql/alter2.4rc1.php:31
 msgid "Set optimal parameters and start upgrade:"
-msgstr ""
+msgstr "تعيين المعلمات المثلى وبدء الترقية:"
 
 #: sql/alter2.4.php:34
 msgid "Text collation optimization:"
-msgstr ""
+msgstr "تحسين ترتيب النص:"
 
-#: sql/alter2.4.php:83
+#: sql/alter2.4.php:89
 msgid "Cannot update config_db.php file."
-msgstr ""
+msgstr "لا يمكن تحديث الملف config_db.php."
 
-#: sql/alter2.4.php:122
+#: sql/alter2.4.php:128
 #, php-format
 msgid ""
 "Cannot update work orders costs:\n"
 "%s"
 msgstr ""
+"لا يمكن تحديث تكاليف طلبات العمل: \n"
+" %s"
 
-#: sql/alter2.4.php:215
+#: sql/alter2.4.php:221
 msgid "Convertion to utf8 done."
-msgstr ""
+msgstr "تحويل إلى utf8 القيام به."
 
-#: sql/alter2.4.php:254
+#: sql/alter2.4.php:260
 #, php-format
 msgid "Cannot drop column in %s table: %s"
-msgstr ""
+msgstr "لا يمكن إسقاط العمود في %s الجدول: %s"
 
 #: sql/alter2.4rc1.php:23
 msgid "Upgrade from version 2.4beta to 2.4RC1"
-msgstr ""
+msgstr "الترقية من الإصدار 2.4beta إلى 2.4RC1"
 
 #: sql/alter2.4rc1.php:36
 msgid "None (will be set later)"
-msgstr ""
+msgstr "لا شيء (سيتم تعيينه لاحقا)"
 
 #: sql/alter2.4rc1.php:71
 #, php-format
@@ -15786,3 +15869,5 @@ msgid ""
 "Cannot update sys prefs setting:\n"
 "%s"
 msgstr ""
+"لا يمكن تحديث إعداد بريفس سيس:\n"
+" %s"
