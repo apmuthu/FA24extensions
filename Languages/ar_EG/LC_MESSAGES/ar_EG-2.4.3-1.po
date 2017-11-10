@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FrontAccounting 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-13 17:38+0200\n"
-"PO-Revision-Date: 2017-11-10 11:33+0400\n"
+"POT-Creation-Date: 2017-11-09 22:44+0100\n"
+"PO-Revision-Date: 2017-11-10 13:30+0530\n"
 "Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2017\n"
 "Language-Team: Arabic (Egypt) (https://www.transifex.com/gnuacademy/teams/55037/ar_EG/)\n"
 "MIME-Version: 1.0\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Language: ar_EG\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: frontaccounting.php:75 frontaccounting.php:76
+#: frontaccounting.php:72 frontaccounting.php:73
 msgid "Main  Menu"
 msgstr "القائمة الرئيسية"
 
-#: frontaccounting.php:77 access/logout.php:21 themes/default/renderer.php:73
+#: frontaccounting.php:74 access/logout.php:21 themes/default/renderer.php:73
 #: themes/default/renderer.php:87
 msgid "Logout"
 msgstr "الخروج"
@@ -348,15 +348,15 @@ msgstr "فشلت عملية النسخ الأحتياطي لقاعدة البي�
 #: gl/manage/gl_account_classes.php:126 gl/manage/gl_quick_entries.php:237
 #: includes/system_tests.inc:38 includes/system_tests.inc:113
 #: includes/system_tests.inc:126 includes/ui/class.reflines_crud.inc:56
-#: includes/ui/ui_lists.inc:1867 purchasing/manage/suppliers.php:122
-#: reporting/rep101.php:128 reporting/rep102.php:110 reporting/rep102.php:112
-#: reporting/rep104.php:103 reporting/rep106.php:81 reporting/rep114.php:74
-#: reporting/rep201.php:103 reporting/rep202.php:116 reporting/rep202.php:118
-#: reporting/rep203.php:84 reporting/rep303.php:112 reporting/rep303.php:116
-#: reporting/rep304.php:123 reporting/rep402.php:99 reporting/rep402.php:134
-#: reporting/rep501.php:113 sales/manage/sales_points.php:94
-#: sales/manage/sales_points.php:95 sales/manage/sales_types.php:119
-#: taxes/item_tax_types.php:129
+#: includes/ui/ui_lists.inc:1870 includes/ui/ui_lists.inc.orig:1867
+#: purchasing/manage/suppliers.php:122 reporting/rep101.php:128
+#: reporting/rep102.php:110 reporting/rep102.php:112 reporting/rep104.php:103
+#: reporting/rep106.php:81 reporting/rep114.php:74 reporting/rep201.php:103
+#: reporting/rep202.php:116 reporting/rep202.php:118 reporting/rep203.php:84
+#: reporting/rep303.php:112 reporting/rep303.php:116 reporting/rep304.php:123
+#: reporting/rep402.php:99 reporting/rep402.php:134 reporting/rep501.php:113
+#: sales/manage/sales_points.php:94 sales/manage/sales_points.php:95
+#: sales/manage/sales_types.php:119 taxes/item_tax_types.php:129
 msgid "No"
 msgstr "لا"
 
@@ -890,13 +890,13 @@ msgstr "الأفتراضي"
 #: gl/manage/gl_account_classes.php:126 gl/manage/gl_quick_entries.php:237
 #: includes/system_tests.inc:38 includes/system_tests.inc:113
 #: includes/system_tests.inc:126 includes/ui/class.reflines_crud.inc:56
-#: includes/ui/class.reflines_crud.inc:101 includes/ui/ui_lists.inc:1868
-#: purchasing/manage/suppliers.php:122 reporting/rep101.php:127
-#: reporting/rep102.php:109 reporting/rep102.php:111 reporting/rep104.php:105
-#: reporting/rep106.php:83 reporting/rep114.php:76 reporting/rep201.php:102
-#: reporting/rep202.php:115 reporting/rep202.php:117 reporting/rep203.php:83
-#: reporting/rep303.php:107 reporting/rep303.php:115 reporting/rep304.php:122
-#: reporting/rep402.php:99 reporting/rep501.php:111
+#: includes/ui/class.reflines_crud.inc:101 includes/ui/ui_lists.inc:1871
+#: includes/ui/ui_lists.inc.orig:1868 purchasing/manage/suppliers.php:122
+#: reporting/rep101.php:127 reporting/rep102.php:109 reporting/rep102.php:111
+#: reporting/rep104.php:105 reporting/rep106.php:83 reporting/rep114.php:76
+#: reporting/rep201.php:102 reporting/rep202.php:115 reporting/rep202.php:117
+#: reporting/rep203.php:83 reporting/rep303.php:107 reporting/rep303.php:115
+#: reporting/rep304.php:122 reporting/rep402.php:99 reporting/rep501.php:111
 #: sales/manage/sales_points.php:94 sales/manage/sales_points.php:95
 #: sales/manage/sales_types.php:119 taxes/item_tax_types.php:133
 msgid "Yes"
@@ -948,7 +948,7 @@ msgstr "تجميع قاعدة البيانات:"
 #: admin/inst_lang.php:87 admin/inst_lang.php:90 admin/inst_module.php:125
 #: admin/inst_theme.php:76 admin/inst_theme.php:78
 #: gl/manage/gl_account_types.php:189 includes/db/audit_trail_db.inc:127
-#: includes/ui/allocation_cart.inc:316 inventory/manage/items.php:446
+#: includes/ui/allocation_cart.inc:316 inventory/manage/items.php:447
 msgid "None"
 msgstr "لا شئ"
 
@@ -1259,8 +1259,9 @@ msgstr "نهاية السنة المالية"
 
 #: admin/fiscalyears.php:138 dimensions/inquiry/search_dimensions.php:130
 #: dimensions/inquiry/search_dimensions.php:136 includes/ui/ui_lists.inc:758
-#: includes/ui/ui_view.inc:1546 manufacturing/search_work_orders.php:114
-#: reporting/rep402.php:103 reporting/rep501.php:87 reporting/rep710.php:113
+#: includes/ui/ui_lists.inc.orig:758 includes/ui/ui_view.inc:1546
+#: manufacturing/search_work_orders.php:114 reporting/rep402.php:103
+#: reporting/rep501.php:87 reporting/rep710.php:113
 #: reporting/includes/excel_report.inc:231
 #: reporting/includes/pdf_report.inc:267
 msgid "Closed"
@@ -1479,7 +1480,7 @@ msgid "Receivable Account:"
 msgstr "حساب العملاء :"
 
 #: admin/gl_setup.php:201 admin/gl_setup.php:246
-#: inventory/manage/item_categories.php:228 inventory/manage/items.php:468
+#: inventory/manage/item_categories.php:228 inventory/manage/items.php:469
 #: sales/manage/customer_branches.php:242
 msgid "Sales Account:"
 msgstr "حساب المبيعات :"
@@ -1569,22 +1570,22 @@ msgid "Items Defaults"
 msgstr "الإعدادات الأفتراضية للبنود المخزنية"
 
 #: admin/gl_setup.php:248 inventory/manage/item_categories.php:244
-#: inventory/manage/items.php:477
+#: inventory/manage/items.php:478
 msgid "Inventory Account:"
 msgstr "حساب المخزون :"
 
 #: admin/gl_setup.php:250 inventory/manage/item_categories.php:232
-#: inventory/manage/item_categories.php:246 inventory/manage/items.php:478
-#: inventory/manage/items.php:483
+#: inventory/manage/item_categories.php:246 inventory/manage/items.php:479
+#: inventory/manage/items.php:484
 msgid "C.O.G.S. Account:"
 msgstr "حساب تكلفة البضاعة المباعة :"
 
 #: admin/gl_setup.php:252 inventory/manage/item_categories.php:247
-#: inventory/manage/items.php:479
+#: inventory/manage/items.php:480
 msgid "Inventory Adjustments Account:"
 msgstr "حساب تسويات المخزون :"
 
-#: admin/gl_setup.php:254 inventory/manage/items.php:490
+#: admin/gl_setup.php:254 inventory/manage/items.php:491
 msgid "WIP Account:"
 msgstr "حساب ويب:"
 
@@ -1793,7 +1794,8 @@ msgid "Install third-party extension."
 msgstr "قم بتثبيت إضافة برمجية خاصة بطرف ثالث"
 
 #: admin/inst_module.php:167 includes/ui/ui_lists.inc:758
-#: includes/ui/ui_lists.inc:2345 reporting/includes/excel_report.inc:229
+#: includes/ui/ui_lists.inc:2348 includes/ui/ui_lists.inc.orig:758
+#: includes/ui/ui_lists.inc.orig:2345 reporting/includes/excel_report.inc:229
 #: reporting/includes/pdf_report.inc:265
 msgid "Active"
 msgstr "نشط"
@@ -2164,8 +2166,8 @@ msgid "Role:"
 msgstr "الدور الوظيفي :"
 
 #: admin/security_roles.php:177 gl/manage/gl_accounts.php:202
-#: inventory/inquiry/stock_movements.php:67 inventory/manage/items.php:563
-#: purchasing/manage/suppliers.php:292 sales/manage/customers.php:331
+#: inventory/inquiry/stock_movements.php:67 inventory/manage/items.php:564
+#: purchasing/manage/suppliers.php:294 sales/manage/customers.php:332
 msgid "Show inactive:"
 msgstr "عرض الغير نشط :"
 
@@ -2212,7 +2214,7 @@ msgstr "حذف الدور الوظيفي الحالي"
 #: includes/ui/ui_controls.inc:645 includes/ui/ui_input.inc:229
 #: inventory/includes/item_adjustments_ui.inc:192
 #: inventory/includes/stock_transfers_ui.inc:152
-#: inventory/manage/items.php:546
+#: inventory/manage/items.php:547
 #: manufacturing/includes/work_order_issue_ui.inc:134
 #: purchasing/includes/ui/po_ui.inc:438
 #: sales/create_recurrent_invoices.php:190
@@ -2221,7 +2223,7 @@ msgstr "حذف الدور الوظيفي الحالي"
 msgid "Cancel"
 msgstr "إلغاء"
 
-#: admin/security_roles.php:244 inventory/manage/items.php:546
+#: admin/security_roles.php:244 inventory/manage/items.php:547
 msgid "Cancel Edition"
 msgstr "إلغاء التحرير"
 
@@ -2547,7 +2549,8 @@ msgstr "إلغاء حركة"
 #: admin/void_transaction.php:125 admin/void_transaction.php:184
 #: gl/inquiry/accounts_list.php:63 includes/ui/ui_input.inc:152
 #: includes/ui/ui_input.inc:300 includes/ui/ui_lists.inc:20
-#: inventory/inquiry/stock_list.php:66 inventory/inquiry/stock_list.php:69
+#: includes/ui/ui_lists.inc.orig:20 inventory/inquiry/stock_list.php:66
+#: inventory/inquiry/stock_list.php:69
 #: purchasing/inquiry/suppliers_list.php:65
 #: purchasing/inquiry/suppliers_list.php:68
 #: sales/inquiry/customer_branches_list.php:60
@@ -3137,7 +3140,7 @@ msgstr "مواقع التخزين للمخزون"
 msgid "&Units of Measure"
 msgstr "وحدات القياس"
 
-#: applications/inventory.php:45 inventory/manage/items.php:592
+#: applications/inventory.php:45 inventory/manage/items.php:593
 msgid "&Reorder Levels"
 msgstr "مستويات إعادة الطلب"
 
@@ -3153,7 +3156,7 @@ msgstr "التسعير البيعي"
 msgid "Purchasing &Pricing"
 msgstr "التسعير الشرائي"
 
-#: applications/inventory.php:53 inventory/manage/items.php:591
+#: applications/inventory.php:53 inventory/manage/items.php:592
 msgid "Standard &Costs"
 msgstr "التكاليف المعيارية"
 
@@ -3584,19 +3587,20 @@ msgid "Reference:"
 msgstr "الإشارة المرجعية :"
 
 #: dimensions/inquiry/search_dimensions.php:74
-#: includes/ui/allocation_cart.inc:314 includes/ui/ui_lists.inc:2115
-#: reporting/rep101.php:114 reporting/rep102.php:92 reporting/rep104.php:95
-#: reporting/rep104.php:99 reporting/rep105.php:95 reporting/rep105.php:99
-#: reporting/rep201.php:89 reporting/rep202.php:98 reporting/rep203.php:69
-#: reporting/rep204.php:77 reporting/rep301.php:151 reporting/rep301.php:158
-#: reporting/rep302.php:103 reporting/rep302.php:110 reporting/rep303.php:95
-#: reporting/rep303.php:102 reporting/rep304.php:109 reporting/rep304.php:114
-#: reporting/rep304.php:119 reporting/rep306.php:120 reporting/rep306.php:125
-#: reporting/rep306.php:130 reporting/rep306.php:135 reporting/rep307.php:103
-#: reporting/rep307.php:108 reporting/rep308.php:212 reporting/rep308.php:217
-#: reporting/rep309.php:93 reporting/rep402.php:87 reporting/rep402.php:95
-#: reporting/rep451.php:67 reporting/rep451.php:74 reporting/rep702.php:61
-#: reporting/rep710.php:86 reporting/rep710.php:87
+#: includes/ui/allocation_cart.inc:314 includes/ui/ui_lists.inc:2118
+#: includes/ui/ui_lists.inc.orig:2115 reporting/rep101.php:114
+#: reporting/rep102.php:92 reporting/rep104.php:95 reporting/rep104.php:99
+#: reporting/rep105.php:95 reporting/rep105.php:99 reporting/rep201.php:89
+#: reporting/rep202.php:98 reporting/rep203.php:69 reporting/rep204.php:77
+#: reporting/rep301.php:151 reporting/rep301.php:158 reporting/rep302.php:103
+#: reporting/rep302.php:110 reporting/rep303.php:95 reporting/rep303.php:102
+#: reporting/rep304.php:109 reporting/rep304.php:114 reporting/rep304.php:119
+#: reporting/rep306.php:120 reporting/rep306.php:125 reporting/rep306.php:130
+#: reporting/rep306.php:135 reporting/rep307.php:103 reporting/rep307.php:108
+#: reporting/rep308.php:212 reporting/rep308.php:217 reporting/rep309.php:93
+#: reporting/rep402.php:87 reporting/rep402.php:95 reporting/rep451.php:67
+#: reporting/rep451.php:74 reporting/rep702.php:61 reporting/rep710.php:86
+#: reporting/rep710.php:87
 msgid "All"
 msgstr "الكل"
 
@@ -3734,8 +3738,8 @@ msgstr "الأستحقاقات الخاصة بـ  '%s'"
 #: gl/includes/ui/gl_journal_ui.inc:105 includes/dashboard.inc:134
 #: includes/dashboard.inc:336 includes/sysnames.inc:43
 #: includes/sysnames.inc:180 inventory/manage/item_categories.php:258
-#: inventory/manage/item_categories.php:260 inventory/manage/items.php:457
-#: inventory/manage/items.php:459 purchasing/includes/ui/invoice_ui.inc:140
+#: inventory/manage/item_categories.php:260 inventory/manage/items.php:458
+#: inventory/manage/items.php:460 purchasing/includes/ui/invoice_ui.inc:140
 #: purchasing/includes/ui/invoice_ui.inc:278
 #: purchasing/includes/ui/invoice_ui.inc:280
 #: purchasing/includes/ui/po_ui.inc:172 purchasing/manage/suppliers.php:147
@@ -3838,7 +3842,8 @@ msgstr "حساب الإيراد أو التكلفة"
 #: includes/dashboard.inc:189 includes/dashboard.inc:226
 #: includes/dashboard.inc:294 includes/dashboard.inc:336
 #: includes/dashboard.inc:448 includes/sysnames.inc:138
-#: includes/ui/allocation_cart.inc:290 includes/ui/ui_lists.inc:1364
+#: includes/ui/allocation_cart.inc:290 includes/ui/ui_lists.inc:1367
+#: includes/ui/ui_lists.inc.orig:1364
 #: manufacturing/includes/manufacturing_ui.inc:253
 #: purchasing/includes/ui/invoice_ui.inc:278
 #: purchasing/includes/ui/invoice_ui.inc:280
@@ -4450,12 +4455,13 @@ msgid "Process journal entry only if debits equal to credits"
 msgstr ""
 "ترحيل قيود اليومية العامة فقط في حالة تساوي الجانب المدين مع الجانب الدائن"
 
-#: gl/inquiry/accounts_list.php:25 inventory/manage/items.php:466
+#: gl/inquiry/accounts_list.php:25 inventory/manage/items.php:467
 #: sales/manage/customer_branches.php:240
 msgid "GL Accounts"
 msgstr "حسابات الأستاذ العام"
 
 #: gl/inquiry/accounts_list.php:40 includes/ui/ui_lists.inc:349
+#: includes/ui/ui_lists.inc.orig:349
 msgid "Search GL accounts"
 msgstr "البحث في حسابات غل"
 
@@ -5877,7 +5883,7 @@ msgstr "تحليلات العمليات التصنيعية"
 msgid "Dimensions configuration"
 msgstr "توصيف القطاعات التحليلية"
 
-#: includes/access_levels.inc:79 inventory/manage/items.php:455
+#: includes/access_levels.inc:79 inventory/manage/items.php:456
 #: reporting/reports_main.php:318
 msgid "Dimensions"
 msgstr "القطاعات التحليلية"
@@ -6214,7 +6220,7 @@ msgstr "نقل الأصول الثابتة"
 msgid "Fixed Asset disposals"
 msgstr "استبعاد الأصول الثابتة"
 
-#: includes/access_levels.inc:207 inventory/manage/items.php:411
+#: includes/access_levels.inc:207 inventory/manage/items.php:412
 msgid "Depreciation"
 msgstr "الاستهلاك"
 
@@ -6424,7 +6430,7 @@ msgstr "النظام متاح لمدير الموقع فقط حتى يتم تر�
 msgid "New password for"
 msgstr "كلمة مرور جديدة ل"
 
-#: includes/current_user.inc:616
+#: includes/current_user.inc:618
 msgid "Requesting data..."
 msgstr "طلب بيانات ..."
 
@@ -6674,23 +6680,28 @@ msgstr "الإشارة المدخلة غير صالحة."
 msgid "The entered reference is already in use."
 msgstr "الإشارة المرجعية التي تم إدخالها موجودة مسبقاً "
 
-#: includes/errors.inc:124
+#: includes/errors.inc:94
+#, php-format
+msgid "Unhandled exception [%s]: %s."
+msgstr "استثناء غير معالج [%s]: %s."
+
+#: includes/errors.inc:132
 msgid "in file"
 msgstr "في الملف "
 
-#: includes/errors.inc:124
+#: includes/errors.inc:132
 msgid "at line "
 msgstr "في السجل"
 
-#: includes/errors.inc:176
+#: includes/errors.inc:184
 msgid "Debug mode database warning:"
 msgstr "تحذير بيئة أستكشاف أخطاء قاعدة البيانات :"
 
-#: includes/errors.inc:178
+#: includes/errors.inc:186
 msgid "DATABASE ERROR :"
 msgstr "خطأ في قاعدة البيانات :"
 
-#: includes/errors.inc:210
+#: includes/errors.inc:218
 msgid ""
 "The entered information is a duplicate. Please go back and enter different "
 "values."
@@ -6701,16 +6712,16 @@ msgstr ""
 msgid "This page is usable only with javascript enabled browsers."
 msgstr "هذه الصفحة مستخدمة فقط مع برامج المتصفح المفعل فيها ميزة JavaScript"
 
-#: includes/packages.inc:189
+#: includes/packages.inc:190
 #, php-format
 msgid "No key field '%s' in file '%s'"
 msgstr "لا يوجد حقل مفتاحي '%s' في الملف '%s'"
 
-#: includes/packages.inc:294
+#: includes/packages.inc:295
 msgid "Cannot download repo index file."
 msgstr "يتعذر تنزيل ملف فهرس إعادة التصدير."
 
-#: includes/packages.inc:303 includes/system_tests.inc:398
+#: includes/packages.inc:304 includes/system_tests.inc:398
 msgid ""
 "OpenSSL have to be available on your server to use extension repository "
 "system."
@@ -6718,25 +6729,25 @@ msgstr ""
 "OpenSSL يجب أن يكون متاح على الخادم حتى يمكنك أستخدام مستودع الإضافات "
 "البرمجية للنظام"
 
-#: includes/packages.inc:310 includes/packages.inc:347
+#: includes/packages.inc:311 includes/packages.inc:348
 #, php-format
 msgid "Cannot delete outdated '%s' file."
 msgstr "لا يمكن حذف الملف القديم  %s"
 
-#: includes/packages.inc:314
+#: includes/packages.inc:315
 msgid "Release file in repository is invalid, or public key is outdated."
 msgstr "ملف الإصدار الموجود في المستودع غير صالح أو أن المفتاح العام غير محدث"
 
-#: includes/packages.inc:331
+#: includes/packages.inc:332
 msgid "Repository version does not match application version."
 msgstr "الإصدار الموجود في المستودع لا يتطابق مع ال"
 
-#: includes/packages.inc:339 includes/packages.inc:381
+#: includes/packages.inc:340 includes/packages.inc:382
 #, php-format
 msgid "Cannot download '%s' file."
 msgstr "يتعذر تنزيل الملف '%s'."
 
-#: includes/packages.inc:351
+#: includes/packages.inc:352
 #, php-format
 msgid ""
 "Security alert: broken index file in repository '%s'. Please inform "
@@ -6745,7 +6756,7 @@ msgstr ""
 "تحذير أمني : ملف فهرس غير صالح في المستودع '%s' الرجاء إبلاغ مدير المستودع "
 "عن هذه المشكلة"
 
-#: includes/packages.inc:387
+#: includes/packages.inc:388
 #, php-format
 msgid ""
 "Security alert: broken package '%s' in repository. Please inform repository "
@@ -6754,7 +6765,7 @@ msgstr ""
 "تحذير أمني : إضافة برمجية غير صالحة '%s' في المستودع الرجاء إبلاغ مدير "
 "المستودع عن هذه المشكلة"
 
-#: includes/packages.inc:645 includes/packages.inc:700
+#: includes/packages.inc:646 includes/packages.inc:701
 #, php-format
 msgid "Package '%s' not found."
 msgstr "لم يتم العثور على الحزمة '%s'."
@@ -8009,11 +8020,11 @@ msgstr ""
 msgid "Click Here to Pick up the date"
 msgstr "أضغط هنا حتى يتم جلب البيانات"
 
-#: includes/ui/ui_input.inc:969 includes/ui/ui_lists.inc:2345
-#: reporting/rep301.php:224 reporting/rep302.php:168 reporting/rep303.php:178
-#: reporting/rep304.php:184 reporting/rep304.php:188 reporting/rep306.php:235
-#: reporting/rep306.php:242 reporting/rep451.php:143
-#: sales/manage/customer_branches.php:292
+#: includes/ui/ui_input.inc:969 includes/ui/ui_lists.inc:2348
+#: includes/ui/ui_lists.inc.orig:2345 reporting/rep301.php:224
+#: reporting/rep302.php:168 reporting/rep303.php:178 reporting/rep304.php:184
+#: reporting/rep304.php:188 reporting/rep306.php:235 reporting/rep306.php:242
+#: reporting/rep451.php:143 sales/manage/customer_branches.php:292
 msgid "Inactive"
 msgstr "غير نشط"
 
@@ -8025,197 +8036,215 @@ msgstr "الائتمان الحالي:"
 msgid "Bank Balance:"
 msgstr "رصيد البنك:"
 
-#: includes/ui/ui_lists.inc:17
+#: includes/ui/ui_lists.inc:17 includes/ui/ui_lists.inc.orig:17
 msgid "Set filter"
 msgstr "تحديد الفرز"
 
-#: includes/ui/ui_lists.inc:99
+#: includes/ui/ui_lists.inc:99 includes/ui/ui_lists.inc.orig:99
 msgid "Press Space tab for search pattern entry"
 msgstr "أضغط على مفتاح المسافات للبحث عن نموذج الإدخال"
 
-#: includes/ui/ui_lists.inc:103
+#: includes/ui/ui_lists.inc:103 includes/ui/ui_lists.inc.orig:103
 msgid "Enter code fragment to search or * for all"
 msgstr "إدخل مقطع التكويد البرمجي للبحث أو إدخل علامة * للبحث عن الكل"
 
-#: includes/ui/ui_lists.inc:104
+#: includes/ui/ui_lists.inc:104 includes/ui/ui_lists.inc.orig:104
 msgid "Enter description fragment to search or * for all"
 msgstr "إدخل المقطع الوصفي للبحث أو إدخل علامة * للبحث عن الكل"
 
 #: includes/ui/ui_lists.inc:308 includes/ui/ui_lists.inc:312
 #: includes/ui/ui_lists.inc:316 includes/ui/ui_lists.inc:320
 #: includes/ui/ui_lists.inc:324 includes/ui/ui_lists.inc:329
-#: includes/ui/ui_lists.inc:333 inventory/inquiry/stock_list.php:42
+#: includes/ui/ui_lists.inc:333 includes/ui/ui_lists.inc.orig:308
+#: includes/ui/ui_lists.inc.orig:312 includes/ui/ui_lists.inc.orig:316
+#: includes/ui/ui_lists.inc.orig:320 includes/ui/ui_lists.inc.orig:324
+#: includes/ui/ui_lists.inc.orig:329 includes/ui/ui_lists.inc.orig:333
+#: inventory/inquiry/stock_list.php:42
 msgid "Search items"
 msgstr "البحث عن العناصر"
 
-#: includes/ui/ui_lists.inc:337 sales/inquiry/customers_list.php:42
+#: includes/ui/ui_lists.inc:337 includes/ui/ui_lists.inc.orig:337
+#: sales/inquiry/customers_list.php:42
 msgid "Search customers"
 msgstr "البحث عن العملاء"
 
-#: includes/ui/ui_lists.inc:341 sales/inquiry/customer_branches_list.php:38
+#: includes/ui/ui_lists.inc:341 includes/ui/ui_lists.inc.orig:341
+#: sales/inquiry/customer_branches_list.php:38
 msgid "Search branches"
 msgstr "بحث الفروع"
 
-#: includes/ui/ui_lists.inc:345 purchasing/inquiry/suppliers_list.php:42
+#: includes/ui/ui_lists.inc:345 includes/ui/ui_lists.inc.orig:345
+#: purchasing/inquiry/suppliers_list.php:42
 msgid "Search suppliers"
 msgstr "البحث عن الموردين"
 
-#: includes/ui/ui_lists.inc:538 includes/ui/ui_lists.inc:1543
+#: includes/ui/ui_lists.inc:538 includes/ui/ui_lists.inc:1546
+#: includes/ui/ui_lists.inc.orig:538 includes/ui/ui_lists.inc.orig:1543
 msgid "All Suppliers"
 msgstr "كل الموردين"
 
-#: includes/ui/ui_lists.inc:542
+#: includes/ui/ui_lists.inc:542 includes/ui/ui_lists.inc.orig:542
 msgid "Press Space tab to filter by name fragment"
 msgstr "إضغط على مفتاح المسافات حتى يتم الفرز بواسطة مقطع الأسم"
 
-#: includes/ui/ui_lists.inc:543
+#: includes/ui/ui_lists.inc:543 includes/ui/ui_lists.inc.orig:543
 msgid "Select supplier"
 msgstr "أختيار المورد"
 
-#: includes/ui/ui_lists.inc:592
+#: includes/ui/ui_lists.inc:592 includes/ui/ui_lists.inc.orig:592
 msgid "All Customers"
 msgstr "كل العملاء"
 
-#: includes/ui/ui_lists.inc:596
+#: includes/ui/ui_lists.inc:596 includes/ui/ui_lists.inc.orig:596
 msgid "Press Space tab to filter by name fragment; F2 - entry new customer"
 msgstr ""
 "إضغط على مفتاح المسافات حتى يتم الفرز بواسطة مقطع الأسم - F2 لإدخال عميل "
 "جديد"
 
-#: includes/ui/ui_lists.inc:597
+#: includes/ui/ui_lists.inc:597 includes/ui/ui_lists.inc.orig:597
 msgid "Select customer"
 msgstr "أختيار العميل"
 
-#: includes/ui/ui_lists.inc:642
+#: includes/ui/ui_lists.inc:642 includes/ui/ui_lists.inc.orig:642
 msgid "All branches"
 msgstr "جميع الفروع"
 
-#: includes/ui/ui_lists.inc:645
+#: includes/ui/ui_lists.inc:645 includes/ui/ui_lists.inc.orig:645
 msgid "Select customer branch"
 msgstr "أختيار فرع العميل"
 
-#: includes/ui/ui_lists.inc:681
+#: includes/ui/ui_lists.inc:681 includes/ui/ui_lists.inc.orig:681
 msgid "All Locations"
 msgstr "كل المواقع التخزينية"
 
 #: includes/ui/ui_lists.inc:838 includes/ui/ui_lists.inc:922
+#: includes/ui/ui_lists.inc.orig:838 includes/ui/ui_lists.inc.orig:922
 msgid "All Items"
 msgstr "كل البنود المخزنية"
 
-#: includes/ui/ui_lists.inc:1475
+#: includes/ui/ui_lists.inc:1478 includes/ui/ui_lists.inc.orig:1475
 msgid "All Sales Types"
 msgstr "جميع أنواع المبيعات"
 
-#: includes/ui/ui_lists.inc:1822
+#: includes/ui/ui_lists.inc:1825 includes/ui/ui_lists.inc.orig:1822
 msgid "Use Item Sales Accounts"
 msgstr "أستخدام حسابات مبيعات البنود المخزنية"
 
-#: includes/ui/ui_lists.inc:2131 includes/ui/ui_lists.inc:2147
-#: includes/ui/ui_lists.inc:2163
+#: includes/ui/ui_lists.inc:2134 includes/ui/ui_lists.inc:2150
+#: includes/ui/ui_lists.inc:2166 includes/ui/ui_lists.inc.orig:2131
+#: includes/ui/ui_lists.inc.orig:2147 includes/ui/ui_lists.inc.orig:2163
 msgid "All Types"
 msgstr "كل الأنواع"
 
-#: includes/ui/ui_lists.inc:2132 sales/view/view_sales_order.php:140
+#: includes/ui/ui_lists.inc:2135 includes/ui/ui_lists.inc.orig:2132
+#: sales/view/view_sales_order.php:140
 msgid "Sales Invoices"
 msgstr "فواتير المبيعات"
 
-#: includes/ui/ui_lists.inc:2133 includes/ui/ui_lists.inc:2166
+#: includes/ui/ui_lists.inc:2136 includes/ui/ui_lists.inc:2169
+#: includes/ui/ui_lists.inc.orig:2133 includes/ui/ui_lists.inc.orig:2166
 msgid "Unsettled transactions"
 msgstr "المعاملات غير المستقرة"
 
-#: includes/ui/ui_lists.inc:2134 includes/ui/ui_lists.inc:2150
-#: includes/ui/ui_lists.inc:2167 includes/ui/ui_view.inc:609
-#: includes/ui/ui_view.inc:613
+#: includes/ui/ui_lists.inc:2137 includes/ui/ui_lists.inc:2153
+#: includes/ui/ui_lists.inc:2170 includes/ui/ui_lists.inc.orig:2134
+#: includes/ui/ui_lists.inc.orig:2150 includes/ui/ui_lists.inc.orig:2167
+#: includes/ui/ui_view.inc:609 includes/ui/ui_view.inc:613
 msgid "Payments"
 msgstr "الدفعات"
 
-#: includes/ui/ui_lists.inc:2135 includes/ui/ui_lists.inc:2151
-#: includes/ui/ui_lists.inc:2168 sales/view/view_sales_order.php:176
+#: includes/ui/ui_lists.inc:2138 includes/ui/ui_lists.inc:2154
+#: includes/ui/ui_lists.inc:2171 includes/ui/ui_lists.inc.orig:2135
+#: includes/ui/ui_lists.inc.orig:2151 includes/ui/ui_lists.inc.orig:2168
+#: sales/view/view_sales_order.php:176
 msgid "Credit Notes"
 msgstr "الإشعارات الدائنة"
 
-#: includes/ui/ui_lists.inc:2136 sales/view/view_sales_order.php:106
+#: includes/ui/ui_lists.inc:2139 includes/ui/ui_lists.inc.orig:2136
+#: sales/view/view_sales_order.php:106
 msgid "Delivery Notes"
 msgstr "سندات التسليم"
 
-#: includes/ui/ui_lists.inc:2148 includes/ui/ui_lists.inc:2165
+#: includes/ui/ui_lists.inc:2151 includes/ui/ui_lists.inc:2168
+#: includes/ui/ui_lists.inc.orig:2148 includes/ui/ui_lists.inc.orig:2165
 msgid "Invoices"
 msgstr "الفواتير "
 
-#: includes/ui/ui_lists.inc:2149
+#: includes/ui/ui_lists.inc:2152 includes/ui/ui_lists.inc.orig:2149
 msgid "Overdue Invoices"
 msgstr "الفواتير المستحقة"
 
-#: includes/ui/ui_lists.inc:2152 includes/ui/ui_lists.inc:2169
+#: includes/ui/ui_lists.inc:2155 includes/ui/ui_lists.inc:2172
+#: includes/ui/ui_lists.inc.orig:2152 includes/ui/ui_lists.inc.orig:2169
 msgid "Overdue Credit Notes"
 msgstr "الإشعارات الدائنة المستحقة"
 
-#: includes/ui/ui_lists.inc:2164
+#: includes/ui/ui_lists.inc:2167 includes/ui/ui_lists.inc.orig:2164
 msgid "GRNs"
 msgstr "إشعارات المواد المخزنية المستلمة"
 
-#: includes/ui/ui_lists.inc:2182
+#: includes/ui/ui_lists.inc:2185 includes/ui/ui_lists.inc.orig:2182
 msgid "Automatically put balance on back order"
 msgstr "ضع الرصيد بشكل تلقائي على طلبات المبيعات الخلفي"
 
-#: includes/ui/ui_lists.inc:2183
+#: includes/ui/ui_lists.inc:2186 includes/ui/ui_lists.inc.orig:2183
 msgid "Cancel any quantites not delivered"
 msgstr "إلغاء الكميات التي لم تصرف بعد"
 
-#: includes/ui/ui_lists.inc:2200
+#: includes/ui/ui_lists.inc:2203 includes/ui/ui_lists.inc.orig:2200
 msgid "Items Returned to Inventory Location"
 msgstr "البنود المخزنية المرتجعة إلى موقع التخزين"
 
-#: includes/ui/ui_lists.inc:2201
+#: includes/ui/ui_lists.inc:2204 includes/ui/ui_lists.inc.orig:2201
 msgid "Items Written Off"
 msgstr "البنود المخزنية المحذوفة"
 
-#: includes/ui/ui_lists.inc:2370
+#: includes/ui/ui_lists.inc:2373 includes/ui/ui_lists.inc.orig:2370
 msgid "New role"
 msgstr "دور وظيفي جديد"
 
-#: includes/ui/ui_lists.inc:2422
+#: includes/ui/ui_lists.inc:2425 includes/ui/ui_lists.inc.orig:2422
 msgid "No tags defined."
 msgstr "لا توجد كلمات دلالية معرفة"
 
-#: includes/ui/ui_lists.inc:2422
+#: includes/ui/ui_lists.inc:2425 includes/ui/ui_lists.inc.orig:2422
 msgid "No active tags defined."
 msgstr "لا توجد كلمات دلالية نشطة معرفة ."
 
-#: includes/ui/ui_lists.inc:2460
+#: includes/ui/ui_lists.inc:2463 includes/ui/ui_lists.inc.orig:2460
 #, php-format
 msgid "Activated for '%s'"
 msgstr "مفعل من خلال  '%s'"
 
-#: includes/ui/ui_lists.inc:2463
+#: includes/ui/ui_lists.inc:2466 includes/ui/ui_lists.inc.orig:2463
 msgid "Available and/or installed"
 msgstr "متاح و / أو مثبت"
 
-#: includes/ui/ui_lists.inc:2533
+#: includes/ui/ui_lists.inc:2536 includes/ui/ui_lists.inc.orig:2533
 msgid "Standard new company American COA (4 digit)"
 msgstr "شركة جديدة بخريطة حسابات رباعية الأرقام"
 
-#: includes/ui/ui_lists.inc:2535
+#: includes/ui/ui_lists.inc:2538 includes/ui/ui_lists.inc.orig:2535
 msgid "Standard American COA (4 digit) with demo data"
 msgstr "خريطة حسابات أمريكية معيارية قياسية رباعية الأرقام "
 
-#: includes/ui/ui_lists.inc:2556
+#: includes/ui/ui_lists.inc:2559 includes/ui/ui_lists.inc.orig:2556
 msgid "No payment Link"
 msgstr "عدم إدراج روابط للدفعات"
 
-#: includes/ui/ui_lists.inc:2676
+#: includes/ui/ui_lists.inc:2679 includes/ui/ui_lists.inc.orig:2676
 msgid "Numeric"
 msgstr "رقمية"
 
-#: includes/ui/ui_lists.inc:2676
+#: includes/ui/ui_lists.inc:2679 includes/ui/ui_lists.inc.orig:2676
 msgid "Alpha Numeric"
 msgstr "ألفا رقمية"
 
-#: includes/ui/ui_lists.inc:2676
+#: includes/ui/ui_lists.inc:2679 includes/ui/ui_lists.inc.orig:2676
 msgid "ALPHA NUMERIC"
 msgstr "ألفا نوميريك"
 
-#: includes/ui/ui_lists.inc:2692
+#: includes/ui/ui_lists.inc:2695 includes/ui/ui_lists.inc.orig:2692
 msgid "All users"
 msgstr "جميع المستخدمين"
 
@@ -8849,7 +8878,7 @@ msgid "Unit Cost"
 msgstr "تكلفة الوحدات"
 
 #: inventory/includes/item_adjustments_ui.inc:57
-#: inventory/manage/items.php:525
+#: inventory/manage/items.php:526
 msgid "Initial Value"
 msgstr "القيمة البدائية"
 
@@ -9061,35 +9090,35 @@ msgstr "أسم التقسيمة :"
 msgid "Default values for new items"
 msgstr "القيم الأفتراضية من البنود المخزنية الجديدة"
 
-#: inventory/manage/item_categories.php:212 inventory/manage/items.php:394
+#: inventory/manage/item_categories.php:212 inventory/manage/items.php:395
 msgid "Item Tax Type:"
 msgstr "نوع ضريبة البند المخزني :"
 
-#: inventory/manage/item_categories.php:217 inventory/manage/items.php:397
+#: inventory/manage/item_categories.php:217 inventory/manage/items.php:398
 msgid "Item Type:"
 msgstr "نوع البند المخزني :"
 
-#: inventory/manage/item_categories.php:219 inventory/manage/items.php:399
+#: inventory/manage/item_categories.php:219 inventory/manage/items.php:400
 msgid "Units of Measure:"
 msgstr "وحدات القياس :"
 
-#: inventory/manage/item_categories.php:224 inventory/manage/items.php:406
+#: inventory/manage/item_categories.php:224 inventory/manage/items.php:407
 msgid "Exclude from sales:"
 msgstr "الأستبعاد من المبيعات :"
 
-#: inventory/manage/item_categories.php:226 inventory/manage/items.php:408
+#: inventory/manage/item_categories.php:226 inventory/manage/items.php:409
 msgid "Exclude from purchases:"
 msgstr "استبعاد من المشتريات:"
 
-#: inventory/manage/item_categories.php:238 inventory/manage/items.php:471
+#: inventory/manage/item_categories.php:238 inventory/manage/items.php:472
 msgid "Asset account:"
 msgstr "حساب الأصول:"
 
-#: inventory/manage/item_categories.php:239 inventory/manage/items.php:472
+#: inventory/manage/item_categories.php:239 inventory/manage/items.php:473
 msgid "Depreciation cost account:"
 msgstr "حساب تكلفة االستهالك:"
 
-#: inventory/manage/item_categories.php:240 inventory/manage/items.php:473
+#: inventory/manage/item_categories.php:240 inventory/manage/items.php:474
 msgid "Depreciation/Disposal account:"
 msgstr "حساب االستهالك / التخلص:"
 
@@ -9241,126 +9270,126 @@ msgstr "الاعدادات العامة"
 msgid "Item Code:"
 msgstr "كود البند المخزني :"
 
-#: inventory/manage/items.php:401
+#: inventory/manage/items.php:402
 msgid "Editable description:"
 msgstr "وصف قابل للتعديل:"
 
-#: inventory/manage/items.php:413
+#: inventory/manage/items.php:414
 msgid "Fixed Asset Class"
 msgstr "فئة الأصول الثابتة"
 
-#: inventory/manage/items.php:415
+#: inventory/manage/items.php:416
 msgid "Depreciation Method"
 msgstr "طريقة الاستهلاك"
 
-#: inventory/manage/items.php:426 inventory/manage/items.php:435
+#: inventory/manage/items.php:427 inventory/manage/items.php:436
 msgid "Depreciation Rate"
 msgstr "معدل الاستهلاك"
 
-#: inventory/manage/items.php:430
+#: inventory/manage/items.php:431
 msgid "Depreciation Years"
 msgstr "الاستهلاك سنوات"
 
-#: inventory/manage/items.php:430
+#: inventory/manage/items.php:431
 msgid "years"
 msgstr "سنوات"
 
-#: inventory/manage/items.php:433
+#: inventory/manage/items.php:434
 msgid "Base Rate"
 msgstr "سعر الأساس"
 
-#: inventory/manage/items.php:438
+#: inventory/manage/items.php:439
 msgid "Rate multiplier"
 msgstr "معدل مضاعف"
 
-#: inventory/manage/items.php:442 inventory/manage/items.php:445
+#: inventory/manage/items.php:443 inventory/manage/items.php:446
 msgid "Depreciation Start"
 msgstr "الاستهلاك بدء"
 
-#: inventory/manage/items.php:446
+#: inventory/manage/items.php:447
 msgid "Last Depreciation"
 msgstr "آخر استهلاك"
 
-#: inventory/manage/items.php:494
+#: inventory/manage/items.php:495
 msgid "Other"
 msgstr "آخر"
 
-#: inventory/manage/items.php:497
+#: inventory/manage/items.php:498
 msgid "Image File (.jpg)"
 msgstr "ملف رسومي بصيغة - JPG "
 
-#: inventory/manage/items.php:512
+#: inventory/manage/items.php:513
 msgid "No image"
 msgstr "لا توجد صورة"
 
-#: inventory/manage/items.php:517
+#: inventory/manage/items.php:518
 msgid "Delete Image:"
 msgstr "حذف الصورة :"
 
-#: inventory/manage/items.php:519
+#: inventory/manage/items.php:520
 msgid "Item status:"
 msgstr "حالة البند المخزني:"
 
-#: inventory/manage/items.php:521
+#: inventory/manage/items.php:522
 msgid "Values"
 msgstr "القيم"
 
-#: inventory/manage/items.php:526 reporting/rep451.php:80
+#: inventory/manage/items.php:527 reporting/rep451.php:80
 msgid "Depreciations"
 msgstr "انخفاض قيمة"
 
-#: inventory/manage/items.php:527
+#: inventory/manage/items.php:528
 msgid "Current Value"
 msgstr "القيمة الحالية"
 
-#: inventory/manage/items.php:535
+#: inventory/manage/items.php:537
 msgid "Insert New Item"
 msgstr "أضافة بند مخزني جديد"
 
-#: inventory/manage/items.php:540
+#: inventory/manage/items.php:541
 msgid "Update Item"
 msgstr "تحديث البند المخزني"
 
-#: inventory/manage/items.php:543
+#: inventory/manage/items.php:544
 msgid "Select this items and return to document entry."
 msgstr "أختر هذه البنود المخزنية ثم أرجع إلى نموذج الإدخال"
 
-#: inventory/manage/items.php:544
+#: inventory/manage/items.php:545
 msgid "Clone This Item"
 msgstr "أستنسخ البند المخزني الحالي "
 
-#: inventory/manage/items.php:545
+#: inventory/manage/items.php:546
 msgid "Delete This Item"
 msgstr "أحذف البند المخزني الحالي"
 
-#: inventory/manage/items.php:560
+#: inventory/manage/items.php:561
 msgid "Select an item:"
 msgstr "أختيار البند المخزني :"
 
-#: inventory/manage/items.php:561
+#: inventory/manage/items.php:562
 msgid "New item"
 msgstr "بند مخزني جديد"
 
-#: inventory/manage/items.php:585 inventory/manage/items.php:588
-#: purchasing/manage/suppliers.php:309 sales/manage/customer_branches.php:310
-#: sales/manage/customers.php:350
+#: inventory/manage/items.php:586 inventory/manage/items.php:589
+#: purchasing/manage/suppliers.php:311 sales/manage/customer_branches.php:310
+#: sales/manage/customers.php:351
 msgid "&General settings"
 msgstr "الإعدادات العامة"
 
-#: inventory/manage/items.php:586 inventory/manage/items.php:594
-#: purchasing/manage/suppliers.php:311 sales/manage/customers.php:352
+#: inventory/manage/items.php:587 inventory/manage/items.php:595
+#: purchasing/manage/suppliers.php:313 sales/manage/customers.php:353
 msgid "&Transactions"
 msgstr "المعاملات"
 
-#: inventory/manage/items.php:589
+#: inventory/manage/items.php:590
 msgid "S&ales Pricing"
 msgstr "تسعير المبيعات"
 
-#: inventory/manage/items.php:590
+#: inventory/manage/items.php:591
 msgid "&Purchasing Pricing"
 msgstr "تسعير الشراء"
 
-#: inventory/manage/items.php:595
+#: inventory/manage/items.php:596
 msgid "&Status"
 msgstr "الحالة"
 
@@ -11561,76 +11590,80 @@ msgstr "ملاحظات عامة"
 msgid "Supplier status:"
 msgstr "حالة المورد :"
 
-#: purchasing/manage/suppliers.php:172
+#: purchasing/manage/suppliers.php:173
 msgid "Update Supplier"
 msgstr "تحديث المورد"
 
-#: purchasing/manage/suppliers.php:173
+#: purchasing/manage/suppliers.php:174
 msgid "Update supplier data"
 msgstr "تحديث بيانات المورد"
 
-#: purchasing/manage/suppliers.php:174
+#: purchasing/manage/suppliers.php:175
 msgid "Select this supplier and return to document entry."
 msgstr "اختر هذا المورد و قم بالرجوع إلى إدخال المستند"
 
-#: purchasing/manage/suppliers.php:175
+#: purchasing/manage/suppliers.php:176
 msgid "Delete Supplier"
 msgstr "حذف المورد"
 
-#: purchasing/manage/suppliers.php:176
+#: purchasing/manage/suppliers.php:177
 msgid "Delete supplier data if have been never used"
 msgstr "حذف بيانات المورد إذا لم يتم أستخدام حسابه من قبل"
 
-#: purchasing/manage/suppliers.php:180
+#: purchasing/manage/suppliers.php:181
 msgid "Add New Supplier Details"
 msgstr "إضافة تفاصيل مورد جديدة"
 
-#: purchasing/manage/suppliers.php:199
+#: purchasing/manage/suppliers.php:200
 msgid "The supplier name must be entered."
 msgstr "يجب إدخال أسم المورد"
 
-#: purchasing/manage/suppliers.php:206
+#: purchasing/manage/suppliers.php:207
 msgid "The supplier short name must be entered."
 msgstr "يجب إدخال الأسم المختصر للمورد ."
 
-#: purchasing/manage/suppliers.php:226
+#: purchasing/manage/suppliers.php:227
 msgid "Supplier has been updated."
 msgstr "تم تحديث المورد"
 
-#: purchasing/manage/suppliers.php:244
+#: purchasing/manage/suppliers.php:245
 msgid "A new supplier has been added."
 msgstr "تمت إضافة مورد جديد"
 
-#: purchasing/manage/suppliers.php:262
+#: purchasing/manage/suppliers.php:263
 msgid ""
 "Cannot delete this supplier because there are transactions that refer to "
 "this supplier."
 msgstr "لا يمكن حذف المورد بسبب أن هناك حركات مرتبطة به"
 
-#: purchasing/manage/suppliers.php:270
+#: purchasing/manage/suppliers.php:271
 msgid ""
 "Cannot delete the supplier record because purchase orders have been created "
 "against this supplier."
 msgstr ""
 "لا يمكن حذف سجل المورد بسبب أن هناك أوامر شراء تم إنشائها مرتبطة بهذا المورد"
 
-#: purchasing/manage/suppliers.php:290
+#: purchasing/manage/suppliers.php:282
+msgid "Supplier has been deleted."
+msgstr "تم حذف المورد."
+
+#: purchasing/manage/suppliers.php:292
 #: purchasing/inquiry/po_search_completed.php:95
 #: purchasing/inquiry/po_search.php:76
 #: purchasing/inquiry/supplier_allocation_inquiry.php:48
 msgid "Select a supplier: "
 msgstr "أختيار المورد :"
 
-#: purchasing/manage/suppliers.php:291
+#: purchasing/manage/suppliers.php:293
 msgid "New supplier"
 msgstr "مورد جديد"
 
-#: purchasing/manage/suppliers.php:310 sales/manage/customer_branches.php:311
-#: sales/manage/customers.php:351
+#: purchasing/manage/suppliers.php:312 sales/manage/customer_branches.php:311
+#: sales/manage/customers.php:352
 msgid "&Contacts"
 msgstr "الاتصالات"
 
-#: purchasing/manage/suppliers.php:312
+#: purchasing/manage/suppliers.php:314
 msgid "Purchase &Orders"
 msgstr "أوامر الشراء"
 
@@ -14421,7 +14454,7 @@ msgid "Customer Allocations"
 msgstr "تخصيصات العميل"
 
 #: sales/allocations/customer_allocation_main.php:32
-#: sales/manage/customer_branches.php:270 sales/manage/customers.php:329
+#: sales/manage/customer_branches.php:270 sales/manage/customers.php:330
 #: sales/inquiry/customer_allocation_inquiry.php:42
 #: sales/inquiry/customer_inquiry.php:154
 #: sales/inquiry/sales_deliveries_view.php:114
@@ -14739,31 +14772,31 @@ msgstr "الأختيار أو الأضافة"
 msgid "&Add or Edit "
 msgstr "إضافة أو تحرير"
 
-#: sales/manage/customers.php:306
+#: sales/manage/customers.php:307
 msgid "Add New Customer"
 msgstr "إضافة عميل جديد"
 
-#: sales/manage/customers.php:310
+#: sales/manage/customers.php:311
 msgid "Update Customer"
 msgstr "تحديث العميل"
 
-#: sales/manage/customers.php:311
+#: sales/manage/customers.php:312
 msgid "Update customer data"
 msgstr "تحديث بيانات العميل"
 
-#: sales/manage/customers.php:312
+#: sales/manage/customers.php:313
 msgid "Select this customer and return to document entry."
 msgstr "قم بأختيار العميل الحالي و قم بالرجوع إلى إدخال المستند"
 
-#: sales/manage/customers.php:313
+#: sales/manage/customers.php:314
 msgid "Delete Customer"
 msgstr "حذف العميل"
 
-#: sales/manage/customers.php:314
+#: sales/manage/customers.php:315
 msgid "Delete customer data if have been never used"
 msgstr "حذف بيانات العميل إذا لم يتم إستخدام حسابه من قبل"
 
-#: sales/manage/customers.php:321
+#: sales/manage/customers.php:322
 msgid ""
 "There are no sales types defined. Please define at least one sales type "
 "before adding a customer."
@@ -14771,11 +14804,11 @@ msgstr ""
 "لا توجد أنواع مبيعات معرفة ، الرجاء تعريف نوع مبيعات واحد على الأقل قل أن "
 "يتم إضافة عميل"
 
-#: sales/manage/customers.php:330
+#: sales/manage/customers.php:331
 msgid "New customer"
 msgstr "عميل جديد"
 
-#: sales/manage/customers.php:353
+#: sales/manage/customers.php:354
 msgid "Sales &Orders"
 msgstr "أوامر البيع"
 
