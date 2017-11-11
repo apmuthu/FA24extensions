@@ -8,22 +8,25 @@
 // ----------------------------------------------------------------
 define ('SS_IMPORTPAYPALITEMS', 107<<8);
 class hooks_import_paypal extends hooks {
-	var $module_name = 'import_paypal'; 
+
+	function __construct() {
+		$this->module_name = 'import_paypal';
+	}
 
 	/*
 		Install additional menu options provided by module
 	*/
 	function install_options($app) {
 		global $path_to_root;
-
+		$module_relative_path = 'modules/' . $this->module_name . '/';
 		switch($app->id) {
 			case 'GL':
 				$app->add_lapp_function(0, _('Import Paypal Transactions'), 
-				$path_to_root.'/modules/import_paypal/import_paypal.php', 'SA_PAYPALIMPORT', MENU_TRANSACTION);
+				$module_relative_path.'import_paypal.php', 'SA_PAYPALIMPORT', MENU_TRANSACTION);
 				break;
 			case 'system':
 				$app->add_lapp_function(1, _('Paypal Import Setup'), 
-				$path_to_root.'/modules/import_paypal/paypal_setup.php', 'SA_PAYPALSETUP', MENU_MAINTENANCE);
+				$module_relative_path.'paypal_setup.php', 'SA_PAYPALSETUP', MENU_MAINTENANCE);
 				break;
 		}
 	}

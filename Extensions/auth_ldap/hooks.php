@@ -19,7 +19,10 @@ include dirname(__FILE__).'/lib/ldap_authenticator.php';
 
 class hooks_auth_ldap extends hooks
 {
-    var $module_name = 'auth_ldap'; // extension module name.
+
+	function __construct() {
+		$this->module_name = 'auth_ldap';
+	}
 
     function authenticate($username, $password)
     {

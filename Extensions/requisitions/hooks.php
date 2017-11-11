@@ -3,19 +3,22 @@
 define('SS_REQUISITIONS', 101<<8); 
 
 class hooks_requisitions extends hooks {
-	var $module_name = 'requisitions'; 
+
+	function __construct() {
+		$this->module_name = 'requisitions';
+	}
 
 	/*
 		Install additional menu options provided by module
 	*/
 	function install_options($app) {
 		global $path_to_root;
-
+		$module_relative_path = '/modules/' . $this->module_name . '/';
 		switch($app->id) {
 			case 'AP':
-				$app->add_rapp_function(0, _('Requisitions Entries'), $path_to_root.'/modules/requisitions/requisitions.php',
+				$app->add_rapp_function(0, _('Requisitions Entries'), $module_relative_path.'requisitions.php',
 					'SA_REQUISITIONS',	MENU_TRANSACTION);
-				$app->add_rapp_function(0, _('Requisitions Allocation'), $path_to_root.'/modules/requisitions/requisition_allocations.php',
+				$app->add_rapp_function(0, _('Requisitions Allocation'), $module_relative_path.'requisition_allocations.php',
 					 'SA_REQUISITION_ALLOCATIONS', MENU_TRANSACTION);
 				break;
 		}

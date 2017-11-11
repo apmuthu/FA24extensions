@@ -77,7 +77,7 @@ class import_sales_cart
     //  $trans_no!=0 && $prep_child==false => update with parent constraints for reedition
     //  $trans_no!=0 && $prep_child==true => prepare for child doc entry
     //
-    function import_sales_cart($type, $trans_no=0, $prep_child=false) {
+    function __construct($type, $trans_no=0, $prep_child=false) {
         /*Constructor function initialises a new shopping cart */
         $this->line_items = array();
         $this->sales_type = "";
@@ -616,7 +616,7 @@ class import_sales_line_details
     var $qty_dispatched;
     var $qty_old = 0;
 
-    function import_sales_line_details ($stock_id, $qty, $prc, $disc_percent,
+    function __construct($stock_id, $qty, $prc, $disc_percent,
         $qty_done, $standard_cost, $description, $id=0, $src_no=0, $src_id=0)
     {
     /* Constructor function to add a new LineDetail object with passed params */

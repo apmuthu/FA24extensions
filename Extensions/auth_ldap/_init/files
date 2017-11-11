@@ -1,9 +1,8 @@
-/hooks.php: d4fbc9a5ad6970cf30785cf87f6e6ce658485551
+/config_ldap.php: b4330dc28eec941e8bd71e156d4cca773730db92
 /doc/FrontAccounting-LDAP-Server.pdf: 9faf7c27c5556edd64c64c4cab0982b85b7072dc
 /doc/readme-ldapclass.txt: 0d097fef227fbbcdf722cb6b809218d7c0aadebd
 /doc/readme.txt: 329fc6ebdf6eca8cb37450d5f419eeddcda59240
-/_init/config: d47d94290ca437ef9d6ac4908d4638cbe4619a3d
-/config_ldap.php: b4330dc28eec941e8bd71e156d4cca773730db92
+/hooks.php: d5ac259854dd1753c383be8ee25190dbb4251677
 /lib/Ldap.php: 8738163c4bce63fcd852072c482b027ce0081b0e
 /lib/ldap_authenticator.php: e3cff87e8738df280a772b3970f1aaddfd53d276
-
+/_init/config: d47d94290ca437ef9d6ac4908d4638cbe4619a3d

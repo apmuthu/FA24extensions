@@ -2,7 +2,10 @@
 define ('SS_IMPORTTRANSACTIONS', 101<<8);
 
 class hooks_import_transactions extends hooks {
-    var $module_name = 'import_transations'; 
+
+	function __construct() {
+		$this->module_name = 'import_transactions';
+	}
 
     /*
         Install additional menu options provided by module
@@ -13,7 +16,7 @@ class hooks_import_transactions extends hooks {
         switch($app->id) {
             case 'GL':
                 $app->add_rapp_function(2, _('Import &Transactions'), 
-                    $path_to_root.'/modules/import_transactions/import_transactions.php', 'SA_CSVTRANSACTIONS');
+                    $path_to_root.'/modules/'.$this->module_name.'/import_transactions.php', 'SA_CSVTRANSACTIONS');
         }
     }
 

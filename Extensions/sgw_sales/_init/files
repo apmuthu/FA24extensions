@@ -2,7 +2,7 @@
 /docs/OrderEntry.png: f794dd1946e59ab16badf02f2c78bb3bd5a919d7
 /docs/sales_order_entry.php.patch: 83019e9114329185a6e02386af54198436ce92d9
 /generate_recurring_invoices.php: ee2a970e465520f0b162d28d74bda16fc13e22b0
-/hooks.php: 46860c814473e283c8c4109f3e7b0a3062c3b0b8
+/hooks.php: f0443d88570876cd1c3e34a77d9a6b8e4eef3e0c
 /includes/common/DataMapper.php: 1423fb1620472aeb995067764e2d6ea6e9a1e587
 /includes/controller/GenerateRecurring.php: af5bb790e5c292ea5e044de707e2958d3a41cd06
 /includes/db/GenerateRecurringModel.php: 13145715282c7d5cf72955c24b6ad66dd4ded3b9

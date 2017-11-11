@@ -12,26 +12,26 @@ class hooks_sgw_sales extends hooks {
 		*/
 	function install_options($app) {
 		global $path_to_root;
-
+		$module_relative_path = 'modules/' . $this->module_name . '/';
 		switch($app->id) {
 			case 'orders': // id tag for sales
 				$app->enabled = true;
 //				var_dump($app);
 				$app->modules[0]->lappfunctions[1] = new app_function(
 					_("Sales &Order Entry"),
-					"modules/sgw_sales/sales_order_entry.php?NewOrder=Yes",
+					$module_relative_path.'sales_order_entry.php?NewOrder=Yes',
 					'SA_SGW_SALES_ORDER',
 					MENU_TRANSACTION
 				);
 				$app->modules[0]->rappfunctions[2] = new app_function(
 					_("&Generate Recurring Invoices"),
-					"modules/sgw_sales/generate_recurring_invoices.php",
+					$module_relative_path.'generate_recurring_invoices.php',
 					'SA_SGW_GENERATE_RECURRING_INVOICES',
 					MENU_TRANSACTION
 				);
 				$app->modules[1]->lappfunctions[1] = new app_function(
 					_("Sales Order &Inquiry"),
-					"modules/sgw_sales/inquiry/sales_orders_view.php?type=30",
+					$module_relative_path.'inquiry/sales_orders_view.php?type=30',
 					'SA_SGW_SALES_INQUIRY',
 					MENU_INQUIRY
 				);
