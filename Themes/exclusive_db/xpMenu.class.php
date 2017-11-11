@@ -7,10 +7,10 @@
 //	Web: 	     				http://www.portalsi.info
 //	Name: 	     				xpMenu.class.php
 // 	Description:   				An easy to use xp style menu generator class
-//  License:      			GNU General Public License (GPL)
-//  Release Date:               	December 27th / 2006
-//  Last Update date: 		December 27th / 2006
-//  Version:                    		1.0
+//  License:      				GNU General Public License (GPL)
+//  Release Date:               December 27th / 2006
+//  Last Update date: 			November 11th / 2017
+//  Version:                    1.0
 //
 // Tested on:
 //		* Server Side:
@@ -45,7 +45,7 @@ class xpMenu{
 	var $menu_expanded;
 
 	/*
-	Function : xpMenu()
+	Function : __construct()
 	Parameters:
 		none
 	Return:
@@ -55,7 +55,7 @@ class xpMenu{
 
 	*/
 
-	function xpMenu(){
+	function __construct(){
 		// cell color when mouse is over
 		$this->submenu_onmouseover 	= '#D8E4F8';
 		// cell color when mouse is out
