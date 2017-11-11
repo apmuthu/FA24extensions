@@ -9,9 +9,9 @@
 class helloworld_app extends application
 {
 
-	function helloworld_app()
+	function __construct()
 	{
-		$this->application("hello", _($this->help_context = "&Hello World"));
+		parent::__construct("hello", _($this->help_context = "&Hello World"));
 
 		$this->add_module(_("Transactions"));
 
