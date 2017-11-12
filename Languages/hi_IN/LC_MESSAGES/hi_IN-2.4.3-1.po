@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: FrontAccounting 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-09 22:44+0100\n"
-"PO-Revision-Date: 2017-11-10 13:30+0530\n"
+"PO-Revision-Date: 2017-11-13 00:18+0530\n"
 "Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2017\n"
 "Language-Team: Hindi (India) (https://www.transifex.com/gnuacademy/teams/55037/hi_IN/)\n"
 "MIME-Version: 1.0\n"
@@ -906,7 +906,7 @@ msgstr "हाँ"
 msgid ""
 "You are about to remove company \\'%s\\'.\n"
 "Do you want to continue ?"
-msgstr "आप कंपनी \\\\'%s\\\\' को हटाने जा रहे हैं।\\nक्या आप जारी रखना चाहते हैं?"
+msgstr "आप कंपनी \\'%s\\' को हटाने जा रहे हैं।\\nक्या आप जारी रखना चाहते हैं?"
 
 #: admin/create_coy.php:282
 msgid "The marked company is the current company which cannot be deleted."
@@ -1660,7 +1660,9 @@ msgstr "नवीनतम एक्सटेंशन पैकेज अपल
 msgid ""
 "You are about to remove package \\'%s\\'.\n"
 "Do you want to continue ?"
-msgstr "आप पैकेज \\\\'%s\\\\' को हटाने वाले हैं।\\nक्या आप जारी रखना चाहते हैं?"
+msgstr ""
+"आप पैकेज \\'%s\\' को हटाने वाले हैं।\n"
+"क्या आप जारी रखना चाहते हैं?"
 
 #: admin/inst_lang.php:23
 msgid "Install/Update Languages"
@@ -1707,7 +1709,9 @@ msgstr "नवीनतम भाषा पैकेज अपलोड और �
 msgid ""
 "You are about to remove language \\'%s\\'.\n"
 "Do you want to continue ?"
-msgstr "आप \\\\'%s\\\\' भाषा को हटाने वाले हैं।\\nक्या आप जारी रखना चाहते हैं?"
+msgstr ""
+"आप \\'%s\\' भाषा को हटाने वाले हैं।\n"
+"क्या आप जारी रखना चाहते हैं?"
 
 #: admin/inst_lang.php:118
 msgid "The marked language is the current language which cannot be deleted."
@@ -6425,9 +6429,9 @@ msgid ""
 "Before software upgrade you have to include old $security_groups and "
 "$security_headings arrays from old config.php file to the new one."
 msgstr ""
-"सॉफ़्टवेयर अपग्रेड करने से पहले आपको पुराने $ security_groups और $ "
-"security_headings arrays को पुराने config.php फ़ाइल से एक नया में शामिल करना"
-" होगा।"
+"सॉफ़्टवेयर अपग्रेड करने से पहले आपको पुराने $security_groups और "
+"$security_headings arrays को पुराने config.php फ़ाइल से एक नया में शामिल "
+"करना होगा।"
 
 #: includes/current_user.inc:102 includes/ui/ui_controls.inc:215
 #: includes/ui/ui_view.inc:985
@@ -6543,22 +6547,22 @@ msgstr "वित्तीय वर्ष में शीर्ष %s ग्�
 #: includes/dashboard.inc:224
 #, php-format
 msgid "Top %s suppliers in fiscal year"
-msgstr "वित्तीय वर्ष में शीर्ष % एस आपूर्तिकर्ता"
+msgstr "वित्तीय वर्ष में शीर्ष %s आपूर्तिकर्ता"
 
 #: includes/dashboard.inc:285
 #, php-format
 msgid "Top %s Manufactured Items in fiscal year"
-msgstr "वित्तीय वर्ष में शीर्ष % एस उत्पादित आइटम"
+msgstr "वित्तीय वर्ष में शीर्ष %s उत्पादित आइटम"
 
 #: includes/dashboard.inc:287
 #, php-format
 msgid "Top %s Fixed Assets"
-msgstr "शीर्ष % फिक्स्ड एसेट्स"
+msgstr "शीर्ष %s फिक्स्ड एसेट्स"
 
 #: includes/dashboard.inc:289
 #, php-format
 msgid "Top %s Sold Items in fiscal year"
-msgstr "वित्तीय वर्ष में %"
+msgstr "वित्तीय वर्ष में प्रमुख %s बेचे गए आइटम"
 
 #: includes/dashboard.inc:292 includes/dashboard.inc:294
 #: manufacturing/search_work_orders.php:161
@@ -6872,7 +6876,7 @@ msgid ""
 "Please remove $security_groups and $security_headings arrays from config.php"
 " file!"
 msgstr ""
-"Config.php फ़ाइल से $ security_groups और $ security_headings arrays को "
+"Config.php फ़ाइल से $security_groups और $security_headings arrays को "
 "निकालें!"
 
 #: includes/session.inc:256
@@ -7475,7 +7479,7 @@ msgstr "डिबगिंग मोड"
 
 #: includes/system_tests.inc:128
 msgid "To switch debugging on set $go_debug>0 in config.php file"
-msgstr "Config.php फ़ाइल में सेट $ go_debug> 0 पर डीबगिंग स्विच करना"
+msgstr "Config.php फ़ाइल में सेट $go_debug>0 पर डीबगिंग स्विच करना"
 
 #: includes/system_tests.inc:138
 msgid "Error logging"
@@ -7487,7 +7491,7 @@ msgstr "विकलांग"
 
 #: includes/system_tests.inc:149
 msgid "To switch error logging set $error_logging in config.php file"
-msgstr "Config_php फ़ाइल में त्रुटि लॉगिंग $ error_logging सेट करने के लिए"
+msgstr "Config_php फ़ाइल में त्रुटि लॉगिंग $error_logging सेट करने के लिए"
 
 #: includes/system_tests.inc:152
 msgid "Log file is not writeable"
@@ -10102,7 +10106,7 @@ msgstr "समाप्त उत्पाद प्राप्ति"
 #: manufacturing/view/wo_costs_view.php:80
 #, php-format
 msgid "Production Costs for Work Order # %d"
-msgstr "कार्य क्रम #% डी के लिए उत्पादन लागत"
+msgstr "कार्य क्रम # %d के लिए उत्पादन लागत"
 
 #: manufacturing/view/wo_issue_view.php:19
 msgid "View Work Order Issue"
@@ -10419,7 +10423,7 @@ msgstr "कार्य क्रम के लिए जारी किए ग
 #: manufacturing/includes/db/work_order_costing_db.inc:98
 #, php-format
 msgid "COGS changed from %s to %s for %d %s of '%s'"
-msgstr "'%s' के%d%s के लिए COGS को%s से बदल दिया गया है"
+msgstr "COGS को %s से %s तक बदल दिया गया %d के लिए  %s के '%s' है"
 
 #: manufacturing/includes/db/work_order_costing_db.inc:235
 #, php-format
@@ -13515,7 +13519,7 @@ msgstr ""
 #: sales/credit_note_entry.php:66
 #, php-format
 msgid "Credit Note # %d has been processed"
-msgstr "क्रेडिट नोट #% डी पर संसाधित किया गया है"
+msgstr "क्रेडिट नोट # %d पर संसाधित किया गया है"
 
 #: sales/credit_note_entry.php:68
 msgid "&View this credit note"
@@ -13891,7 +13895,7 @@ msgstr "दर्ज किए गए डेटा की जांच करे
 #: sales/customer_invoice.php:37
 #, php-format
 msgid "Modifying Sales Invoice # %d."
-msgstr "विक्रय बिक्री चालान #% डी"
+msgstr "विक्रय बिक्री चालान # %d"
 
 #: sales/customer_invoice.php:40
 msgid "Issue an Invoice for Delivery Note"
@@ -14372,7 +14376,7 @@ msgstr ""
 #: sales/sales_order_entry.php:552
 #, php-format
 msgid "Price %s is below Standard Cost %s"
-msgstr "मूल्य %s मानक लागत% से नीचे है"
+msgstr "मूल्य %s मानक मूल्य %s से नीचे है"
 
 #: sales/sales_order_entry.php:577
 msgid ""
@@ -15207,7 +15211,7 @@ msgstr "क्रेडिट नोट देखें"
 #: sales/view/view_credit.php:39
 #, php-format
 msgid "CREDIT NOTE #%d"
-msgstr "क्रेडिट नोट #% डी"
+msgstr "क्रेडिट नोट # %d"
 
 #: sales/view/view_credit.php:126
 msgid "There are no line items on this credit note."
@@ -15220,7 +15224,7 @@ msgstr "बिक्री डिस्पेच देखें"
 #: sales/view/view_dispatch.php:43
 #, php-format
 msgid "DISPATCH NOTE #%d"
-msgstr "डिस्पैच नोट #% डी"
+msgstr "डिस्पैच नोट # %d"
 
 #: sales/view/view_dispatch.php:65 sales/view/view_invoice.php:67
 msgid "Charge Branch"
@@ -15254,17 +15258,17 @@ msgstr "देखें बिक्री चालान"
 #: sales/view/view_invoice.php:45
 #, php-format
 msgid "FINAL INVOICE #%d"
-msgstr "अंतिम चालान #% डी"
+msgstr "अंतिम चालान # %d"
 
 #: sales/view/view_invoice.php:45
 #, php-format
 msgid "PREPAYMENT INVOICE #%d"
-msgstr "प्रीपेमेंट नौवहन #% डी"
+msgstr "प्रीपेमेंट नौवहन # %d"
 
 #: sales/view/view_invoice.php:45
 #, php-format
 msgid "SALES INVOICE #%d"
-msgstr "बिक्री चालान #% डी"
+msgstr "बिक्री चालान # %d"
 
 #: sales/view/view_invoice.php:154
 msgid "There are no line items on this invoice."
@@ -15281,7 +15285,7 @@ msgstr "ग्राहक भुगतान देखें"
 #: sales/view/view_receipt.php:33
 #, php-format
 msgid "Customer Payment #%d"
-msgstr "ग्राहक भुगतान #% डी"
+msgstr "ग्राहक भुगतान # %d"
 
 #: sales/view/view_receipt.php:38
 msgid "From Customer"
@@ -15314,7 +15318,7 @@ msgstr "बिक्री विक्रय देखें"
 #: sales/view/view_sales_order.php:29
 #, php-format
 msgid "Sales Quotation #%d"
-msgstr "बिक्री कोटेशन #% डी"
+msgstr "बिक्री कोटेशन # %d"
 
 #: sales/view/view_sales_order.php:33
 msgid "View Sales Order"
@@ -15323,7 +15327,7 @@ msgstr "बिक्री विक्रय देखें"
 #: sales/view/view_sales_order.php:34
 #, php-format
 msgid "Sales Order #%d"
-msgstr "विक्रय आदेश #% डी"
+msgstr "विक्रय आदेश # %d"
 
 #: sales/view/view_sales_order.php:49
 msgid "Order Information"
