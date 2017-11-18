@@ -1,0 +1,9 @@
+<?php
+
+// Retrieves Sales Invoice #5 (trans_no=5, type=13) in Array Format
+
+$a = file_get_contents('http://localhost/frontac24/modules/api24/sales/5/13');
+$a = json_decode($a, true);
+echo print_r($a, true);
+
+?>

@@ -1,3 +1,4 @@
+2017-11-18 Ap.Muthu Added example for json to array using json_decode()
 2017-11-18 Ap.Muthu Translated Spanish comments to English
 2017-11-18 Ap.Muthu Fixes to FA interface code to work without composer dependencies
 2017-11-18 Ap.Muthu Remove forced FA 5.4+ syntax Array declaration [] => array()
