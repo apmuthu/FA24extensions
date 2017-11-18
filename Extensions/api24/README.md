@@ -34,6 +34,11 @@ The following API endpoints have been implemented:
 
 Some of them have not been tested yet so be careful.
 
+## REST Clients
+* [Jsonium](http://jsonium.org)
+* [SoapUI](https://www.soapui.org)
+* [I'm only RESTing](http://downloads.swensensoftware.com/im-only-resting/im-only-resting-1.4.0.zip)
+
 ## How to Help
 
 Report issues you find with as much detail as you can.

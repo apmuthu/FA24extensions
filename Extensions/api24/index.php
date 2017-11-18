@@ -1,4 +1,12 @@
 <?php
+ini_set('html_errors', false);
+ini_set('xdebug.show_exception_trace', 0);
+// ini_set('xdebug.auto_trace', 2);
+
+include_once ('config_api.php');
+foreach (glob("src/*.php") as $filename)
+	include $filename;
+
 use FAAPI\Inventory;
 use FAAPI\InventoryLocations;
 use FAAPI\Category;
@@ -11,22 +19,7 @@ use FAAPI\GLAccounts;
 use FAAPI\Currencies;
 use FAAPI\InventoryCosts;
 use FAAPI\Sales;
-/**********************************************
-Author: Andres Amaya
-Name: SASYS REST API
-Free software under GNU GPL
 
---> 15-July-2013:
-- Added .htaccess
-- GET with pagination
-- Sales Methods
-
---> 14-June-2013:
-- Added POST /locations/ To Add A Location Thanks to Richard Vinke
-
---> 6-Sept-2014
-- Several bug fixes and additions Thanks to Cambell Prince
-***********************************************/
 ini_set('html_errors', false);
 ini_set('xdebug.show_exception_trace', 0);
 // ini_set('xdebug.auto_trace', 2);
@@ -38,10 +31,7 @@ global $security_areas, $security_groups, $security_headings, $path_to_root, $db
 $page_security = 'SA_API';
 
 include_once (API_ROOT . "/session-custom.inc");
-include_once (API_ROOT . "/vendor/autoload.php");
-
 include_once (API_ROOT . "/util.php");
-
 include_once (FA_ROOT . "/includes/date_functions.inc");
 include_once (FA_ROOT . "/includes/data_checks.inc");
 
@@ -50,6 +40,9 @@ include_once (FA_ROOT . "/includes/data_checks.inc");
 // echo "sales invoice => ".ST_SALESINVOICE;
 // echo "cust delivery => ".ST_CUSTDELIVERY;
 // echo "cust credit => ".ST_CUSTCREDIT;
+
+require 'Slim/Slim.php';
+\Slim\Slim::registerAutoloader();
 
 $rest = new \Slim\Slim(array(
 	'log.enabled' => true,
