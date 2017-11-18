@@ -66,7 +66,7 @@ class View
      */
     public function __construct()
     {
-        $this->data = new \Slim\Helper\Set();
+        $this->data = new \Slim\Helper\WSet();
     }
 
     /********************************************************************************

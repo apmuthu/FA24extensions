@@ -149,7 +149,7 @@ class Slim
     public function __construct(array $userSettings = array())
     {
         // Setup IoC container
-        $this->container = new \Slim\Helper\Set();
+        $this->container = new \Slim\Helper\WSet();
         $this->container['settings'] = array_merge(static::getDefaultSettings(), $userSettings);
 
         // Default environment
@@ -191,7 +191,7 @@ class Slim
 
         // Default log
         $this->container->singleton('log', function ($c) {
-            $log = new \Slim\Log($c['logWriter']);
+            $log = new \Slim\WLog($c['logWriter']);
             $log->setEnabled($c['settings']['log.enabled']);
             $log->setLevel($c['settings']['log.level']);
             $env = $c['environment'];
@@ -289,7 +289,7 @@ class Slim
             'debug' => true,
             // Logging
             'log.writer' => null,
-            'log.level' => \Slim\Log::DEBUG,
+            'log.level' => \Slim\WLog::DEBUG,
             'log.enabled' => true,
             // View
             'templates.path' => './templates',

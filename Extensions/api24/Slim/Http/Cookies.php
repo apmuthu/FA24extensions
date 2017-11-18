@@ -32,7 +32,7 @@
  */
 namespace Slim\Http;
 
-class Cookies extends \Slim\Helper\Set
+class Cookies extends \Slim\Helper\WSet
 {
     /**
      * Default cookie settings

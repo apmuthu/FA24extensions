@@ -32,7 +32,7 @@
  */
 namespace Slim\Helper;
 
-class Set implements \ArrayAccess, \Countable, \IteratorAggregate
+class WSet implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * Key-value array of arbitrary data
