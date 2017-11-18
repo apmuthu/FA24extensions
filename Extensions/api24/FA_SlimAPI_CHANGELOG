@@ -1,3 +1,4 @@
+2017-11-18 Ap.Muthu Remove forced FA 5.4+ syntax Array declaration [] => array()
 2017-11-18 Ap.Muthu Non-Composer FA portion import from cambell-prince repo (fork of andresamayadiaz)
 2017-11-18 Ap.Muthu Fixes to Slim2 Framework for constructor clash with class named method
 2017-11-18 Ap.Muthu Initial import of Slim2 Framework

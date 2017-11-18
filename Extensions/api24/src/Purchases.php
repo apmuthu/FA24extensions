@@ -15,7 +15,8 @@ class Purchases
 		$sql = get_sql_for_supplier_inquiry(ALL_TEXT, '1/1/0000', '1/1/9999');
 		$result = db_query($sql, 'oops');
 		
-		$body = [];
+		$body = array();
+
 		while ($row = db_fetch_assoc($result)) {
 			$body[] = $row;
 		}
