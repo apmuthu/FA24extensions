@@ -1,3 +1,4 @@
+2017-11-20  Ap.Muthu     en_AU general 4 digit Chart of Accounts updated for FA 2.4.3
 2017-11-18  Ap.Muthu     Slim 2.64 API for FA 2.4.x added
 2017-11-13  Ap.Muthu     Indian 4-digit Chart of Accounts updated for FA 2.4.3
 2017-11-13  Ap.Muthu     Hindi (hi_IN) core language fixes

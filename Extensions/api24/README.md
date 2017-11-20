@@ -32,7 +32,8 @@ The following API endpoints have been implemented:
 - GL Accounts
 - GL Account Types.
 
-Some of them have not been tested yet so be careful.
+* Some of them have not been tested yet so be careful.
+* Checkout the evolving [documentation](http://cambell-prince.github.io/FrontAccountingSimpleAPI/)
 
 ## REST Clients
 * [Jsonium](http://jsonium.org)
