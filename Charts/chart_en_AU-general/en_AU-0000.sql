@@ -623,7 +623,7 @@ CREATE TABLE IF NOT EXISTS `0_fiscal_year` (
 
 ### Data of table `0_fiscal_year` ###
 
-INSERT INTO `0_fiscal_year` VALUES (1, '2016-01-01', '2016-12-31', 0);
+INSERT INTO `0_fiscal_year` VALUES (1, '2016-07-01', '2017-06-30', 0);
 
 ### Structure of table `0_gl_trans` ###
 
