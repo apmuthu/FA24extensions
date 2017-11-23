@@ -1,15 +1,17 @@
-# MySQL dump of database 'frontac24' on host 'localhost'
-# Backup Date and Time: 2017-11-13 15:53+0530
-# Built by FrontAccounting 2.4.3
-# http://frontaccounting.com
-# Company: Training Co.
-# Author: Ap.Muthu <apmuthu@usa.net>
+-- MySQL dump of database 'frontac24' on host 'localhost'
+-- Backup Date and Time: 2017-11-23 14:14+0530
+-- Built by FrontAccounting 2.4.3
+-- http://frontaccounting.com
+-- Company: Training Co.
+-- Author: Ap.Muthu <apmuthu@usa.net>
 
-# Compatibility: 2.4.1
+-- Compatibility: 2.4.1
 
 -- --------------------------------------------------------
 
 SET NAMES latin1;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `0_areas`
@@ -114,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `0_bank_accounts` (
 --
 
 INSERT INTO `0_bank_accounts` VALUES
- ('1060', '0', 'Current account', '9999999999', 'Wachovia Bank', '', 'INR', '1', '1', '5690', '0000-00-00 00:00:00', '0', '0')
+ ('1060', '0', 'Current account', 'N/A', 'N/A', '', 'INR', '1', '1', '5690', '0000-00-00 00:00:00', '0', '0')
 ,('1065', '3', 'Petty Cash account', 'N/A', 'N/A', '', 'INR', '0', '2', '5690', '0000-00-00 00:00:00', '0', '0');
 
 -- --------------------------------------------------------
@@ -455,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `0_crm_contacts` (
   `person_id` int(11) NOT NULL DEFAULT '0' COMMENT 'foreign key to crm_contacts',
   `type` varchar(20) NOT NULL COMMENT 'foreign key to crm_categories',
   `action` varchar(20) NOT NULL COMMENT 'foreign key to crm_categories',
-  `entity_id` varchar(11) default NULL COMMENT 'entity id in related class table',
+  `entity_id` varchar(11) DEFAULT NULL COMMENT 'entity id in related class table',
   PRIMARY KEY (`id`),
   KEY `type` (`type`,`action`)
 ) ENGINE=InnoDB ;
@@ -1293,7 +1295,6 @@ CREATE TABLE IF NOT EXISTS `0_recurrent_invoices` (
 --
 
 DROP TABLE IF EXISTS `0_reflines`;
-
 CREATE TABLE IF NOT EXISTS `0_reflines` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `trans_type` int(11) NOT NULL,
@@ -1303,7 +1304,7 @@ CREATE TABLE IF NOT EXISTS `0_reflines` (
   `default` tinyint(1) NOT NULL DEFAULT '0',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `prefix` (`trans_type`,`prefix`)
+  UNIQUE KEY `prefix` (`trans_type`, `prefix`)
 ) ENGINE=InnoDB ;
 
 --
@@ -1858,6 +1859,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ,('alternative_tax_include_on_docs', 'setup.company', 'tinyint', '1', '0')
 ,('auto_curr_reval', 'setup.company', 'smallint', '6', '1')
 ,('bank_charge_act', 'glsetup.general', 'varchar', '15', '5690')
+,('barcodes_on_stock','setup.company', 'tinyint', 1, '0')
 ,('base_sales', 'setup.company', 'int', '11', '1')
 ,('bcc_email', 'setup.company', 'varchar', '100', '')
 ,('company_logo_report', 'setup.company', 'tinyint', '1', '0')

@@ -1,7 +1,8 @@
 # MySQL dump of database 'fa24' on host 'localhost'
-# Backup Date and Time: 2017-11-20 21:54+0530
-# Built on FrontAccounting 2.4.3
+# Backup Date and Time: 2017-11-23 14:14+0530
+# Built by FrontAccounting 2.4.3
 # http://frontaccounting.com
+# Company: Training Co.
 
 # Compatibility: 2.4.1
 # Author: Ap.Muthu <apmuthu@usa.net>
@@ -768,7 +769,7 @@ CREATE TABLE IF NOT EXISTS `0_item_units` (
 ### Data of table `0_item_units` ###
 
 INSERT INTO `0_item_units` VALUES
-('ea.', 'Each', '0', '0'),
+('each', 'Each', '0', '0'),
 ('hr', 'Hours', 0, 0);
 
 ### Structure of table `0_journal` ###
@@ -1508,6 +1509,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('alternative_tax_include_on_docs','setup.company', 'tinyint', 1, '0'),
 ('auto_curr_reval', 'setup.company', 'smallint', 6, '1'),
 ('bank_charge_act', 'glsetup.general', 'varchar', 15, '5690'),
+('barcodes_on_stock','setup.company', 'tinyint', 1, '0'),
 ('base_sales', 'setup.company', 'int', 11, '1'),
 ('bcc_email', 'setup.company', 'varchar', 100, ''),
 ('company_logo_report','setup.company', 'tinyint', 1, '0'),
@@ -1648,7 +1650,7 @@ CREATE TABLE IF NOT EXISTS `0_tax_types` (
 ### Data of table `0_tax_types` ###
 
 INSERT INTO `0_tax_types` VALUES
-(1, 5, '2150', '2150', 'Tax', 0);
+(1, 5, '2150', '2150', 'GST', 0);
 
 ### Structure of table `0_trans_tax_details` ###
 
@@ -1723,7 +1725,7 @@ CREATE TABLE IF NOT EXISTS `0_users` (
   `rep_popup` tinyint(1) DEFAULT '1',
   `sticky_doc_date` tinyint(1) DEFAULT '0',
   `startup_tab` varchar(20) NOT NULL DEFAULT '',
-  `transaction_days` int(6) NOT NULL DEFAULT '30' COMMENT 'Transaction days',
+  `transaction_days` smallint(6) NOT NULL DEFAULT '30' COMMENT 'Transaction days',
   `save_report_selections` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Save Report Selection Days',
   `use_date_picker` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Use Date Picker for all Date Values',
   `def_print_destination` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Default Report Destination',

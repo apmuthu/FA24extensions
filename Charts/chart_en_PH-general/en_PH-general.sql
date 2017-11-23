@@ -1,15 +1,12 @@
--- MySQL dump of database 'faupgrade' on host 'localhost'
--- Backup Date and Time: 2017-07-24 12:30
--- Built by FrontAccounting 2.4.1
+-- MySQL dump of database 'fa24' on host 'localhost'
+-- Backup Date and Time: 2017-11-23 14:14+0530
+-- Built by FrontAccounting 2.4.3
 -- http://frontaccounting.com
 -- Company: Training Co.
--- User: 
 
 -- Compatibility: 2.4.1
 
---
--- Database: `fatest`
---
+-- --------------------------------------------------------
 
 SET NAMES latin1;
 
@@ -72,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `0_audit_trail` (
   `type` smallint(6) unsigned NOT NULL default '0',
   `trans_no` int(11) unsigned NOT NULL default '0',
   `user` smallint(6) unsigned NOT NULL default '0',
-  `stamp` timestamp NOT NULL,
+  `stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `description` varchar(60) default NULL,
   `fiscal_year` int(11) NOT NULL default 0,
   `gl_date` date NOT NULL default '0000-00-00',
@@ -444,7 +441,9 @@ CREATE TABLE IF NOT EXISTS `0_crm_categories` (
   UNIQUE KEY `type_2` (`type`,`name`)
 ) ENGINE=InnoDB ;
 
-### Data of table `0_crm_categories` ###
+--
+-- Dumping data for table `0_crm_categories`
+--
 
 INSERT INTO `0_crm_categories` VALUES
 ('1', 'cust_branch', 'general', 'General', 'General contact data for customer branch (overrides company setting)', '1', '0'),
@@ -534,8 +533,8 @@ CREATE TABLE IF NOT EXISTS `0_currencies` (
 INSERT INTO `0_currencies` VALUES
 ('Phillipine Pesos', 'PHP', 'P$', 'Phillipines', 'Sentimo', '1', '0'),
 ('US Dollars', 'USD', '$', 'United States', 'Cents', '1', '0'),
-('Euro', 'EUR', 'â‚¬', 'Europe', 'Cents', '1', '0'),
-('Pounds', 'GBP', 'Â£', 'Great Britain', 'Pence', '1', '0'),
+('Euro', 'EUR', '€', 'Europe', 'Cents', '1', '0'),
+('Pounds', 'GBP', '£', 'Great Britain', 'Pence', '1', '0'),
 ('CA Dollars', 'CAD', '$', 'Canada', 'Cents', '1', '0');
 
 -- --------------------------------------------------------
@@ -555,7 +554,7 @@ CREATE TABLE IF NOT EXISTS `0_cust_allocations` (
   `trans_no_to` int(11) default NULL,
   `trans_type_to` int(11) default NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `person_id` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
+  UNIQUE KEY `trans_type_from` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
   KEY `From` (`trans_type_from`,`trans_no_from`),
   KEY `To` (`trans_type_to`,`trans_no_to`)
 ) ENGINE=InnoDB ;
@@ -664,7 +663,7 @@ CREATE TABLE IF NOT EXISTS `0_debtor_trans` (
   `dimension2_id` int(11) NOT NULL default '0',
   `payment_terms` int(11) default NULL,
   `tax_included` tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY (`type`,`trans_no`),
+  PRIMARY KEY (`type`,`trans_no`,`debtor_no`),
   KEY `debtor_no` (`debtor_no`,`branch_code`),
   KEY `tran_date` (`tran_date`),
   KEY `order_` (`order_`)
@@ -1634,7 +1633,11 @@ INSERT INTO `0_stock_category` VALUES
 (3, 'Systems',    1, 'pc', 'M', '7100', '8100', '3000', '3000', '1510', 0, 0, 0, 0, 0),
 (4, 'Services',   1, 'hr', 'D', '7100', '8100', '3000', '3000', '1510', 0, 0, 0, 0, 0);
 
-### Structure of table `0_stock_fa_class` ###
+-- --------------------------------------------------------
+
+--
+-- Structure of table `0_stock_fa_class`
+--
 
 DROP TABLE IF EXISTS `0_stock_fa_class`;
 CREATE TABLE IF NOT EXISTS `0_stock_fa_class` (
@@ -1645,7 +1648,11 @@ CREATE TABLE IF NOT EXISTS `0_stock_fa_class` (
   `depreciation_rate` double NOT NULL DEFAULT '0',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`fa_class_id`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB;
+
+--
+-- Dumping data for table `0_stock_fa_class`
+--
 
 -- --------------------------------------------------------
 
@@ -1832,7 +1839,7 @@ CREATE TABLE IF NOT EXISTS `0_supp_trans` (
   `rate` double NOT NULL default '1',
   `alloc` double NOT NULL default '0',
   `tax_included` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY (`type`,`trans_no`),
+  PRIMARY KEY (`type`,`trans_no`,`supplier_id`),
   KEY `supplier_id` (`supplier_id`),
   KEY `tran_date` (`tran_date`)
 ) ENGINE=InnoDB ;
@@ -1871,10 +1878,12 @@ INSERT INTO `0_sys_prefs` VALUES
 ('alternative_tax_include_on_docs', 'setup.company', 'tinyint', '1', '0'),
 ('auto_curr_reval', 'setup.company', 'smallint', '6', ''),
 ('bank_charge_act', 'glsetup.general', 'varchar', '15', '1100'),
+('barcodes_on_stock','setup.company', 'tinyint', 1, '0'),
 ('base_sales', 'setup.company', 'int', '11', '1'),
 ('bcc_email', 'setup.company', 'varchar', '100', ''),
+('company_logo_report', 'setup.company', 'tinyint', '1', '0'),
 ('coy_logo', 'setup.company', 'varchar', '100', ''),
-('coy_name', 'setup.company', 'varchar', '60', 'Marinny Corporation'),
+('coy_name', 'setup.company', 'varchar', '60', 'Company name'),
 ('coy_no', 'setup.company', 'varchar', '25', ''),
 ('creditors_act', 'glsetup.purchase', 'varchar', '15', '5020'),
 ('curr_default', 'setup.company', 'char', '3', 'PHP'),
@@ -1923,6 +1932,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('pyt_discount_act', 'glsetup.purchase', 'varchar', '15', '3099'),
 ('retained_earnings_act', 'glsetup.general', 'varchar', '15', '6900'),
 ('round_to', 'setup.company', 'int', '5', '1'),
+('shortname_name_in_list', 'setup.company', 'tinyint', '1', '0'),
 ('show_po_item_codes', 'glsetup.purchase', 'tinyint', '1', '0'),
 ('suppress_tax_rates', 'setup.company', 'tinyint', '1', '0'),
 ('tax_algorithm', 'glsetup.customer', 'tinyint', '1', '1'),
@@ -2030,7 +2040,8 @@ CREATE TABLE IF NOT EXISTS `0_tax_types` (
   `purchasing_gl_code` varchar(15) NOT NULL default '',
   `name` varchar(60) NOT NULL default '',
   `inactive` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`,`rate`)
 ) ENGINE=InnoDB ;
 
 --

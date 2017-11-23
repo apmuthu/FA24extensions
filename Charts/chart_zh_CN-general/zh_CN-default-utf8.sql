@@ -1,9 +1,8 @@
 -- MySQL dump of database 'fa24' on host 'localhost'
--- Backup Date and Time: 2017-10-23 16:59
--- Built by FrontAccounting 2.4.2
+-- Backup Date and Time: 2017-11-23 14:14+0530
+-- Built on FrontAccounting 2.4.3
 -- http://frontaccounting.com
 -- Company: Default Co.
--- User: 
 
 
 SET NAMES utf8;
@@ -20,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `0_areas` (
 ) ENGINE=InnoDB ;
 
 INSERT INTO `0_areas` VALUES
- ('1', 'Beijing', '0');
+ ('1', 'Global', '0');
 
 DROP TABLE IF EXISTS `0_attachments`;
 CREATE TABLE IF NOT EXISTS `0_attachments` (
@@ -341,8 +340,8 @@ CREATE TABLE IF NOT EXISTS `0_currencies` (
 
 INSERT INTO `0_currencies` VALUES
  ('Chinese Yuan', 'CNY', 'RMB', '', '', '1', '0')
-,('Euro', 'EUR', 'â‚¬', 'Europe', 'Cents', '1', '0')
-,('Pounds', 'GBP', 'Â£', 'England', 'Pence', '1', '0')
+,('Euro', 'EUR', '€', 'Europe', 'Cents', '1', '0')
+,('Pounds', 'GBP', '£', 'England', 'Pence', '1', '0')
 ,('US Dollars', 'USD', '$', 'United States', 'Cents', '1', '0');
 
 DROP TABLE IF EXISTS `0_cust_allocations`;
@@ -356,7 +355,7 @@ CREATE TABLE IF NOT EXISTS `0_cust_allocations` (
   `trans_no_to` int(11) DEFAULT NULL,
   `trans_type_to` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `person_id` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
+  UNIQUE KEY `trans_type_from` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
   KEY `From` (`trans_type_from`,`trans_no_from`),
   KEY `To` (`trans_type_to`,`trans_no_to`)
 ) ENGINE=InnoDB ;
@@ -392,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `0_debtor_trans` (
   `trans_no` int(11) unsigned NOT NULL DEFAULT '0',
   `type` smallint(6) unsigned NOT NULL DEFAULT '0',
   `version` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `debtor_no` int(11) unsigned DEFAULT NULL,
+  `debtor_no` int(11) unsigned NOT NULL,
   `branch_code` int(11) NOT NULL DEFAULT '-1',
   `tran_date` date NOT NULL DEFAULT '0000-00-00',
   `due_date` date NOT NULL DEFAULT '0000-00-00',
@@ -412,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `0_debtor_trans` (
   `dimension2_id` int(11) NOT NULL DEFAULT '0',
   `payment_terms` int(11) DEFAULT NULL,
   `tax_included` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`type`,`trans_no`),
+  PRIMARY KEY (`type`,`trans_no`,`debtor_no`),
   KEY `debtor_no` (`debtor_no`,`branch_code`),
   KEY `tran_date` (`tran_date`),
   KEY `order_` (`order_`)
@@ -434,7 +433,7 @@ CREATE TABLE IF NOT EXISTS `0_debtor_trans_details` (
   `src_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Transaction` (`debtor_trans_type`,`debtor_trans_no`),
-  KEY `src_id` (`src_id`)
+  KEY (`src_id`)
 ) ENGINE=InnoDB ;
 
 DROP TABLE IF EXISTS `0_debtors_master`;
@@ -1114,7 +1113,7 @@ CREATE TABLE IF NOT EXISTS `0_supp_allocations` (
   `trans_no_to` int(11) DEFAULT NULL,
   `trans_type_to` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `person_id` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
+  UNIQUE KEY `trans_type_from` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
   KEY `From` (`trans_type_from`,`trans_no_from`),
   KEY `To` (`trans_type_to`,`trans_no_to`)
 ) ENGINE=InnoDB ;
@@ -1143,7 +1142,7 @@ DROP TABLE IF EXISTS `0_supp_trans`;
 CREATE TABLE IF NOT EXISTS `0_supp_trans` (
   `trans_no` int(11) unsigned NOT NULL DEFAULT '0',
   `type` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `supplier_id` int(11) unsigned DEFAULT NULL,
+  `supplier_id` int(11) unsigned NOT NULL,
   `reference` tinytext NOT NULL,
   `supp_reference` varchar(60) NOT NULL DEFAULT '',
   `tran_date` date NOT NULL DEFAULT '0000-00-00',
@@ -1154,7 +1153,7 @@ CREATE TABLE IF NOT EXISTS `0_supp_trans` (
   `rate` double NOT NULL DEFAULT '1',
   `alloc` double NOT NULL DEFAULT '0',
   `tax_included` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`type`,`trans_no`),
+  PRIMARY KEY (`type`,`trans_no`,`supplier_id`),
   KEY `supplier_id` (`supplier_id`),
   KEY `tran_date` (`tran_date`)
 ) ENGINE=InnoDB ;
@@ -1193,7 +1192,7 @@ CREATE TABLE IF NOT EXISTS `0_sys_prefs` (
   `category` varchar(30) DEFAULT NULL,
   `type` varchar(20) NOT NULL DEFAULT '',
   `length` smallint(6) DEFAULT NULL,
-  `value` TEXT NOT NULL DEFAULT '',
+  `value` text NOT NULL,
   PRIMARY KEY (`name`),
   KEY `category` (`category`)
 ) ENGINE=InnoDB ;
@@ -1207,6 +1206,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('alternative_tax_include_on_docs', 'setup.company', 'tinyint', '1', '0'),
 ('auto_curr_reval', 'setup.company', 'smallint', '6', '1'),
 ('bank_charge_act', 'glsetup.general', 'varchar', '15', '5690'),
+('barcodes_on_stock','setup.company', 'tinyint', 1, '0'),
 ('base_sales', 'setup.company', 'int', '11', '-1'),
 ('bcc_email', 'setup.company', 'varchar', '100', ''),
 ('company_logo_report', 'setup.company', 'tinyint', '1', '0'),
@@ -1393,11 +1393,11 @@ CREATE TABLE IF NOT EXISTS `0_users` (
   `rep_popup` tinyint(1) DEFAULT '1',
   `sticky_doc_date` tinyint(1) DEFAULT '0',
   `startup_tab` varchar(20) NOT NULL DEFAULT '',
-  `transaction_days` smallint(6) NOT NULL DEFAULT '30',
+  `transaction_days` smallint(6) NOT NULL DEFAULT '30' COMMENT 'Transaction days',
   `save_report_selections` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Save Report Selection Days',
-  `use_date_picker` tinyint(1) NOT NULL DEFAULT '1',
-  `def_print_destination` tinyint(1) NOT NULL DEFAULT '0',
-  `def_print_orientation` tinyint(1) NOT NULL DEFAULT '0',
+  `use_date_picker` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Use Date Picker for all Date Values',
+  `def_print_destination` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Default Report Destination',
+  `def_print_orientation` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Default Report Orientation',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
