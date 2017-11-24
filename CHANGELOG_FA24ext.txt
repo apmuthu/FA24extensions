@@ -1,3 +1,4 @@
+2017-11-24  Ap.Muthu     Vietnamese (vi_VN) core language strings fully translated
 2017-11-23  Ap.Muthu     Updated AU, GB, PH, IN, SG, CN general 4 digit Charts for new sys_pref items
 2017-11-23  Ap.Muthu     en_AU general 4 digit Chart of Accounts fixed fiscal year range
 2017-11-20  Ap.Muthu     en_AU general 4 digit Chart of Accounts updated for FA 2.4.3
