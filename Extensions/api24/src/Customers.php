@@ -24,7 +24,7 @@ class Customers
 		}
 	}
 
-	// Get Specific Item by Stock Id
+	// Get Specific Item by Id
 	public function getById($rest, $id)
 	{
 		$cust = get_customer($id);

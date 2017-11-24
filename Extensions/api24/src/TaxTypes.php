@@ -4,6 +4,7 @@ namespace FAAPI;
 $path_to_root = "../..";
 
 include_once ($path_to_root . "/taxes/db/item_tax_types_db.inc");
+include_once ($path_to_root . "/taxes/db/tax_types_db.inc");
 
 class TaxTypes
 {
@@ -21,6 +22,14 @@ class TaxTypes
 			$from = -- $page * RESULTS_PER_PAGE;
 			$this->taxtypes_all($from);
 		}
+	}
+
+	// Get Specific TaxType by Id
+	public function getById($rest, $id)
+	{
+		$ttgo = get_tax_type($id);
+		if(!$ttgo) $ttgo = array();
+		api_success_response(json_encode($ttgo));
 	}
 
 	private function taxtypes_all($from = null)

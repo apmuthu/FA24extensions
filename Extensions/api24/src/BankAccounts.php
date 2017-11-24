@@ -23,7 +23,7 @@ class BankAccounts
 		}
 	}
 
-	// Get Specific Item by Stock Id
+	// Get Specific Item by Id
 	public function getById($rest, $id)
 	{
 		$bank = get_bank_account($id);

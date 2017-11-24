@@ -20,7 +20,7 @@ class Sales
 		}
 	}
 
-	// Get Specific Item by Stock Id
+	// Get Specific Item by Id
 	public function getById($rest, $trans_no, $trans_type)
 	{
 		include_once (API_ROOT . "/sales.inc");

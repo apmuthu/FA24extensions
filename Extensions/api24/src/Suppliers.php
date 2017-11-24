@@ -8,7 +8,7 @@ include_once ($path_to_root . "/includes/db/crm_contacts_db.inc");
 
 class Suppliers
 {
-	// Get Items
+	// Get Suppliers
 	public function get($rest)
 	{
 		$req = $rest->request();
@@ -17,7 +17,7 @@ class Suppliers
 		$this->supplier_all($page);
 	}
 
-	// Get Specific Item by Stock Id
+	// Get Specific Supplier by Id
 	public function getById($rest, $id)
 	{
 		$sup = get_supplier($id);
@@ -25,7 +25,7 @@ class Suppliers
 			$sup = array();
 		api_success_response(json_encode($sup));
 	}
-	// Add Item
+	// Add Supplier
 	public function post($rest)
 	{
 		$req = $rest->request();
@@ -100,7 +100,7 @@ class Suppliers
 			api_error(500, 'Could Not Save to Database');
 		}
 	}
-	// Edit Specific Item
+	// Edit Specific Supplier
 	public function put($rest, $id)
 	{
 		$req = $rest->request();
@@ -173,7 +173,7 @@ class Suppliers
 
 		api_success_response("Supplier has been updated");
 	}
-	// Delete Specific Item
+	// Delete Specific Supplier
 	public function delete($rest, $id)
 	{
 		$req = $rest->request();

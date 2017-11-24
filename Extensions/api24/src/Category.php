@@ -23,7 +23,7 @@ class Category
 		}
 	}
 
-	// Get Specific Item by Stock Id
+	// Get Specific Item by Id
 	public function getById($rest, $id)
 	{
 		$catego = get_item_category($id);

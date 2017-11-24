@@ -24,7 +24,7 @@ class GLAccounts
 		}
 	}
 
-	// Get Specific Item by Stock Id
+	// Get Specific Item by Id
 	public function getById($rest, $id)
 	{
 		$acct = get_gl_account($id);

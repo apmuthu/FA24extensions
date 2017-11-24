@@ -25,7 +25,7 @@ class Currencies
 		}
 	}
 
-	// Get Specific Item by Stock Id
+	// Get Specific Currency by Id
 	public function getById($rest, $id)
 	{
 		$curr = get_currency($id);
