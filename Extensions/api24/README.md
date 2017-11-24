@@ -30,10 +30,11 @@ The following API endpoints have been implemented:
 - Tax Types
 - Bank Accounts
 - GL Accounts
-- GL Account Types.
+- GL Account Types
 
 * Some of them have not been tested yet so be careful.
 * Checkout the evolving [documentation](http://cambell-prince.github.io/FrontAccountingSimpleAPI/)
+* Support for json sent in requests using `Content-Type: application/json` with json encoded data in the body.
 
 ## REST Clients
 * [Jsonium](http://jsonium.org)

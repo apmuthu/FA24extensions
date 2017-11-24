@@ -1,7 +1,5 @@
 <?php
 ini_set('html_errors', false);
-ini_set('xdebug.show_exception_trace', 0);
-// ini_set('xdebug.auto_trace', 2);
 
 include_once ('config_api.php');
 foreach (glob("src/*.php") as $filename)
@@ -20,18 +18,13 @@ use FAAPI\Currencies;
 use FAAPI\InventoryCosts;
 use FAAPI\Sales;
 
-ini_set('html_errors', false);
-ini_set('xdebug.show_exception_trace', 0);
-// ini_set('xdebug.auto_trace', 2);
-
-include_once ('config_api.php');
-
 global $security_areas, $security_groups, $security_headings, $path_to_root, $db, $db_connections;
 
 $page_security = 'SA_API';
 
 include_once (API_ROOT . "/session-custom.inc");
 include_once (API_ROOT . "/util.php");
+
 include_once (FA_ROOT . "/includes/date_functions.inc");
 include_once (FA_ROOT . "/includes/data_checks.inc");
 
@@ -57,6 +50,24 @@ api_login();
 $req = $rest->request();
 
 define("RESULTS_PER_PAGE", 2);
+
+class JsonToFormData extends \Slim\Middleware
+{
+	function call() {
+		$env = $this->app->environment();
+		if (is_array($env['slim.input'])) {
+			$env['slim.request.form_hash'] = $env['slim.input'];
+		}
+		$this->next->call();
+	}
+}
+
+/*
+The order of these 'add' calls is important, the JsonToFormData must be the
+second Middleware called, which means it needs to be added first.
+*/
+$rest->add(new JsonToFormData());
+$rest->add(new \Slim\Middleware\ContentTypes());
 
 // API Routes
 // ------------------------------- Items -------------------------------
