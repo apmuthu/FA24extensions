@@ -2,6 +2,8 @@
 
 * This is used for some basic integration functions to other software applications.
 * It is a Slim 2.x based REST API for Front Accounting v2.4.x.
+* The original author for the REST API adaptation for FrontAccounting is Andres Amaya Diaz.
+* This is a [derived fork of it](https://github.com/andresamayadiaz/FrontAccountingSimpleAPI).
 
 ## API Quick Start
 
