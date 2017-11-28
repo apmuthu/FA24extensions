@@ -1,8 +1,7 @@
 <?php
 namespace FAAPI;
 
-class Sales
-{
+class Sales {
 	// Get Items
 	public function get($rest, $trans_type)
 	{
@@ -21,26 +20,25 @@ class Sales
 	}
 
 	// Get Specific Item by Id
-	public function getById($rest, $trans_no, $trans_type)
-	{
+	public function getById($rest, $trans_no, $trans_type) {
 		include_once (API_ROOT . "/sales.inc");
 		sales_get($trans_no, $trans_type);
 	}
+
 	// Add Item
-	public function post($rest)
-	{
+	public function post($rest) {
 		include_once (API_ROOT . "/sales.inc");
 		sales_add();
 	}
+
 	// Edit Specific Item
-	public function put($rest, $trans_no, $trans_type)
-	{
+	public function put($rest, $trans_no, $trans_type) {
 		include_once (API_ROOT . "/sales.inc");
 		sales_edit($trans_no, $trans_type);
 	}
+
 	// Delete Specific Item
-	public function delete($rest, $branch_id, $uuid)
-	{
+	public function delete($rest, $branch_id, $uuid) {
 		include_once (API_ROOT . "/sales.inc");
 		sales_cancel($branch_id, $uuid);
 	}

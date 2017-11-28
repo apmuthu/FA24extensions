@@ -9,11 +9,9 @@ include_once ($path_to_root . "/inventory/includes/db/items_locations_db.inc");
 include_once ($path_to_root . "/gl/includes/gl_db.inc");
 include_once ($path_to_root . "/includes/ui/items_cart.inc");
 
-class InventoryLocations
-{
+class InventoryLocations {
 	// Get Items
-	public function get($rest)
-	{
+	public function get($rest) {
 		$locations = get_item_locations(false);
 		$ret = array();
 		while ($loc = db_fetch($locations)) {
@@ -32,8 +30,7 @@ class InventoryLocations
 	}
 
 	// Add Item
-	public function post($rest)
-	{
+	public function post($rest) {
 		// Originally added by Richard Vinke
 		$req = $rest->request();
 		$info = $req->post();

@@ -6,17 +6,15 @@ $path_to_root = "../..";
 include_once($path_to_root . "/includes/db/inventory_db.inc");
 include_once($path_to_root . "/inventory/includes/db/items_trans_db.inc");
 
-class InventoryCosts
-{
+class InventoryCosts {
 	// Get Specific Item by Stock Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$cost = get_unit_cost($id);
 		api_success_response(json_encode( array('stock_id' => $id, 'unit_cost' => $cost) ));
 	}
+
 	// Edit Specific Item
-	public function put($rest, $id)
-	{
+	public function put($rest, $id) {
 		$req = $rest->request();
 		$info = $req->post();
 

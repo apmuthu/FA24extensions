@@ -5,11 +5,9 @@ $path_to_root = "../..";
 
 include_once ($path_to_root . "/inventory/includes/db/items_category_db.inc");
 
-class Category
-{
+class Category {
 	// Get Items
-	public function get($rest)
-	{
+	public function get($rest) {
 		$req = $rest->request();
 
 		$page = $req->get("page");
@@ -24,15 +22,13 @@ class Category
 	}
 
 	// Get Specific Item by Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$catego = get_item_category($id);
-		if(!$catego) $catego = array();
-		api_success_response(json_encode($catego));
+		api_success_response(json_encode(api_ensureAssociativeArray($catego)));
 	}
+
 	// Add Item
-	public function post($rest)
-	{
+	public function post($rest) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -40,25 +36,28 @@ class Category
 		if(!isset($info['description'])){
 			api_error(412, 'Description is required');
 		}
-		if(!isset($info['tax_type_id'])){
+		if(!isset($info['dflt_tax_type'])){
 			api_error(412, 'Tax Type is required');
 		}
-		if(!isset($info['units'])){
+		if(!isset($info['dflt_units'])){
 			api_error(412, 'Units is required');
 		}
-		if(!isset($info['mb_flag'])){
+		if(!isset($info['dflt_mb_flag'])){
 			api_error(412, 'MB Flag is required');
 		}
-		if(!isset($info['sales_account'])){
+		if(!isset($info['dflt_sales_act'])){
 			api_error(412, 'Sales Account is required');
 		}
-		if(!isset($info['cogs_account'])){
-			api_error(412, 'Cogs Account is required');
+		if(!isset($info['dflt_cogs_act'])){
+			api_error(412, 'COGS Account is required');
 		}
-		if(!isset($info['adjustment_account'])){
+		if(!isset($info['dflt_inventory_act'])){
+			api_error(412, 'Inventory Account is required');
+		}
+		if(!isset($info['dflt_adjustment_act'])){
 			api_error(412, 'Adjustment Account is required');
 		}
-		if(!isset($info['wip_account'])){
+		if(!isset($info['dflt_wip_act'])){
 			api_error(412, 'WIP Account is required');
 		}
 		if(!isset($info['inventory_account'])){
@@ -70,14 +69,16 @@ class Category
 		$cogs_account, $inventory_account, $adjustment_account, $wip_account,
 		$units, $mb_flag, $dim1, $dim2, $no_sale
 		*/
-		add_item_category($info['description'], $info['tax_type_id'],
-			$info['sales_account'],
-			$info['cogs_account'],
-			$info['inventory_account'],
-			$info['adjustment_account'],
-			$info['wip_account'],
-			$info['units'],
-			$info['mb_flag'],
+		add_item_category(
+			$info['description'],
+			$info['dflt_tax_type'],
+			$info['dflt_sales_act'],
+			$info['dflt_cogs_act'],
+			$info['dflt_inventory_act'],
+			$info['dflt_adjustment_act'],
+			$info['dflt_wip_act'],
+			$info['dflt_units'],
+			$info['dflt_mb_flag'],
 			0, // dimension 1
 			0, // dimension2
 			0, // no sale
@@ -93,9 +94,9 @@ class Category
 			api_error(500, 'Could Not Save to Database');
 		}
 	}
+
 	// Edit Specific Item
-	public function put($rest, $id)
-	{
+	public function put($rest, $id) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -108,29 +109,29 @@ class Category
 		if(!isset($info['description'])){
 			api_error(412, 'Description is required');
 		}
-		if(!isset($info['tax_type_id'])){
+		if(!isset($info['dflt_tax_type'])){
 			api_error(412, 'Tax Type is required');
 		}
-		if(!isset($info['units'])){
+		if(!isset($info['dflt_units'])){
 			api_error(412, 'Units is required');
 		}
-		if(!isset($info['mb_flag'])){
+		if(!isset($info['dflt_mb_flag'])){
 			api_error(412, 'MB Flag is required');
 		}
-		if(!isset($info['sales_account'])){
+		if(!isset($info['dflt_sales_act'])){
 			api_error(412, 'Sales Account is required');
 		}
-		if(!isset($info['cogs_account'])){
-			api_error(412, 'Cogs Account is required');
+		if(!isset($info['dflt_cogs_act'])){
+			api_error(412, 'COGS Account is required');
 		}
-		if(!isset($info['adjustment_account'])){
+		if(!isset($info['dflt_inventory_act'])){
+			api_error(412, 'Inventory Account is required');
+		}
+		if(!isset($info['dflt_adjustment_act'])){
 			api_error(412, 'Adjustment Account is required');
 		}
-		if(!isset($info['wip_account'])){
+		if(!isset($info['dflt_wip_act'])){
 			api_error(412, 'Assembly Account is required');
-		}
-		if(!isset($info['inventory_account'])){
-			api_error(412, 'Inventory Account is required');
 		}
 
 		/*
@@ -138,14 +139,16 @@ class Category
 		$sales_account, $cogs_account, $inventory_account, $adjustment_account,
 		$wip_account, $units, $mb_flag, $dim1, $dim2, $no_sale
 		*/
-		update_item_category($id, $info['description'], $info['tax_type_id'],
-			$info['sales_account'],
-			$info['cogs_account'],
-			$info['inventory_account'],
-			$info['adjustment_account'],
-			$info['wip_account'],
-			$info['units'],
-			$info['mb_flag'],
+		update_item_category(
+			$id, $info['description'],
+			$info['dflt_tax_type'],
+			$info['dflt_sales_act'],
+			$info['dflt_cogs_act'],
+			$info['dflt_inventory_act'],
+			$info['dflt_adjustment_act'],
+			$info['dflt_wip_act'],
+			$info['dflt_units'],
+			$info['dflt_mb_flag'],
 			0, // dimension 1
 			0, // dimension2
 			0, // no sale
@@ -155,8 +158,7 @@ class Category
 		api_success_response("Category has been updated");
 	}
 	// Delete Specific Item
-	public function delete($rest, $id)
-	{
+	public function delete($rest, $id) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -176,8 +178,7 @@ class Category
 		}
 	}
 
-	private function category_all($from = null)
-	{
+	private function category_all($from = null) {
 		$sql = "SELECT c.*, t.name as tax_name FROM "
 			. TB_PREF . "stock_category c, "
 			. TB_PREF . "item_tax_types t WHERE c.dflt_tax_type=t.id";

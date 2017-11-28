@@ -11,11 +11,9 @@ include_once ($path_to_root . "/includes/ui/items_cart.inc");
 
 include_once (API_ROOT . "/inventory.inc");
 
-class Inventory
-{
+class Inventory {
 	// Get Items
-	public function get($rest)
-	{
+	public function get($rest) {
 		$req = $rest->request();
 
 		$page = $req->get("page");
@@ -30,28 +28,26 @@ class Inventory
 	}
 
 	// Get Specific Item by Stock Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$this->inventory_get($id);
 	}
+
 	// Add Item
-	public function post($rest)
-	{
+	public function post($rest) {
 		$this->inventory_add();
 	}
+
 	// Edit Specific Item
-	public function put($rest, $id)
-	{
+	public function put($rest, $id) {
 		$this->inventory_edit($id);
 	}
+
 	// Delete Specific Item
-	public function delete($rest, $id)
-	{
+	public function delete($rest, $id) {
 		$this->inventory_delete($id);
 	}
 
-	function inventory_all($from = null)
-	{
+	function inventory_all($from = null) {
 		if ($from == null)
 			$from = 0;
 
@@ -89,16 +85,12 @@ class Inventory
 		api_success_response(json_encode($info));
 	}
 
-	function inventory_get($id)
-	{
+	function inventory_get($id) {
 		$item = get_item($id);
-		if (! $item)
-			$item = array();
-		api_success_response(json_encode($item));
+		api_success_response(json_encode(api_ensureAssociativeArray($item)));
 	}
 
-	function inventory_add()
-	{
+	function inventory_add() {
 		$app = \Slim\Slim::getInstance('SASYS');
 		$req = $app->request();
 		$info = $req->post();
@@ -174,8 +166,7 @@ class Inventory
 		}
 	}
 
-	function inventory_edit($id)
-	{
+	function inventory_edit($id) {
 		$app = \Slim\Slim::getInstance('SASYS');
 		$req = $app->request();
 		$info = $req->post();
@@ -245,8 +236,7 @@ class Inventory
 		api_success_response("Item has been updated");
 	}
 
-	function inventory_delete($id)
-	{
+	function inventory_delete($id) {
 		$app = \Slim\Slim::getInstance('SASYS');
 		$req = $app->request();
 		$info = $req->post();
@@ -266,6 +256,5 @@ class Inventory
 			api_success_response("Item has been deleted");
 		}
 	}
-
 
 }

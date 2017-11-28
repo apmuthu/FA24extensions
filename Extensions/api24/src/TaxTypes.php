@@ -6,8 +6,7 @@ $path_to_root = "../..";
 include_once ($path_to_root . "/taxes/db/item_tax_types_db.inc");
 include_once ($path_to_root . "/taxes/db/tax_types_db.inc");
 
-class TaxTypes
-{
+class TaxTypes {
 	// Get Items
 	public function get($rest)
 	{
@@ -25,15 +24,13 @@ class TaxTypes
 	}
 
 	// Get Specific TaxType by Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$ttgo = get_tax_type($id);
 		if(!$ttgo) $ttgo = array();
 		api_success_response(json_encode($ttgo));
 	}
 
-	private function taxtypes_all($from = null)
-	{
+	private function taxtypes_all($from = null) {
 		if ($from == null)
 			$from = 0;
 

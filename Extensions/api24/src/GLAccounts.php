@@ -6,11 +6,9 @@ $path_to_root = "../..";
 include_once ($path_to_root . "/gl/includes/db/gl_db_accounts.inc");
 include_once ($path_to_root . "/gl/includes/db/gl_db_account_types.inc");
 
-class GLAccounts
-{
+class GLAccounts {
 	// Get Items
-	public function get($rest)
-	{
+	public function get($rest) {
 		$req = $rest->request();
 
 		$page = $req->get("page");
@@ -25,16 +23,12 @@ class GLAccounts
 	}
 
 	// Get Specific Item by Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$acct = get_gl_account($id);
-		if (! $acct)
-			$acct = array();
-		api_success_response(json_encode($acct));
+		api_success_response(json_encode(\api_ensureAssociativeArray($acct)));
 	}
 
-	public function getTypes($rest)
-	{
+	public function getTypes($rest) {
 		$accttypes = get_account_types();
 		$ret = array();
 		while ($type = db_fetch($accttypes)) {
@@ -48,8 +42,7 @@ class GLAccounts
 		api_success_response(json_encode($ret));
 	}
 
-	private function glaccounts_all($from = null)
-	{
+	private function glaccounts_all($from = null) {
 		if ($from == null)
 			$from = 0;
 

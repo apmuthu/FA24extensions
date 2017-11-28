@@ -6,11 +6,9 @@ $path_to_root = "../..";
 include_once ($path_to_root . "/sales/includes/db/customers_db.inc");
 include_once ($path_to_root . "/includes/db/crm_contacts_db.inc");
 
-class Customers
-{
+class Customers {
 	// Get Items
-	public function get($rest)
-	{
+	public function get($rest) {
 		$req = $rest->request();
 
 		$page = $req->get("page");
@@ -25,25 +23,22 @@ class Customers
 	}
 
 	// Get Specific Item by Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$cust = get_customer($id);
-		if (! $cust)
-			$cust = array();
-		api_success_response(json_encode($cust));
+		api_success_response(json_encode(api_ensureAssociativeArray($cust)));
 	}
+
 	// Add Item
-	public function post($rest)
-	{
+	public function post($rest) {
 		$req = $rest->request();
 		$info = $req->post();
 
 		// Validate Required Fields
-		if (! isset($info['custname'])) {
-			api_error(412, 'Customer Name is required [custname]');
+		if (! isset($info['name'])) {
+			api_error(412, 'Customer Name is required [name]');
 		}
-		if (! isset($info['cust_ref'])) {
-			api_error(412, 'Customer Reference is required [cust_ref]');
+		if (! isset($info['debtor_ref'])) {
+			api_error(412, 'Customer Reference is required [debtor_ref]');
 		}
 		if (! isset($info['address'])) {
 			api_error(412, 'Address is required [address]');
@@ -113,16 +108,16 @@ class Customers
 		 * $CustName, $cust_ref, $address, $tax_id, $curr_code, $dimension_id, $dimension2_id, $credit_status,
 		 * $payment_terms, $discount, $pymt_discount, $credit_limit, $sales_type, $notes
 		 */
-		add_customer($info['custname'], $info['cust_ref'], $info['address'], $info['tax_id'], $info['curr_code'], 0, 0, $info['credit_status'], $info['payment_terms'], $info['discount'], $info['pymt_discount'], $info['credit_limit'], $info['sales_type'], $info['notes']);
+		add_customer($info['name'], $info['debtor_ref'], $info['address'], $info['tax_id'], $info['curr_code'], 0, 0, $info['credit_status'], $info['payment_terms'], $info['discount'], $info['pymt_discount'], $info['credit_limit'], $info['sales_type'], $info['notes']);
 
 		$selected_id = db_insert_id();
 		$auto_create_branch = 1;
 		if (isset($auto_create_branch) && $auto_create_branch == 1) {
-			add_branch($selected_id, $info['custname'], $info['cust_ref'], $info['address'], $info['salesman'], $info['area'], $info['tax_group_id'], '1', get_company_pref('default_sales_discount_act'), get_company_pref('debtors_act'), get_company_pref('default_prompt_payment_act'), $info['location'], $info['address'], 0, 0, $info['ship_via'], $info['notes']);
+			add_branch($selected_id, $info['name'], $info['debtor_ref'], $info['address'], $info['salesman'], $info['area'], $info['tax_group_id'], '1', get_company_pref('default_sales_discount_act'), get_company_pref('debtors_act'), get_company_pref('default_prompt_payment_act'), $info['location'], $info['address'], 0, 0, $info['ship_via'], $info['notes']);
 
 			$selected_branch = db_insert_id();
 
-			add_crm_person($info['cust_ref'], $info['custname'], '', $info['address'], $info['phone'], $info['phone2'], $info['fax'], $info['email'], '', '');
+			add_crm_person($info['debtor_ref'], $info['name'], '', $info['address'], $info['phone'], $info['phone2'], $info['fax'], $info['email'], '', '');
 
 			$pers_id = db_insert_id();
 			add_crm_contact('cust_branch', 'general', $selected_branch, $pers_id);
@@ -136,9 +131,9 @@ class Customers
 			api_error(500, 'Could Not Save to Database');
 		}
 	}
+
 	// Edit Specific Item
-	public function put($rest, $id)
-	{
+	public function put($rest, $id) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -148,11 +143,11 @@ class Customers
 		}
 
 		// Validate Required Fields
-		if (! isset($info['custname'])) {
-			api_error(412, 'Customer Name is required [custname]');
+		if (! isset($info['name'])) {
+			api_error(412, 'Customer Name is required [name]');
 		}
-		if (! isset($info['cust_ref'])) {
-			api_error(412, 'Customer Reference is required [cust_ref]');
+		if (! isset($info['debtor_ref'])) {
+			api_error(412, 'Customer Reference is required [debtor_ref]');
 		}
 		if (! isset($info['address'])) {
 			api_error(412, 'Address is required [address]');
@@ -190,16 +185,16 @@ class Customers
 		}
 
 		/*
-		 * $customer_id, $CustName, $cust_ref, $address, $tax_id, $curr_code, $dimension_id, $dimension2_id,
+		 * $customer_id, $CustName, $debtor_ref, $address, $tax_id, $curr_code, $dimension_id, $dimension2_id,
 		 * $credit_status, $payment_terms, $discount, $pymt_discount, $credit_limit, $sales_type, $notes
 		 */
-		update_customer($id, $info['custname'], $info['cust_ref'], $info['address'], $info['tax_id'], $info['curr_code'], 0, 0, $info['credit_status'], $info['payment_terms'], $info['discount'], $info['pymt_discount'], $info['credit_limit'], $info['sales_type'], $info['notes']);
+		update_customer($id, $info['name'], $info['debtor_ref'], $info['address'], $info['tax_id'], $info['curr_code'], 0, 0, $info['credit_status'], $info['payment_terms'], $info['discount'], $info['pymt_discount'], $info['credit_limit'], $info['sales_type'], $info['notes']);
 
 		api_success_response("Customer has been updated");
 	}
+
 	// Delete Specific Item
-	public function delete($rest, $id)
-	{
+	public function delete($rest, $id) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -220,8 +215,7 @@ class Customers
 		}
 	}
 
-	public function getBranches($rest, $id)
-	{
+	public function getBranches($rest, $id) {
 		$sql = "SELECT " .
 			"b.branch_code, " .
 			"b.branch_ref, " .
@@ -263,8 +257,7 @@ class Customers
 		api_success_response(json_encode($ret));
 	}
 
-	private function customer_all($from = null)
-	{
+	private function customer_all($from = null) {
 		if ($from == null)
 			$from = 0;
 

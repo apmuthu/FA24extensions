@@ -33,13 +33,17 @@ The following API endpoints have been implemented:
 - GL Account Types
 
 * Some of them have not been tested yet so be careful.
-* Checkout the evolving [documentation](http://cambell-prince.github.io/FrontAccountingSimpleAPI/)
+* Checkout the evolving [documentation](http://cambell-prince.github.io/FrontAccountingSimpleAPI/) and the code at [Github](https://github.com/cambell-prince/FrontAccountingSimpleAPI).
 * Support for json sent in requests using `Content-Type: application/json` with json encoded data in the body.
 
 ## REST Clients
 * [Jsonium](http://jsonium.org)
 * [SoapUI](https://www.soapui.org)
 * [I'm only RESTing](http://downloads.swensensoftware.com/im-only-resting/im-only-resting-1.4.0.zip)
+* [REST Client for windows](https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/rest-client/restclient-ui-3.2.2-jar-with-dependencies.jar)
+* [Postman](https://www.getpostman.com/) | [Sitepoint Tutorial](https://www.sitepoint.com/api-building-and-testing-made-easier-with-postman/)
+* [Firefox Addin - Poster](https://addons.mozilla.org/en-US/firefox/addon/poster/)
+* [Codeception](http://codeception.com/builds)
 
 ## How to Help
 

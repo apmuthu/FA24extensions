@@ -5,8 +5,7 @@ $path_to_root = "../..";
 
 include_once ($path_to_root . "/taxes/db/tax_groups_db.inc");
 
-class TaxGroups
-{
+class TaxGroups {
 	// Get Items
 	public function get($rest)
 	{
@@ -23,8 +22,7 @@ class TaxGroups
 		}
 	}
 
-	private function taxgroups_all($from = null)
-	{
+	private function taxgroups_all($from = null) {
 		if ($from == null)
 			$from = 0;
 

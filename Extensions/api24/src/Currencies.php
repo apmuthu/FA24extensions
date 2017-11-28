@@ -7,11 +7,9 @@ include_once ($path_to_root . "/gl/includes/db/gl_db_currencies.inc");
 // include_once($path_to_root . "/gl/includes/db/gl_db_rates.inc");
 include_once ($path_to_root . "/includes/banking.inc");
 
-class Currencies
-{
+class Currencies {
 	// Get Items
-	public function get($rest)
-	{
+	public function get($rest) {
 		$req = $rest->request();
 
 		$page = $req->get("page");
@@ -26,16 +24,14 @@ class Currencies
 	}
 
 	// Get Specific Currency by Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$curr = get_currency($id);
 		if (! $curr)
 			$curr = array();
 		api_success_response(json_encode($curr));
 	}
 
-	public function getLastExchangeRate($rest, $currencyCode)
-	{
+	public function getLastExchangeRate($rest, $currencyCode) {
 		$date = date2sql(Today());
 
 		$sql = "SELECT rate_buy, max(date_) as date_ FROM "
@@ -62,8 +58,7 @@ class Currencies
 		)));
 	}
 
-	private function currencies_all($from = null)
-	{
+	private function currencies_all($from = null) {
 		if ($from == null)
 			$from = 0;
 

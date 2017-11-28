@@ -6,11 +6,9 @@ $path_to_root = "../..";
 include_once ($path_to_root . "/purchasing/includes/db/suppliers_db.inc");
 include_once ($path_to_root . "/includes/db/crm_contacts_db.inc");
 
-class Suppliers
-{
+class Suppliers {
 	// Get Suppliers
-	public function get($rest)
-	{
+	public function get($rest) {
 		$req = $rest->request();
 		$page = $req->get("page");
 
@@ -18,16 +16,13 @@ class Suppliers
 	}
 
 	// Get Specific Supplier by Id
-	public function getById($rest, $id)
-	{
+	public function getById($rest, $id) {
 		$sup = get_supplier($id);
-		if (! $sup)
-			$sup = array();
-		api_success_response(json_encode($sup));
+		api_success_response(json_encode(api_ensureAssociativeArray($sup)));
 	}
+
 	// Add Supplier
-	public function post($rest)
-	{
+	public function post($rest) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -100,9 +95,9 @@ class Suppliers
 			api_error(500, 'Could Not Save to Database');
 		}
 	}
+
 	// Edit Specific Supplier
-	public function put($rest, $id)
-	{
+	public function put($rest, $id) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -173,9 +168,9 @@ class Suppliers
 
 		api_success_response("Supplier has been updated");
 	}
+
 	// Delete Specific Supplier
-	public function delete($rest, $id)
-	{
+	public function delete($rest, $id) {
 		$req = $rest->request();
 		$info = $req->post();
 
@@ -196,14 +191,12 @@ class Suppliers
 		}
 	}
 
-	public function getContacts($rest, $id)
-	{
+	public function getContacts($rest, $id) {
 		$contacts = get_supplier_contacts($id, null);
 		api_success_response(json_encode($contacts));
 	}
 
-	private function supplier_all($from = null)
-	{
+	private function supplier_all($from = null) {
 		if ($from == null)
 			$from = 0;
 

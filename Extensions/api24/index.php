@@ -49,8 +49,6 @@ api_login();
 
 $req = $rest->request();
 
-define("RESULTS_PER_PAGE", 2);
-
 class JsonToFormData extends \Slim\Middleware
 {
 	function call() {
