@@ -17,8 +17,8 @@
 $_ldap_config = array (
     // default configuration for all companies
     'default' => array (
-        // LDAP authentication enabled?
-        'enabled' => true,
+        // This is sample LDAP configuration
+        'enabled' => false,	// set this to true after final configuration
         // LDAP configuration
         'ldap' => array (
             'host' => 'ldap',

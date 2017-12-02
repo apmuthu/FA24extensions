@@ -10,6 +10,6 @@ Depends:
 Type: extension
 Name: Auth_LDAP
 InstallPath: modules/auth_ldap
-Filename: auth_ldap-2.4.0-1
-Version: 2.4.0-1
+Filename: auth_ldap-2.4.0-2
+Version: 2.4.0-2
 

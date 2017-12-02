@@ -19,7 +19,10 @@ include dirname(__FILE__).'/lib/ldap_authenticator.php';
 
 class hooks_auth_ldap extends hooks
 {
-    var $module_name = 'auth_ldap'; // extension module name.
+
+	function __construct() {
+		$this->module_name = 'auth_ldap';
+	}
 
     function authenticate($username, $password)
     {
@@ -33,4 +36,13 @@ class hooks_auth_ldap extends hooks
         return $authenticator->login($username, $password);
     }
 
+    function activate_extension($company, $check_only=true)
+    {
+        if (!function_exists('ldap_connect')) {
+            if (!$check_only)
+                display_error(_('Auth_LDAP module cannot be activated. Please enable LDAP module in your PHP configuration.'));
+            return false;
+        }
+        return true;
+    }
 }

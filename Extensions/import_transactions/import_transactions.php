@@ -107,10 +107,10 @@ if ((isset($_POST['type']))) {
             display_error(_("Error opening file $filename"));
         } else {
             begin_transaction();
-            $curEntryId[ST_JOURNAL] = get_next_trans_no(ST_JOURNAL);
+            $curEntryId[ST_JOURNAL]      = get_next_trans_no(ST_JOURNAL);
             $curEntryId[ST_BANKTRANSFER] = get_next_trans_no(ST_BANKTRANSFER);
-            $curEntryId[ST_BANKDEPOSIT] = get_next_trans_no(ST_BANKDEPOSIT);
-            $curEntryId[ST_BANKPAYMENT] = get_next_trans_no(ST_BANKPAYMENT);
+            $curEntryId[ST_BANKDEPOSIT]  = get_next_trans_no(ST_BANKDEPOSIT);
+            $curEntryId[ST_BANKPAYMENT]  = get_next_trans_no(ST_BANKPAYMENT);
             $line = 0;
             $description = "";
             $i = 0;

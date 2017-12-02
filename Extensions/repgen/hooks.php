@@ -2,7 +2,10 @@
 define('SS_REPORT_GENERATOR',	130<<8);
 
 class hooks_repgen extends hooks {
-	var $module_name = 'repgen';
+
+	function __construct() {
+		$this->module_name = 'repgen';
+	}
 	
 	/*
 		Install additional menu options provided by module
@@ -13,7 +16,7 @@ class hooks_repgen extends hooks {
 		switch($app->id) {
 			case 'system':
 				$app->add_rapp_function( 2, _("&Report Generator"), 
-					$path_to_root.'/modules/repgen/repgen_select.php', 'SA_REPORT_GENERATOR');
+					$path_to_root.'/modules/'.$this->module_name.'/repgen_select.php', 'SA_REPORT_GENERATOR');
 		}
 	}
 

@@ -1,5 +1,5 @@
 Package: vi_VN
-Version: 2.4.1-2
+Version: 2.4.1-3
 Description: Vietnamese translation files.
 Author: Ap.Muthu <apmuthu@usa.net>
 Maintenance: Ap.Muthu <apmuthu@usa.net>
@@ -12,5 +12,5 @@ Type: language
 Name: Vietnamese
 Name-vi_VN: Tiếng Việt (Việt Nam)
 InstallPath: lang/vi_VN
-Filename: vi_VN-2.4.1-2
+Filename: vi_VN-2.4.1-3
 

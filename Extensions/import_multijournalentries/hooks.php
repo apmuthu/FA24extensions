@@ -2,7 +2,10 @@
 define ('SS_IMPORTMULTIJOURNAL', 101<<8);
 
 class hooks_import_multijournalentries extends hooks {
-	var $module_name = 'import_multijournalentries'; 
+
+	function __construct() {
+		$this->module_name = 'import_multijournalentries';
+	}
 
 	/*
 		Install additional menu options provided by module
@@ -13,7 +16,7 @@ class hooks_import_multijournalentries extends hooks {
 		switch($app->id) {
 			case 'GL':
 				$app->add_rapp_function(2, _('Import &Multiple Jourmal Entries'), 
-					$path_to_root.'/modules/import_multijournalentries/import_multijournalentries.php', 'SA_CSVMULTIJOURNALIMPORT');
+					$path_to_root.'/modules/'.$this->module_name.'/import_multijournalentries.php', 'SA_CSVMULTIJOURNALIMPORT');
 		}
 	}
 

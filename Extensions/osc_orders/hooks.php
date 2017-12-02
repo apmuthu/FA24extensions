@@ -2,7 +2,10 @@
 define ('SS_OSCORDERS', 106<<8);
 
 class hooks_osc_orders extends hooks {
-	var $module_name = 'osCommerce Order Import'; 
+
+	function __construct() {
+		$this->module_name = 'osc_orders';
+	}
 
 	/*
 		Install additional menu options provided by module
@@ -13,7 +16,7 @@ class hooks_osc_orders extends hooks {
 		switch($app->id) {
 			case 'orders':
 				$app->add_rapp_function(2, _('osCommerce Import'), 
-					$path_to_root.'/modules/osc_orders/osCommerce.php', 'SA_OSCORDERS');
+					$path_to_root.'/modules/'.$this->module_name.'/osCommerce.php', 'SA_OSCORDERS');
 		}
 	}
 

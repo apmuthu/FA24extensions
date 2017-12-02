@@ -382,7 +382,7 @@ echo "<br><br>";
 if ($action == 'import') {
     start_form(true);
 
-    start_table(TABLESTYLE2, "width=40%");
+    start_table(TABLESTYLE2, "width=60%");
 
     table_section_title("Default GL Accounts");
 

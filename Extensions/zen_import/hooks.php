@@ -2,7 +2,10 @@
 define ('SS_ZENORDERS', 101<<8);
 
 class hooks_zen_import extends hooks {
-	var $module_name = 'Import Zen Cart Orders'; 
+
+	function __construct() {
+		$this->module_name = 'zen_import';
+	}
 
 	/*
 		Install additional menu options provided by module
@@ -13,7 +16,7 @@ class hooks_zen_import extends hooks {
 		switch($app->id) {
 			case 'GL':
 				$app->add_rapp_function(2, _('Import Zen Cart Orders'), 
-					$path_to_root.'/modules/zen_import/zencart.php', 'SA_ZENIMPORT');
+					$path_to_root.'/modules/'.$this->module_name.'/zencart.php', 'SA_ZENIMPORT');
 		}
 	}
 

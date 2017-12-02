@@ -1,5 +1,5 @@
 Package: ar_EG
-Version: 2.4.2-1
+Version: 2.4.3-1
 Description: Arabic translation file.
 Author: www.infotechaccountants.com/forums <admin@infotechaccountants.com>
 Maintenance: www.infotechaccountants.com/forums <admin@infotechaccountants.com>
@@ -12,5 +12,5 @@ Type: language
 Name: Arabic (Egypt)
 Name-ar_EG: العربية (مصر)
 InstallPath: lang/ar_EG
-Filename: ar_EG-2.4.2-1
+Filename: ar_EG-2.4.3-1
 
