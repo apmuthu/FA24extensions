@@ -66,9 +66,6 @@ function get_item_category_by_name($name)
         return db_fetch($result);
 }
 
-}
-
-
 function download_file($filename, $saveasname='')
 {
     if (empty($filename) || !file_exists($filename))
