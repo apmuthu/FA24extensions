@@ -1,0 +1,10 @@
+Package: kanban
+Name: Kanban
+Description: Kanban Project Management Module for FrontAccounting.
+Author: Phuong <trananhphuong83@gmail.com>
+Maintenance: Phuong <trananhphuong83@gmail.com>
+Homepage: https://github.com/notrinos/FrontKanban
+Type: extension
+InstallPath: modules/kanban
+Filename: kanban
+
