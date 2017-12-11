@@ -88,7 +88,7 @@ ul {
 	color: #555;
 	box-sizing: border-box;
 }
-.user_list_cells, .task_modal_control {
+.user_list_cells, .date_cells, .task_modal_control {
     display: inline-block;
     width: 45%;
     float: right;
@@ -107,7 +107,7 @@ ul {
 .clear {
 	clear: both;
 }
-#filter_header {
+.filter_header {
 	font-size: 1em;
 	font-weight: bold;
 	color: #555;
@@ -116,10 +116,12 @@ ul {
 	float: left;
 	margin-right: 10px;
 }
-.member_filter {
+.task_filter {
+	display: inline-block;
+	width: 100%;
 	margin: 10px;
 }
-.member_filter ul {
+.task_filter ul {
 	display: inline-block;
 }
 .hide {
@@ -201,4 +203,8 @@ ul {
 	background-color: #FFF !important; 
 	border: dashed 1px #CCC !important; 
 	margin: 5px;
+}
+input.editbutton {
+	display: inline-block;
+	width: auto;
 }

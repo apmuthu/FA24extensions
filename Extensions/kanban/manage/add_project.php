@@ -3,7 +3,7 @@
 |                        FrontKanban                     |
 |--------------------------------------------------------|
 |   Creator: Phương                                      |
-|   Date :   01-12-2017                                  |
+|   Date :   01-Dec-2017                                 |
 |   Description: Frontaccounting Project Management Ext  |
 |   Free software under GNU GPL                          |
 |                                                        |

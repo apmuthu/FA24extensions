@@ -3,7 +3,7 @@
 |                        FrontKanban                     |
 |--------------------------------------------------------|
 |   Creator: Phương                                      |
-|   Date :   01-12-2017                                  |
+|   Date :   01-Dec-2017                                 |
 |   Description: Frontaccounting Project Management Ext  |
 |   Free software under GNU GPL                          |
 |                                                        |
@@ -19,12 +19,6 @@ class kanban_app extends application {
         
         $this->add_module(_("Transactions"));
 		$this->add_lapp_function(0, _('Projects'), $path_to_root.'/modules/kanban/manage/projects.php?', 'SA_MANAGER', MENU_TRANSACTION);
-   
-        // $this->add_module(_("Inquiries and Reports"));
-		// $this->add_lapp_function(1, _('Timesheet'), $path_to_root.'/modules/kanban/inquiry/time_sheet.php', 'SA_EMPL', MENU_INQUIRY);
-        
-        // $this->add_module(_("Maintenance"));
-		// $this->add_lapp_function(2, _('Employees'), $path_to_root.'/modules/kanban/manage/employee.php?', 'SA_EMPL', MENU_ENTRY);
 		
 		$this->add_extensions();
     }

@@ -3,11 +3,12 @@
 |                        FrontKanban                     |
 |--------------------------------------------------------|
 |   Creator: Phương                                      |
-|   Date :   01-12-2017                                  |
+|   Date :   01-Dec-2017                                 |
 |   Description: Frontaccounting Project Management Ext  |
 |   Free software under GNU GPL                          |
 |                                                        |
 \=======================================================*/
+
 (function(){
 	"use strict";
 
@@ -64,7 +65,7 @@
 	var init_states = function(states_input) {
 		var states = {};
 		var states_order = [];
-		for ( var i=0, len=states_input.length; i<len; i++ ) {
+		for ( var i=0; i<states_input.length; i++ ) {
 			var state = states_input[i].split(",");
 			if (state.length === 2) {
 				states[state[0]] = state[1];
@@ -104,7 +105,7 @@
 	var create_list = function(board, state) {
 		var list = $("<ul></ul>");
 		if (board[state]) {
-			for (var i=0, len=board[state].length; i<len; i++) {
+			for (var i=0; i<board[state].length; i++) {
 				var id = board[state][i].id;
 				var task_element = create_task_li_item(app_data.rawData[id]);
 				list.append(task_element);
@@ -161,7 +162,12 @@
 	};
 
 	var startDragsort = function() {
-		$('ul.state').dragsort({dragSelector:'li',dragBetween: true, placeHolderTemplate: "<li class='placeholder'><div>&nbsp</div></li>",dragEnd:droppedElement});
+		$('ul.state').dragsort({
+			dragSelector:'li',
+			dragBetween: true,
+			placeHolderTemplate: "<li class='placeholder'><div>&nbsp</div></li>",
+			dragEnd:droppedElement
+		});
 	};
 
 	var destroyDragsort = function() {
@@ -197,6 +203,17 @@
 
 		return list;
 	}
+
+	var dateFormat = function(miliseconds) {
+		var date = parseInt(miliseconds);
+		date = new Date(date);
+		var day = date.getDate() < 10 ? '0'+date.getDate() : date.getDate();
+		var month = date.getMonth();
+		var month_name = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+		var year = date.getFullYear();
+
+		return day + '/' + month_name[month] + '/' + year;
+	}
 	
 //--------------------------------------------------------------------------
 
@@ -226,8 +243,10 @@
 				var oldColor = app_data.rawData[taskId].color;
 				var oldAssignee = app_data.rawData[taskId].responsible;
 
+				var createdDate = dateFormat(app_data.rawData[taskId].id);
+
 				var members = create_members_list(oldAssignee);
-				var form = '<form><textarea rows="10" class="editBox" value='+value+' data-old-value="'+value+'" data-old-color="'+oldColor+'">'+value+'</textarea><div class="user_list_cells">Assignee:'+members+'</div><br/><div class="task_modal_control"><a class="save" href="#">Save</a><a class="cancel" href="#">Cancel</a><a href="#" class="color">Color</a><a href="#" class="delete">Delete</a></div></form>';
+				var form = '<form><textarea rows="10" class="editBox" value='+value+' data-old-value="'+value+'" data-old-color="'+oldColor+'">'+value+'</textarea><div class="user_list_cells"><div class="date_cells">Created: '+createdDate+'</div>Assignee:'+members+'</div><br/><div class="task_modal_control"><a class="save" href="#">Save</a><a class="cancel" href="#">Cancel</a><a href="#" class="color">Color</a><a href="#" class="delete">Delete</a></div></form>';
 
 				$(this).parent().addClass('task_modal');
 				$('.task_modal').show();
@@ -268,6 +287,51 @@
 			}
 			if(count == 0) {
 				$('#kanban_board').find('.blur_task').removeClass('blur_task');
+			}
+		});
+
+		$('#date_filter').on('click', 'input[name="search"]', function() {
+			var from = $('input[name="FromDate"]').attr('_last_val');
+			var to = $('input[name="ToDate"]').attr('_last_val');
+
+			if(user.datefmt == 1) {
+				from = from.split('/');
+				from = new Date(from[2],from[1]-1,from[0]);
+			    from = from.getTime();
+			    to = to.split('/');
+			    to = new Date(to[2],to[1]-1,to[0]);
+			    to = to.getTime();
+			}
+			else {
+				from = new Date(from);
+			    from = from.getTime();
+			    to = new Date(to);
+			    to = to.getTime();
+			}
+
+			if(to < from)
+				alert("From date must be before To date");
+
+			for(var i in app_data.rawData) {
+				if(i < from || i > (to + 86399999)) {
+					for(var j in app_data.rawData[i]) {
+						$('#kanban_board li[data-id="'+app_data.rawData[i][j]+'"] .task_box').addClass('blur_task');
+					}
+				}
+				else {
+					for(var j in app_data.rawData[i]) {
+						$('#kanban_board li[data-id="'+app_data.rawData[i][j]+'"] .task_box').removeClass('blur_task');
+					}
+				}
+			}
+		});
+
+		$('#date_filter').on('click', 'input[name="clear"]', function() {
+			for(var i in app_data.rawData) {
+				for(var j in app_data.rawData[i]) {
+					$('#kanban_board li[data-id="'+app_data.rawData[i][j]+'"] .task_box').removeClass('blur_task');
+					$('#date_filter').find('.date').val('');
+				}
 			}
 		});
 
