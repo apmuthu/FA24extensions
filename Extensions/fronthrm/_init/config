@@ -1,0 +1,10 @@
+Package: fronthrm
+Name: FrontHRM
+Description: FrontHRM Module for FrontAccounting.
+Author: Phuong <trananhphuong83@gmail.com>
+Maintenance: Phuong <trananhphuong83@gmail.com>
+Homepage: https://github.com/notrinos/Front-Hrm
+Type: extension
+InstallPath: modules/kanban
+Filename: fronthrm
+
