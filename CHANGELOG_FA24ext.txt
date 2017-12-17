@@ -1,3 +1,4 @@
+2017-12-17  Ap.Muthu     FrontHRM ERD added
 2017-12-17  Phuong       FrontHRM Payroll and Human Resource extension added
 2017-12-11  Phuong       Upstream update of Kanban PME with date filter
 2017-12-09  Phuong       Kanban Project Management extension added
