@@ -1,0 +1,11 @@
+Package: rep_customer_ledger
+Name: Customer Ledger Report
+Description: Customer Ledger Report based on rep101 - Area and Salesman filtered
+Filename: rep_customer_ledger-2.4.1-2
+Author: Faisal Ayub <faisal.ayub@boxygen.pk>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_customer_ledger
+Version: 2.4.1-2
+
