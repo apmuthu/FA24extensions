@@ -1,13 +1,13 @@
 /hooks.php: 202ed99ccb59ac052a5453fe4af8946d18b41365
-/import_transactions.php: fc5818c40b59adfd1bb58fffa6bd0bc211ba390e
+/import_transactions.php: 6e1a868f18316dd43fb9918c6a552b4fe700ff6e
 /includes/import_sales_cart_class.inc: d96dc5d7875d4de010661acfec3f2079dd4b0696
 /includes/import_sales_order_entry.inc: c4ef4ba520aa490308701165622d430cb3dcd89c
 /includes/import_sales_order_ui.inc: 12eb96fa96ec79316e145778fd1170c7034fc1bc
 /includes/import_transactions.inc: 8ecede1b6cc23031841f1bb206fb3a7c8d3483b4
 /LICENSE: 23a1f87d806ce0330b3d85485e399a5f9f553409
 /README.md: d1b25dcad53bac106d97e1f42c768d9aae97eae2
-/spreadsheet_headers.doc: 7dd9ccf959f34b7fa9a3cb13b0365b835916441b
-/spreadsheet_headers.html: 1d0d9b3c44e652ded7125492772100cd61c29fa5
+/spreadsheet_headers.doc: ed454ea5842cc64cf7da099c5cff6a877b2a8d15
+/spreadsheet_headers.html: 316f3a2e8ae1cca8d30297bcbd644e9f1d18c1e9
 /templates/bank_en_GB.csv: 4e14ba6967babc2a5e9560ed2e24b0af48d06f96
 /templates/deposit_en_GB.csv: 9e61e2dc23b5851b150e0e9b07d9875cf03a9594
 /templates/journal_en_GB.csv: b9bf7769cb3777235ec8586606cb0ec7ddb57ea2
@@ -15,5 +15,4 @@
 /templates/salesinvoices_two_invoices_multiitems_cash_sale_paymentid4.csv: 0bf65efbe920b356cf2f500d3ce9c608d8ca09b0
 /templates/salesinvoices_two_invoices_multiitems_credit_sale_paymentid1.csv: 80aef05fd1e35f261976ffb59bd4f1b5b838eec2
 /templates/single_line_salesinvoices.csv: 2432b7e06f46faa1acdbd2017080b836c9c73c44
-/templates/single_line_salesinvoices.csv.bak: 24156ed70434f12ef96184053253252f75731ec2
 /_init/config: 036d4a0a0f958904e6214a024a983d03d0161f5a
