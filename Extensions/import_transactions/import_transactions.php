@@ -188,12 +188,11 @@ if ((isset($_POST['type']))) {
                         $prev_ref = $reference;
                         continue;
                     }
-                } else if ((($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT)) && ($stateformat == null))
+                } else if ((($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT)) && ($stateformat == null)) {
                     list($reference, $date, $memo, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $BranchNo) = $data;
-
-                str_replace('"', "", $memo);
-                str_replace('"', "", $person_id);
-                if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
+					str_replace('"', "", $memo);
+					str_replace('"', "", $person_id);
+				} else if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
                     list($customer_id, $branchNo, $reference, $date, $payment_id, $sales_type_name, $dimension_id, $dimension2_id, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage, $freightcost, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) = $data;
                     display_notification_centered(_("Processing line $line ($customer_id, $branchNo, $reference, $date, $payment_id, $sales_type_name, $dimension_id, $dimension2_id, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage, $freightcost, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) in import file '{$_FILES['imp']['name']}')"));
                     if (!customer_exist($customer_id)) {
@@ -241,6 +240,8 @@ if ((isset($_POST['type']))) {
                         display_notification_centered("Error");
                         $error = true;
                     }
+                } else {
+                    continue;
                 }
                 if (($prev_ref <> $reference) && ($type < 4)) {
                     init_entry_part_2($entry, $date, $reference);
@@ -285,7 +286,6 @@ if ((isset($_POST['type']))) {
                     display_error(_("Error: date '$date' not properly formatted (line $line in import file '{$_FILES['imp']['name']}')"));
                     $error = true;
                 }
-                display_notification_centered($line . ":" . $bank_account_gl_code);
                 //$date = sql2date($date);
                 //if ((is_date_in_fiscalyear($date)) == false) {
                 //    display_error(_("Error: Date not within company fiscal year. Make sure date is in dd/mm/yyyy format and your csv years are 4 digits long. Check that current fiscal year is active under Setup..Company Setup"));
@@ -294,6 +294,7 @@ if ((isset($_POST['type']))) {
 
                 // validation for
                 if (($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT) || ($type == ST_JOURNAL)) {
+					display_notification_centered($line . ":" . $bank_account_gl_code);
                     $i = journal_display($i, $type, $taxtype, $amt, $entry, $code_id, $dim1, $dim2, $memo, $description, $bank_account_gl_code, $bank_desc);
                 }
                 if (!$error) {
