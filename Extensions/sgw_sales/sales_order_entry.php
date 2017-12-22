@@ -680,7 +680,7 @@ function handle_new_item()
 
 //--------------------------------------------------------------------------------
 
-function  handle_cancel_order()
+function handle_cancel_order()
 {
 	global $path_to_root, $Ajax;
 

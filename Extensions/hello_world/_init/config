@@ -8,5 +8,5 @@ Depends:
 InstallPath: modules/hello_world
 Type: extension
 Filename: hello_world
-Version: -
+Version: 2.4.1-2
 
