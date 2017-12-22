@@ -1,7 +1,7 @@
 /hooks.php: 202ed99ccb59ac052a5453fe4af8946d18b41365
 /import_transactions.php: fc5818c40b59adfd1bb58fffa6bd0bc211ba390e
 /includes/import_sales_cart_class.inc: d96dc5d7875d4de010661acfec3f2079dd4b0696
-/includes/import_sales_order_entry.inc: cf41f8ecaa399ad94e92012739732c284b7093d4
+/includes/import_sales_order_entry.inc: c4ef4ba520aa490308701165622d430cb3dcd89c
 /includes/import_sales_order_ui.inc: 12eb96fa96ec79316e145778fd1170c7034fc1bc
 /includes/import_transactions.inc: 8ecede1b6cc23031841f1bb206fb3a7c8d3483b4
 /LICENSE: 23a1f87d806ce0330b3d85485e399a5f9f553409
@@ -14,5 +14,6 @@
 /templates/payment_en_GB.csv: 7bf1069f5701555f1f4e620208c2dbf9e10f4bc7
 /templates/salesinvoices_two_invoices_multiitems_cash_sale_paymentid4.csv: 0bf65efbe920b356cf2f500d3ce9c608d8ca09b0
 /templates/salesinvoices_two_invoices_multiitems_credit_sale_paymentid1.csv: 80aef05fd1e35f261976ffb59bd4f1b5b838eec2
-/templates/single_line_salesinvoices.csv: 24156ed70434f12ef96184053253252f75731ec2
+/templates/single_line_salesinvoices.csv: 2432b7e06f46faa1acdbd2017080b836c9c73c44
+/templates/single_line_salesinvoices.csv.bak: 24156ed70434f12ef96184053253252f75731ec2
 /_init/config: 036d4a0a0f958904e6214a024a983d03d0161f5a

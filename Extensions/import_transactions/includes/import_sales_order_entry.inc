@@ -124,7 +124,8 @@ function check_import_item_data($line_no, $item_code, $item_description, $quanti
         return false;
     }
 
-    $cost_home = get_standard_cost($item_code); // Added 2011-03-27 Joe Hunt
+//    $cost_home = get_standard_cost($item_code); // Added 2011-03-27 Joe Hunt
+    $cost_home = get_unit_cost($item_code); // Added 2017-12-22 Ap.Muthu
     $cost = $cost_home / get_exchange_rate_from_home_currency($_SESSION['Items']->customer_currency, $_SESSION['Items']->document_date);
         if (($price) < $cost)
     {
