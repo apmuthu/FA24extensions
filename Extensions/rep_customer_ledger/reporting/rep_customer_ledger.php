@@ -141,7 +141,6 @@ function print_customer_balances()
 
 	if ($area == ALL_NUMERIC)
  			$area = 0;
-
  	if ($area == 0)
  			$sarea = _('All Areas');
  	else
@@ -174,11 +173,13 @@ function print_customer_balances()
 		$headers[7] = _('Balance');
 	$aligns = array('left','left',	'left',	'left',	'left',	'right', 'right', 'right', 'right');
 
-    $params =   array( 	0 => $comments,
-    				    1 => array('text' => _('Period'), 'from' => $from, 		'to' => $to),
-    				    2 => array('text' => _('Customer'), 'from' => $cust,   	'to' => ''),
-    				    3 => array('text' => _('Currency'), 'from' => $currency, 'to' => ''),
-						4 => array('text' => _('Suppress Zeros'), 'from' => $nozeros, 'to' => ''));
+    $params =   array(  0 => $comments,
+    				    1 => array('text' => _('Period'),         'from' => $from,      'to' => $to),
+    				    2 => array('text' => _('Customer'),       'from' => $cust,      'to' => ''),
+    				    3 => array('text' => _('Sales Areas'),    'from' => $sarea,     'to' => ''),
+    				    4 => array('text' => _('Sales Folk'),     'from' => $salesfolk, 'to' => ''),
+    				    5 => array('text' => _('Currency'),       'from' => $currency,  'to' => ''),
+						6 => array('text' => _('Suppress Zeros'), 'from' => $nozeros,   'to' => ''));
 
     $rep = new FrontReport(_('Customer Ledger'), "CustomerLedger", user_pagesize(), 9, $orientation);
     if ($orientation == 'L')
@@ -189,32 +190,23 @@ function print_customer_balances()
 
 	$grandtotal = array(0,0,0,0);
 
-	$sql = "SELECT ".TB_PREF."debtors_master.debtor_no, name, curr_code FROM ".TB_PREF."debtors_master
-		INNER JOIN ".TB_PREF."cust_branch
-        ON ".TB_PREF."debtors_master.debtor_no=".TB_PREF."cust_branch.debtor_no
-    INNER JOIN ".TB_PREF."areas
-        ON ".TB_PREF."cust_branch.area = ".TB_PREF."areas.area_code
-    INNER JOIN ".TB_PREF."salesman
-        ON ".TB_PREF."cust_branch.salesman=".TB_PREF."salesman.salesman_code";
+    $sql = "SELECT cust.debtor_no, name, curr_code
+FROM ".TB_PREF."debtors_master cust
+    INNER JOIN ".TB_PREF."cust_branch branch
+        ON cust.debtor_no=branch.debtor_no
+    INNER JOIN ".TB_PREF."areas areas
+        ON branch.area = areas.area_code
+    INNER JOIN ".TB_PREF."salesman salesman
+        ON branch.salesman=salesman.salesman_code
+WHERE 1=1";
     if ($fromcust != ALL_TEXT )
-        {
-           // if ($area != 0 || $folk != 0) continue;
-            $sql .= " WHERE ".TB_PREF."debtors_master.debtor_no=".db_escape($fromcust);
-        }
-    elseif ($area != 0)
-        {
-            if ($folk != 0)
-                $sql .= " WHERE ".TB_PREF."salesman.salesman_code=".db_escape($folk)."
-                    AND ".TB_PREF."areas.area_code=".db_escape($area);
-            else
-                $sql .= " WHERE ".TB_PREF."areas.area_code=".db_escape($area);
-        }
-    elseif ($folk != 0 )
-        {
-            $sql .= " WHERE ".TB_PREF."salesman.salesman_code=".db_escape($folk);
-        }
-
-	$sql .= " GROUP BY ".TB_PREF."debtors_master.debtor_no ORDER BY name";
+        $sql .= " AND cust.debtor_no=".db_escape($fromcust);
+    if ($area != 0)
+        $sql .= " AND areas.area_code=".db_escape($area);
+    if ($folk != 0 )
+        $sql .= " AND salesman.salesman_code=".db_escape($folk);
+ 
+	$sql .= " GROUP BY cust.debtor_no ORDER BY name";
 
 	$result = db_query($sql, "The customers could not be retrieved");
 
