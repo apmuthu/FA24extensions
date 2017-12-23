@@ -8,7 +8,7 @@ include_once($path_to_root . "/sales/includes/sales_db.inc");
 include_once($path_to_root . "/sales/includes/db/sales_types_db.inc");
 include_once($path_to_root . "/reporting/includes/reporting.inc");
 
-function can_process($line, $customer_id, $branchNo, $reference, $date, $dimension_id, $dimension2_id, $freightcost=0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments,$exrate) {
+function can_process($line, $customer_id, $branchNo, $reference, $date, $dimension_id, $dimension2_id, $freightcost=0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) {
 
     global $Refs, $SysPrefs;
 
@@ -30,7 +30,7 @@ function can_process($line, $customer_id, $branchNo, $reference, $date, $dimensi
             return false;
         }    
         
-        if (!$Refs->is_valid($reference)) {
+        if (!$Refs->is_valid($reference, $_SESSION['Items']->trans_type)) {
         display_error(_("On line $line you must enter a reference."));
         return false;
     }
@@ -38,7 +38,7 @@ function can_process($line, $customer_id, $branchNo, $reference, $date, $dimensi
         display_error(_("On line $line you must enter a valid date."));
         return false;
     }
-        if ($_SESSION['Items']->trans_type!=ST_SALESORDER && $_SESSION['Items']->trans_type!=ST_SALESQUOTE && !is_date_in_fiscalyear($date)) {
+    if ($_SESSION['Items']->trans_type!=ST_SALESORDER && $_SESSION['Items']->trans_type!=ST_SALESQUOTE && !is_date_in_fiscalyear($date)) {
         display_error(_("On line $line the entered date is not in the fiscal year"));
         return false;
     }
