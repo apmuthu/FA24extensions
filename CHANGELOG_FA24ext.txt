@@ -1,3 +1,4 @@
+2017-12-25  Ap.Muthu     import_transactions module: missing sales document types added
 2017-12-23  Ap.Muthu     import_transactions module: missing argument fixed
 2017-12-23  Ap.Muthu     Re-run of Customer Ledger Report extension - filters areas, salesmen
 2017-12-23  Ap.Muthu     import_transactions module: undefined variables skipped
