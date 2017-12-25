@@ -110,7 +110,7 @@ if ((isset($_POST['type']))) {
         } else {
             begin_transaction();
 			$supported_types = array(ST_JOURNAL, ST_BANKTRANSFER, ST_BANKDEPOSIT, ST_BANKPAYMENT, ST_SALESINVOICE, ST_SALESORDER);
-			if (in_array($type, $supported_types)
+			if (in_array($type, $supported_types))
 				$curEntryId = get_next_trans_no($type);
             $line = 0;
             $description = "";
