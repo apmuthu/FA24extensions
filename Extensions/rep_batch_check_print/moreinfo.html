@@ -1,32 +1,28 @@
 <b>How To Use This Report To Print And Update Checks</b>
 <ol>
 <li>
-When entering check payments in FrontAccounting to be printed by this report,
-add the Check Replacement String (default: @@@@) to the payment "Memo:" field.
-This flags the check "To Be Printed" and will be replaced by the actual check number when the checks are printed.
+Select the starting bank payment to be printed.
+The first one in the displayed list is the next bank payment
+after the last one that was printed.
+This is determined by looking for the pattern [<number>] in
+the check "Memo:".
 </li>
 <li>
-Run this report.
 Do a dry run first to review the PDF.
-If not all the checks that you expected to print appear,
-use Bank Inquiry and examine the memo field for the replacement string.
-Edit the checks as necessary.
 </li>
 <li>
 Once the PDF is correct, load the checks and print.
 </li>
 <li>
 If the checks print okay, set Update Check Numbers to "Yes" and rerun the report.
-This updates the checks by replacing the Check Replacement String
-with the check number in the "Memo:" field.
+This updates the checks by adding the check number in square brackets
+in the "Memo:" field.
 </li>
 <li>
-If some checks failed to print properly due to printer problems,
-use the Ending Check Number field to limit the update to the first
-checks that printed fine.
-Then run the report again to print the remainder of the checks.
+Use the Ending Check Number field to limit the number
+of checks to print or update.
+This is useful
+if some checks failed to print properly due to printer problems.
 </li>
 </ol>
-FUTURE: This report needs a popup to select/unselect the checks,
-which would add/remove the Check Replacement String in the payments.
 

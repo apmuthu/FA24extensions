@@ -31,15 +31,16 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 print_bank_check();
 
 
-function get_bank_transactions_to_print($account, $check_replace)
+function get_bank_transactions_to_print($account, $start)
 {
-        $sql = "SELECT * FROM ".TB_PREF."bank_trans b
+        $sql = "SELECT b.* FROM ".TB_PREF."bank_trans b
                 LEFT JOIN ".TB_PREF."comments c
                 ON b.type=c.type and c.id = b.trans_no
                 WHERE b.bank_act = '$account'
-                AND LOCATE(".db_escape($check_replace).", memo_) != 0
+                AND (b.type = " . ST_BANKPAYMENT . "
+                OR b.type = " . ST_SUPPAYMENT . ")
+                AND b.trans_no >= $start
                 ORDER BY trans_date,b.id";
-
         return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
 
@@ -83,15 +84,20 @@ function print_bank_check()
     // Get the payment
     $acc = $_POST['PARAM_0'];
     $check_style = $_POST['PARAM_1'];
-    $check_start = $_POST['PARAM_2'];
-    $check_end = $_POST['PARAM_3'];
-    $check_replace = $_POST['PARAM_4'];
+    $bank_payments = $_POST['PARAM_2'];
+    $check_start = $_POST['PARAM_3'];
+    $check_end = $_POST['PARAM_4'];
     $check_update = $_POST['PARAM_5'];
     $destination = $_POST['PARAM_6'];
     if ($destination)
         include_once($path_to_root . "/reporting/includes/excel_report.inc");
     else
         include_once($path_to_root . "/reporting/includes/pdf_report.inc");
+
+    if ($bank_payments == "") {
+        display_error(_('No printable bank transactions found'));
+        return;
+    }
 
     if ($check_start == "") {
         display_error(_('Starting check number must be entered'));
@@ -107,7 +113,7 @@ function print_bank_check()
     $dec = user_price_dec();
     $account = get_bank_account($acc);
 
-    $trans = get_bank_transactions_to_print($account['id'], $check_replace);
+    $trans = get_bank_transactions_to_print($account['id'], $bank_payments);
 
     $rows = db_num_rows($trans);
     if ($rows > 0) {
@@ -123,11 +129,7 @@ function print_bank_check()
                 if ($check_end != "" && $check_no > $check_end)
                     break;
 
-            if (!($myrow['type'] == ST_BANKPAYMENT
-                || $myrow['type'] == ST_SUPPAYMENT))
-                continue;
-            if (strpos(get_comments_string($myrow['type'], $myrow['trans_no']), $check_replace) !== false) {
-                if ($check_style == "0") {
+                if ($check_style == "1") {
                     if ($count%3 == 0) {
                         $rep->SetHeaderType(null);
                         $rep->NewPage();
@@ -138,22 +140,25 @@ function print_bank_check()
                     } else
                         $rep->NewLine(1,0,96);
 
-                    rep_print_1up($rep, $account, $dec, $myrow, $check_replace, $check_no);
+                    rep_print_1up($rep, $account, $dec, $myrow, $check_no);
                 }
                 else
-                    rep_print_3up($rep, $account, $dec, $myrow, $check_replace, $check_no);
+                    rep_print_3up($rep, $account, $dec, $myrow, $check_no);
                 $check_no++;
                 $count++;
-                if ($check_update == "1")
-                    update_comments($myrow['type'], $myrow['trans_no'], null, str_replace($check_replace, $check_no, get_comments_string($myrow['type'], $myrow['trans_no'])));
-            }
+                if ($check_update == "1") { 
+                    $comments = get_comments_string($myrow['type'], $myrow['trans_no']);
+                    if ($comments != "")
+                        $comments .= " ";
+                    update_comments($myrow['type'], $myrow['trans_no'], null, $comments . "[" . $check_no . "]");
+}
         }
     }
     $rep->End();
 }
 
 
-function rep_print_1up($rep, $account, $dec, $myrow, $check_replace, $check_no)
+function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
 {
     global $path_to_root, $systypes_array, $print_invoice_no;
 
@@ -162,7 +167,7 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_replace, $check_no)
 
     
     $date = sql2date($myrow['trans_date']);
-    $memo = str_replace($check_replace, $check_no, get_comments_string($myrow['type'], $myrow['trans_no']));
+    $memo = get_comments_string($myrow['type'], $myrow['trans_no']) . " [" . $check_no . "]";
     
     //////////////////
     // Check portion
@@ -215,7 +220,7 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_replace, $check_no)
 
 //--------------------------------------------------------------------------------
 
-function rep_print_3up($rep, $account, $dec, $myrow, $check_replace, $check_no)
+function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
 {
     global $path_to_root, $systypes_array, $print_invoice_no;
 
@@ -235,7 +240,7 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_replace, $check_no)
     $from_trans = get_remittance($myrow['type'], $myrow['trans_no']);
     
     $date = sql2date($myrow['trans_date']);
-    $memo = str_replace($check_replace, $check_no, get_comments_string($myrow['type'], $myrow['trans_no']));
+    $memo = get_comments_string($myrow['type'], $myrow['trans_no']) . " [" . $check_no . "]";
     
     //////////////////
     // Check portion
@@ -356,6 +361,5 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_replace, $check_no)
 }
 
 //--------------------------------------------------------------------------------
-
 
 ?>

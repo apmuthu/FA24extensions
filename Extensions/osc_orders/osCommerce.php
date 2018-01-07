@@ -592,7 +592,7 @@ if (isset($_POST['action'])) {
                 // calculate the FA line item discount based on order discount
                 $disc_percent = 0;
                 if ($total_discount != 0)
-                    $disc_percent = $total_discount/$total_subtotal;
+                    $disc_percent = $total_discount/($total_subtotal+$total_discount);
 
                 $sql      = "SELECT comments FROM orders_status_history WHERE orders_id = ".osc_escape($oID);
                 $result   = osc_dbQuery($sql, true);
@@ -682,6 +682,8 @@ if (isset($_POST['action'])) {
                 $cart->email             = $order['customers_email_address'];
                 $cart->freight_cost      = $total_shipping;
                 $cart->due_date          = Today();
+                $cart->dimension_id      = $_POST['dimension_id'];
+                $cart->dimension2_id     = $_POST['dimension2_id'];
 
                 $sql                     = "SELECT * FROM orders_products WHERE orders_id = ".osc_escape($oID);
                 $result                  = osc_dbQuery($sql, true);
@@ -708,7 +710,7 @@ if (isset($_POST['action'])) {
 
                 if ($_POST['invoice'] == 1) {
                     if (!$SysPrefs->allow_negative_stock() && ($low_stock = $cart->check_qoh())) {
-                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . implode(' ', $low_stock)));
+                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . implode(' ', $low_stock) . " on " . $cart->document_date));
                         if ($errors == 0) {
                             display_error('Skipping order ' . $oID);
                             continue;
@@ -732,10 +734,10 @@ if (isset($_POST['action'])) {
                     display_notification("Added Order Number $order_no for " . $customers_name);
 
                     $comments="Imported into FA";
-                    $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($oID) . "," .  $order['orders_status']. "," . Today() . ", 0, " . osc_escape($comments) . "}";
+                    $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($oID) . "," .  $order['orders_status']. "," . osc_escape(date('Y-m-d H:i:s')) . ", 0, " . osc_escape($comments) . ")";
 
                     // display_notification($sql);
-                    // osc_dbQuery($sql);
+                    $result = mysqli_query($osc, $sql);
 
                     if ($oID > $lastoid) {
                         $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($oID)." WHERE name = 'lastoid'";
@@ -1216,6 +1218,17 @@ if ($action == 'oimport') {
     text_row("Last Order Number:", 'last_oid', $max_oid, 8, 8);
     text_row("Osc Status Id", 'statusId', $statusId, 20, 40);
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, true);
+    $dim = get_company_pref('use_dimension');
+    if ($dim < 1)
+        hidden('dimension_id', 0);
+    if ($dim < 2)
+        hidden('dimension2_id', 0);
+
+    if ($dim >= 1)
+        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', null, true, " ", false, 1);
+    if ($dim > 1)
+        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', null, true, " ", false, 2);
+
     yesno_list_row(_("Direct Invoice"), 'invoice', null, "", "", false);
     sale_payment_list_cells(_('Payment:'), 'payment', PM_ANY, null, false);
 
@@ -1288,6 +1301,7 @@ if ($action == 'pupdate') {
 
 if ($action == 'iimport') {
 
+
     start_form(true);
 
     start_table(TABLESTYLE2, "width=40%");
@@ -1341,7 +1355,7 @@ if ($action == 'iimport') {
 
     hidden('action', 'i_import');
     submit_center('iimport', "Import osC Items");
-    if ($num_price_errors > 0) display_notification("There were $num_price_errors prices updated");
+    if ($num_qty_errors > 0) display_notification("There were $num_qty_errors items imported");
 
     end_form();
     end_page();
@@ -1362,7 +1376,7 @@ if ($action == 'icheck') {
 
     hidden('action', 'i_check');
     submit_center('pcheck', "Check osC Inventory");
-    if ($num_price_errors == 0) display_notification("No Inventory Errors Found");
+    if ($num_qty_errors == 0) display_notification("No Inventory Errors Found");
 
     end_form();
 
@@ -1372,6 +1386,15 @@ if ($action == 'icheck') {
 
 
 if ($action == 'iupdate') {
+
+    $osc     = osc_connect();
+    $sql     = "SELECT `orders_id` FROM `orders` order by `orders_id` desc LIMIT 0,1";
+    $oid     = osc_dbQuery($sql);
+    if ($osc && !$one_database) mysqli_close($osc);
+
+    if ((int) $oid['orders_id'] != $last_oid)
+        display_error("Order Import required before Inventory Update (" . $oid['orders_id'] . " != " . $last_oid . ")");
+    else {
     start_form(true);
 
     start_table(TABLESTYLE2, "width=40%");
@@ -1385,8 +1408,9 @@ if ($action == 'iupdate') {
 
     hidden('action', 'i_update');
     submit_center('pupdate', "Update osC Inventory");
-    if ($num_qty_errors > 0) display_notification("There were $num_qty_errors prices updated");
+    if ($num_qty_errors > 0) display_notification("There were $num_qty_errors items updated");
 
     end_form();
     end_page();
+    }
 }
