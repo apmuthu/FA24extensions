@@ -556,7 +556,7 @@ if (isset($_POST['action'])) {
             while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID         = $order['orders_id'];
 
-                $sql         = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID);
+                $sql         = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID) . " ORDER BY sort_order";
                 $total_shipping = 0;
                 $total_total = 0;
                 $total_discount = 0;
@@ -592,7 +592,7 @@ if (isset($_POST['action'])) {
                 // calculate the FA line item discount based on order discount
                 $disc_percent = 0;
                 if ($total_discount != 0)
-                    $disc_percent = $total_discount/($total_subtotal+$total_discount);
+                    $disc_percent = $total_discount/$total_subtotal;
 
                 $sql      = "SELECT comments FROM orders_status_history WHERE orders_id = ".osc_escape($oID);
                 $result   = osc_dbQuery($sql, true);
