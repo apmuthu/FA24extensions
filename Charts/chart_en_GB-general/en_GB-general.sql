@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `0_chart_master` (
 INSERT INTO `0_chart_master` VALUES
 ('1001', '', 'Stock', '2', '0'),
 ('1002', '', 'Work in Progress', '2', '0'),
-('1005', '', 'Goods Received Clearing account', '2', 0);
+('1005', '', 'Goods Received Clearing account', '2', 0),
 ('1010', '', 'Freehold Property', '1', '0'),
 ('1011', '', 'Goodwill', '1', '0'),
 ('1012', '', 'Goodwill Amortisation', '1', '0'),
