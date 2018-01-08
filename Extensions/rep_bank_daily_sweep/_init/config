@@ -1,0 +1,11 @@
+Package: rep_bank_daily_sweep
+Description: Daily Bank Account Sweep
+Name: Daily Bank Account Sweep
+Filename: rep_bank_daily_sweep
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_bank_daily_sweep
+Version: 2.4.0-1
+
