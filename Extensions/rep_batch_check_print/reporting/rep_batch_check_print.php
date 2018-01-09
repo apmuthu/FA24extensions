@@ -38,7 +38,7 @@ function get_bank_transactions_to_print($account, $start)
                 WHERE b.bank_act = '$account'
                 AND (b.type = " . ST_BANKPAYMENT . "
                 OR b.type = " . ST_SUPPAYMENT . ")
-                AND b.trans_no >= $start
+                AND b.id >= $start
                 ORDER BY trans_date,b.id";
         return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
@@ -139,10 +139,10 @@ function print_bank_check()
                     } else
                         $rep->NewLine(1,0,96);
 
-                    rep_print_1up($rep, $account, $dec, $myrow, $check_no);
+                    rep_print_3up($rep, $account, $dec, $myrow, $check_no);
                 }
                 else
-                    rep_print_3up($rep, $account, $dec, $myrow, $check_no);
+                    rep_print_1up($rep, $account, $dec, $myrow, $check_no);
                 $check_no++;
                 $count++;
                 if ($check_update == "1") { 
@@ -157,7 +157,7 @@ function print_bank_check()
 }
 
 
-function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
+function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
 {
     global $path_to_root, $systypes_array, $print_invoice_no;
 
@@ -211,15 +211,16 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
         }
     }
 
-    $rep->NewLine(1,0,66 - $lines * 12);
+    $rep->NewLine(1,0,56 - $lines * 12);
     
     // Memo
     $rep->TextCol(0, 1, $memo);
+    $rep->NewLine(1,0,10);
 }
 
 //--------------------------------------------------------------------------------
 
-function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
+function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
 {
     global $path_to_root, $systypes_array, $print_invoice_no;
 

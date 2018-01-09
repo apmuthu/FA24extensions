@@ -258,7 +258,7 @@ $dbName           = "";
 $oscId            = "products_model";
 $oscPrefix        = "";
 $lastcid          = 0;
-$lastoid          = 0;
+$lastdate         = "";
 $defaultTaxGroup  = 0;
 $destCust         = 0;
 $statusId         = 0;
@@ -270,13 +270,13 @@ $db_Name          = "";
 $osc_Id           = "products_model";
 $osc_Prefix       = "";
 $last_cid         = 0;
-$last_oid         = 0;
+$last_date        = "";
 $default_TaxGroup = 0;
 
 $min_cid = 0;
 $max_cid = 0;
-$min_oid = 0;
-$max_oid = 0;
+$min_date = 0;
+$max_date = 0;
 $min_iid = 0;
 $max_iid = 0;
 
@@ -328,14 +328,14 @@ if ($found) {
     } else $last_cid = $row[1];
 
     // Get last oID imported
-    $sql = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastoid'";
+    $sql = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastdate'";
     $result = db_query($sql, "could not get DB name");
     $row    = db_fetch_row($result);
     if (!$row) {
-        $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastoid', 0)";
-        db_query($sql, "add lastoid");
-        $last_oid = 0;
-    } else $last_oid = $row[1];
+        $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastdate', 0)";
+        db_query($sql, "add lastdate");
+        $last_date = 0;
+    } else $last_date = $row[1];
 
     // Get Default Tax Group
     $sql              = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'taxgroup'";
@@ -441,11 +441,11 @@ if (isset($_POST['action'])) {
             db_query($sql, "Update 'lastcid'");
         }
 
-        if ($lastoid != $last_oid) { // It changed
-            if ($lastoid == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'lastoid'";
-            else if ($last_oid == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastoid', ".db_escape($lastoid).")";
-            else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($lastoid)." WHERE name = 'lastoid'";
-            db_query($sql, "Update 'lastoid'");
+        if ($lastdate != $last_date) { // It changed
+            if ($lastdate == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'lastdate'";
+            else if ($last_date == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastdate', ".db_escape($lastdate).")";
+            else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($lastdate)." WHERE name = 'lastdate'";
+            db_query($sql, "Update 'lastdate'");
         }
 
         if ($defaultTaxGroup != $default_TaxGroup) { // It changed
@@ -464,7 +464,7 @@ if (isset($_POST['action'])) {
         $oscId           = $osc_Id;
         $oscPrefix       = $osc_Prefix;
         $lastcid         = $last_cid;
-        $lastoid         = $last_oid;
+        $lastdate        = $last_date;
         $defaultTaxGroup = $default_TaxGroup;
     }
 
@@ -529,12 +529,8 @@ if (isset($_POST['action'])) {
         }
 
         if ($action == 'o_import') { // Import Order specified by oID
-            $first_oid = (int) $_POST['first_oid'];
-            $last_oid  = (int) $_POST['last_oid'];
-            if (!not_null($first_oid) || !not_null($last_oid)) {
-                $first_oid = 0;
-                $last_oid  = 0;
-            }
+            $first_date = date2sql($_POST['first_date']);
+            $last_date  = date2sql($_POST['last_date']);
 
             $destCust        = $_POST['destCust'];
             $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('destCust', ".db_escape($destCust).") ON DUPLICATE KEY UPDATE name='destCust', value=".db_escape($destCust);
@@ -546,7 +542,7 @@ if (isset($_POST['action'])) {
 
             $customer = null;
             $errors = (int) $_POST['errors'];
-            $sql        = "SELECT * FROM orders WHERE orders_id >= ".osc_escape($first_oid)." AND orders_id <= ".osc_escape($last_oid);
+            $sql        = "SELECT * FROM orders WHERE date_purchased BETWEEN ".osc_escape($first_date ." 00:00:00") . " AND " . osc_escape($last_date . " 23:59:59");
             if ($statusId != "")
                 $sql .= " AND orders_status = " . $statusId;
             $sql .= " AND orders_id not in (select orders_id from orders_status_history oh where LOCATE('Imported into FA', comments) != 0) group by orders_id";
@@ -555,6 +551,7 @@ if (isset($_POST['action'])) {
 
             while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID         = $order['orders_id'];
+                $date_purchased = $order['date_purchased'];
 
                 $sql         = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID) . " ORDER BY sort_order";
                 $total_shipping = 0;
@@ -673,7 +670,7 @@ if (isset($_POST['action'])) {
                 $cart->Branch            = $branch['branch_code'];
                 $cart->cust_ref          = "osC Order # $oID";
                 $cart->Comments          = $comments;
-                $cart->document_date     = sql2date($order['date_purchased']);
+                $cart->document_date     = sql2date($date_purchased);
                 $cart->sales_type        = $customer['sales_type'];
                 $cart->ship_via          = $branch['default_ship_via'];
                 $cart->deliver_to        = $branch['br_name'];
@@ -739,9 +736,9 @@ if (isset($_POST['action'])) {
                     // display_notification($sql);
                     $result = mysqli_query($osc, $sql);
 
-                    if ($oID > $lastoid) {
-                        $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($oID)." WHERE name = 'lastoid'";
-                        db_query($sql, "Update 'lastoid'");
+                    if ($date_purchased > $lastdate) {
+                        $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($date_purchased)." WHERE name = 'lastdate'";
+                        db_query($sql, "Update 'lastdate'");
                     }
                 }
 
@@ -842,7 +839,7 @@ if (isset($_POST['action'])) {
             $action = 'pupdate';
         }
         if ($action == 'i_import') { // Item Import
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id where products_status='1'";
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
@@ -996,7 +993,7 @@ if (isset($_POST['action'])) {
     $oscId           = $osc_Id;
     $oscPrefix       = $osc_Prefix;
     $lastcid         = $last_cid;
-    $lastoid         = $last_oid;
+    $lastdate         = $last_date;
     $defaultTaxGroup = $default_TaxGroup;
 }
 
@@ -1015,13 +1012,13 @@ if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport')) && ($o
 
     if ($action == 'oimport' || $action == 'summary') { // Preview Order Import page
 
-        $sql     = "SELECT `orders_id` FROM `orders` order by `orders_id` asc LIMIT 0,1";
+        $sql     = "SELECT `date_purchased` FROM `orders` order by `date_purchased` asc LIMIT 0,1";
         $oid     = osc_dbQuery($sql);
-        $min_oid = (int) $oid['orders_id'];
-        if ($min_oid <= $last_oid) $min_oid = $last_oid + 1;
-        $sql     = "SELECT `orders_id` FROM `orders` order by `orders_id` desc LIMIT 0,1";
+        $min_date = $oid['date_purchased'];
+        if ($min_date <= $last_date) $min_date = date('Y-m-d', strtotime($last_date .' +1 day'));
+        $sql     = "SELECT `date_purchased` FROM `orders` order by `date_purchased` desc LIMIT 0,1";
         $oid     = osc_dbQuery($sql);
-        $max_oid = (int) $oid['orders_id'];
+        $max_date = $oid['date_purchased'];
     }
 
     if ($action == 'iimport' || $action == 'summary') { // Preview Item Import page
@@ -1085,11 +1082,11 @@ if ($action == 'summary') {
         label_cell($max_cid - $min_cid + 1);
     }
     end_row();
-    label_cell("New Orders");
-    if ($min_oid > $max_oid) {
+    label_cell("New Orders From Date");
+    if ($min_date > $max_date) {
         label_cell("None");
     } else {
-        label_cell($max_oid - $min_oid + 1);
+        label_cell($min_date);
     }
     end_row();
     end_form();
@@ -1214,8 +1211,8 @@ if ($action == 'oimport') {
 
     table_section_title("Order Import Options");
 
-    text_row("Starting Order Number:", 'first_oid', $min_oid, 8, 8);
-    text_row("Last Order Number:", 'last_oid', $max_oid, 8, 8);
+    date_row("Starting Order Date:", 'first_date', sql2date($min_date));
+    date_row("Last Order Date:", 'last_date', sql2date($max_date));
     text_row("Osc Status Id", 'statusId', $statusId, 20, 40);
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, true);
     $dim = get_company_pref('use_dimension');
@@ -1392,8 +1389,8 @@ if ($action == 'iupdate') {
     $oid     = osc_dbQuery($sql);
     if ($osc && !$one_database) mysqli_close($osc);
 
-    if ((int) $oid['orders_id'] != $last_oid)
-        display_error("Order Import required before Inventory Update (" . $oid['orders_id'] . " != " . $last_oid . ")");
+    if ((int) $oid['orders_id'] != $last_date)
+        display_error("Order Import required before Inventory Update (" . $oid['orders_id'] . " != " . $last_date . ")");
     else {
     start_form(true);
 

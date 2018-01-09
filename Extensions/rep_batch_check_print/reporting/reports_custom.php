@@ -21,7 +21,7 @@ $reports->register_controls("check_start");
 function bank_payments($param, $type)
 {
     if ($type == 'BANK_PAYMENTS') {
-        $sql = "SELECT child.trans_no, concat(child.trans_no, ': ', child.person_id, ' (', child.amount, ')')  as IName FROM ".TB_PREF."bank_trans AS child, (select max(id) AS maxid FROM ".TB_PREF."comments WHERE (type = " . ST_BANKPAYMENT . " OR type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\[[0-9]+\]$') AS parent WHERE (child.type = " . ST_BANKPAYMENT . " OR child.type = " . ST_SUPPAYMENT . ") AND child.trans_no > parent.maxid";
+        $sql = "SELECT child.id, concat(child.id, ': ', child.person_id, ' (', child.amount, ')')  as IName FROM ".TB_PREF."bank_trans AS child, (select max(bt.id) AS maxid FROM ".TB_PREF."bank_trans bt LEFT JOIN " .TB_PREF."comments c ON bt.trans_no=c.id AND bt.type=c.type  WHERE (bt.type = " . ST_BANKPAYMENT . " OR bt.type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\[[0-9]+\]$') AS parent WHERE (child.type = " . ST_BANKPAYMENT . " OR child.type = " . ST_SUPPAYMENT . ") AND (ISNULL(parent.maxid) OR  child.id > parent.maxid) ORDER BY child.id";
         return combo_input($param, '', $sql, 'order_no', 'IName',array('order'=>false));
     }
 }
