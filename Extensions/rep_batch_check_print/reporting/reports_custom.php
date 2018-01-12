@@ -13,14 +13,30 @@ $reports->register_controls("check_end");
 
 function check_start($param, $type)
 {
-    if ($type == 'CHECK_START')
-        return "<input type=\"number\" name=\"$param\" min=1 max=999999>";
+    if ($type == 'CHECK_START') {
+
+// find the last computer printed check
+        $sql = "SELECT memo_ FROM ".TB_PREF."bank_trans bt LEFT JOIN " .TB_PREF."comments c ON bt.trans_no=c.id AND bt.type=c.type  WHERE (bt.type = " . ST_BANKPAYMENT . " OR bt.type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\[[0-9]+\]$' ORDER BY bt.id DESC LIMIT 1";
+        $result = db_query($sql, "The check number cannot be retrieved");
+        $row = db_fetch($result);
+        $checkno='';
+        if ($row[0] != 0) {
+            $checkno = substr($row['memo_'], strpos($row['memo_'], '[')+1, -1);
+            $checkno++;
+        }
+
+        return "<input type=\"number\" name=\"$param\" min=1 max=999999 value=\"$checkno\">";
+    }
 }
 $reports->register_controls("check_start");
 
 function bank_payments($param, $type)
 {
     if ($type == 'BANK_PAYMENTS') {
+
+// find all the supplier and bank payments after the last
+// computer printed check
+
         $sql = "SELECT child.id, concat(child.id, ': ', child.person_id, ' (', child.amount, ')')  as IName FROM ".TB_PREF."bank_trans AS child, (select max(bt.id) AS maxid FROM ".TB_PREF."bank_trans bt LEFT JOIN " .TB_PREF."comments c ON bt.trans_no=c.id AND bt.type=c.type  WHERE (bt.type = " . ST_BANKPAYMENT . " OR bt.type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\[[0-9]+\]$') AS parent WHERE (child.type = " . ST_BANKPAYMENT . " OR child.type = " . ST_SUPPAYMENT . ") AND (ISNULL(parent.maxid) OR  child.id > parent.maxid) ORDER BY child.id";
         return combo_input($param, '', $sql, 'order_no', 'IName',array('order'=>false));
     }

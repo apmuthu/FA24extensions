@@ -143,14 +143,16 @@ function print_bank_check()
                 }
                 else
                     rep_print_1up($rep, $account, $dec, $myrow, $check_no);
-                $check_no++;
-                $count++;
+
                 if ($check_update == "1") { 
                     $comments = get_comments_string($myrow['type'], $myrow['trans_no']);
                     if ($comments != "")
                         $comments .= " ";
                     update_comments($myrow['type'], $myrow['trans_no'], null, $comments . "[" . $check_no . "]");
-}
+                }
+
+                $check_no++;
+                $count++;
         }
     }
     $rep->End();
