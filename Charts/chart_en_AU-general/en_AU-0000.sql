@@ -1,11 +1,11 @@
 # MySQL dump of database 'fa24' on host 'localhost'
-# Backup Date and Time: 2017-11-23 14:14+0530
+# Backup Date and Time: 2018-01-18 14:14+0530
 # Built by FrontAccounting 2.4.3
 # http://frontaccounting.com
 # Company: Training Co.
+# Author: Ap.Muthu <apmuthu@usa.net>
 
 # Compatibility: 2.4.1
-# Author: Ap.Muthu <apmuthu@usa.net>
 
 
 SET NAMES latin1;
@@ -208,10 +208,11 @@ INSERT INTO `0_chart_master` VALUES
 ('1540', '', 'Stocks of Finished Goods', '2', 0),
 ('1550', '', 'Goods Received Clearing account', '2', 0),
 ('1820', '', 'Office Furniture & Equipment', '3', 0),
-('1825', '', 'Accum. Amort. -Furn. & Equip.', '3', 0),
+('1825', '', 'Accum. Amort. - Furn. & Equip.', '3', 0),
 ('1840', '', 'Vehicle', '3', 0),
-('1845', '', 'Accum. Amort. -Vehicle', '3', 0),
+('1845', '', 'Accum. Amort. - Vehicle', '3', 0),
 ('2100', '', 'Accounts Payable', '4', 0),
+('2105', '', 'Deferred Income', '4', 0),
 ('2110', '', 'Accrued Income Tax - Federal', '4', 0),
 ('2120', '', 'Accrued Income Tax - State', '4', 0),
 ('2130', '', 'Accrued Franchise Tax', '4', 0),
@@ -235,7 +236,7 @@ INSERT INTO `0_chart_master` VALUES
 ('3350', '', 'Common Shares', '6', 0),
 ('3590', '', 'Retained Earnings - prior years', '7', 0),
 ('4010', '', 'Sales', '8', 0),
-('4430', '', 'Shipping & Handling', '9', 0),
+('4430', '', 'Shipping and Handling', '9', 0),
 ('4440', '', 'Interest', '9', 0),
 ('4450', '', 'Foreign Exchange Gain', '9', 0),
 ('4500', '', 'Prompt Payment Discounts', '9', 0),
@@ -247,7 +248,7 @@ INSERT INTO `0_chart_master` VALUES
 ('5050', '', 'Purchases of materials', '10', 0),
 ('5060', '', 'Discounts Received', '10', 0),
 ('5100', '', 'Freight', '10', 0),
-('5410', '', 'Wages & Salaries', '11', 0),
+('5410', '', 'Wages and Salaries', '11', 0),
 ('5420', '', 'Wages - Overtime', '11', 0),
 ('5430', '', 'Benefits - Comp Time', '11', 0),
 ('5440', '', 'Benefits - Payroll Taxes', '11', 0),
@@ -265,12 +266,12 @@ INSERT INTO `0_chart_master` VALUES
 ('5620', '', 'Bad Debts', '12', 0),
 ('5660', '', 'Amortization Expense', '12', 0),
 ('5685', '', 'Insurance', '12', 0),
-('5690', '', 'Interest & Bank Charges', '12', 0),
+('5690', '', 'Interest and Bank Charges', '12', 0),
 ('5700', '', 'Office Supplies', '12', 0),
 ('5760', '', 'Rent', '12', 0),
-('5765', '', 'Repair & Maintenance', '12', 0),
+('5765', '', 'Repair and Maintenance', '12', 0),
 ('5780', '', 'Telephone', '12', 0),
-('5785', '', 'Travel & Entertainment', '12', 0),
+('5785', '', 'Travel and Entertainment', '12', 0),
 ('5790', '', 'Utilities', '12', 0),
 ('5795', '', 'Registrations', '12', 0),
 ('5800', '', 'Licenses', '12', 0),
@@ -305,7 +306,7 @@ INSERT INTO `0_chart_types` VALUES
 ('9', 'Other Revenue', '3', '', 0),
 ('10', 'Cost of Goods Sold', '4', '', 0),
 ('11', 'Payroll Expenses', '4', '', 0),
-('12', 'General & Administrative expenses', '4', '', 0);
+('12', 'General and Administrative expenses', '4', '', 0);
 
 ### Structure of table `0_comments` ###
 
@@ -624,7 +625,8 @@ CREATE TABLE IF NOT EXISTS `0_fiscal_year` (
 
 ### Data of table `0_fiscal_year` ###
 
-INSERT INTO `0_fiscal_year` VALUES (1, '2016-07-01', '2017-06-30', 0);
+INSERT INTO `0_fiscal_year` VALUES
+ (1, '2017-07-01', '2018-06-30', 0);
 
 ### Structure of table `0_gl_trans` ###
 
@@ -847,7 +849,8 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Due 15th Of the Following Month', '0', '17', '0'),
 ('2', 'Due By End Of The Following Month', '0', '30', '0'),
 ('3', 'Payment due within 10 days', '10', '0', '0'),
-('4', 'Cash Only', '1', '0', '0');
+('4', 'Cash Only', '0', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 ### Structure of table `0_prices` ###
 
@@ -1493,7 +1496,7 @@ CREATE TABLE IF NOT EXISTS `0_sys_prefs` (
   `category` varchar(30) DEFAULT NULL,
   `type` varchar(20) NOT NULL DEFAULT '',
   `length` smallint(6) DEFAULT NULL,
-  `value` TEXT NOT NULL DEFAULT '',
+  `value` TEXT NOT NULL,
   PRIMARY KEY (`name`),
   KEY `category` (`category`)
 ) ENGINE=InnoDB ;
@@ -1501,12 +1504,12 @@ CREATE TABLE IF NOT EXISTS `0_sys_prefs` (
 ### Data of table `0_sys_prefs` ###
 
 INSERT INTO `0_sys_prefs` VALUES
-('accounts_alpha','glsetup.general', 'tinyint', 1, '0'),
+('accounts_alpha', 'glsetup.general', 'tinyint', 1, '0'),
 ('accumulate_shipping', 'glsetup.customer', 'tinyint', 1, '0'),
 ('add_pct', 'setup.company', 'int', 5, '-1'),
-('allow_negative_prices','glsetup.inventory', 'tinyint', 1, '1'),
+('allow_negative_prices', 'glsetup.inventory', 'tinyint', 1, '1'),
 ('allow_negative_stock', 'glsetup.inventory', 'tinyint', 1, '0'),
-('alternative_tax_include_on_docs','setup.company', 'tinyint', 1, '0'),
+('alternative_tax_include_on_docs', 'setup.company', 'tinyint', 1, '0'),
 ('auto_curr_reval', 'setup.company', 'smallint', 6, '1'),
 ('bank_charge_act', 'glsetup.general', 'varchar', 15, '5690'),
 ('barcodes_on_stock','setup.company', 'tinyint', 1, '0'),
@@ -1534,7 +1537,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('default_sales_discount_act', 'glsetup.sales', 'varchar', 15, '4510'),
 ('default_wip_act', 'glsetup.items', 'varchar', 15, '1530'),
 ('default_workorder_required', 'glsetup.manuf', 'int', 11, '20'),
-('deferred_income_act', 'glsetup.sales', 'varchar', '15', ''),
+('deferred_income_act', 'glsetup.sales', 'varchar', '15', '2105'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
 ('domicile', 'setup.company', 'varchar', 55, ''),
 ('email', 'setup.company', 'varchar', 100, ''),
@@ -1542,23 +1545,23 @@ INSERT INTO `0_sys_prefs` VALUES
 ('f_year', 'setup.company', 'int', 11, '1'),
 ('fax', 'setup.company', 'varchar', 30, ''),
 ('freight_act', 'glsetup.customer', 'varchar', 15, '4430'),
-('gl_closing_date','setup.closing_date', 'date', 8, ''),
+('gl_closing_date', 'setup.closing_date', 'date', 8, ''),
 ('grn_clearing_act', 'glsetup.purchase', 'varchar', 15, '1550'),
 ('gst_no', 'setup.company', 'varchar', 25, ''),
 ('legal_text', 'glsetup.customer', 'tinytext', 0, ''),
-('loc_notification','glsetup.inventory', 'tinyint', 1, '0'),
+('loc_notification', 'glsetup.inventory', 'tinyint', 1, '0'),
 ('login_tout', 'setup.company', 'smallint', 6, '600'),
 ('no_customer_list', 'setup.company', 'tinyint', 1, '0'),
 ('no_item_list', 'setup.company', 'tinyint', 1, '0'),
 ('no_supplier_list', 'setup.company', 'tinyint', 1, '0'),
-('no_zero_lines_amount','glsetup.sales', 'tinyint', 1, '1'),
+('no_zero_lines_amount', 'glsetup.sales', 'tinyint', 1, '1'),
 ('past_due_days', 'glsetup.general', 'int', 11, '30'),
 ('phone', 'setup.company', 'varchar', 30, ''),
 ('po_over_charge', 'glsetup.purchase', 'int', 11, '10'),
 ('po_over_receive', 'glsetup.purchase', 'int', 11, '10'),
 ('postal_address', 'setup.company', 'tinytext', 0, 'N/A'),
-('print_invoice_no','glsetup.sales', 'tinyint', 1, '0'),
-('print_item_images_on_quote','glsetup.inventory', 'tinyint', 1, '0'),
+('print_invoice_no', 'glsetup.sales', 'tinyint', 1, '0'),
+('print_item_images_on_quote', 'glsetup.inventory', 'tinyint', 1, '0'),
 ('profit_loss_year_act', 'glsetup.general', 'varchar', 15, '9990'),
 ('pyt_discount_act', 'glsetup.purchase', 'varchar', 15, '5060'),
 ('retained_earnings_act', 'glsetup.general', 'varchar', 15, '3590'),
@@ -1590,6 +1593,7 @@ CREATE TABLE IF NOT EXISTS `0_tags` (
 ) ENGINE=InnoDB ;
 
 ### Data of table `0_tags` ###
+
 ### Structure of table `0_tag_associations` ###
 
 DROP TABLE IF EXISTS `0_tag_associations`;
@@ -1615,12 +1619,11 @@ CREATE TABLE IF NOT EXISTS `0_tax_groups` (
 
 ### Data of table `0_tax_groups` ###
 
-
-### Structure of table `0_tax_group_items` ###
-
 INSERT INTO `0_tax_groups` VALUES
 (1, 'Tax', 0),
 (2, 'Tax Exempt', 0);
+
+### Structure of table `0_tax_group_items` ###
 
 DROP TABLE IF EXISTS `0_tax_group_items`;
 CREATE TABLE IF NOT EXISTS `0_tax_group_items` (
@@ -1631,7 +1634,6 @@ CREATE TABLE IF NOT EXISTS `0_tax_group_items` (
 ) ENGINE=InnoDB ;
 
 ### Data of table `0_tax_group_items` ###
-
 
 ### Structure of table `0_tax_types` ###
 
@@ -1738,7 +1740,7 @@ CREATE TABLE IF NOT EXISTS `0_users` (
 ### Data of table `0_users` ###
 
 INSERT INTO `0_users` VALUES
-(1, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'Administrator', 2, '', 'adm@example.com', 'en_US', 0, 0, 0, 0, 'default', 'A4', 2, 2, 4, 1, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
+(1, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'Administrator', 2, '', 'adm@example.com', 'en_US', 0, 0, 0, 0, 'default', 'A4', 2, 2, 4, 1, 1, 0, 0, '2017-01-01 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
 
 ### Structure of table `0_voided` ###
 
