@@ -160,7 +160,7 @@ if ((isset($_POST['type']))) {
                         // If the journal entry is not created, then
                         // a journal transaction entered through FA would have a trans_no
                         // starting from 1, and thus VOID would void the wrong G/L entries.
-                        add_journal(ST_JOURNAL, $curEntryId, $total_debit_positive, $date, get_company_pref('curr_default'), $reference, 1, $date, $date);
+                        add_journal(ST_JOURNAL, $curEntryId, $total_debit_positive, $date, get_company_pref('curr_default'), $reference, '', 1, $date, $date);
                         $total_debit_positive = 0;
                     }
                 } else if (($type == ST_BANKPAYMENT) && ($stateformat != null))
