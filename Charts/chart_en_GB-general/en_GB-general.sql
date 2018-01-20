@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `0_chart_master` (
 INSERT INTO `0_chart_master` VALUES
 ('1001', '', 'Stock', '2', '0'),
 ('1002', '', 'Work in Progress', '2', '0'),
-('1005', '', 'Goods Received Clearing account', '2', 0);
+('1005', '', 'Goods Received Clearing account', '2', 0),
 ('1010', '', 'Freehold Property', '1', '0'),
 ('1011', '', 'Goodwill', '1', '0'),
 ('1012', '', 'Goodwill Amortisation', '1', '0'),
@@ -271,6 +271,7 @@ INSERT INTO `0_chart_master` VALUES
 ('1240', '', 'Company Credit Card', '3', '0'),
 ('2100', '', 'Creditors Control Account', '4', '0'),
 ('2102', '', 'Other Creditors', '4', '0'),
+('2105', '', 'Deferred Income', '4', '0'),
 ('2109', '', 'Accruals', '4', '0'),
 ('2200', '', 'VAT (20%)', '4', '0'),
 ('2205', '', 'VAT (5%)', '4', '0'),
@@ -778,7 +779,7 @@ CREATE TABLE IF NOT EXISTS `0_fiscal_year` (
 --
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2016-01-01', '2016-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0');
 
 -- --------------------------------------------------------
 
@@ -1069,7 +1070,8 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Due 15th Of the Following Month', '0', '17', '0'),
 ('2', 'Due By End Of The Following Month', '0', '30', '0'),
 ('3', 'Payment due within 10 days', '10', '0', '0'),
-('4', 'Cash Only', '0', '0', '0');
+('4', 'Cash Only', '0', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1907,7 +1909,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('default_sales_discount_act', 'glsetup.sales', 'varchar', '15', '4000'),
 ('default_wip_act', 'glsetup.items', 'varchar', '15', '1001'),
 ('default_workorder_required', 'glsetup.manuf', 'int', '11', '20'),
-('deferred_income_act', 'glsetup.sales', 'varchar', '15', ''),
+('deferred_income_act', 'glsetup.sales', 'varchar', '15', '2105'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
 ('domicile', 'setup.company', 'varchar', '55', ''),
 ('email', 'setup.company', 'varchar', '100', ''),

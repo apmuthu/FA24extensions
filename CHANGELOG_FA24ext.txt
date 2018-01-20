@@ -1,3 +1,11 @@
+2018-01-18  Ap.Muthu     Updated EG, AU, CA, FR, GB, IN, SG, US-5, US-GAAP English Charts with upstream
+2018-01-07  Ap.Muthu     en_GB general 4 digit Chart of Accounts fixed typo
+2017-12-25  Ap.Muthu     import_transactions module: cart class synched with core
+2017-12-25  Ap.Muthu     import_transactions module: missing sales document types added
+2017-12-23  Ap.Muthu     import_transactions module: missing argument fixed
+2017-12-23  Ap.Muthu     Re-run of Customer Ledger Report extension - filters areas, salesmen
+2017-12-23  Ap.Muthu     import_transactions module: undefined variables skipped
+2017-12-22  Ap.Muthu     import_transactions module: updated documentation
 2017-12-22  Ap.Muthu     import_transactions module: fixed function name change in FA 2.4
 2017-12-21  Ayub Faizal  Added Customer Ledger Report extension - filters areas, salesmen
 2017-12-17  Ap.Muthu     FrontHRM ERD added

@@ -261,6 +261,7 @@ INSERT INTO `0_chart_master` VALUES
 ('12094001', '', 'Installment Notes Due After the Upcoming Year', '12094', '0'),
 ('21010001', '', 'Accounts Payable', '2101', '0'),
 ('21020001', '', 'Commercial Paper and Other Short-term Notes Payable', '2102', '0'),
+('21050001', '', 'Deferred Income', '2105', '0'),
 ('21060001', '', 'Dividends Payable', '2106', '0'),
 ('21070001', '', 'Rent Revenue Collected in Advance', '2107', '0'),
 ('21070002', '', 'Other Advances From Customers', '2107', '0'),
@@ -364,9 +365,9 @@ INSERT INTO `0_chart_types` VALUES
 ('11035', '11035 - Other Receivables', '1', '1103', '0'),
 ('1104', '1104 - Inventories', '1', '11', '0'),
 ('1105', '1105 - Prepaid Expenses and Deposits', '1', '11', '0'),
-('12', '12 - None Current Assets', '1', '', '0'),
+('12', '12 - Non Current Assets', '1', '', '0'),
 ('1201', '1201 - Long-Term Investments', '1', '12', '0'),
-('12011', '12011 - Debit &amp; Equity Securties', '1', '1201', '0'),
+('12011', '12011 - Debit &amp; Equity Securities', '1', '1201', '0'),
 ('12012', '12012 - Tangible Assets Not Used In Operations', '1', '1201', '0'),
 ('12013', '12013 - Investments Held in Special Funds', '1', '1201', '0'),
 ('1202', '1202 - Properties , Plant and Equipment', '1', '12', '0'),
@@ -375,16 +376,17 @@ INSERT INTO `0_chart_types` VALUES
 ('12091', '12091 - Long-term Prepaid Expenses', '1', '1209', '0'),
 ('12092', '12092 - Restricted Cash', '1', '1209', '0'),
 ('12093', '12093 - Deferred Taxes', '1', '1209', '0'),
-('12094', '12094 - Nonecurrent Receivables', '1', '1209', '0'),
+('12094', '12094 - Non Current Receivables', '1', '1209', '0'),
 ('21', '21 - Current Liabilities', '2', '', '0'),
 ('2101', '2101 - Accounts Payable', '2', '21', '0'),
 ('2102', '2102 - Notes Payble', '2', '21', '0'),
+('2105', '2105 - Deferred Income', '2', '21', '0'),
 ('2106', '2106 - Dividends Payable', '2', '21', '0'),
 ('2107', '2107 - Advances and Deposits', '2', '21', '0'),
 ('2108', '2108 - Agency Collections and Withholdings', '2', '21', '0'),
 ('2109', '2109 - Current Portion of Long-Term Debts', '2', '21', '0'),
 ('2110', '2110 - Short-term Accrued Expenses', '2', '21', '0'),
-('22', '22 - None Current Liabilities', '2', '', '0'),
+('22', '22 - Non Current Liabilities', '2', '', '0'),
 ('2201', '2201 - Long-term Loans , Notes and Bonds Payable', '2', '22', '0'),
 ('2202', '2202 - Lease Obligations', '2', '22', '0'),
 ('2203', '2203 - Long-term Accrued Expenses', '2', '22', '0'),
@@ -751,9 +753,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2008-01-01', '2008-12-31', '0'),
-('2', '2009-01-01', '2009-12-31', '0'),
-('3', '2010-01-01', '2010-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -990,7 +990,8 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Due 15th Of the Following Month', '0', '17', '0'),
 ('2', 'Due By End Of The Following Month', '0', '30', '0'),
 ('3', 'Payment due within 10 days', '10', '0', '0'),
-('4', 'Cash Only', '1', '0', '0');
+('4', 'Cash Only', '1', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 ### Structure of table `0_prices` ###
 
@@ -1698,7 +1699,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('default_sales_discount_act', 'glsetup.sales', 'varchar', '15', '41010002'),
 ('default_wip_act', 'glsetup.items', 'varchar', '15', '11040002'),
 ('default_workorder_required', 'glsetup.manuf', 'int', '11', '20'),
-('deferred_income_act', 'glsetup.sales', 'varchar', '15', ''),
+('deferred_income_act', 'glsetup.sales', 'varchar', '15', '21050001'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
 ('domicile', 'setup.company', 'varchar', '55', ''),
 ('email', 'setup.company', 'varchar', '100', ''),

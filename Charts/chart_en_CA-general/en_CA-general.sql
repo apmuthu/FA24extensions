@@ -1,9 +1,9 @@
-# MySQL dump of database 'faupgrade' on host 'localhost'
-# Backup Date and Time: 2016-02-23 17:03
-# Built by FrontAccounting 2.4.RC1
+# MySQL dump of database 'fa24' on host 'localhost'
+# Backup Date and Time: 2018-01-18 17:03
+# Built by FrontAccounting 2.4.3
 # http://frontaccounting.com
 # Company: Training Co.
-# User: 
+# Author: Ap.Muthu <apmuthu@usa.net>
 
 # Compatibility: 2.4.1
 
@@ -14,25 +14,23 @@ SET NAMES latin1;
 ### Structure of table `0_areas` ###
 
 DROP TABLE IF EXISTS `0_areas`;
-
-CREATE TABLE `0_areas` (
+CREATE TABLE IF NOT EXISTS `0_areas` (
   `area_code` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(60) NOT NULL DEFAULT '',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`area_code`),
   UNIQUE KEY `description` (`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_areas` ###
 
 INSERT INTO `0_areas` VALUES
-('1', 'USA', '0');
+('1', 'Global', '0');
 
 ### Structure of table `0_attachments` ###
 
 DROP TABLE IF EXISTS `0_attachments`;
-
-CREATE TABLE `0_attachments` (
+CREATE TABLE IF NOT EXISTS `0_attachments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(60) NOT NULL DEFAULT '',
   `type_no` int(11) NOT NULL DEFAULT '0',
@@ -52,8 +50,7 @@ CREATE TABLE `0_attachments` (
 ### Structure of table `0_audit_trail` ###
 
 DROP TABLE IF EXISTS `0_audit_trail`;
-
-CREATE TABLE `0_audit_trail` (
+CREATE TABLE IF NOT EXISTS `0_audit_trail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` smallint(6) unsigned NOT NULL DEFAULT '0',
   `trans_no` int(11) unsigned NOT NULL DEFAULT '0',
@@ -74,8 +71,7 @@ CREATE TABLE `0_audit_trail` (
 ### Structure of table `0_bank_accounts` ###
 
 DROP TABLE IF EXISTS `0_bank_accounts`;
-
-CREATE TABLE `0_bank_accounts` (
+CREATE TABLE IF NOT EXISTS `0_bank_accounts` (
   `account_code` varchar(15) NOT NULL DEFAULT '',
   `account_type` smallint(6) NOT NULL DEFAULT '0',
   `bank_account_name` varchar(60) NOT NULL DEFAULT '',
@@ -93,26 +89,24 @@ CREATE TABLE `0_bank_accounts` (
   KEY `bank_account_name` (`bank_account_name`),
   KEY `bank_account_number` (`bank_account_number`),
   KEY `account_code` (`account_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_bank_accounts` ###
 
 INSERT INTO `0_bank_accounts` VALUES
-('1060', '0', 'Current account', 'N/A', 'N/A', NULL, 'CAD', '0', '1', '1430', '0000-00-00 00:00:00', '0', '0'),
-('1065', '0', 'Petty Cash account', 'N/A', 'N/A', NULL, 'CAD', '0', '2', '1430', '0000-00-00 00:00:00', '0', '0');
+('1060', '0', 'Current account', 'N/A', 'N/A', '', 'CAD', '1', '1', '5690', '0000-00-00 00:00:00', '0', '0'),
+('1065', '3', 'Petty Cash account', 'N/A', 'N/A', '', 'CAD', '0', '2', '5690', '0000-00-00 00:00:00', '0', '0');
 
 ### Structure of table `0_bank_trans` ###
 
 DROP TABLE IF EXISTS `0_bank_trans`;
-
-CREATE TABLE `0_bank_trans` (
+CREATE TABLE IF NOT EXISTS `0_bank_trans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` smallint(6) DEFAULT NULL,
   `trans_no` int(11) DEFAULT NULL,
   `bank_act` varchar(15) NOT NULL DEFAULT '',
   `ref` varchar(40) DEFAULT NULL,
   `trans_date` date NOT NULL DEFAULT '0000-00-00',
-  `bank_trans_type_id` int(10) unsigned DEFAULT NULL,
   `amount` double DEFAULT NULL,
   `dimension_id` int(11) NOT NULL DEFAULT '0',
   `dimension2_id` int(11) NOT NULL DEFAULT '0',
@@ -132,8 +126,7 @@ CREATE TABLE `0_bank_trans` (
 ### Structure of table `0_bom` ###
 
 DROP TABLE IF EXISTS `0_bom`;
-
-CREATE TABLE `0_bom` (
+CREATE TABLE IF NOT EXISTS `0_bom` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent` char(20) NOT NULL DEFAULT '',
   `component` char(20) NOT NULL DEFAULT '',
@@ -154,11 +147,11 @@ CREATE TABLE `0_bom` (
 ### Structure of table `0_budget_trans` ###
 
 DROP TABLE IF EXISTS `0_budget_trans`;
-
-CREATE TABLE `0_budget_trans` (
+CREATE TABLE IF NOT EXISTS `0_budget_trans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tran_date` date NOT NULL DEFAULT '0000-00-00',
   `account` varchar(15) NOT NULL DEFAULT '',
+  `memo_` tinytext NOT NULL,
   `amount` double NOT NULL DEFAULT '0',
   `dimension_id` int(11) DEFAULT '0',
   `dimension2_id` int(11) DEFAULT '0',
@@ -172,8 +165,7 @@ CREATE TABLE `0_budget_trans` (
 ### Structure of table `0_chart_class` ###
 
 DROP TABLE IF EXISTS `0_chart_class`;
-
-CREATE TABLE `0_chart_class` (
+CREATE TABLE IF NOT EXISTS `0_chart_class` (
   `cid` varchar(3) NOT NULL,
   `class_name` varchar(60) NOT NULL DEFAULT '',
   `ctype` tinyint(1) NOT NULL DEFAULT '0',
@@ -192,8 +184,7 @@ INSERT INTO `0_chart_class` VALUES
 ### Structure of table `0_chart_master` ###
 
 DROP TABLE IF EXISTS `0_chart_master`;
-
-CREATE TABLE `0_chart_master` (
+CREATE TABLE IF NOT EXISTS `0_chart_master` (
   `account_code` varchar(15) NOT NULL DEFAULT '',
   `account_code2` varchar(15) NOT NULL DEFAULT '',
   `account_name` varchar(60) NOT NULL DEFAULT '',
@@ -207,62 +198,66 @@ CREATE TABLE `0_chart_master` (
 ### Data of table `0_chart_master` ###
 
 INSERT INTO `0_chart_master` VALUES
-('1060', '1002', 'Chequing Account', '1', '0'),
-('1065', '1001', 'Petty Cash', '1', '0'),
-('1200', '1060', 'Accounts Receivables', '1', '0'),
-('1205', '1063', 'Allowance for doubtful accounts', '1', '0'),
-('1520', '1122', 'Inventory / General', '2', '0'),
-('1530', '1122', 'Inventory / Aftermarket Parts', '2', '0'),
-('1540', '1122', 'Inventory / Raw Materials', '2', '0'),
-('1820', '1787', 'Office Furniture &amp; Equipment', '3', '0'),
-('1825', '1788', 'Accum. Amort. -Furn. &amp; Equip.', '3', '0'),
-('1840', '1742', 'Vehicle', '3', '0'),
-('1845', '1743', 'Accum. Amort. -Vehicle', '3', '0'),
-('2100', '2621', 'Accounts Payable', '4', '0'),
-('2160', '2683', 'Federal Taxes Payable', '4', '0'),
-('2170', '2684', 'Provincial Taxes Payable', '4', '0'),
-('2310', '2685', 'GST', '4', '0'),
-('2320', '2686', 'PST', '4', '0'),
-('2380', '2624', 'Vacation Pay Payable', '4', '0'),
-('2390', '2627', 'WCB Payable', '4', '0'),
-('2410', '2627', 'EI Payable', '5', '0'),
-('2420', '2627', 'CPP Payable', '5', '0'),
-('2450', '2628', 'Income Tax Payable', '5', '0'),
-('2620', '2701', 'Bank Loans', '6', '0'),
-('2680', '2780', 'Loans from Shareholders', '6', '0'),
-('3350', '3500', 'Common Shares', '7', '0'),
-('4020', '8000', 'General Sales', '8', '0'),
-('4030', '8000', 'Aftermarket Parts', '8', '0'),
-('4430', '8457', 'Shipping &amp; Handling', '9', '0'),
-('4440', '8090', 'Interest', '9', '0'),
-('4450', '8231', 'Foreign Exchange Gain / (Loss)', '9', '0'),
-('5010', '8320', 'Purchases', '10', '0'),
-('5050', '8320', 'Aftermarket Parts', '10', '0'),
-('5100', '8457', 'Freight', '10', '0'),
-('5410', '9060', 'Wages &amp; Salaries', '11', '0'),
-('5420', '8622', 'EI Expense', '11', '0'),
-('5430', '8622', 'CPP Expense', '11', '0'),
-('5440', '8622', 'WCB Expense', '11', '0'),
-('5610', '8862', 'Accounting &amp; Legal', '12', '0'),
-('5615', '8520', 'Advertising &amp; Promotions', '12', '0'),
-('5620', '8590', 'Bad Debts', '12', '0'),
-('5660', '8670', 'Amortization Expense', '12', '0'),
-('5680', '9990', 'Income Taxes', '12', '0'),
-('5685', '9804', 'Insurance', '12', '0'),
-('5690', '9805', 'Interest &amp; Bank Charges', '12', '0'),
-('5700', '8811', 'Office Supplies', '12', '0'),
-('5760', '9811', 'Rent', '12', '0'),
-('5765', '8964', 'Repair &amp; Maintenance', '12', '0'),
-('5780', '9225', 'Telephone', '12', '0'),
-('5785', '8523', 'Travel &amp; Entertainment', '12', '0'),
-('5790', '8812', 'Utilities', '12', '0'),
-('5800', '8760', 'Licenses', '12', '0');
+('1060', '', 'Chequing Account', '1', 0),
+('1065', '', 'Petty Cash', '1', 0),
+('1200', '', 'Accounts Receivables', '1', 0),
+('1205', '', 'Allowance for doubtful accounts', '1', 0),
+('1520', '', 'Inventory / General', '2', 0),
+('1530', '', 'Inventory / Aftermarket Parts', '2', 0),
+('1540', '', 'Inventory / Raw Materials', '2', 0),
+('1550', '', 'Goods Received Clearing account', '2', 0),
+('1820', '', 'Office Furniture and Equipment', '3', 0),
+('1825', '', 'Accum. Amort. - Furn. and Equip.', '3', 0),
+('1840', '', 'Vehicle', '3', 0),
+('1845', '', 'Accum. Amort. - Vehicle', '3', 0),
+('2100', '', 'Accounts Payable', '4', 0),
+('2105', '', 'Deferred Income', '4', 0),
+('2160', '', 'Federal Taxes Payable', '4', 0),
+('2170', '', 'Provincial Taxes Payable', '4', 0),
+('2310', '', 'GST', '4', 0),
+('2320', '', 'PST', '4', 0),
+('2380', '', 'Vacation Pay Payable', '4', 0),
+('2390', '', 'WCB Payable', '4', 0),
+('2410', '', 'EI Payable', '5', 0),
+('2420', '', 'CPP Payable', '5', 0),
+('2450', '', 'Income Tax Payable', '5', 0),
+('2620', '', 'Bank Loans', '6', 0),
+('2680', '', 'Loans from Shareholders', '6', 0),
+('3350', '', 'Common Shares', '7', 0),
+('4020', '', 'General Sales', '8', 0),
+('4030', '', 'Aftermarket Parts Sales', '8', 0),
+('4430', '', 'Shipping and Handling', '9', 0),
+('4440', '', 'Interest', '9', 0),
+('4450', '', 'Foreign Exchange Gain / (Loss)', '9', 0),
+('5010', '', 'Purchases', '10', 0),
+('5020', '', 'Material Usage Varaiance', '10', 0),
+('5050', '', 'Aftermarket Parts Cost', '10', 0),
+('5100', '', 'Freight', '10', 0),
+('5410', '', 'Wages and Salaries', '11', 0),
+('5420', '', 'EI Expense', '11', 0),
+('5430', '', 'CPP Expense', '11', 0),
+('5440', '', 'WCB Expense', '11', 0),
+('5610', '', 'Accounting and Legal', '12', 0),
+('5615', '', 'Advertising and Promotions', '12', 0),
+('5620', '', 'Bad Debts', '12', 0),
+('5660', '', 'Amortization Expense', '12', 0),
+('5680', '', 'Income Taxes', '12', 0),
+('5685', '', 'Insurance', '12', 0),
+('5690', '', 'Interest and Bank Charges', '12', 0),
+('5700', '', 'Office Supplies', '12', 0),
+('5760', '', 'Rent', '12', 0),
+('5765', '', 'Repair and Maintenance', '12', 0),
+('5780', '', 'Telephone', '12', 0),
+('5785', '', 'Travel and Entertainment', '12', 0),
+('5790', '', 'Utilities', '12', 0),
+('5800', '', 'Licenses', '12', 0),
+('5810', '', 'Foreign Exchange Loss', '12', 0),
+('9990', '', 'Year Profit/Loss', '12', 0);
 
 ### Structure of table `0_chart_types` ###
 
 DROP TABLE IF EXISTS `0_chart_types`;
-
-CREATE TABLE `0_chart_types` (
+CREATE TABLE IF NOT EXISTS `0_chart_types` (
   `id` varchar(10) NOT NULL,
   `name` varchar(60) NOT NULL DEFAULT '',
   `class_id` varchar(3) NOT NULL DEFAULT '',
@@ -277,9 +272,6 @@ CREATE TABLE `0_chart_types` (
 
 INSERT INTO `0_chart_types` VALUES
 ('1', 'CURRENT ASSETS', '1', '', '0'),
-('10', 'COST OF GOODS SOLD', '4', '', '0'),
-('11', 'PAYROLL EXPENSES', '4', '', '0'),
-('12', 'GENERAL &amp; ADMINISTRATIVE EXPENSES', '4', '', '0'),
 ('2', 'INVENTORY ASSETS', '1', '', '0'),
 ('3', 'CAPITAL ASSETS', '1', '', '0'),
 ('4', 'CURRENT LIABILITIES', '2', '', '0'),
@@ -287,13 +279,15 @@ INSERT INTO `0_chart_types` VALUES
 ('6', 'LONG TERM LIABILITIES', '2', '', '0'),
 ('7', 'SHARE CAPITAL', '2', '', '0'),
 ('8', 'SALES REVENUE', '3', '', '0'),
-('9', 'OTHER REVENUE', '3', '', '0');
+('9', 'OTHER REVENUE', '3', '', '0'),
+('10', 'COST OF GOODS SOLD', '4', '', '0'),
+('11', 'PAYROLL EXPENSES', '4', '', '0'),
+('12', 'GENERAL AND ADMINISTRATIVE EXPENSES', '4', '', '0');
 
 ### Structure of table `0_comments` ###
 
 DROP TABLE IF EXISTS `0_comments`;
-
-CREATE TABLE `0_comments` (
+CREATE TABLE IF NOT EXISTS `0_comments` (
   `type` int(11) NOT NULL DEFAULT '0',
   `id` int(11) NOT NULL DEFAULT '0',
   `date_` date DEFAULT '0000-00-00',
@@ -307,15 +301,14 @@ CREATE TABLE `0_comments` (
 ### Structure of table `0_credit_status` ###
 
 DROP TABLE IF EXISTS `0_credit_status`;
-
-CREATE TABLE `0_credit_status` (
+CREATE TABLE IF NOT EXISTS `0_credit_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reason_description` char(100) NOT NULL DEFAULT '',
   `dissallow_invoices` tinyint(1) NOT NULL DEFAULT '0',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `reason_description` (`reason_description`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_credit_status` ###
 
@@ -327,19 +320,18 @@ INSERT INTO `0_credit_status` VALUES
 ### Structure of table `0_crm_categories` ###
 
 DROP TABLE IF EXISTS `0_crm_categories`;
-
-CREATE TABLE `0_crm_categories` (
+CREATE TABLE IF NOT EXISTS `0_crm_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'pure technical key',
-  `type` varchar(20) NOT NULL,
-  `action` varchar(20) NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `description` tinytext NOT NULL,
+  `type` varchar(20) NOT NULL COMMENT 'contact type e.g. customer',
+  `action` varchar(20) NOT NULL COMMENT 'detailed usage e.g. department',
+  `name` varchar(30) NOT NULL COMMENT 'for category selector',
+  `description` tinytext NOT NULL COMMENT 'usage description',
   `system` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'nonzero for core system usage',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`,`action`),
   UNIQUE KEY `type_2` (`type`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_crm_categories` ###
 
@@ -360,13 +352,12 @@ INSERT INTO `0_crm_categories` VALUES
 ### Structure of table `0_crm_contacts` ###
 
 DROP TABLE IF EXISTS `0_crm_contacts`;
-
-CREATE TABLE `0_crm_contacts` (
+CREATE TABLE IF NOT EXISTS `0_crm_contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `person_id` int(11) NOT NULL DEFAULT '0' COMMENT 'foreign key to crm_contacts',
-  `type` varchar(20) NOT NULL,
-  `action` varchar(20) NOT NULL,
-  `entity_id` varchar(11) DEFAULT NULL,
+  `type` varchar(20) NOT NULL COMMENT 'foreign key to crm_categories',
+  `action` varchar(20) NOT NULL COMMENT 'foreign key to crm_categories',
+  `entity_id` varchar(11) DEFAULT NULL COMMENT 'entity id in related class table',
   PRIMARY KEY (`id`),
   KEY `type` (`type`,`action`)
 ) ENGINE=InnoDB ;
@@ -377,8 +368,7 @@ CREATE TABLE `0_crm_contacts` (
 ### Structure of table `0_crm_persons` ###
 
 DROP TABLE IF EXISTS `0_crm_persons`;
-
-CREATE TABLE `0_crm_persons` (
+CREATE TABLE IF NOT EXISTS `0_crm_persons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ref` varchar(30) NOT NULL,
   `name` varchar(60) NOT NULL,
@@ -401,31 +391,29 @@ CREATE TABLE `0_crm_persons` (
 ### Structure of table `0_currencies` ###
 
 DROP TABLE IF EXISTS `0_currencies`;
-
-CREATE TABLE `0_currencies` (
+CREATE TABLE IF NOT EXISTS `0_currencies` (
   `currency` varchar(60) NOT NULL DEFAULT '',
   `curr_abrev` char(3) NOT NULL DEFAULT '',
   `curr_symbol` varchar(10) NOT NULL DEFAULT '',
   `country` varchar(100) NOT NULL DEFAULT '',
   `hundreds_name` varchar(15) NOT NULL DEFAULT '',
-  `inactive` tinyint(1) NOT NULL DEFAULT '0',
   `auto_update` tinyint(1) NOT NULL DEFAULT '1',
+  `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`curr_abrev`)
 ) ENGINE=InnoDB ;
 
 ### Data of table `0_currencies` ###
 
 INSERT INTO `0_currencies` VALUES
-('CA Dollars', 'CAD', '', '', '', '0', '1'),
-('Euro', 'EUR', '?', 'Europe', 'Cents', '0', '1'),
-('Pounds', 'GBP', '?', 'England', 'Pence', '0', '1'),
-('US Dollars', 'USD', '$', 'United States', 'Cents', '0', '1');
+('CA Dollars', 'CAD', '', '', '', '1', '0'),
+('Euro', 'EUR', '€', 'Europe', 'Cents', '1', '0'),
+('Pounds', 'GBP', '£', 'England', 'Pence', '1', '0'),
+('US Dollars', 'USD', '$', 'United States', 'Cents', '1', '0');
 
 ### Structure of table `0_cust_allocations` ###
 
 DROP TABLE IF EXISTS `0_cust_allocations`;
-
-CREATE TABLE `0_cust_allocations` (
+CREATE TABLE IF NOT EXISTS `0_cust_allocations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `person_id` int(11) DEFAULT NULL,
   `amt` double unsigned DEFAULT NULL,
@@ -446,11 +434,11 @@ CREATE TABLE `0_cust_allocations` (
 ### Structure of table `0_cust_branch` ###
 
 DROP TABLE IF EXISTS `0_cust_branch`;
-
-CREATE TABLE `0_cust_branch` (
+CREATE TABLE IF NOT EXISTS `0_cust_branch` (
   `branch_code` int(11) NOT NULL AUTO_INCREMENT,
   `debtor_no` int(11) NOT NULL DEFAULT '0',
   `br_name` varchar(60) NOT NULL DEFAULT '',
+  `branch_ref` varchar(30) NOT NULL DEFAULT '',
   `br_address` tinytext NOT NULL,
   `area` int(11) DEFAULT NULL,
   `salesman` int(11) NOT NULL DEFAULT '0',
@@ -463,10 +451,9 @@ CREATE TABLE `0_cust_branch` (
   `default_ship_via` int(11) NOT NULL DEFAULT '1',
   `br_post_address` tinytext NOT NULL,
   `group_no` int(11) NOT NULL DEFAULT '0',
-  `notes` tinytext,
+  `notes` tinytext NOT NULL,
   `bank_account` varchar(60) DEFAULT NULL,
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
-  `branch_ref` varchar(30) NOT NULL,
   PRIMARY KEY (`branch_code`,`debtor_no`),
   KEY `branch_ref` (`branch_ref`),
   KEY `group_no` (`group_no`)
@@ -475,15 +462,42 @@ CREATE TABLE `0_cust_branch` (
 ### Data of table `0_cust_branch` ###
 
 
+### Structure of table `0_debtors_master` ###
+
+DROP TABLE IF EXISTS `0_debtors_master`;
+CREATE TABLE IF NOT EXISTS `0_debtors_master` (
+  `debtor_no` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `debtor_ref` varchar(30) NOT NULL,
+  `address` tinytext,
+  `tax_id` varchar(55) NOT NULL DEFAULT '',
+  `curr_code` char(3) NOT NULL DEFAULT '',
+  `sales_type` int(11) NOT NULL DEFAULT '1',
+  `dimension_id` int(11) NOT NULL DEFAULT '0',
+  `dimension2_id` int(11) NOT NULL DEFAULT '0',
+  `credit_status` int(11) NOT NULL DEFAULT '0',
+  `payment_terms` int(11) DEFAULT NULL,
+  `discount` double NOT NULL DEFAULT '0',
+  `pymt_discount` double NOT NULL DEFAULT '0',
+  `credit_limit` float NOT NULL DEFAULT '1000',
+  `notes` tinytext,
+  `inactive` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`debtor_no`),
+  KEY `name` (`name`),
+  UNIQUE KEY `debtor_ref` (`debtor_ref`)
+) ENGINE=InnoDB ;
+
+### Data of table `0_debtors_master` ###
+
+
 ### Structure of table `0_debtor_trans` ###
 
 DROP TABLE IF EXISTS `0_debtor_trans`;
-
-CREATE TABLE `0_debtor_trans` (
+CREATE TABLE IF NOT EXISTS `0_debtor_trans` (
   `trans_no` int(11) unsigned NOT NULL DEFAULT '0',
   `type` smallint(6) unsigned NOT NULL DEFAULT '0',
   `version` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `debtor_no` int(11) unsigned NOT NULL DEFAULT '0',
+  `debtor_no` int(11) unsigned NOT NULL,
   `branch_code` int(11) NOT NULL DEFAULT '-1',
   `tran_date` date NOT NULL DEFAULT '0000-00-00',
   `due_date` date NOT NULL DEFAULT '0000-00-00',
@@ -505,7 +519,8 @@ CREATE TABLE `0_debtor_trans` (
   `tax_included` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`type`,`trans_no`,`debtor_no`),
   KEY `debtor_no` (`debtor_no`,`branch_code`),
-  KEY `tran_date` (`tran_date`)
+  KEY `tran_date` (`tran_date`),
+  KEY `order_` (`order_`)
 ) ENGINE=InnoDB ;
 
 ### Data of table `0_debtor_trans` ###
@@ -514,8 +529,7 @@ CREATE TABLE `0_debtor_trans` (
 ### Structure of table `0_debtor_trans_details` ###
 
 DROP TABLE IF EXISTS `0_debtor_trans_details`;
-
-CREATE TABLE `0_debtor_trans_details` (
+CREATE TABLE IF NOT EXISTS `0_debtor_trans_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `debtor_trans_no` int(11) DEFAULT NULL,
   `debtor_trans_type` int(11) DEFAULT NULL,
@@ -527,7 +541,7 @@ CREATE TABLE `0_debtor_trans_details` (
   `discount_percent` double NOT NULL DEFAULT '0',
   `standard_cost` double NOT NULL DEFAULT '0',
   `qty_done` double NOT NULL DEFAULT '0',
-  `src_id` int(11) DEFAULT NULL,
+  `src_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Transaction` (`debtor_trans_type`,`debtor_trans_no`),
   KEY `src_id` (`src_id`)
@@ -535,41 +549,10 @@ CREATE TABLE `0_debtor_trans_details` (
 
 ### Data of table `0_debtor_trans_details` ###
 
-
-### Structure of table `0_debtors_master` ###
-
-DROP TABLE IF EXISTS `0_debtors_master`;
-
-CREATE TABLE `0_debtors_master` (
-  `debtor_no` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT '',
-  `address` tinytext,
-  `tax_id` varchar(55) NOT NULL DEFAULT '',
-  `curr_code` char(3) NOT NULL DEFAULT '',
-  `sales_type` int(11) NOT NULL DEFAULT '1',
-  `dimension_id` int(11) NOT NULL DEFAULT '0',
-  `dimension2_id` int(11) NOT NULL DEFAULT '0',
-  `credit_status` int(11) NOT NULL DEFAULT '0',
-  `payment_terms` int(11) DEFAULT NULL,
-  `discount` double NOT NULL DEFAULT '0',
-  `pymt_discount` double NOT NULL DEFAULT '0',
-  `credit_limit` float NOT NULL DEFAULT '1000',
-  `notes` tinytext,
-  `inactive` tinyint(1) NOT NULL DEFAULT '0',
-  `debtor_ref` varchar(30) NOT NULL,
-  PRIMARY KEY (`debtor_no`),
-  UNIQUE KEY `debtor_ref` (`debtor_ref`),
-  KEY `name` (`name`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_debtors_master` ###
-
-
 ### Structure of table `0_dimensions` ###
 
 DROP TABLE IF EXISTS `0_dimensions`;
-
-CREATE TABLE `0_dimensions` (
+CREATE TABLE IF NOT EXISTS `0_dimensions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reference` varchar(60) NOT NULL DEFAULT '',
   `name` varchar(60) NOT NULL DEFAULT '',
@@ -590,8 +573,7 @@ CREATE TABLE `0_dimensions` (
 ### Structure of table `0_exchange_rates` ###
 
 DROP TABLE IF EXISTS `0_exchange_rates`;
-
-CREATE TABLE `0_exchange_rates` (
+CREATE TABLE IF NOT EXISTS `0_exchange_rates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `curr_code` char(3) NOT NULL DEFAULT '',
   `rate_buy` double NOT NULL DEFAULT '0',
@@ -607,8 +589,7 @@ CREATE TABLE `0_exchange_rates` (
 ### Structure of table `0_fiscal_year` ###
 
 DROP TABLE IF EXISTS `0_fiscal_year`;
-
-CREATE TABLE `0_fiscal_year` (
+CREATE TABLE IF NOT EXISTS `0_fiscal_year` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `begin` date DEFAULT '0000-00-00',
   `end` date DEFAULT '0000-00-00',
@@ -616,18 +597,17 @@ CREATE TABLE `0_fiscal_year` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `begin` (`begin`),
   UNIQUE KEY `end` (`end`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2008-01-01', '2008-12-31', '0');
+ ('1', '2018-01-01', '2018-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
 DROP TABLE IF EXISTS `0_gl_trans`;
-
-CREATE TABLE `0_gl_trans` (
+CREATE TABLE IF NOT EXISTS `0_gl_trans` (
   `counter` int(11) NOT NULL AUTO_INCREMENT,
   `type` smallint(6) NOT NULL DEFAULT '0',
   `type_no` int(11) NOT NULL DEFAULT '0',
@@ -653,15 +633,14 @@ CREATE TABLE `0_gl_trans` (
 ### Structure of table `0_grn_batch` ###
 
 DROP TABLE IF EXISTS `0_grn_batch`;
-
-CREATE TABLE `0_grn_batch` (
+CREATE TABLE IF NOT EXISTS `0_grn_batch` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) NOT NULL DEFAULT '0',
   `purch_order_no` int(11) DEFAULT NULL,
   `reference` varchar(60) NOT NULL DEFAULT '',
   `delivery_date` date NOT NULL DEFAULT '0000-00-00',
   `loc_code` varchar(5) DEFAULT NULL,
-  `rate` double DEFAULT '1',
+  `rate` double NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `delivery_date` (`delivery_date`),
   KEY `purch_order_no` (`purch_order_no`)
@@ -673,8 +652,7 @@ CREATE TABLE `0_grn_batch` (
 ### Structure of table `0_grn_items` ###
 
 DROP TABLE IF EXISTS `0_grn_items`;
-
-CREATE TABLE `0_grn_items` (
+CREATE TABLE IF NOT EXISTS `0_grn_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `grn_batch_id` int(11) DEFAULT NULL,
   `po_detail_item` int(11) NOT NULL DEFAULT '0',
@@ -692,14 +670,13 @@ CREATE TABLE `0_grn_items` (
 ### Structure of table `0_groups` ###
 
 DROP TABLE IF EXISTS `0_groups`;
-
-CREATE TABLE `0_groups` (
+CREATE TABLE IF NOT EXISTS `0_groups` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(60) NOT NULL DEFAULT '',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `description` (`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_groups` ###
 
@@ -711,8 +688,7 @@ INSERT INTO `0_groups` VALUES
 ### Structure of table `0_item_codes` ###
 
 DROP TABLE IF EXISTS `0_item_codes`;
-
-CREATE TABLE `0_item_codes` (
+CREATE TABLE IF NOT EXISTS `0_item_codes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `item_code` varchar(20) NOT NULL,
   `stock_id` varchar(20) NOT NULL,
@@ -732,8 +708,7 @@ CREATE TABLE `0_item_codes` (
 ### Structure of table `0_item_tax_type_exemptions` ###
 
 DROP TABLE IF EXISTS `0_item_tax_type_exemptions`;
-
-CREATE TABLE `0_item_tax_type_exemptions` (
+CREATE TABLE IF NOT EXISTS `0_item_tax_type_exemptions` (
   `item_tax_type_id` int(11) NOT NULL DEFAULT '0',
   `tax_type_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`item_tax_type_id`,`tax_type_id`)
@@ -745,8 +720,7 @@ CREATE TABLE `0_item_tax_type_exemptions` (
 ### Structure of table `0_item_tax_types` ###
 
 DROP TABLE IF EXISTS `0_item_tax_types`;
-
-CREATE TABLE `0_item_tax_types` (
+CREATE TABLE IF NOT EXISTS `0_item_tax_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL DEFAULT '',
   `exempt` tinyint(1) NOT NULL DEFAULT '0',
@@ -761,8 +735,7 @@ CREATE TABLE `0_item_tax_types` (
 ### Structure of table `0_item_units` ###
 
 DROP TABLE IF EXISTS `0_item_units`;
-
-CREATE TABLE `0_item_units` (
+CREATE TABLE IF NOT EXISTS `0_item_units` (
   `abbr` varchar(20) NOT NULL,
   `name` varchar(40) NOT NULL,
   `decimals` tinyint(2) NOT NULL,
@@ -774,13 +747,13 @@ CREATE TABLE `0_item_units` (
 ### Data of table `0_item_units` ###
 
 INSERT INTO `0_item_units` VALUES
-('ea.', 'Each', '0', '0');
+('each', 'Each', '0', '0'),
+('hr', 'Hours', 0, 0);
 
 ### Structure of table `0_journal` ###
 
 DROP TABLE IF EXISTS `0_journal`;
-
-CREATE TABLE `0_journal` (
+CREATE TABLE IF NOT EXISTS `0_journal` (
   `type` smallint(6) NOT NULL DEFAULT '0',
   `trans_no` int(11) NOT NULL DEFAULT '0',
   `tran_date` date DEFAULT '0000-00-00',
@@ -801,8 +774,7 @@ CREATE TABLE `0_journal` (
 ### Structure of table `0_loc_stock` ###
 
 DROP TABLE IF EXISTS `0_loc_stock`;
-
-CREATE TABLE `0_loc_stock` (
+CREATE TABLE IF NOT EXISTS `0_loc_stock` (
   `loc_code` char(5) NOT NULL DEFAULT '',
   `stock_id` char(20) NOT NULL DEFAULT '',
   `reorder_level` double NOT NULL DEFAULT '0',
@@ -816,8 +788,7 @@ CREATE TABLE `0_loc_stock` (
 ### Structure of table `0_locations` ###
 
 DROP TABLE IF EXISTS `0_locations`;
-
-CREATE TABLE `0_locations` (
+CREATE TABLE IF NOT EXISTS `0_locations` (
   `loc_code` varchar(5) NOT NULL DEFAULT '',
   `location_name` varchar(60) NOT NULL DEFAULT '',
   `delivery_address` tinytext NOT NULL,
@@ -839,8 +810,7 @@ INSERT INTO `0_locations` VALUES
 ### Structure of table `0_payment_terms` ###
 
 DROP TABLE IF EXISTS `0_payment_terms`;
-
-CREATE TABLE `0_payment_terms` (
+CREATE TABLE IF NOT EXISTS `0_payment_terms` (
   `terms_indicator` int(11) NOT NULL AUTO_INCREMENT,
   `terms` char(80) NOT NULL DEFAULT '',
   `days_before_due` smallint(6) NOT NULL DEFAULT '0',
@@ -848,7 +818,7 @@ CREATE TABLE `0_payment_terms` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`terms_indicator`),
   UNIQUE KEY `terms` (`terms`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_payment_terms` ###
 
@@ -856,13 +826,13 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Due 15th Of the Following Month', '0', '17', '0'),
 ('2', 'Due By End Of The Following Month', '0', '30', '0'),
 ('3', 'Payment due within 10 days', '10', '0', '0'),
-('4', 'Cash Only', '1', '0', '0');
+('4', 'Cash Only', '0', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 ### Structure of table `0_prices` ###
 
 DROP TABLE IF EXISTS `0_prices`;
-
-CREATE TABLE `0_prices` (
+CREATE TABLE IF NOT EXISTS `0_prices` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `stock_id` varchar(20) NOT NULL DEFAULT '',
   `sales_type_id` int(11) NOT NULL DEFAULT '0',
@@ -878,8 +848,7 @@ CREATE TABLE `0_prices` (
 ### Structure of table `0_print_profiles` ###
 
 DROP TABLE IF EXISTS `0_print_profiles`;
-
-CREATE TABLE `0_print_profiles` (
+CREATE TABLE IF NOT EXISTS `0_print_profiles` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `profile` varchar(30) NOT NULL,
   `report` varchar(5) DEFAULT NULL,
@@ -904,8 +873,7 @@ INSERT INTO `0_print_profiles` VALUES
 ### Structure of table `0_printers` ###
 
 DROP TABLE IF EXISTS `0_printers`;
-
-CREATE TABLE `0_printers` (
+CREATE TABLE IF NOT EXISTS `0_printers` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `description` varchar(60) NOT NULL,
@@ -927,8 +895,7 @@ INSERT INTO `0_printers` VALUES
 ### Structure of table `0_purch_data` ###
 
 DROP TABLE IF EXISTS `0_purch_data`;
-
-CREATE TABLE `0_purch_data` (
+CREATE TABLE IF NOT EXISTS `0_purch_data` (
   `supplier_id` int(11) NOT NULL DEFAULT '0',
   `stock_id` char(20) NOT NULL DEFAULT '',
   `price` double NOT NULL DEFAULT '0',
@@ -968,8 +935,7 @@ CREATE TABLE `0_purch_order_details` (
 ### Structure of table `0_purch_orders` ###
 
 DROP TABLE IF EXISTS `0_purch_orders`;
-
-CREATE TABLE `0_purch_orders` (
+CREATE TABLE IF NOT EXISTS `0_purch_orders` (
   `order_no` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) NOT NULL DEFAULT '0',
   `comments` tinytext,
@@ -992,18 +958,17 @@ CREATE TABLE `0_purch_orders` (
 ### Structure of table `0_quick_entries` ###
 
 DROP TABLE IF EXISTS `0_quick_entries`;
-
-CREATE TABLE `0_quick_entries` (
+CREATE TABLE IF NOT EXISTS `0_quick_entries` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `type` tinyint(1) NOT NULL DEFAULT '0',
   `description` varchar(60) NOT NULL,
-  `usage` varchar(120) DEFAULT NULL,
+  `usage` varchar(120) NULL,
   `base_amount` double NOT NULL DEFAULT '0',
   `base_desc` varchar(60) DEFAULT NULL,
   `bal_type` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `description` (`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_quick_entries` ###
 
@@ -1027,7 +992,7 @@ CREATE TABLE `0_quick_entry_lines` (
   `dimension2_id` smallint(6) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `qid` (`qid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_quick_entry_lines` ###
 
@@ -1039,8 +1004,7 @@ INSERT INTO `0_quick_entry_lines` VALUES
 ### Structure of table `0_recurrent_invoices` ###
 
 DROP TABLE IF EXISTS `0_recurrent_invoices`;
-
-CREATE TABLE `0_recurrent_invoices` (
+CREATE TABLE IF NOT EXISTS `0_recurrent_invoices` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(60) NOT NULL DEFAULT '',
   `order_no` int(11) unsigned NOT NULL,
@@ -1061,8 +1025,7 @@ CREATE TABLE `0_recurrent_invoices` (
 ### Structure of table `0_reflines` ###
 
 DROP TABLE IF EXISTS `0_reflines`;
-
-CREATE TABLE `0_reflines` (
+CREATE TABLE IF NOT EXISTS `0_reflines` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `trans_type` int(11) NOT NULL,
   `prefix` char(5) NOT NULL DEFAULT '',
@@ -1072,39 +1035,38 @@ CREATE TABLE `0_reflines` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `prefix` (`trans_type`,`prefix`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_reflines` ###
 
 INSERT INTO `0_reflines` VALUES
-('1', '0', '', '1', '', '1', '0'),
-('2', '1', '', '1', '', '1', '0'),
-('3', '2', '', '1', '', '1', '0'),
-('4', '4', '', '1', '', '1', '0'),
-('5', '10', '', '1', '', '1', '0'),
-('6', '11', '', '1', '', '1', '0'),
-('7', '12', '', '1', '', '1', '0'),
-('8', '13', '', '1', '', '1', '0'),
-('9', '16', '', '1', '', '1', '0'),
-('10', '17', '', '1', '', '1', '0'),
-('11', '18', '', '1', '', '1', '0'),
-('12', '20', '', '1', '', '1', '0'),
-('13', '21', '', '1', '', '1', '0'),
-('14', '22', '', '1', '', '1', '0'),
-('15', '25', '', '1', '', '1', '0'),
-('16', '26', '', '1', '', '1', '0'),
-('17', '28', '', '1', '', '1', '0'),
-('18', '29', '', '1', '', '1', '0'),
-('19', '30', '', '1', '', '1', '0'),
-('20', '32', '', '1', '', '1', '0'),
-('21', '35', '', '1', '', '1', '0'),
-('22', '40', '', '1', '', '1', '0');
+('1', '0', '', '{001}/{YYYY}', '', '1', '0'),
+('2', '1', '', '{001}/{YYYY}', '', '1', '0'),
+('3', '2', '', '{001}/{YYYY}', '', '1', '0'),
+('4', '4', '', '{001}/{YYYY}', '', '1', '0'),
+('5', '10', '', '{001}/{YYYY}', '', '1', '0'),
+('6', '11', '', '{001}/{YYYY}', '', '1', '0'),
+('7', '12', '', '{001}/{YYYY}', '', '1', '0'),
+('8', '13', '', '{001}/{YYYY}', '', '1', '0'),
+('9', '16', '', '{001}/{YYYY}', '', '1', '0'),
+('10', '17', '', '{001}/{YYYY}', '', '1', '0'),
+('11', '18', '', '{001}/{YYYY}', '', '1', '0'),
+('12', '20', '', '{001}/{YYYY}', '', '1', '0'),
+('13', '21', '', '{001}/{YYYY}', '', '1', '0'),
+('14', '22', '', '{001}/{YYYY}', '', '1', '0'),
+('15', '25', '', '{001}/{YYYY}', '', '1', '0'),
+('16', '26', '', '{001}/{YYYY}', '', '1', '0'),
+('17', '28', '', '{001}/{YYYY}', '', '1', '0'),
+('18', '29', '', '{001}/{YYYY}', '', '1', '0'),
+('19', '30', '', '{001}/{YYYY}', '', '1', '0'),
+('20', '32', '', '{001}/{YYYY}', '', '1', '0'),
+('21', '35', '', '{001}/{YYYY}', '', '1', '0'),
+('22', '40', '', '{001}/{YYYY}', '', '1', '0');
 
 ### Structure of table `0_refs` ###
 
 DROP TABLE IF EXISTS `0_refs`;
-
-CREATE TABLE `0_refs` (
+CREATE TABLE IF NOT EXISTS `0_refs` (
   `id` int(11) NOT NULL DEFAULT '0',
   `type` int(11) NOT NULL DEFAULT '0',
   `reference` varchar(100) NOT NULL DEFAULT '',
@@ -1118,8 +1080,7 @@ CREATE TABLE `0_refs` (
 ### Structure of table `0_sales_order_details` ###
 
 DROP TABLE IF EXISTS `0_sales_order_details`;
-
-CREATE TABLE `0_sales_order_details` (
+CREATE TABLE IF NOT EXISTS `0_sales_order_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_no` int(11) NOT NULL DEFAULT '0',
   `trans_type` smallint(6) NOT NULL DEFAULT '30',
@@ -1141,8 +1102,7 @@ CREATE TABLE `0_sales_order_details` (
 ### Structure of table `0_sales_orders` ###
 
 DROP TABLE IF EXISTS `0_sales_orders`;
-
-CREATE TABLE `0_sales_orders` (
+CREATE TABLE IF NOT EXISTS `0_sales_orders` (
   `order_no` int(11) NOT NULL,
   `trans_type` smallint(6) NOT NULL DEFAULT '30',
   `version` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -1175,8 +1135,7 @@ CREATE TABLE `0_sales_orders` (
 ### Structure of table `0_sales_pos` ###
 
 DROP TABLE IF EXISTS `0_sales_pos`;
-
-CREATE TABLE `0_sales_pos` (
+CREATE TABLE IF NOT EXISTS `0_sales_pos` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `pos_name` varchar(30) NOT NULL,
   `cash_sale` tinyint(1) NOT NULL,
@@ -1186,7 +1145,7 @@ CREATE TABLE `0_sales_pos` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `pos_name` (`pos_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_sales_pos` ###
 
@@ -1196,8 +1155,7 @@ INSERT INTO `0_sales_pos` VALUES
 ### Structure of table `0_sales_types` ###
 
 DROP TABLE IF EXISTS `0_sales_types`;
-
-CREATE TABLE `0_sales_types` (
+CREATE TABLE IF NOT EXISTS `0_sales_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sales_type` char(50) NOT NULL DEFAULT '',
   `tax_included` int(1) NOT NULL DEFAULT '0',
@@ -1205,7 +1163,7 @@ CREATE TABLE `0_sales_types` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sales_type` (`sales_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_sales_types` ###
 
@@ -1216,8 +1174,7 @@ INSERT INTO `0_sales_types` VALUES
 ### Structure of table `0_salesman` ###
 
 DROP TABLE IF EXISTS `0_salesman`;
-
-CREATE TABLE `0_salesman` (
+CREATE TABLE IF NOT EXISTS `0_salesman` (
   `salesman_code` int(11) NOT NULL AUTO_INCREMENT,
   `salesman_name` char(60) NOT NULL DEFAULT '',
   `salesman_phone` char(30) NOT NULL DEFAULT '',
@@ -1239,8 +1196,7 @@ INSERT INTO `0_salesman` VALUES
 ### Structure of table `0_security_roles` ###
 
 DROP TABLE IF EXISTS `0_security_roles`;
-
-CREATE TABLE `0_security_roles` (
+CREATE TABLE IF NOT EXISTS `0_security_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role` varchar(30) NOT NULL,
   `description` varchar(50) DEFAULT NULL,
@@ -1249,27 +1205,26 @@ CREATE TABLE `0_security_roles` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role` (`role`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_security_roles` ###
 
 INSERT INTO `0_security_roles` VALUES
-('1', 'Inquiries', 'Inquiries', '768;2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15872;16128', '257;258;259;260;513;514;515;516;517;518;519;520;521;522;523;524;525;773;774;2822;3073;3075;3076;3077;3329;3330;3331;3332;3333;3334;3335;5377;5633;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8450;8451;10497;10753;11009;11010;11012;13313;13315;15617;15618;15619;15620;15621;15622;15623;15624;15625;15626;15873;15882;16129;16130;16131;16132;775', '0'),
-('2', 'System Administrator', 'System Administrator', '256;512;768;2816;3072;3328;5376;5632;5888;7936;8192;8448;10496;10752;11008;13056;13312;15616;15872;16128', '257;258;259;260;513;514;515;516;517;518;519;520;521;522;523;524;525;526;769;770;771;772;773;774;2817;2818;2819;2820;2821;2822;2823;3073;3074;3082;3075;3076;3077;3078;3079;3080;3081;3329;3330;3331;3332;3333;3334;3335;5377;5633;5634;5635;5636;5637;5641;5638;5639;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8195;8196;8197;8449;8450;8451;10497;10753;10754;10755;10756;10757;11009;11010;11011;11012;13057;13313;13314;13315;15617;15618;15619;15620;15621;15622;15623;15624;15628;15625;15626;15627;15873;15874;15875;15876;15877;15878;15879;15880;15883;15881;15882;16129;16130;16131;16132;775', '0'),
-('3', 'Salesman', 'Salesman', '768;3072;5632;8192;15872', '773;774;3073;3075;3081;5633;8194;15873;775', '0'),
-('4', 'Stock Manager', 'Stock Manager', '2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15872;16128;768', '775', '0'),
-('5', 'Production Manager', 'Production Manager', '512;2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128;768', '775', '0'),
-('6', 'Purchase Officer', 'Purchase Officer', '512;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128;768', '775', '0'),
-('7', 'AR Officer', 'AR Officer', '512;768;2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '521;523;524;771;773;774;2818;2819;2820;2821;2822;2823;3073;3073;3074;3075;3076;3077;3078;3079;3080;3081;3081;3329;3330;3330;3330;3331;3331;3332;3333;3334;3335;5633;5633;5634;5637;5638;5639;5640;5640;5889;5890;5891;8193;8194;8194;8196;8197;8450;8451;10753;10755;11009;11010;11012;13313;13315;15617;15619;15620;15621;15624;15624;15873;15876;15877;15878;15880;15882;16129;16130;16131;16132;775', '0'),
-('8', 'AP Officer', 'AP Officer', '512;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128;768', '775', '0'),
-('9', 'Accountant', 'New Accountant', '512;768;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '257;258;259;260;521;523;524;771;772;773;774;2818;2819;2820;2821;2822;2823;3073;3074;3075;3076;3077;3078;3079;3080;3081;3329;3330;3331;3332;3333;3334;3335;5377;5633;5634;5635;5637;5638;5639;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8196;8197;8449;8450;8451;10497;10753;10755;11009;11010;11012;13313;13315;15617;15618;15619;15620;15621;15624;15873;15876;15877;15878;15880;15882;16129;16130;16131;16132;775', '0'),
-('10', 'Sub Admin', 'Sub Admin', '512;768;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '257;258;259;260;521;523;524;771;772;773;774;2818;2819;2820;2821;2822;2823;3073;3074;3082;3075;3076;3077;3078;3079;3080;3081;3329;3330;3331;3332;3333;3334;3335;5377;5633;5634;5635;5637;5638;5639;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8196;8197;8449;8450;8451;10497;10753;10755;11009;11010;11012;13057;13313;13315;15617;15619;15620;15621;15624;15873;15874;15876;15877;15878;15879;15880;15882;16129;16130;16131;16132;775', '0');
+(1, 'Inquiries', 'Inquiries', '768;2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15872;16128', '257;258;259;260;513;514;515;516;517;518;519;520;521;522;523;524;525;773;774;2822;3073;3075;3076;3077;3329;3330;3331;3332;3333;3334;3335;5377;5633;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8450;8451;10497;10753;11009;11010;11012;13313;13315;15617;15618;15619;15620;15621;15622;15623;15624;15625;15626;15873;15882;16129;16130;16131;16132;775', 0),
+(2, 'System Administrator', 'System Administrator', '256;512;768;2816;3072;3328;5376;5632;5888;7936;8192;8448;9472;9728;10496;10752;11008;13056;13312;15616;15872;16128', '257;258;259;260;513;514;515;516;517;518;519;520;521;522;523;524;525;526;769;770;771;772;773;774;2817;2818;2819;2820;2821;2822;2823;3073;3074;3082;3075;3076;3077;3078;3079;3080;3081;3329;3330;3331;3332;3333;3334;3335;5377;5633;5634;5635;5636;5637;5641;5638;5639;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8195;8196;8197;8449;8450;8451;9217;9218;9220;9473;9474;9475;9476;9729;10497;10753;10754;10755;10756;10757;11009;11010;11011;11012;13057;13313;13314;13315;15617;15618;15619;15620;15621;15622;15623;15624;15628;15625;15626;15627;15873;15874;15875;15876;15877;15878;15879;15880;15883;15881;15882;16129;16130;16131;16132;775', 0),
+(3, 'Salesman', 'Salesman', '768;3072;5632;8192;15872', '773;774;3073;3075;3081;5633;8194;15873;775', 0),
+(4, 'Stock Manager', 'Stock Manager', '768;2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15872;16128', '2818;2822;3073;3076;3077;3329;3330;3330;3330;3331;3331;3332;3333;3334;3335;5633;5640;5889;5890;5891;8193;8194;8450;8451;10753;11009;11010;11012;13313;13315;15882;16129;16130;16131;16132;775', 0),
+(5, 'Production Manager', 'Production Manager', '512;768;2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '521;523;524;2818;2819;2820;2821;2822;2823;3073;3074;3076;3077;3078;3079;3080;3081;3329;3330;3330;3330;3331;3331;3332;3333;3334;3335;5633;5640;5640;5889;5890;5891;8193;8194;8196;8197;8450;8451;10753;10755;11009;11010;11012;13313;13315;15617;15619;15620;15621;15624;15624;15876;15877;15880;15882;16129;16130;16131;16132;775', 0),
+(6, 'Purchase Officer', 'Purchase Officer', '512;768;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '521;523;524;2818;2819;2820;2821;2822;2823;3073;3074;3076;3077;3078;3079;3080;3081;3329;3330;3330;3330;3331;3331;3332;3333;3334;3335;5377;5633;5635;5640;5640;5889;5890;5891;8193;8194;8196;8197;8449;8450;8451;10753;10755;11009;11010;11012;13313;13315;15617;15619;15620;15621;15624;15624;15876;15877;15880;15882;16129;16130;16131;16132;775', 0),
+(7, 'AR Officer', 'AR Officer', '512;768;2816;3072;3328;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '521;523;524;771;773;774;2818;2819;2820;2821;2822;2823;3073;3073;3074;3075;3076;3077;3078;3079;3080;3081;3081;3329;3330;3330;3330;3331;3331;3332;3333;3334;3335;5633;5633;5634;5637;5638;5639;5640;5640;5889;5890;5891;8193;8194;8194;8196;8197;8450;8451;10753;10755;11009;11010;11012;13313;13315;15617;15619;15620;15621;15624;15624;15873;15876;15877;15878;15880;15882;16129;16130;16131;16132;775', 0),
+(8, 'AP Officer', 'AP Officer', '512;768;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '257;258;259;260;521;523;524;769;770;771;772;773;774;2818;2819;2820;2821;2822;2823;3073;3074;3082;3076;3077;3078;3079;3080;3081;3329;3330;3331;3332;3333;3334;3335;5377;5633;5635;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8196;8197;8449;8450;8451;10497;10753;10755;11009;11010;11012;13057;13313;13315;15617;15619;15620;15621;15624;15876;15877;15880;15882;16129;16130;16131;16132;775', 0),
+(9, 'Accountant', 'New Accountant', '512;768;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '257;258;259;260;521;523;524;771;772;773;774;2818;2819;2820;2821;2822;2823;3073;3074;3075;3076;3077;3078;3079;3080;3081;3329;3330;3331;3332;3333;3334;3335;5377;5633;5634;5635;5637;5638;5639;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8196;8197;8449;8450;8451;10497;10753;10755;11009;11010;11012;13313;13315;15617;15618;15619;15620;15621;15624;15873;15876;15877;15878;15880;15882;16129;16130;16131;16132;775', 0),
+(10, 'Sub Admin', 'Sub Admin', '512;768;2816;3072;3328;5376;5632;5888;8192;8448;10752;11008;13312;15616;15872;16128', '257;258;259;260;521;523;524;771;772;773;774;2818;2819;2820;2821;2822;2823;3073;3074;3082;3075;3076;3077;3078;3079;3080;3081;3329;3330;3331;3332;3333;3334;3335;5377;5633;5634;5635;5637;5638;5639;5640;5889;5890;5891;7937;7938;7939;7940;8193;8194;8196;8197;8449;8450;8451;10497;10753;10755;11009;11010;11012;13057;13313;13315;15617;15619;15620;15621;15624;15873;15874;15876;15877;15878;15879;15880;15882;16129;16130;16131;16132;775', 0);
 
 ### Structure of table `0_shippers` ###
 
 DROP TABLE IF EXISTS `0_shippers`;
-
-CREATE TABLE `0_shippers` (
+CREATE TABLE IF NOT EXISTS `0_shippers` (
   `shipper_id` int(11) NOT NULL AUTO_INCREMENT,
   `shipper_name` varchar(60) NOT NULL DEFAULT '',
   `phone` varchar(30) NOT NULL DEFAULT '',
@@ -1279,7 +1234,7 @@ CREATE TABLE `0_shippers` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`shipper_id`),
   UNIQUE KEY `name` (`shipper_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_shippers` ###
 
@@ -1289,8 +1244,7 @@ INSERT INTO `0_shippers` VALUES
 ### Structure of table `0_sql_trail` ###
 
 DROP TABLE IF EXISTS `0_sql_trail`;
-
-CREATE TABLE `0_sql_trail` (
+CREATE TABLE IF NOT EXISTS `0_sql_trail` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sql` text NOT NULL,
   `result` tinyint(1) NOT NULL,
@@ -1304,11 +1258,9 @@ CREATE TABLE `0_sql_trail` (
 ### Structure of table `0_stock_category` ###
 
 DROP TABLE IF EXISTS `0_stock_category`;
-
-CREATE TABLE `0_stock_category` (
+CREATE TABLE IF NOT EXISTS `0_stock_category` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(60) NOT NULL DEFAULT '',
-  `inactive` tinyint(1) NOT NULL DEFAULT '0',
   `dflt_tax_type` int(11) NOT NULL DEFAULT '1',
   `dflt_units` varchar(20) NOT NULL DEFAULT 'each',
   `dflt_mb_flag` char(1) NOT NULL DEFAULT 'B',
@@ -1319,25 +1271,25 @@ CREATE TABLE `0_stock_category` (
   `dflt_wip_act` varchar(15) NOT NULL DEFAULT '',
   `dflt_dim1` int(11) DEFAULT NULL,
   `dflt_dim2` int(11) DEFAULT NULL,
+  `inactive` tinyint(1) NOT NULL DEFAULT '0',
   `dflt_no_sale` tinyint(1) NOT NULL DEFAULT '0',
   `dflt_no_purchase` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`category_id`),
   UNIQUE KEY `description` (`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_stock_category` ###
 
 INSERT INTO `0_stock_category` VALUES
-('1', 'Components', '0', '1', 'each', 'B', '4020', '5010', '1520', '1520', '1520', '0', '0', '0', '0'),
-('2', 'Charges', '0', '1', 'each', 'B', '4020', '5010', '1520', '1520', '1520', '0', '0', '0', '0'),
-('3', 'Systems', '0', '1', 'each', 'B', '4020', '5010', '1520', '1520', '1520', '0', '0', '0', '0'),
-('4', 'Services', '0', '1', 'each', 'B', '4020', '5010', '1520', '1520', '1520', '0', '0', '0', '0');
+(1, 'Components', 1, 'each', 'B', '4020', '5010', '1520', '5020', '1530', 0, 0, 0, 0, 0),
+(2, 'Charges', 1, 'each', 'D', '4020', '5010', '1520', '5020', '1530', 0, 0, 0, 0, 0),
+(3, 'Systems', 1, 'each', 'M', '4020', '5010', '1520', '5020', '1530', 0, 0, 0, 0, 0),
+(4, 'Services', 1, 'hr', 'D', '4020', '5010', '1520', '5020', '1530', 0, 0, 0, 0, 0);
 
 ### Structure of table `0_stock_fa_class` ###
 
 DROP TABLE IF EXISTS `0_stock_fa_class`;
-
-CREATE TABLE `0_stock_fa_class` (
+CREATE TABLE IF NOT EXISTS `0_stock_fa_class` (
   `fa_class_id` varchar(20) NOT NULL DEFAULT '',
   `parent_id` varchar(20) NOT NULL DEFAULT '',
   `description` varchar(200) NOT NULL DEFAULT '',
@@ -1379,7 +1331,7 @@ CREATE TABLE `0_stock_master` (
   `editable` tinyint(1) NOT NULL DEFAULT '0',
   `depreciation_method` char(1) NOT NULL DEFAULT 'S',
   `depreciation_rate` double NOT NULL DEFAULT '0',
-  `depreciation_factor` double NOT NULL DEFAULT '0',
+  `depreciation_factor` double NOT NULL DEFAULT '1',
   `depreciation_start` date NOT NULL DEFAULT '0000-00-00',
   `depreciation_date` date NOT NULL DEFAULT '0000-00-00',
   `fa_class_id` varchar(20) NOT NULL DEFAULT '',
@@ -1392,8 +1344,7 @@ CREATE TABLE `0_stock_master` (
 ### Structure of table `0_stock_moves` ###
 
 DROP TABLE IF EXISTS `0_stock_moves`;
-
-CREATE TABLE `0_stock_moves` (
+CREATE TABLE IF NOT EXISTS `0_stock_moves` (
   `trans_id` int(11) NOT NULL AUTO_INCREMENT,
   `trans_no` int(11) NOT NULL DEFAULT '0',
   `stock_id` char(20) NOT NULL DEFAULT '',
@@ -1415,8 +1366,7 @@ CREATE TABLE `0_stock_moves` (
 ### Structure of table `0_supp_allocations` ###
 
 DROP TABLE IF EXISTS `0_supp_allocations`;
-
-CREATE TABLE `0_supp_allocations` (
+CREATE TABLE IF NOT EXISTS `0_supp_allocations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `person_id` int(11) DEFAULT NULL,
   `amt` double unsigned DEFAULT NULL,
@@ -1426,7 +1376,7 @@ CREATE TABLE `0_supp_allocations` (
   `trans_no_to` int(11) DEFAULT NULL,
   `trans_type_to` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `person_id` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
+  UNIQUE KEY `trans_type_from` (`person_id`,`trans_type_from`,`trans_no_from`,`trans_type_to`,`trans_no_to`),
   KEY `From` (`trans_type_from`,`trans_no_from`),
   KEY `To` (`trans_type_to`,`trans_no_to`)
 ) ENGINE=InnoDB ;
@@ -1437,8 +1387,7 @@ CREATE TABLE `0_supp_allocations` (
 ### Structure of table `0_supp_invoice_items` ###
 
 DROP TABLE IF EXISTS `0_supp_invoice_items`;
-
-CREATE TABLE `0_supp_invoice_items` (
+CREATE TABLE IF NOT EXISTS `0_supp_invoice_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supp_trans_no` int(11) DEFAULT NULL,
   `supp_trans_type` int(11) DEFAULT NULL,
@@ -1463,11 +1412,10 @@ CREATE TABLE `0_supp_invoice_items` (
 ### Structure of table `0_supp_trans` ###
 
 DROP TABLE IF EXISTS `0_supp_trans`;
-
-CREATE TABLE `0_supp_trans` (
+CREATE TABLE IF NOT EXISTS `0_supp_trans` (
   `trans_no` int(11) unsigned NOT NULL DEFAULT '0',
   `type` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `supplier_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `supplier_id` int(11) unsigned NOT NULL,
   `reference` tinytext NOT NULL,
   `supp_reference` varchar(60) NOT NULL DEFAULT '',
   `tran_date` date NOT NULL DEFAULT '0000-00-00',
@@ -1489,8 +1437,7 @@ CREATE TABLE `0_supp_trans` (
 ### Structure of table `0_suppliers` ###
 
 DROP TABLE IF EXISTS `0_suppliers`;
-
-CREATE TABLE `0_suppliers` (
+CREATE TABLE IF NOT EXISTS `0_suppliers` (
   `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
   `supp_name` varchar(60) NOT NULL DEFAULT '',
   `address` tinytext NOT NULL,
@@ -1523,8 +1470,7 @@ CREATE TABLE `0_suppliers` (
 ### Structure of table `0_sys_prefs` ###
 
 DROP TABLE IF EXISTS `0_sys_prefs`;
-
-CREATE TABLE `0_sys_prefs` (
+CREATE TABLE IF NOT EXISTS `0_sys_prefs` (
   `name` varchar(35) NOT NULL DEFAULT '',
   `category` varchar(30) DEFAULT NULL,
   `type` varchar(20) NOT NULL DEFAULT '',
@@ -1537,132 +1483,85 @@ CREATE TABLE `0_sys_prefs` (
 ### Data of table `0_sys_prefs` ###
 
 INSERT INTO `0_sys_prefs` VALUES
-('accounts_alpha', 'glsetup.general', 'tinyint', '1', '0'),
-('accumulate_shipping', 'glsetup.customer', 'tinyint', '1', '0'),
-('add_pct', 'setup.company', 'int', '5', '-1'),
-('allow_negative_prices', 'glsetup.inventory', 'tinyint', '1', '1'),
-('allow_negative_stock', 'glsetup.inventory', 'tinyint', '1', '0'),
-('alternative_tax_include_on_docs', 'setup.company', 'tinyint', '1', '0'),
-('auto_curr_reval', 'setup.company', 'smallint', '6', '1'),
-('bank_charge_act', 'glsetup.general', 'varchar', '15', '1430'),
-('base_sales', 'setup.company', 'int', '11', '-1'),
-('bcc_email', 'setup.company', 'varchar', '100', ''),
-('coy_logo', 'setup.company', 'varchar', '100', ''),
-('coy_name', 'setup.company', 'varchar', '60', 'Company name'),
-('coy_no', 'setup.company', 'varchar', '25', ''),
-('creditors_act', 'glsetup.purchase', 'varchar', '15', '2100'),
-('curr_default', 'setup.company', 'char', '3', 'CAD'),
-('debtors_act', 'glsetup.sales', 'varchar', '15', '1200'),
-('default_adj_act', 'glsetup.items', 'varchar', '15', '1520'),
-('default_cogs_act', 'glsetup.items', 'varchar', '15', '5010'),
-('default_credit_limit', 'glsetup.customer', 'int', '11', '1000'),
-('default_delivery_required', 'glsetup.sales', 'smallint', '6', '1'),
-('default_dim_required', 'glsetup.dims', 'int', '11', '20'),
-('default_inv_sales_act', 'glsetup.items', 'varchar', '15', '4020'),
-('default_inventory_act', 'glsetup.items', 'varchar', '15', '1520'),
+('accounts_alpha', 'glsetup.general', 'tinyint', 1, '0'),
+('accumulate_shipping', 'glsetup.customer', 'tinyint', 1, '0'),
+('add_pct', 'setup.company', 'int', 5, '-1'),
+('allow_negative_prices', 'glsetup.inventory', 'tinyint', 1, '1'),
+('allow_negative_stock', 'glsetup.inventory', 'tinyint', 1, '0'),
+('alternative_tax_include_on_docs', 'setup.company', 'tinyint', 1, '0'),
+('auto_curr_reval', 'setup.company', 'smallint', 6, '1'),
+('bank_charge_act', 'glsetup.general', 'varchar', 15, '5690'),
+('barcodes_on_stock','setup.company', 'tinyint', 1, '0'),
+('base_sales', 'setup.company', 'int', 11, '-1'),
+('bcc_email', 'setup.company', 'varchar', 100, ''),
+('company_logo_report','setup.company', 'tinyint', 1, '0'),
+('coy_logo', 'setup.company', 'varchar', 100, ''),
+('coy_name', 'setup.company', 'varchar', 60, 'Company name'),
+('coy_no', 'setup.company', 'varchar', 25, ''),
+('creditors_act', 'glsetup.purchase', 'varchar', 15, '2100'),
+('curr_default', 'setup.company', 'char', 3, 'CAD'),
+('debtors_act', 'glsetup.sales', 'varchar', 15, '1200'),
+('default_adj_act', 'glsetup.items', 'varchar', 15, '5020'),
+('default_cogs_act', 'glsetup.items', 'varchar', 15, '5010'),
+('default_credit_limit', 'glsetup.customer', 'int', 11, '1000'),
+('default_delivery_required', 'glsetup.sales', 'smallint', 6, '1'),
+('default_dim_required', 'glsetup.dims', 'int', 11, '20'),
+('default_inv_sales_act', 'glsetup.items', 'varchar', 15, '4020'),
+('default_inventory_act', 'glsetup.items', 'varchar', 15, '1520'),
 ('default_loss_on_asset_disposal_act', 'glsetup.items', 'varchar', '15', '5660'),
-('default_prompt_payment_act', 'glsetup.sales', 'varchar', '15', '4020'),
-('default_quote_valid_days', 'glsetup.sales', 'smallint', '6', '30'),
-('default_receival_required', 'glsetup.purchase', 'smallint', '6', '10'),
-('default_sales_act', 'glsetup.sales', 'varchar', '15', '4020'),
-('default_sales_discount_act', 'glsetup.sales', 'varchar', '15', '4020'),
-('default_wip_act', 'glsetup.items', 'varchar', '15', '1520'),
-('default_workorder_required', 'glsetup.manuf', 'int', '11', '20'),
-('deferred_income_act', 'glsetup.sales', 'varchar', '15', ''),
+('default_prompt_payment_act', 'glsetup.sales', 'varchar', 15, '4020'),
+('default_quote_valid_days', 'glsetup.sales', 'smallint', 6, '30'),
+('default_receival_required', 'glsetup.purchase', 'smallint', 6, '10'),
+('default_sales_act', 'glsetup.sales', 'varchar', 15, '4020'),
+('default_sales_discount_act', 'glsetup.sales', 'varchar', 15, '4020'),
+('default_wip_act', 'glsetup.items', 'varchar', 15, '1520'),
+('default_workorder_required', 'glsetup.manuf', 'int', 11, '20'),
+('deferred_income_act', 'glsetup.sales', 'varchar', '15', '2105'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
-('domicile', 'setup.company', 'varchar', '55', ''),
-('email', 'setup.company', 'varchar', '100', ''),
-('exchange_diff_act', 'glsetup.general', 'varchar', '15', '4450'),
-('f_year', 'setup.company', 'int', '11', '1'),
-('fax', 'setup.company', 'varchar', '30', ''),
-('freight_act', 'glsetup.customer', 'varchar', '15', '5010'),
-('gl_closing_date', 'setup.closing_date', 'date', '8', ''),
-('grn_clearing_act', 'glsetup.purchase', 'varchar', '15', '0'),
-('gst_no', 'setup.company', 'varchar', '25', ''),
-('legal_text', 'glsetup.customer', 'tinytext', '0', ''),
-('loc_notification', 'glsetup.inventory', 'tinyint', '1', '0'),
-('login_tout', 'setup.company', 'smallint', '6', '600'),
-('no_customer_list', 'setup.company', 'tinyint', '1', '0'),
-('no_item_list', 'setup.company', 'tinyint', '1', '0'),
-('no_supplier_list', 'setup.company', 'tinyint', '1', '0'),
-('no_zero_lines_amount', 'glsetup.sales', 'tinyint', '1', '1'),
-('past_due_days', 'glsetup.general', 'int', '11', '30'),
-('phone', 'setup.company', 'varchar', '30', ''),
-('po_over_charge', 'glsetup.purchase', 'int', '11', '10'),
-('po_over_receive', 'glsetup.purchase', 'int', '11', '10'),
-('postal_address', 'setup.company', 'tinytext', '0', 'N/A'),
-('print_invoice_no', 'glsetup.sales', 'tinyint', '1', '0'),
-('print_item_images_on_quote', 'glsetup.inventory', 'tinyint', '1', '0'),
-('profit_loss_year_act', 'glsetup.general', 'varchar', '15', '9990'),
-('pyt_discount_act', 'glsetup.purchase', 'varchar', '15', '5010'),
-('retained_earnings_act', 'glsetup.general', 'varchar', '15', '2050'),
-('round_to', 'setup.company', 'int', '5', '1'),
-('show_po_item_codes', 'glsetup.purchase', 'tinyint', '1', '0'),
-('suppress_tax_rates', 'setup.company', 'tinyint', '1', '0'),
-('tax_algorithm', 'glsetup.customer', 'tinyint', '1', '1'),
-('tax_last', 'setup.company', 'int', '11', '1'),
-('tax_prd', 'setup.company', 'int', '11', '1'),
-('time_zone', 'setup.company', 'tinyint', '1', '0'),
-('use_dimension', 'setup.company', 'tinyint', '1', '1'),
-('use_fixed_assets', 'setup.company', 'tinyint', '1', '1'),
-('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
-('version_id', 'system', 'varchar', '11', '2.4.1');
-
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
-
-INSERT INTO `0_sys_types` VALUES
-('0', '17', '1'),
-('1', '7', '1'),
-('2', '4', '1'),
-('4', '3', '1'),
-('10', '16', '1'),
-('11', '2', '1'),
-('12', '6', '1'),
-('13', '1', '1'),
-('16', '2', '1'),
-('17', '2', '1'),
-('18', '1', '1'),
-('20', '6', '1'),
-('21', '1', '1'),
-('22', '3', '1'),
-('25', '1', '1'),
-('26', '1', '1'),
-('28', '1', '1'),
-('29', '1', '1'),
-('30', '0', '1'),
-('32', '0', '1'),
-('35', '1', '1'),
-('40', '1', '1');
-
-### Structure of table `0_tag_associations` ###
-
-DROP TABLE IF EXISTS `0_tag_associations`;
-
-CREATE TABLE `0_tag_associations` (
-  `record_id` varchar(15) NOT NULL,
-  `tag_id` int(11) NOT NULL,
-  UNIQUE KEY `record_id` (`record_id`,`tag_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_tag_associations` ###
+('domicile', 'setup.company', 'varchar', 55, ''),
+('email', 'setup.company', 'varchar', 100, ''),
+('exchange_diff_act', 'glsetup.general', 'varchar', 15, '4450'),
+('f_year', 'setup.company', 'int', 11, '1'),
+('fax', 'setup.company', 'varchar', 30, ''),
+('freight_act', 'glsetup.customer', 'varchar', 15, '4430'),
+('gl_closing_date', 'setup.closing_date', 'date', 8, ''),
+('grn_clearing_act', 'glsetup.purchase', 'varchar', 15, '1550'),
+('gst_no', 'setup.company', 'varchar', 25, ''),
+('legal_text', 'glsetup.customer', 'tinytext', 0, ''),
+('loc_notification', 'glsetup.inventory', 'tinyint', 1, '0'),
+('login_tout', 'setup.company', 'smallint', 6, '600'),
+('no_customer_list', 'setup.company', 'tinyint', 1, '0'),
+('no_item_list', 'setup.company', 'tinyint', 1, '0'),
+('no_supplier_list', 'setup.company', 'tinyint', 1, '0'),
+('no_zero_lines_amount', 'glsetup.sales', 'tinyint', 1, '1'),
+('past_due_days', 'glsetup.general', 'int', 11, '30'),
+('phone', 'setup.company', 'varchar', 30, ''),
+('po_over_charge', 'glsetup.purchase', 'int', 11, '10'),
+('po_over_receive', 'glsetup.purchase', 'int', 11, '10'),
+('postal_address', 'setup.company', 'tinytext', 0, 'N/A'),
+('print_invoice_no', 'glsetup.sales', 'tinyint', 1, '0'),
+('print_item_images_on_quote', 'glsetup.inventory', 'tinyint', 1, '0'),
+('profit_loss_year_act', 'glsetup.general', 'varchar', 15, '9990'),
+('pyt_discount_act', 'glsetup.purchase', 'varchar', 15, '5010'),
+('retained_earnings_act', 'glsetup.general', 'varchar', 15, '2050'),
+('round_to', 'setup.company', 'int', 5, '1'),
+('shortname_name_in_list','setup.company', 'tinyint', 1, '0'),
+('show_po_item_codes','glsetup.purchase', 'tinyint', 1, '0'),
+('suppress_tax_rates','setup.company', 'tinyint', 1, '0'),
+('tax_algorithm', 'glsetup.customer', 'tinyint', 1, '1'),
+('tax_last', 'setup.company', 'int', 11, '1'),
+('tax_prd', 'setup.company', 'int', 11, '1'),
+('time_zone', 'setup.company', 'tinyint', 1, '0'),
+('use_dimension', 'setup.company', 'tinyint', 1, '1'),
+('use_fixed_assets','setup.company', 'tinyint', 1, '1'),
+('use_manufacturing','setup.company', 'tinyint', 1, '1'),
+('version_id', 'system', 'varchar', 11, '2.4.1');
 
 
 ### Structure of table `0_tags` ###
 
 DROP TABLE IF EXISTS `0_tags`;
-
-CREATE TABLE `0_tags` (
+CREATE TABLE IF NOT EXISTS `0_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` smallint(6) NOT NULL,
   `name` varchar(30) NOT NULL,
@@ -1674,26 +1573,22 @@ CREATE TABLE `0_tags` (
 
 ### Data of table `0_tags` ###
 
+### Structure of table `0_tag_associations` ###
 
-### Structure of table `0_tax_group_items` ###
-
-DROP TABLE IF EXISTS `0_tax_group_items`;
-
-CREATE TABLE `0_tax_group_items` (
-  `tax_group_id` int(11) NOT NULL DEFAULT '0',
-  `tax_type_id` int(11) NOT NULL DEFAULT '0',
-  `tax_shipping` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`tax_group_id`,`tax_type_id`)
+DROP TABLE IF EXISTS `0_tag_associations`;
+CREATE TABLE IF NOT EXISTS `0_tag_associations` (
+  `record_id` varchar(15) NOT NULL,
+  `tag_id` int(11) NOT NULL,
+  UNIQUE KEY `record_id` (`record_id`,`tag_id`)
 ) ENGINE=InnoDB ;
 
-### Data of table `0_tax_group_items` ###
+### Data of table `0_tag_associations` ###
 
 
 ### Structure of table `0_tax_groups` ###
 
 DROP TABLE IF EXISTS `0_tax_groups`;
-
-CREATE TABLE `0_tax_groups` (
+CREATE TABLE IF NOT EXISTS `0_tax_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL DEFAULT '',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
@@ -1703,12 +1598,26 @@ CREATE TABLE `0_tax_groups` (
 
 ### Data of table `0_tax_groups` ###
 
+INSERT INTO `0_tax_groups` VALUES
+(1, 'Tax', 0),
+(2, 'Tax Exempt', 0);
+
+### Structure of table `0_tax_group_items` ###
+
+DROP TABLE IF EXISTS `0_tax_group_items`;
+CREATE TABLE IF NOT EXISTS `0_tax_group_items` (
+  `tax_group_id` int(11) NOT NULL DEFAULT '0',
+  `tax_type_id` int(11) NOT NULL DEFAULT '0',
+  `tax_shipping` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`tax_group_id`,`tax_type_id`)
+) ENGINE=InnoDB ;
+
+### Data of table `0_tax_group_items` ###
 
 ### Structure of table `0_tax_types` ###
 
 DROP TABLE IF EXISTS `0_tax_types`;
-
-CREATE TABLE `0_tax_types` (
+CREATE TABLE IF NOT EXISTS `0_tax_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rate` double NOT NULL DEFAULT '0',
   `sales_gl_code` varchar(15) NOT NULL DEFAULT '',
@@ -1717,7 +1626,7 @@ CREATE TABLE `0_tax_types` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`,`rate`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_tax_types` ###
 
@@ -1728,8 +1637,7 @@ INSERT INTO `0_tax_types` VALUES
 ### Structure of table `0_trans_tax_details` ###
 
 DROP TABLE IF EXISTS `0_trans_tax_details`;
-
-CREATE TABLE `0_trans_tax_details` (
+CREATE TABLE IF NOT EXISTS `0_trans_tax_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `trans_type` smallint(6) DEFAULT NULL,
   `trans_no` int(11) DEFAULT NULL,
@@ -1753,8 +1661,7 @@ CREATE TABLE `0_trans_tax_details` (
 ### Structure of table `0_useronline` ###
 
 DROP TABLE IF EXISTS `0_useronline`;
-
-CREATE TABLE `0_useronline` (
+CREATE TABLE IF NOT EXISTS `0_useronline` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `timestamp` int(15) NOT NULL DEFAULT '0',
   `ip` varchar(40) NOT NULL DEFAULT '',
@@ -1770,8 +1677,7 @@ CREATE TABLE `0_useronline` (
 ### Structure of table `0_users` ###
 
 DROP TABLE IF EXISTS `0_users`;
-
-CREATE TABLE `0_users` (
+CREATE TABLE IF NOT EXISTS `0_users` (
   `id` smallint(6) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(60) NOT NULL DEFAULT '',
   `password` varchar(100) NOT NULL DEFAULT '',
@@ -1797,11 +1703,11 @@ CREATE TABLE `0_users` (
   `query_size` tinyint(1) unsigned NOT NULL DEFAULT '10',
   `graphic_links` tinyint(1) DEFAULT '1',
   `pos` smallint(6) DEFAULT '1',
-  `print_profile` varchar(30) NOT NULL DEFAULT '1',
+  `print_profile` varchar(30) NOT NULL DEFAULT '',
   `rep_popup` tinyint(1) DEFAULT '1',
   `sticky_doc_date` tinyint(1) DEFAULT '0',
-  `startup_tab` varchar(20) NOT NULL DEFAULT 'orders',
-  `transaction_days` int(6) NOT NULL DEFAULT '30' COMMENT 'Transaction days',
+  `startup_tab` varchar(20) NOT NULL DEFAULT '',
+  `transaction_days` smallint(6) NOT NULL DEFAULT '30' COMMENT 'Transaction days',
   `save_report_selections` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Save Report Selection Days',
   `use_date_picker` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Use Date Picker for all Date Values',
   `def_print_destination` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Default Report Destination',
@@ -1809,18 +1715,17 @@ CREATE TABLE `0_users` (
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB ;
 
 ### Data of table `0_users` ###
 
 INSERT INTO `0_users` VALUES
-('1', 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'Administrator', '2', '', 'adm@adm.com', 'en_US', '0', '0', '0', '0', 'default', 'Letter', '2', '2', '4', '1', '1', '0', '0', '2008-04-04 12:34:29', '10', '1', '1', '1', '1', '0', 'orders', '30', '0', '1', '0', '0', '0');
+('1', 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'Administrator', 2, '', 'adm@example.com', 'en_US', '0', '0', '0', '0', 'default', 'Letter', '2', '2', '4', '1', '1', '0', '0', '2017-01-01 12:34:29', '10', '1', '1', '1', '1', '0', 'orders', '30', '0', '1', '0', '0', '0');
 
 ### Structure of table `0_voided` ###
 
 DROP TABLE IF EXISTS `0_voided`;
-
-CREATE TABLE `0_voided` (
+CREATE TABLE IF NOT EXISTS `0_voided` (
   `type` int(11) NOT NULL DEFAULT '0',
   `id` int(11) NOT NULL DEFAULT '0',
   `date_` date NOT NULL DEFAULT '0000-00-00',
@@ -1830,100 +1735,10 @@ CREATE TABLE `0_voided` (
 
 ### Data of table `0_voided` ###
 
-
-### Structure of table `0_wo_costing` ###
-
-DROP TABLE IF EXISTS `0_wo_costing`;
-
-CREATE TABLE `0_wo_costing` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `workorder_id` int(11) NOT NULL DEFAULT '0',
-  `cost_type` tinyint(1) NOT NULL DEFAULT '0',
-  `trans_type` int(11) NOT NULL DEFAULT '0',
-  `trans_no` int(11) NOT NULL DEFAULT '0',
-  `factor` double NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_wo_costing` ###
-
-
-### Structure of table `0_wo_issue_items` ###
-
-DROP TABLE IF EXISTS `0_wo_issue_items`;
-
-CREATE TABLE `0_wo_issue_items` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `stock_id` varchar(40) DEFAULT NULL,
-  `issue_id` int(11) DEFAULT NULL,
-  `qty_issued` double DEFAULT NULL,
-  `unit_cost` double NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_wo_issue_items` ###
-
-
-### Structure of table `0_wo_issues` ###
-
-DROP TABLE IF EXISTS `0_wo_issues`;
-
-CREATE TABLE `0_wo_issues` (
-  `issue_no` int(11) NOT NULL AUTO_INCREMENT,
-  `workorder_id` int(11) NOT NULL DEFAULT '0',
-  `reference` varchar(100) DEFAULT NULL,
-  `issue_date` date DEFAULT NULL,
-  `loc_code` varchar(5) DEFAULT NULL,
-  `workcentre_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`issue_no`),
-  KEY `workorder_id` (`workorder_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_wo_issues` ###
-
-
-### Structure of table `0_wo_manufacture` ###
-
-DROP TABLE IF EXISTS `0_wo_manufacture`;
-
-CREATE TABLE `0_wo_manufacture` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `reference` varchar(100) DEFAULT NULL,
-  `workorder_id` int(11) NOT NULL DEFAULT '0',
-  `quantity` double NOT NULL DEFAULT '0',
-  `date_` date NOT NULL DEFAULT '0000-00-00',
-  PRIMARY KEY (`id`),
-  KEY `workorder_id` (`workorder_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_wo_manufacture` ###
-
-
-### Structure of table `0_wo_requirements` ###
-
-DROP TABLE IF EXISTS `0_wo_requirements`;
-
-CREATE TABLE `0_wo_requirements` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `workorder_id` int(11) NOT NULL DEFAULT '0',
-  `stock_id` char(20) NOT NULL DEFAULT '',
-  `workcentre` int(11) NOT NULL DEFAULT '0',
-  `units_req` double NOT NULL DEFAULT '1',
-  `unit_cost` double NOT NULL DEFAULT '0',
-  `loc_code` char(5) NOT NULL DEFAULT '',
-  `units_issued` double NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `workorder_id` (`workorder_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_wo_requirements` ###
-
-
 ### Structure of table `0_workcentres` ###
 
 DROP TABLE IF EXISTS `0_workcentres`;
-
-CREATE TABLE `0_workcentres` (
+CREATE TABLE IF NOT EXISTS `0_workcentres` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` char(40) NOT NULL DEFAULT '',
   `description` char(50) NOT NULL DEFAULT '',
@@ -1938,8 +1753,7 @@ CREATE TABLE `0_workcentres` (
 ### Structure of table `0_workorders` ###
 
 DROP TABLE IF EXISTS `0_workorders`;
-
-CREATE TABLE `0_workorders` (
+CREATE TABLE IF NOT EXISTS `0_workorders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `wo_ref` varchar(60) NOT NULL DEFAULT '',
   `loc_code` varchar(5) NOT NULL DEFAULT '',
@@ -1958,3 +1772,87 @@ CREATE TABLE `0_workorders` (
 ) ENGINE=InnoDB ;
 
 ### Data of table `0_workorders` ###
+
+
+### Structure of table `0_wo_costing` ###
+
+DROP TABLE IF EXISTS `0_wo_costing`;
+CREATE TABLE IF NOT EXISTS `0_wo_costing` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `workorder_id` int(11) NOT NULL DEFAULT '0',
+  `cost_type` tinyint(1) NOT NULL DEFAULT '0',
+  `trans_type` int(11) NOT NULL DEFAULT '0',
+  `trans_no` int(11) NOT NULL DEFAULT '0',
+  `factor` double NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB ;
+
+### Data of table `0_wo_costing` ###
+
+
+### Structure of table `0_wo_issues` ###
+
+DROP TABLE IF EXISTS `0_wo_issues`;
+CREATE TABLE IF NOT EXISTS `0_wo_issues` (
+  `issue_no` int(11) NOT NULL AUTO_INCREMENT,
+  `workorder_id` int(11) NOT NULL DEFAULT '0',
+  `reference` varchar(100) DEFAULT NULL,
+  `issue_date` date DEFAULT NULL,
+  `loc_code` varchar(5) DEFAULT NULL,
+  `workcentre_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`issue_no`),
+  KEY `workorder_id` (`workorder_id`)
+) ENGINE=InnoDB ;
+
+### Data of table `0_wo_issues` ###
+
+
+### Structure of table `0_wo_issue_items` ###
+
+DROP TABLE IF EXISTS `0_wo_issue_items`;
+CREATE TABLE IF NOT EXISTS `0_wo_issue_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `stock_id` varchar(40) DEFAULT NULL,
+  `issue_id` int(11) DEFAULT NULL,
+  `qty_issued` double DEFAULT NULL,
+  `unit_cost` double NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB ;
+
+### Data of table `0_wo_issue_items` ###
+
+
+### Structure of table `0_wo_manufacture` ###
+
+DROP TABLE IF EXISTS `0_wo_manufacture`;
+CREATE TABLE IF NOT EXISTS `0_wo_manufacture` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference` varchar(100) DEFAULT NULL,
+  `workorder_id` int(11) NOT NULL DEFAULT '0',
+  `quantity` double NOT NULL DEFAULT '0',
+  `date_` date NOT NULL DEFAULT '0000-00-00',
+  PRIMARY KEY (`id`),
+  KEY `workorder_id` (`workorder_id`)
+) ENGINE=InnoDB ;
+
+### Data of table `0_wo_manufacture` ###
+
+
+### Structure of table `0_wo_requirements` ###
+
+DROP TABLE IF EXISTS `0_wo_requirements`;
+CREATE TABLE IF NOT EXISTS `0_wo_requirements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `workorder_id` int(11) NOT NULL DEFAULT '0',
+  `stock_id` char(20) NOT NULL DEFAULT '',
+  `workcentre` int(11) NOT NULL DEFAULT '0',
+  `units_req` double NOT NULL DEFAULT '1',
+  `unit_cost` double NOT NULL DEFAULT '0',
+  `loc_code` char(5) NOT NULL DEFAULT '',
+  `units_issued` double NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `workorder_id` (`workorder_id`)
+) ENGINE=InnoDB ;
+
+### Data of table `0_wo_requirements` ###
+

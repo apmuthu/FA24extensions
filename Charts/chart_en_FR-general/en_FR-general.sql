@@ -2453,8 +2453,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2008-01-01', '2008-12-31', '0'),
-('2', '2009-01-01', '2009-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -2690,7 +2689,8 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Due 15th Of the Following Month', '0', '17', '0'),
 ('2', 'Due By End Of The Following Month', '0', '30', '0'),
 ('3', 'Payment due within 10 days', '10', '0', '0'),
-('4', 'Cash Only', '1', '0', '0');
+('4', 'Cash Only', '1', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 ### Structure of table `0_prices` ###
 
@@ -3402,7 +3402,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('default_sales_discount_act', 'glsetup.sales', 'varchar', '15', '709100'),
 ('default_wip_act', 'glsetup.items', 'varchar', '15', '658000'),
 ('default_workorder_required', 'glsetup.manuf', 'int', '11', '20'),
-('deferred_income_act', 'glsetup.sales', 'varchar', '15', ''),
+('deferred_income_act', 'glsetup.sales', 'varchar', '15', '487000'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
 ('domicile', 'setup.company', 'varchar', '55', ''),
 ('email', 'setup.company', 'varchar', '100', ''),

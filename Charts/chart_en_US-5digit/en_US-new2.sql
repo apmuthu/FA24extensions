@@ -255,6 +255,7 @@ INSERT INTO `0_chart_master` VALUES
 ('50004', '', 'Import Duty (Customs)', '501', '0'),
 ('50005', '', 'Transport Insurance', '501', '0'),
 ('50006', '', 'Inventory Adjustments', '501', '0'),
+('52001', '', 'Deferred Income', '503', '0'),
 ('60000', '', 'Productive Labour', '521', '0'),
 ('60100', '', 'Cost of Sales Labour', '521', '0'),
 ('61000', '', 'Sales Commissions', '522', '0'),
@@ -360,6 +361,7 @@ INSERT INTO `0_chart_types` VALUES
 ('5', 'L2 - Current Liabilities', '2', '', '0'),
 ('501', 'L3 - (50000-50999) - C.O.G.S to Trade Customers', '5', '12', '0'),
 ('502', 'L3 - (51000-51999) - C.O.G.S to Sister Companies', '5', '12', '0'),
+('503', 'L3 - (52000-52999) - Deferred Income', '5', '12', '0'),
 ('521', 'L3 - (60000-60999) - Production &amp; Marketing Wages', '5', '13', '0'),
 ('522', 'L3 - (61000-61999) - Commissions', '5', '13', '0'),
 ('523', 'L3 - (62000-62999) - Sales Promotions', '5', '13', '0'),
@@ -715,7 +717,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2008-01-01', '2008-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -950,7 +952,8 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Due 15th Of the Following Month', '0', '17', '0'),
 ('2', 'Due By End Of The Following Month', '0', '30', '0'),
 ('3', 'Payment due within 10 days', '10', '0', '0'),
-('4', 'Cash Only', '1', '0', '0');
+('4', 'Cash Only', '1', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 ### Structure of table `0_prices` ###
 
@@ -1662,7 +1665,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('default_sales_discount_act', 'glsetup.sales', 'varchar', '15', '40001'),
 ('default_wip_act', 'glsetup.items', 'varchar', '15', '14001'),
 ('default_workorder_required', 'glsetup.manuf', 'int', '11', '20'),
-('deferred_income_act', 'glsetup.sales', 'varchar', '15', ''),
+('deferred_income_act', 'glsetup.sales', 'varchar', '15', '52001'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
 ('domicile', 'setup.company', 'varchar', '55', ''),
 ('email', 'setup.company', 'varchar', '100', ''),

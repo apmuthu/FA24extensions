@@ -64,7 +64,7 @@ all_delete($yes = false);
 $js = "";
 if ($SysPrefs->use_popup_windows) 
     $js .= get_js_open_window(800, 500);
-$help_context = "Import General Journals  / Deposits / Payments / Bank Statements / Sales Orders / Sales Invoices  <a href='spreadsheet_headers.html'>Help: Formats</a>";
+$help_context = "Import General Journals  / Deposits / Payments / Bank Statements / Sales Orders / Sales Invoices  <a href='spreadsheet_headers.html' target='_blank'>Help: Formats</a>";
 page(_($help_context), false, false, "", $js);
 
 global $Refs;
@@ -79,6 +79,8 @@ if ($filename != "") {
     $_POST['sep']              = ",";
     $_POST['trial']            = false;
 }
+
+$curEntryId = false;
 
 if ((isset($_POST['type']))) {
     $type = $_POST['type'];
@@ -107,10 +109,9 @@ if ((isset($_POST['type']))) {
             display_error(_("Error opening file $filename"));
         } else {
             begin_transaction();
-            $curEntryId[ST_JOURNAL]      = get_next_trans_no(ST_JOURNAL);
-            $curEntryId[ST_BANKTRANSFER] = get_next_trans_no(ST_BANKTRANSFER);
-            $curEntryId[ST_BANKDEPOSIT]  = get_next_trans_no(ST_BANKDEPOSIT);
-            $curEntryId[ST_BANKPAYMENT]  = get_next_trans_no(ST_BANKPAYMENT);
+			$supported_types = array(ST_JOURNAL, ST_BANKTRANSFER, ST_BANKDEPOSIT, ST_BANKPAYMENT, ST_SALESINVOICE, ST_SALESORDER);
+			if (in_array($type, $supported_types))
+				$curEntryId = get_next_trans_no($type);
             $line = 0;
             $description = "";
             $i = 0;
@@ -159,7 +160,7 @@ if ((isset($_POST['type']))) {
                         // If the journal entry is not created, then
                         // a journal transaction entered through FA would have a trans_no
                         // starting from 1, and thus VOID would void the wrong G/L entries.
-                        add_journal(ST_JOURNAL, $curEntryId[ST_JOURNAL], $total_debit_positive, $date, get_company_pref('curr_default'), $reference, 1, $date, $date);
+                        add_journal(ST_JOURNAL, $curEntryId, $total_debit_positive, $date, get_company_pref('curr_default'), $reference, 1, $date, $date);
                         $total_debit_positive = 0;
                     }
                 } else if (($type == ST_BANKPAYMENT) && ($stateformat != null))
@@ -188,12 +189,11 @@ if ((isset($_POST['type']))) {
                         $prev_ref = $reference;
                         continue;
                     }
-                } else if ((($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT)) && ($stateformat == null))
+                } else if ((($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT)) && ($stateformat == null)) {
                     list($reference, $date, $memo, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $BranchNo) = $data;
-
-                str_replace('"', "", $memo);
-                str_replace('"', "", $person_id);
-                if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
+					str_replace('"', "", $memo);
+					str_replace('"', "", $person_id);
+				} else if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
                     list($customer_id, $branchNo, $reference, $date, $payment_id, $sales_type_name, $dimension_id, $dimension2_id, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage, $freightcost, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) = $data;
                     display_notification_centered(_("Processing line $line ($customer_id, $branchNo, $reference, $date, $payment_id, $sales_type_name, $dimension_id, $dimension2_id, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage, $freightcost, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) in import file '{$_FILES['imp']['name']}')"));
                     if (!customer_exist($customer_id)) {
@@ -241,6 +241,8 @@ if ((isset($_POST['type']))) {
                         display_notification_centered("Error");
                         $error = true;
                     }
+                } else {
+                    continue;
                 }
                 if (($prev_ref <> $reference) && ($type < 4)) {
                     init_entry_part_2($entry, $date, $reference);
@@ -277,7 +279,7 @@ if ((isset($_POST['type']))) {
                 } elseif ((!$Refs->is_new_reference($reference, $type)) && ($reference == $prev_ref)) { //do nothing $Refs->save($type,$line,$reference);
 
                 } elseif (((!$Refs->is_new_reference($reference, $type)) == null) && ($reference != $prev_ref)) {
-                    $Refs->save($type, $curEntryId[$type], $reference);
+                    $Refs->save($type, $curEntryId, $reference);
                     // save_next_reference($type, $reference);
 
                 }
@@ -288,7 +290,6 @@ if ((isset($_POST['type']))) {
                     display_error(_("Error: date '$date' not properly formatted (line $line in import file '{$_FILES['imp']['name']}')"));
                     $error = true;
                 }
-                display_notification_centered($line . ":" . $bank_account_gl_code);
                 //$date = sql2date($date);
                 //if ((is_date_in_fiscalyear($date)) == false) {
                 //    display_error(_("Error: Date not within company fiscal year. Make sure date is in dd/mm/yyyy format and your csv years are 4 digits long. Check that current fiscal year is active under Setup..Company Setup"));
@@ -297,24 +298,24 @@ if ((isset($_POST['type']))) {
 
                 // validation for
                 if (($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT) || ($type == ST_JOURNAL)) {
-
+					display_notification_centered($line . ":" . $bank_account_gl_code);
                     $i = journal_display($i, $type, $taxtype, $amt, $entry, $code_id, $dim1, $dim2, $memo, $description, $bank_account_gl_code, $bank_desc);
                 }
                 if (!$error) {
                     if (($type == ST_JOURNAL)) {
                         if ($bank_account !== false)
-                            journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$type], $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $comments, $prev_ref != $reference);
+                            journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $comments, $prev_ref != $reference);
                         else {
                             if (check_tax_appropriate($code_id, $taxtype, $line) == true) {
-                                journal_inclusive_tax($type, $reference, $date, $line, $curEntryId[$type], $code_id, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id);
+                                journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $code_id, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id);
                             }
                         }
-                        add_audit_trail($type, $curEntryId[$type], $date);
+                        add_audit_trail($type, $curEntryId, $date);
                     } elseif (($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT) && ($amt > 0)) {
                         if (check_tax_appropriate($code_id, $taxtype, $line) == true) {
-                            bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId[$type], $code_id, $dim1, $dim2, $memo, ($type == ST_BANKDEPOSIT ? $amt : -$amt), $taxtype, $person_type_id, $person_id, $BranchNo);
+                            bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId, $code_id, $dim1, $dim2, $memo, ($type == ST_BANKDEPOSIT ? $amt : -$amt), $taxtype, $person_type_id, $person_id, $BranchNo);
                         } else {
-                            display_notification_centered(_("Warning: Taxtype used with Asset or Liability - $curEntryId[$type], $date, $code_id.(line $line in import file '{$_FILES['imp']['name']}')"));
+                            display_notification_centered(_("Warning: Taxtype used with Asset or Liability - $curEntryId, $date, $code_id.(line $line in import file '{$_FILES['imp']['name']}')"));
                         }
                     } elseif (($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT) && ($amt < 0)) {
                         display_notification_centered(_("Error: Credit amounts represented by negative amounts being entered. Check csv file is correct.(line $line in import file '{$_FILES['imp']['name']}')"));
@@ -323,7 +324,7 @@ if ((isset($_POST['type']))) {
                     $entryCount = $entryCount + 1;
                 }
                 if (($type == ST_JOURNAL && $reference != $next_ref) || $type != ST_JOURNAL)
-                    $curEntryId[$type]+= 1;
+                    $curEntryId += 1;
 
                 if ($error) {
                     $errCnt = $errCnt + 1;
