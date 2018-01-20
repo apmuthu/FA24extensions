@@ -1,3 +1,4 @@
+2018-01-20  BraathWaate  Added bank_auto_reconcile extension
 2018-01-18  Ap.Muthu     Updated EG, AU, CA, FR, GB, IN, SG, US-5, US-GAAP English Charts with upstream
 2018-01-07  Ap.Muthu     en_GB general 4 digit Chart of Accounts fixed typo
 2017-12-25  Ap.Muthu     import_transactions module: cart class synched with core
