@@ -1,3 +1,4 @@
+2018-01-20  BraathWaate  osc_orders module: product attribute import added
 2018-01-20  BraathWaate  import_transactions module: reference pattern check added
 2018-01-20  BraathWaate  Added bank_auto_reconcile extension
 2018-01-18  Ap.Muthu     Updated EG, AU, CA, FR, GB, IN, SG, US-5, US-GAAP English Charts with upstream

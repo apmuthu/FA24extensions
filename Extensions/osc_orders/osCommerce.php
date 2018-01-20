@@ -19,6 +19,7 @@ include_once($path_to_root . "/sales/includes/cart_class.inc");
 include_once($path_to_root . "/sales/includes/ui/sales_order_ui.inc");
 include_once($path_to_root . "/inventory/includes/db/items_prices_db.inc");
 include_once($path_to_root . "/taxes/db/item_tax_types_db.inc");
+include_once($path_to_root . "/includes/date_functions.inc");
 
 /*
 SELECT c.customers_id, CONCAT(c.customers_firstname, ' ', c.customers_lastname) , b.entry_street_address, b.entry_suburb, b.entry_city, b.entry_zone_id, b.entry_state, b.entry_postcode, b.entry_country_id, c.customers_telephone, c.customers_email_address FROM customers c left join `customers_info` i on c.customers_id = i.customers_info_id left join address_book b on c.customers_default_address_id = b.address_book_id
@@ -44,14 +45,21 @@ function osc_connect() {
 function osc_dbQuery($sql, $multirow = false) {
     global $osc;
 
+    $sql = trim($sql);
+    $sql_mod = in_array(substr(strtoupper($sql),0,6), array('INSERT', 'UPDATE', 'DELETE'));
     $result = mysqli_query($osc, $sql);
     if (!$result)
         display_notification($sql);
-    if ($multirow)
+    if ($multirow || $sql_mod)
         return $result;
     $data = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     return $data;
+}
+
+function osc_insert_id() {
+    global $osc;
+	return mysqli_insert_id($osc);
 }
 
 function osc_escape($value = "", $nullify = false) {
@@ -174,15 +182,60 @@ function get_item_tax_type_by_name($name) {
 
 function get_sales_point_by_name($name)
 {
-        $sql = "SELECT pos.*, loc.location_name, acc.bank_account_name FROM "
-                .TB_PREF."sales_pos as pos
-                LEFT JOIN ".TB_PREF."locations as loc on pos.pos_location=loc.loc_code
-                LEFT JOIN ".TB_PREF."bank_accounts as acc on pos.pos_account=acc.id
-                WHERE pos.pos_name=".db_escape($name);
+    $sql = "SELECT pos.*, loc.location_name, acc.bank_account_name FROM "
+            .TB_PREF."sales_pos as pos
+            LEFT JOIN ".TB_PREF."locations as loc on pos.pos_location=loc.loc_code
+            LEFT JOIN ".TB_PREF."bank_accounts as acc on pos.pos_account=acc.id
+            WHERE pos.pos_name=".db_escape($name);
 
-        $result = db_query($sql, "could not get POS definition");
+    $result = db_query($sql, "could not get POS definition");
 
-        return db_fetch($result);
+    return db_fetch($result);
+}
+
+function addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price)
+{
+        $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($osc_id);
+        $result = db_query($sql,"item could not be retreived");
+        $row    = db_fetch_row($result);
+        if (!$row) {
+            $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
+                    tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
+                    adjustment_account, wip_account, dimension_id, dimension2_id)
+                    VALUES ('$osc_id', " . db_escape($products_name) . ", '',
+                    '$cat', '$tax_type_id', '{$_POST['units']}', '$mb_flag',
+                    '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
+                    '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', '{$_POST['dimension_id']}', '{$_POST['dimension2_id']}')";
+
+            db_query($sql, "The item could not be added");
+            $sql = "INSERT INTO ".TB_PREF."loc_stock (loc_code, stock_id) VALUES ('{$_POST['default_location']}', ".db_escape($osc_id).")";
+
+            db_query($sql, "The item locstock could not be added");
+            add_item_price($osc_id, $_POST['sales_type'], $_POST['currency'], $products_price);
+            display_notification("Insert $osc_id " . $products_name);
+        } else {
+            // FrontAccounting is considered the inventory master
+            // so once an osCommerce item is imported into FA,
+            // update is limited to fields controlled by OSC
+            // ignoring price and inventory quantity.
+            // Note that Update Prices and Update Inventory
+            // will overwrite these fields in osCommerce, so it
+            // it pointless to change them in osCommerce.
+            // Conversely, product name, category, tax class are controlled
+            // by osCommerce so it is pointless to change them
+            // in FA, as they will be overwritten.
+            $sql = "UPDATE ".TB_PREF."stock_master SET description=" . db_escape($products_name) .", category_id='$cat', tax_type_id='$tax_type_id'
+                WHERE stock_id=" . db_escape($osc_id);
+
+            db_query($sql, "The item could not be updated");
+            display_notification("Update $osc_id $products_name");
+        }
+
+        $sql    = "SELECT id from ".TB_PREF."item_codes WHERE item_code=".db_escape($osc_id)." AND stock_id = ".db_escape($osc_id);
+        $result = db_query($sql, "item code could not be retreived");
+        $row    = db_fetch_row($result);
+        if (!$row) add_item_code($osc_id, $osc_id, $products_name, $cat, 1);
+        else update_item_code($row[0], $osc_id, $osc_id, $products_name, $cat, 1);
 }
 
 
@@ -213,9 +266,10 @@ $dbName           = "";
 $oscId            = "products_model";
 $oscPrefix        = "";
 $lastcid          = 0;
-$lastoid          = 0;
+$lastdate         = "";
 $defaultTaxGroup  = 0;
 $destCust         = 0;
+$invCust          = 0;
 $statusId         = 0;
 
 $db_Host          = "";
@@ -225,15 +279,15 @@ $db_Name          = "";
 $osc_Id           = "products_model";
 $osc_Prefix       = "";
 $last_cid         = 0;
-$last_oid         = 0;
+$last_date        = "";
 $default_TaxGroup = 0;
 
-$min_cid = 0;
-$max_cid = 0;
-$min_oid = 0;
-$max_oid = 0;
-$min_iid = 0;
-$max_iid = 0;
+$min_cid  = 0;
+$max_cid  = 0;
+$min_date = "";
+$max_date = "";
+$min_iid  = 0;
+$max_iid  = 0;
 
 if ($found) {
     // Get Host Name
@@ -283,14 +337,14 @@ if ($found) {
     } else $last_cid = $row[1];
 
     // Get last oID imported
-    $sql = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastoid'";
+    $sql = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastdate'";
     $result = db_query($sql, "could not get DB name");
     $row    = db_fetch_row($result);
     if (!$row) {
-        $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastoid', 0)";
-        db_query($sql, "add lastoid");
-        $last_oid = 0;
-    } else $last_oid = $row[1];
+        $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastdate', 0)";
+        db_query($sql, "add lastdate");
+        $last_date = "";
+    } else $last_date = $row[1];
 
     // Get Default Tax Group
     $sql              = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'taxgroup'";
@@ -304,6 +358,12 @@ if ($found) {
     $row        = db_fetch_row($result);
     $destCust  = $row[1];
 
+    // Get inventory customer
+    $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'invCust'";
+    $result     = db_query($sql, "could not get invtCust");
+    $row        = db_fetch_row($result);
+    $invCust  = $row[1];
+
     // Get status Id
     $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'statusId'";
     $result     = db_query($sql, "could not get statusId");
@@ -312,6 +372,7 @@ if ($found) {
 }
 
 $num_price_errors = -1;
+$num_qty_errors = -1;
 
 $action = 'summary';
 if (isset($_GET['action']) && $found) $action = $_GET['action'];
@@ -395,11 +456,11 @@ if (isset($_POST['action'])) {
             db_query($sql, "Update 'lastcid'");
         }
 
-        if ($lastoid != $last_oid) { // It changed
-            if ($lastoid == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'lastoid'";
-            else if ($last_oid == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastoid', ".db_escape($lastoid).")";
-            else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($lastoid)." WHERE name = 'lastoid'";
-            db_query($sql, "Update 'lastoid'");
+        if ($lastdate != $last_date) { // It changed
+            if ($lastdate == '') $sql = "DELETE FROM ".TB_PREF."oscommerce WHERE name = 'lastdate'";
+            else if ($last_date == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastdate', ".db_escape($lastdate).")";
+            else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($lastdate)." WHERE name = 'lastdate'";
+            db_query($sql, "Update 'lastdate'");
         }
 
         if ($defaultTaxGroup != $default_TaxGroup) { // It changed
@@ -418,11 +479,11 @@ if (isset($_POST['action'])) {
         $oscId           = $osc_Id;
         $oscPrefix       = $osc_Prefix;
         $lastcid         = $last_cid;
-        $lastoid         = $last_oid;
+        $lastdate        = $last_date;
         $defaultTaxGroup = $default_TaxGroup;
     }
 
-    if ( in_array($action, array('c_import', 'o_import', 'p_check', 'p_update', 'i_import')) && ($osc = osc_connect()) ) {
+    if ( in_array($action, array('c_import', 'o_import', 'p_check', 'p_update', 'i_import', 'i_check', 'i_update')) && ($osc = osc_connect()) ) {
 
         if ($action == 'c_import') {
             if (!check_num('credit_limit', 0)) {
@@ -483,12 +544,8 @@ if (isset($_POST['action'])) {
         }
 
         if ($action == 'o_import') { // Import Order specified by oID
-            $first_oid = (int) $_POST['first_oid'];
-            $last_oid  = (int) $_POST['last_oid'];
-            if (!not_null($first_oid) || !not_null($last_oid)) {
-                $first_oid = 0;
-                $last_oid  = 0;
-            }
+            $first_date = date2sql($_POST['first_date']);
+            $last_date  = date2sql($_POST['last_date']);
 
             $destCust        = $_POST['destCust'];
             $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('destCust', ".db_escape($destCust).") ON DUPLICATE KEY UPDATE name='destCust', value=".db_escape($destCust);
@@ -500,7 +557,7 @@ if (isset($_POST['action'])) {
 
             $customer = null;
             $errors = (int) $_POST['errors'];
-            $sql        = "SELECT * FROM orders WHERE orders_id >= ".osc_escape($first_oid)." AND orders_id <= ".osc_escape($last_oid);
+            $sql = "SELECT * FROM orders WHERE date_purchased BETWEEN ".osc_escape($first_date ." 00:00:00") . " AND " . osc_escape($last_date . " 23:59:59");
             if ($statusId != "")
                 $sql .= " AND orders_status = " . $statusId;
             $sql .= " AND orders_id not in (select orders_id from orders_status_history oh where LOCATE('Imported into FA', comments) != 0) group by orders_id";
@@ -508,16 +565,17 @@ if (isset($_POST['action'])) {
             display_notification("Found " . mysqli_num_rows($oid_result) . " New Orders");
 
             while ($order = mysqli_fetch_assoc($oid_result)) {
-                $oID         = $order['orders_id'];
-
-                $sql         = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID);
+                $oID            = $order['orders_id'];
+                $date_purchased = $order['date_purchased'];
                 $total_shipping = 0;
-                $total_total = 0;
+                $total_total    = 0;
                 $total_discount = 0;
                 $total_subtotal = 0;
-                $found_tax = false;
+                $found_tax      = false;
                 $found_subtotal = false;
-                $total_result = osc_dbQuery($sql, true);
+
+                $sql = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID);
+                $total_result   = osc_dbQuery($sql, true);
                 while ($total = mysqli_fetch_assoc($total_result)) {
                     switch ($total['class']) {
                         case 'ot_shipping' :
@@ -627,7 +685,7 @@ if (isset($_POST['action'])) {
                 $cart->Branch            = $branch['branch_code'];
                 $cart->cust_ref          = "osC Order # $oID";
                 $cart->Comments          = $comments;
-                $cart->document_date     = sql2date($order['date_purchased']);
+                $cart->document_date     = sql2date($date_purchased);
                 $cart->sales_type        = $customer['sales_type'];
                 $cart->ship_via          = $branch['default_ship_via'];
                 $cart->deliver_to        = $branch['br_name'];
@@ -636,6 +694,8 @@ if (isset($_POST['action'])) {
                 $cart->email             = $order['customers_email_address'];
                 $cart->freight_cost      = $total_shipping;
                 $cart->due_date          = Today();
+                $cart->dimension_id      = $_POST['dimension_id'];
+                $cart->dimension2_id     = $_POST['dimension2_id'];
 
                 $sql                     = "SELECT * FROM orders_products WHERE orders_id = ".osc_escape($oID);
                 $result                  = osc_dbQuery($sql, true);
@@ -650,8 +710,39 @@ if (isset($_POST['action'])) {
                         break;  // total check below will fail
                     }
                     add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $disc_percent);
+
+            // Note: OSC attributes are handled in FA as two different
+            // products. An OSC order of a product with attributes
+            // is an order of two products in FA:
+            // the parent product and the child attribute
+
+                    $sql = "SELECT pa.products_attributes_id, opa.options_values_price
+                            FROM orders_products_attributes opa
+                                LEFT JOIN products_options po ON opa.products_options = po.products_options_name
+                                LEFT JOIN products_options_values pov ON opa.products_options_values=pov.products_options_values_name
+                                LEFT JOIN orders_products op ON op.orders_products_id=opa.orders_products_id
+                                LEFT JOIN products_attributes pa ON op.products_id=pa.products_id
+                                    AND po.products_options_id=pa.options_id
+                                    AND pov.products_options_values_id=pa.options_values_id
+                            WHERE opa.orders_id=".osc_escape($oID);
+
+                    $pa_result = osc_dbQuery($sql, true);
+                    while ($pa = mysqli_fetch_assoc($pa_result)) {
+                        $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
+                        $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($pa_osc_id);
+                        $item = db_query($sql, "could not get item");
+                        $row  = db_fetch_row($item);
+                        if (!$row) {
+
+                            display_error("osC order " . $oID . " item " . $pa_osc_id . " not in FA.  Do an Item Import first.");
+                            break;  // total check below will fail
+                        }
+                        add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $prod['options_values_price'], $disc_percent);
+                    }
+                    mysqli_free_result($pa_result);
                 }
                 mysqli_free_result($result);
+
                 if ($total_total != round($cart->get_trans_total(), 2)) {
                     display_error("osC order " . $oID . " total " . $total_total . " does not match FA total " . $cart->get_trans_total() . ". (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent.")");
                     if ($errors == 0) {
@@ -662,7 +753,7 @@ if (isset($_POST['action'])) {
 
                 if ($_POST['invoice'] == 1) {
                     if (!$SysPrefs->allow_negative_stock() && ($low_stock = $cart->check_qoh())) {
-                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . implode(' ', $low_stock)));
+                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . implode(' ', $low_stock) . " on " . $cart->document_date));
                         if ($errors == 0) {
                             display_error('Skipping order ' . $oID);
                             continue;
@@ -686,14 +777,12 @@ if (isset($_POST['action'])) {
                     display_notification("Added Order Number $order_no for " . $customers_name);
 
                     $comments="Imported into FA";
-                    $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($oID) . "," .  $order['orders_status']. "," . Today() . ", 0, " . osc_escape($comments) . "}";
+                    $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($oID) . "," .  $order['orders_status']. "," . date('Y-m-d H:i:s') . ", 0, " . osc_escape($comments) . ")";
+                    $result = osc_dbQuery($sql);
 
-                    // display_notification($sql);
-                    // osc_dbQuery($sql);
-
-                    if ($oID > $lastoid) {
-                        $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($oID)." WHERE name = 'lastoid'";
-                        db_query($sql, "Update 'lastoid'");
+                    if ($date_purchased > $lastdate) {
+                        $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($date_purchased)." WHERE name = 'lastdate'";
+                        db_query($sql, "Update 'lastdate'");
                     }
                 }
 
@@ -705,7 +794,7 @@ if (isset($_POST['action'])) {
 
         if ($action == 'p_check') { // Price Check
 
-            $sql = "SELECT " . $osc_Id . ", products_price FROM products WHERE products_status = 1";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_price, products_name FROM products p LEFT JOIN products_description pd ON p.products_id = pd.products_id WHERE products_status = 1";
             // echo $sql;
             $p_result         = osc_dbQuery($sql, true);
             $currency         = $_POST['currency'];
@@ -718,9 +807,31 @@ if (isset($_POST['action'])) {
                 $myprice = get_kit_price($osc_id, $currency, $sales_type);
                 if ($myprice === false) display_notification("$osc_id price not found in FA");
                 else if ($price != $myprice) {
-                    display_notification("$osc_id Prices do not match FA $myprice osC $price");
+                    $products_name=$pp['products_name'];
+                    display_notification("$osc_id $products_name : FA price $myprice does not match osC $price");
                     $num_price_errors++;
                 }
+
+                // Check for product attributes
+                // FA item number like oscXXXX-AAAA
+
+                $sql = "SELECT products_attributes_id, options_values_price, products_options_values_name FROM products_attributes pa LEFT JOIN products_options_values po ON pa.options_values_id=products_options_values_id WHERE products_id=" . $pp['products_id'];
+
+                $pa_result = osc_dbQuery($sql, true);
+                while ($pa = mysqli_fetch_assoc($pa_result)) {
+                    $pa_price = $price + $pa['options_values_price'];
+                    $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
+                    $myprice = false;
+                    $myprice = get_kit_price($pa_osc_id, $currency, $sales_type);
+                    if ($myprice === false) display_notification("$osc_id price not found in FA");
+                    else if ($pa_price != $myprice) {
+                        $products_name=$pp['products_name'];
+                        $pa_products_name=$pa['products_options_values_name'];
+                        display_notification("$pa_osc_id $products_name $pa_products_name : FA price $myprice does not match osC $pa_price");
+                        $num_price_errors++;
+                    }
+                }
+                mysqli_free_result($pa_result);
             }
             mysqli_free_result($p_result);
             $action = 'pcheck';
@@ -741,15 +852,43 @@ if (isset($_POST['action'])) {
                 else if ($price != $myprice) {
                     display_notification("Updating $osc_id from $price to $myprice");
                     $sql = "UPDATE products SET products_price = ".osc_escape($myprice)." WHERE $osc_Id = ".osc_escape($osc_id);
-                    osc_dbQuery($sql);
+                    $result = osc_dbQuery($sql);
                     $num_price_errors++;
                 }
+
+                // Check for product attributes
+                // FA item number like oscXXXX-AAAA
+
+                $sql = "SELECT products_attributes_id, options_values_price, products_options_values_name FROM products_attributes pa LEFT JOIN products_options_values po ON pa.options_values_id=products_options_values_id WHERE products_id=" . $pp['products_id'];
+
+                $pa_result = osc_dbQuery($sql, true);
+                while ($pa = mysqli_fetch_assoc($pa_result)) {
+                    $pa_price = $price + $pa['options_values_price'];
+                    $pa_att_id = $pa['products_attributes_id']; 
+                    $pa_osc_id = $osc_id . "-" . $pa_att_id;
+                    $pa_myprice = false;
+                    $pa_myprice = get_kit_price($pa_osc_id, $currency, $sales_type);
+                    if ($pa_myprice === false) display_notification("$pa_osc_id price not found in FA");
+                    else if ($pa_price != $pa_myprice) {
+                        display_notification("Updating $pa_osc_id from $pa_price to $pa_myprice");
+                        $sql = "UPDATE products_attributes SET options_values_price = ".osc_escape($pa_myprice - $myprice)." WHERE products_attributes_id = ".osc_escape($pa_att_id);
+                        $result = osc_dbQuery($sql);
+                        $num_price_errors++;
+                    }
+                }
+                mysqli_free_result($pa_result);
             }
             mysqli_free_result($p_result);
             $action = 'pupdate';
         }
         if ($action == 'i_import') { // Item Import
-            $sql = "SELECT p." . $osc_Id . ", pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title
+                    FROM products p
+                        LEFT JOIN products_description pd ON p.products_id=pd.products_id
+                        LEFT JOIN products_to_categories pc ON p.products_id=pc.products_id
+                        LEFT JOIN categories_description cd ON pc.categories_id=cd.categories_id
+                        LEFT JOIN tax_class tc ON p.products_tax_class_id=tc.tax_class_id 
+                    WHERE products_status='1'";
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
@@ -793,51 +932,146 @@ if (isset($_POST['action'])) {
                 } else
                     $cat = $row['category_id'];
 
-                $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($osc_id);
-                $result = db_query($sql,"item could not be retreived");
-                $row    = db_fetch_row($result);
-                if (!$row) {
-                    $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
-                            tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
-                            adjustment_account, wip_account, dimension_id, dimension2_id)
-                            VALUES ('$osc_id', " . db_escape($products_name) . ", '',
-                            '$cat', '$tax_type_id', '{$_POST['units']}', '$mb_flag',
-                            '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
-                            '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', '{$_POST['dimension_id']}', '{$_POST['dimension2_id']}')";
+                addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price);
 
-                    db_query($sql, "The item could not be added");
-                    $sql = "INSERT INTO ".TB_PREF."loc_stock (loc_code, stock_id) VALUES ('{$_POST['default_location']}', ".db_escape($osc_id).")";
+                // Check for product attributes
+                // FA item number like oscXXXX-AAAA
 
-                    db_query($sql, "The item locstock could not be added");
-                    add_item_price($osc_id, $_POST['sales_type'], $_POST['currency'], $products_price);
-                    display_notification("Insert $osc_id " . $products_name);
-                } else {
-                    // FrontAccounting is considered the inventory master
-                    // so once an osCommerce item is imported into FA,
-                    // update is limited to fields controlled by OSC
-                    // ignoring price and inventory quantity.
-                    // Note that Update Prices and Update Inventory
-                    // will overwrite these fields in osCommerce, so it
-                    // it pointless to change them in osCommerce.
-                    // Conversely, product name, category, tax class are controlled
-                    // by osCommerce so it is pointless to change them
-                    // in FA, as they will be overwritten.
-                    $sql = "UPDATE ".TB_PREF."stock_master SET description=" . db_escape($products_name) .", category_id='$cat', tax_type_id='$tax_type_id'
-                        WHERE stock_id=" . db_escape($osc_id);
+                $sql = "SELECT products_attributes_id, options_values_price, products_options_values_name FROM products_attributes pa LEFT JOIN products_options_values po ON pa.options_values_id=products_options_values_id WHERE products_id=" . $pp['products_id'];
 
-                    db_query($sql, "The item could not be updated");
-                    display_notification("Update $osc_id $products_name");
+                $pa_result = osc_dbQuery($sql, true);
+                while ($pa = mysqli_fetch_assoc($pa_result)) {
+                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], $cat, $tax_type_id, $mb_flag, $pa['options_values_price']);
                 }
-
-                $sql    = "SELECT id from ".TB_PREF."item_codes WHERE item_code=".db_escape($osc_id)." AND stock_id = ".db_escape($osc_id);
-                $result = db_query($sql, "item code could not be retreived");
-                $row    = db_fetch_row($result);
-                if (!$row) add_item_code($osc_id, $osc_id, $products_name, $cat, 1);
-                else update_item_code($row[0], $osc_id, $osc_id, $products_name, $cat, 1);
+                mysqli_free_result($pa_result);
             }
             mysqli_free_result($p_result);
             $action = 'iimport';
         }
+
+        if ($action == 'i_check') { // Inventory Check
+
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_quantity, products_name FROM products p LEFT JOIN products_description pd ON p.products_id = pd.products_id WHERE products_quantity != '' AND products_status = 1";
+            $p_result = osc_dbQuery($sql, true);
+            $num_qty_errors = 0;
+            while ($pp = mysqli_fetch_assoc($p_result)) {
+                $qty   = $pp['products_quantity'];
+                $osc_id = $osc_Prefix . $pp[$osc_Id];
+                $myqty = get_qoh_on_date($osc_id, $_POST['default_location']);
+                if ($qty != $myqty) {
+                    $products_name=$pp['products_name'];
+                    display_notification("$osc_id $products_name : FA quantity $myqty does not match osC $qty");
+                    $num_qty_errors++;
+                }
+
+                // Check for product attributes
+                // FA item number like oscXXXX-AAAA
+
+                $sql = "SELECT products_attributes_id, options_quantity, products_options_values_name FROM products_attributes pa LEFT JOIN products_options_values po ON pa.options_values_id=products_options_values_id WHERE options_quantity != '' AND products_id=" . $pp['products_id'];
+
+                $pa_result = osc_dbQuery($sql, true);
+                while ($pa = mysqli_fetch_assoc($pa_result)) {
+                    $pa_qty = $pa['options_quantity'];
+                    $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
+                    $pa_myqty = get_qoh_on_date($pa_osc_id, $_POST['default_location']);
+                    if ($pa_qty != $pa_myqty) {
+                        $products_name=$pp['products_name'];
+                        $pa_products_name=$pa['products_options_values_name'];
+                        display_notification("$pa_osc_id $products_name $pa_products_name : FA quantity $pa_myqty does not match osC $pa_qty");
+                        $num_qty_errors++;
+                    }
+                }
+                mysqli_free_result($pa_result);
+            }
+            mysqli_free_result($p_result);
+            $action = 'icheck';
+        }
+
+        if ($action == 'i_update') { // Update Inventory
+            $invCust = $_POST['invCust'];
+            $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('invCust', ".db_escape($invCust).") ON DUPLICATE KEY UPDATE name='invCust', value=".db_escape($invCust);
+            db_query($sql, "Update 'invCust'");
+
+            if ($invCust != '') {
+                $statusId = $_POST['statusId'];
+                $sql = "INSERT INTO orders SET
+                    customers_id='$invCust',
+                    customers_name='FA Inventory Adjust',
+                    orders_status='$statusId',
+                    date_purchased='" . date2sql(Today()) . "',
+                    last_modified='" . date2sql(Today()) . "'";
+                $insert_osc_result = osc_dbQuery($sql);
+                $insert_id=osc_insert_id();
+
+                $sql = "INSERT INTO orders_total set
+                    orders_id='$insert_id',
+                    class='ot_total',
+                    title='Total:',
+                    text='$0.00'";
+                $insert_osc_result = osc_dbQuery($sql);
+            }
+
+            $sql = "SELECT p." . $osc_Id . ", products_quantity, products_name, products_model FROM products p LEFT JOIN products_description pd ON p.products_id=pd.products_id WHERE products_quantity != '' AND products_status = 1";
+            $p_result = osc_dbQuery($sql, true);
+            $num_qty_errors = 0;
+            while ($pp = mysqli_fetch_assoc($p_result)) {
+                $qty   = $pp['products_quantity'];
+                $osc_id = $osc_Prefix . $pp[$osc_Id];
+                $myqty = get_qoh_on_date($osc_id, $_POST['default_location']);
+                $diff = $myqty - $qty;
+                if ($diff != 0) {
+                    display_notification("Updating $osc_id from $qty to $myqty");
+                    $sql = "UPDATE products SET products_quantity = ".osc_escape($myqty)." WHERE $osc_Id = ".osc_escape($pp[$osc_Id]);
+                    $result = osc_dbQuery($sql);
+                    if ($invCust != '') {
+                    $sql = "INSERT INTO orders_products set
+                        orders_id='$insert_id',
+                        products_id=".osc_escape($pp['products_id']).",
+                        products_model=".osc_escape($pp['products_model']).",
+                        products_name=".osc_escape($pp['products_name']).",
+                        products_quantity=".osc_escape(-$diff);
+                        $result = osc_dbQuery($sql);
+                        $p_insert_id=osc_insert_id();
+                    }
+
+                    $num_qty_errors++;
+                }
+
+                // Check for product attributes
+                // FA item number like oscXXXX-AAAA
+
+                $sql = "SELECT products_attributes_id, options_quantity, products_options_values_name FROM products_attributes pa LEFT JOIN products_options_values po ON pa.options_values_id=products_options_values_id WHERE options_quantity !='' AND products_id=" . $pp['products_id'];
+
+                $pa_result = osc_dbQuery($sql, true);
+                while ($pa = mysqli_fetch_assoc($pa_result)) {
+                    $pa_qty = $pa['options_quantity'];
+                    $pa_att_id = $pa['products_attributes_id']; 
+                    $pa_osc_id = $osc_id . "-" . $pa_att_id;
+                    $pa_myqty = get_qoh_on_date($pa_osc_id, $_POST['default_location']);
+                    $diff = $pa_myqty - $pa_qty;
+                    if ($diff != 0) {
+                        display_notification("Updating $pa_osc_id from $pa_qty to $pa_myqty");
+                        $sql = "UPDATE products_attributes SET options_quantity = ".osc_escape($pa_myqty)." WHERE products_attributes_id = ".osc_escape($pa['products_attributes_id']);
+                        $result = mysqli_query($osc, $sql);
+
+                        if ($invCust != '') {
+                        $sql = "INSERT INTO orders_products_attributes set
+                            orders_id='$insert_id',
+                            orders_products_id='$p_insert_id',
+                            products_id=".osc_escape($pp['products_id']);
+                            $result = mysqli_query($osc, $sql);
+                        }
+                        $num_qty_errors++;
+                    }
+                }
+                mysqli_free_result($pa_result);
+            }
+            mysqli_free_result($p_result);
+            $action = 'iupdate';
+        }
+
+
+
         if ($osc && !$one_database) mysqli_close($osc);
    }
 
@@ -850,11 +1084,11 @@ if (isset($_POST['action'])) {
     $oscId           = $osc_Id;
     $oscPrefix       = $osc_Prefix;
     $lastcid         = $last_cid;
-    $lastoid         = $last_oid;
+    $lastdate         = $last_date;
     $defaultTaxGroup = $default_TaxGroup;
 }
 
-if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport')) && ($osc = osc_connect()) ) {
+if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport', 'iupdate')) && ($osc = osc_connect()) ) {
 
     if ($action == 'cimport' || $action == 'summary') { // Preview Customer Import page
 
@@ -869,13 +1103,13 @@ if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport')) && ($o
 
     if ($action == 'oimport' || $action == 'summary') { // Preview Order Import page
 
-        $sql     = "SELECT `orders_id` FROM `orders` order by `orders_id` asc LIMIT 0,1";
-        $oid     = osc_dbQuery($sql);
-        $min_oid = (int) $oid['orders_id'];
-        if ($min_oid <= $last_oid) $min_oid = $last_oid + 1;
-        $sql     = "SELECT `orders_id` FROM `orders` order by `orders_id` desc LIMIT 0,1";
-        $oid     = osc_dbQuery($sql);
-        $max_oid = (int) $oid['orders_id'];
+        $sql      = "SELECT `date_purchased` FROM `orders` ORDER BY `date_purchased` ASC LIMIT 0,1";
+        $oid      = osc_dbQuery($sql);
+        $min_date = $oid['date_purchased'];
+        if ($min_date <= $last_date) $min_date = date('Y-m-d', strtotime($last_date .' +1 DAY'));
+        $sql      = "SELECT `date_purchased` FROM `orders` ORDER BY `date_purchased` DESC LIMIT 0,1";
+        $oid      = osc_dbQuery($sql);
+        $max_date = $oid['date_purchased'];
     }
 
     if ($action == 'iimport' || $action == 'summary') { // Preview Item Import page
@@ -888,6 +1122,9 @@ if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport')) && ($o
 $js = "";
 if ($SysPrefs->use_popup_windows)
     $js .= get_js_open_window(800, 500);
+if (user_use_date_picker())
+        $js .= get_js_date_picker();
+
 $help_context="osCommerce Interface";
 page(_($help_context), false, false, "", $js);
 
@@ -911,6 +1148,12 @@ else hyperlink_params($_SERVER['PHP_SELF'], _("&Update Prices"), "action=pupdate
 echo '&nbsp;|&nbsp;';
 if ($action == 'iimport') echo 'Item Import';
 else hyperlink_params($_SERVER['PHP_SELF'], _("&Item Import"), "action=iimport", false);
+echo '&nbsp;|&nbsp;';
+if ($action == 'icheck') echo 'Inventory Check';
+else hyperlink_params($_SERVER['PHP_SELF'], _("&Inventory Check"), "action=icheck", false);
+echo '&nbsp;|&nbsp;';
+if ($action == 'iupdate') echo 'Update Inventory';
+else hyperlink_params($_SERVER['PHP_SELF'], _("&Update Inventory"), "action=iupdate", false);
 echo "<br><br>";
 
 include($path_to_root . "/includes/ui.inc");
@@ -926,18 +1169,18 @@ if ($action == 'summary') {
 
     //alt_table_row_color($k);
 
-    label_cell("New Customers");
+    label_cell("Customer Import");
     if ($min_cid > $max_cid) {
         label_cell("None");
     } else {
         label_cell($max_cid - $min_cid + 1);
     }
     end_row();
-    label_cell("New Orders");
-    if ($min_oid > $max_oid) {
+    label_cell("Order Import");
+    if ($min_date > $max_date) {
         label_cell("None");
     } else {
-        label_cell($max_oid - $min_oid + 1);
+        label_cell($min_date);
     }
     end_row();
     end_form();
@@ -1062,12 +1305,25 @@ if ($action == 'oimport') {
 
     table_section_title("Order Import Options");
 
-    text_row("Starting Order Number:", 'first_oid', $min_oid, 8, 8);
-    text_row("Last Order Number:", 'last_oid', $max_oid, 8, 8);
+    $_POST['first_date'] = sql2date($min_date);
+    $_POST['last_date'] = sql2date($max_date);
+    date_row("Starting Order Date:", 'first_date');
+    date_row("Last Order Date:", 'last_date');
     text_row("Osc Status Id", 'statusId', $statusId, 20, 40);
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, true);
+    $dim = get_company_pref('use_dimension');
+    if ($dim < 1)
+        hidden('dimension_id', 0);
+    if ($dim < 2)
+        hidden('dimension2_id', 0);
+
+    if ($dim >= 1)
+        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', null, true, " ", false, 1);
+    if ($dim > 1)
+        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', null, true, " ", false, 2);
+
     yesno_list_row(_("Direct Invoice"), 'invoice', null, "", "", false);
-    sale_payment_list_cells(_('Payment:'), 'payment', PM_ANY, null, false);
+    sale_payment_list_cells(_('Payment:'), 'payment', PM_CASH, null, false);
 
     yesno_list_row(_("Errors"), 'errors', null, "Ignore", "Skip", false);
     yesno_list_row(_("Trial Run"), 'trial_run', null, "", "", false);
@@ -1191,8 +1447,58 @@ if ($action == 'iimport') {
 
     hidden('action', 'i_import');
     submit_center('iimport', "Import osC Items");
-    if ($num_price_errors > 0) display_notification("There were $num_price_errors prices updated");
+    if ($num_qty_errors > 0) display_notification("There were $num_qty_errors items imported");
 
     end_form();
     end_page();
+}
+
+if ($action == 'icheck') {
+
+    start_form(true);
+
+    start_table(TABLESTYLE2, "width=40%");
+
+    table_section_title("Inventory Check Options");
+    locations_list_row("Location:", 'default_location', null);
+
+    $company_record = get_company_prefs();
+
+    end_table(1);
+
+    hidden('action', 'i_check');
+    submit_center('pcheck', "Check osC Inventory");
+    if ($num_qty_errors == 0) display_notification("No Inventory Errors Found");
+
+    end_form();
+
+    hyperlink_params($_SERVER['PHP_SELF'], _("Refresh"), "action=icheck");
+    end_page();
+}
+
+if ($action == 'iupdate') {
+
+    if ($min_date <= $max_date)
+        display_error("Order Import required before Inventory Update");
+    else {
+        start_form(true);
+
+        start_table(TABLESTYLE2, "width=40%");
+
+        table_section_title("Update Inventory Options");
+
+        locations_list_row("Location:", 'default_location', null);
+        text_row("Inventory Customer Id:", 'invCust', $invCust, 20, 40);
+        text_row("Osc Status Id", 'statusId', $statusId, 20, 40);
+        $company_record = get_company_prefs();
+
+        end_table(1);
+
+        hidden('action', 'i_update');
+        submit_center('pupdate', "Update osC Inventory");
+        if ($num_qty_errors > 0) display_notification("There were $num_qty_errors items updated");
+
+        end_form();
+        end_page();
+    }
 }
