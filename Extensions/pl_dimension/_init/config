@@ -1,0 +1,13 @@
+Package: pl_dimension
+Name: Profit Loss All Dimensions
+Description: This extension is like the built-in profit loss drilldown,
+but it shows all dimensions at once.
+Author: Tom Hallman
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/pl_dimension
+Type: extension
+Filename: pl_dimension-2.4.0-2
+Version: 2.4.0-2
+
