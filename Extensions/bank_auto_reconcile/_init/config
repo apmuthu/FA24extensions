@@ -8,6 +8,6 @@ Homepage: frontaccounting.com
 Depends: 
 InstallPath: modules/bank_auto_reconcile
 Type: extension
-Filename: import_items-2.4.0-2
+Filename: bank_auto_reconcile-2.4.0-2
 Version: 2.4.0-2
 

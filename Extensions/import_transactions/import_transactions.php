@@ -159,7 +159,7 @@ if ((isset($_POST['type']))) {
                         // If the journal entry is not created, then
                         // a journal transaction entered through FA would have a trans_no
                         // starting from 1, and thus VOID would void the wrong G/L entries.
-                        add_journal(ST_JOURNAL, $curEntryId[ST_JOURNAL], $total_debit_positive, $date, get_company_pref('curr_default'), $curEntryId[ST_JOURNAL]);
+                        add_journal(ST_JOURNAL, $curEntryId[ST_JOURNAL], $total_debit_positive, $date, get_company_pref('curr_default'), $reference, 1, $date, $date);
                         $total_debit_positive = 0;
                     }
                 } else if (($type == ST_BANKPAYMENT) && ($stateformat != null))
@@ -267,7 +267,10 @@ if ((isset($_POST['type']))) {
                 if ($reference == '') {
                     display_error(_("$line does not have a reference. (line $line in import file '{$_FILES['imp']['name']}')"));
                     $error = true;
-                }
+                } else if (!$Refs->is_valid($reference, $type)) {
+                        display_notification("Reference " . $reference . " must match valid pattern in Setup->Transaction References");
+                        $error = true;
+                    }
                 if ((!$Refs->is_new_reference($reference, $type)) && ($reference != $prev_ref)) {
                     display_error(_("Error: Reference from table 'refs': '$reference' is already in use. (line $line in import file '{$_FILES['imp']['name']}')"));
                     $error = true;

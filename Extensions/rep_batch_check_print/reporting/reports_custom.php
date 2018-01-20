@@ -20,7 +20,7 @@ function check_start($param, $type)
         $result = db_query($sql, "The check number cannot be retrieved");
         $row = db_fetch($result);
         $checkno='';
-        if ($row[0] != 0) {
+        if ($row != 0) {
             $checkno = substr($row['memo_'], strpos($row['memo_'], '[')+1, -1);
             $checkno++;
         }

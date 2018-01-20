@@ -554,6 +554,7 @@ if (isset($_POST['action'])) {
                 $sql .= " AND orders_status = " . $statusId;
             $sql .= " AND orders_id not in (select orders_id from orders_status_history oh where LOCATE('Imported into FA', comments) != 0) group by orders_id";
             $oid_result = osc_dbQuery($sql, true);
+            // display_notification($sql);
             display_notification("Found " . mysqli_num_rows($oid_result) . " New Orders");
 
             while ($order = mysqli_fetch_assoc($oid_result)) {
@@ -702,8 +703,31 @@ if (isset($_POST['action'])) {
                         break;  // total check below will fail
                     }
                     add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $disc_percent);
+
+            // Note: OSC attributes are handled in FA as two different
+            // products. An OSC order of a product with attributes
+            // is an order of two products in FA:
+            // the parent product and the child attribute
+
+                    $sql = "select pa.products_attributes_id, opa.options_values_price FROM orders_products_attributes opa LEFT JOIN products_options po on opa.products_options = po.products_options_name LEFT JOIN products_options_values pov ON opa.products_options_values=pov.products_options_values_name LEFT JOIN orders_products op on op.orders_products_id=opa.orders_products_id LEFT JOIN products_attributes pa on op.products_id=pa.products_id AND po.products_options_id=pa.options_id AND pov.products_options_values_id=pa.options_values_id where opa.orders_id=".osc_escape($oID);
+
+                    $pa_result = osc_dbQuery($sql, true);
+                    while ($pa = mysqli_fetch_assoc($pa_result)) {
+                        $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
+                        $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($pa_osc_id);
+                        $item = db_query($sql, "could not get item");
+                        $row  = db_fetch_row($item);
+                        if (!$row) {
+
+                            display_error("osC order " . $oID . " item " . $pa_osc_id . " not in FA.  Do an Item Import first.");
+                            break;  // total check below will fail
+                        }
+                        add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $prod['options_values_price'], $disc_percent);
+                    }
+                    mysqli_free_result($pa_result);
                 }
                 mysqli_free_result($result);
+
                 if ($total_total != round($cart->get_trans_total(), 2)) {
                     display_error("osC order " . $oID . " total " . $total_total . " does not match FA total " . $cart->get_trans_total() . ". (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent.")");
                     if ($errors == 0) {
@@ -899,7 +923,7 @@ if (isset($_POST['action'])) {
 
                 $pa_result = osc_dbQuery($sql, true);
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
-                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], $cat, $tax_type_id, $mb_flag, $products_price + $pa['options_values_price']);
+                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], $cat, $tax_type_id, $mb_flag, $pa['options_values_price']);
                 }
                 mysqli_free_result($pa_result);
             }

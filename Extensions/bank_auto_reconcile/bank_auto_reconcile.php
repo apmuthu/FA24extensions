@@ -71,13 +71,38 @@ function get_bank_transaction($account, $amount, $check, $current)
     return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
 
+function get_similar_bank_transaction($account, $search)
+{
+    $sql = "SELECT b.*, gl.account, cm.account_name FROM ".TB_PREF."bank_trans b
+            LEFT JOIN ".TB_PREF."comments c
+            ON b.type=c.type AND c.id = b.trans_no
+            LEFT JOIN ".TB_PREF."gl_trans gl
+            ON b.type=gl.type AND b.trans_no=gl.type_no
+            LEFT JOIN ".TB_PREF."chart_master cm
+            ON gl.account=cm.account_code
+            WHERE b.bank_act = '$account'
+            AND gl.amount > 0
+            AND LOCATE('$search', c.memo_) != 0
+            ORDER BY b.id DESC LIMIT 1";
+    return db_query($sql,"The transactions for '$account' could not be retrieved");
+}
 
 function auto_reconcile($current)
 {
     $newdate=$_POST['reconcile_date'];
     $reconcile_value =  ("'".date2sql($_POST['reconcile_date']) ."'");
     foreach ($current as $key => $value) {
-    //    update_reconciled_values($key, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
+/*
+        update_reconciled_values($key, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
+
+        $sql = "SELECT b.type, b.trans_no, memo_ FROM ".TB_PREF."bank_trans b
+            LEFT JOIN ".TB_PREF."comments c
+            ON b.type=c.type and c.id = b.trans_no
+            WHERE id = '$key'";
+        $result = db_query($sql,"The transaction for '$id' could not be retrieved");
+        $row = db_fetch($result);
+        add_comments($row['type'], $row['tran_no'], $reconcile_value, $row['memo_'] + " " + $value);
+*/
         display_notification("Updated $key");
     }
 }
@@ -91,30 +116,68 @@ page(_($help_context), false, false, "", $js);
 
 if (isset($_POST['import'])) {
     if (isset($_FILES['imp']) && $_FILES['imp']['name'] != '') {
-        $filename = $_FILES['imp']['tmp_name'];
-        $fp = @fopen($filename, "r");
-        if (!$fp)
-            die("can not open file $filename");
-
         $current = array();
+        $auto = array();
         $total_miss = 0;
+        $total_current = 0;
         $total = 0;
-        while ($data = fgetcsv($fp, 4096, ",")) {
-            if ($data[0] == null)
-                continue;
-            $result = get_bank_transaction($_POST['bank_account'], $data[1], $data[3], $current);
-            $row = db_fetch($result);
-            if ($row[0] == 0) {
-                display_error("$data[0]:$data[1]:$data[3]:$data[4]");
-                $total_miss += $data[1];
-            } else {
-                $current[$row['id']] = $row['amount'];
-            }
-            $total += $data[1];
-        }
-        @fclose($fp);
 
-        show_balance($total, $total_miss, array_sum($current));
+        // do checks first, then auto deducts
+        for ($i=0; $i < 2; $i++) {
+            $filename = $_FILES['imp']['tmp_name'];
+            $fp = @fopen($filename, "r");
+            if (!$fp)
+                die("can not open file $filename");
+
+            while ($data = fgetcsv($fp, 4096, ",")) {
+                if ($data[0] == null)   // blank line
+                    continue;
+
+                $amount = $data[1];
+                $checkno = $data[3];
+                if ($i == 1)
+                    $comment = $data[4];
+                else
+                    $comment = "";
+
+                 if (($checkno != "" && $i == 1)
+                    || ($checkno == "" && $i == 0))
+                    continue;
+
+                $result = get_bank_transaction($_POST['bank_account'], $amount, $checkno, $current);
+                $row = db_fetch($result);
+                if ($row[0] == 0) {
+
+        // search for recurrent transactions for auto payments
+
+                    if ($checkno == ""
+                        && $comment != "") {
+                        $result = get_similar_bank_transaction($_POST['bank_account'], substr($comment, 0, 12));
+
+        // only simple (non-split) recurrent transactions can be auto-reconciled
+
+                        if (db_num_rows($result) == 1) {
+                            $sim = db_fetch($result);
+                            display_notification("$data[0]:$data[1]:$data[3]:$data[4] will be created using account " . $sim['account'] . " " . $sim['account_name']);
+                            $auto[$sim['id']] = $comment;
+                            $total_current += $amount;
+                            $total += $amount;
+                            continue;
+                        }
+                    }
+
+                    display_notification("$data[0]:$data[1]:$data[3]:$data[4]");
+                    $total_miss += $amount;
+                    $total += $amount;
+                } else {
+                    $current[$row['id']] = $comment;
+                    $total_current += $row['amount'];
+                    $total += $row['amount'];
+                }
+            } // while
+            @fclose($fp);
+        }
+        show_balance($total, $total_miss, $total_current);
 
         if ($total_miss == 0) {
             $trial = (isset($_POST['trial']) ? $_POST['trial'] : false);
