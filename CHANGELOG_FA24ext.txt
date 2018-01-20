@@ -1,3 +1,4 @@
+2018-01-20  BraathWaate  Profit and Loss All Dimensions extension added
 2018-01-20  BraathWaate  osc_orders module: product attribute import added
 2018-01-20  BraathWaate  import_transactions module: reference pattern check added
 2018-01-20  BraathWaate  Added bank_auto_reconcile extension
