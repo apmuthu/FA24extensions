@@ -1,3 +1,4 @@
+2018-01-20  BraathWaate  rep_batch_check_print module: guide by date
 2018-01-20  BraathWaate  Profit and Loss All Dimensions extension added
 2018-01-20  BraathWaate  osc_orders module: product attribute import added
 2018-01-20  BraathWaate  import_transactions module: reference pattern check added
