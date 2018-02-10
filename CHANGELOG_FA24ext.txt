@@ -1,3 +1,4 @@
+2018-02-10  Ap.Muthu     South African 4 digit Chart of Accounts added based on en_US-new.sql
 2018-02-01  Ap.Muthu     de_DE language translations updated and charset as iso-8859-1
 2018-01-25  Ap.Muthu     id_ID language translations updated and charset as iso-8859-1
 2018-01-20  BraathWaate  rep_bank_daily_sweep module added
