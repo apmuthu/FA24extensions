@@ -56,7 +56,7 @@ function project_list() {
 
         $table = new_db_pager('projects_tbl', $sql, $cols);
 		$table->set_marker('check_overdue', _("Marked rows are overdue."));
-        $table->width = "60%";
+        // $table->width = "60%";
 	
 	    display_note(_('Press name to go to project details.'));
         display_db_pager($table);
@@ -64,25 +64,17 @@ function project_list() {
 
 //--------------------------------------------------------------------------
 
-page(_($help_context = "Manage Projects"), false, false, "", $js);
-
-if(isset($_GET['action']) && $_GET['action'] == 'list')
+if(isset($_GET['action']) && $_GET['action'] == 'list') {
+    page(_($help_context = "Projects List"), false, false, "", $js);
     project_list();
-else {
+} else {
 	if(empty($_GET['proj']))
         $_SESSION['project'] = get_last_project()[0];
-    else 
-	     $_SESSION['project'] = $_GET['proj'];
+    else
+        $_SESSION['project'] = $_GET['proj'];
 
-	echo "&nbsp";
-    echo viewer_link(_('Add Project'), 'modules/kanban/manage/add_project.php');
-    echo "&nbsp&nbsp";
-    // echo "<a href='#' id='new'>New Task</a>";
-    echo "&nbsp&nbsp";
-    echo "<a href='?action=list'>"._('Projects List')."</a>";
-    if(isset($_SESSION['project']))
-        echo "<center><h3>".get_projects($_SESSION['project'])['proj_name']."</h3></center>";
+    page($help_context = get_projects($_SESSION['project'])['proj_name'], false, false, "", $js);
+
     include_once("$path_to_root/modules/kanban/includes/ui/board.inc");
 }
-
 end_page();

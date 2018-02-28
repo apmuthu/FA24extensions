@@ -11,9 +11,9 @@ Requirement
 Installation
 ------------
 - Rename folder *FrontKanban-master* to *kanban* then copy folder to the FA modules directory.
-- Install and activate the module if you have incorporated the [non-versioned module install fix](http://frontaccounting.com/punbb/viewtopic.php?id=6986).
+- Install and activate the module if your FA install uses code on or after 2017-12-15, otherwise first incorporate the [non-versioned module install fix](http://frontaccounting.com/punbb/viewtopic.php?id=6986):
 - Otherwise, do the following:
 
 * Comment out block of codes from lines 215 to 220 of "*admin/inst_module.php*".
 * Install and activate the module.
-* Uncomment lines 215-220 of "*admin/inst_module.php*".
+* Uncomment lines 215-220 of `admin/inst_module.php`.

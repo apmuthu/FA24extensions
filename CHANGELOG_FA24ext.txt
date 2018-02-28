@@ -1,3 +1,4 @@
+2018-02-28  Phuong       Kanban Project Management extension partial upstream synch
 2018-02-18  Ap.Muthu     Charts Prepaid additions
 2018-02-18  Ap.Muthu     module api24: VARLIB_PATH and VARLOG_PATH changes included
 2018-02-18  Braathwaate  en_US ANSI core language files updated
