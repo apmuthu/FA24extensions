@@ -215,4 +215,3 @@ function import_sales_order_item_controls(&$order, &$rowcounter, $line_no=-1)
 
 //--------------------------------------------------------------------------------
 
-?>

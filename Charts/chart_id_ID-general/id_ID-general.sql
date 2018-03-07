@@ -1165,7 +1165,8 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Tanggal 15 bulan berikutnya', '0', '17', '0'),
 ('2', 'Akhir bulan berikutnya', '0', '30', '0'),
 ('3', 'Pembayaran dalam 10 hari', '10', '0', '0'),
-('4', 'Cash Only', '0', '0', '0');
+('4', 'Cash Only', '0', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 ### Structure of table `0_prices` ###
 

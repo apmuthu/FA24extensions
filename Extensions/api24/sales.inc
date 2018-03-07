@@ -89,7 +89,7 @@ function sales_all($trans_type, $from = null) {
 
 		while($sale = db_fetch($query, "error")) {
 			try {
-				$trans					= get_customer_trans($sale['trans_no'], $sale['type']);
+				$trans			= get_customer_trans($sale['trans_no'], $sale['type']);
 				$trans_details	= get_customer_trans_details($sale['type'], $trans['trans_no']);
 
 				$info[$sale_index]['trans_no']				= $trans['trans_no'];
@@ -107,7 +107,7 @@ function sales_all($trans_type, $from = null) {
 				$info[$sale_index]['ov_freight']			= $trans['ov_freight'];
 				$info[$sale_index]['ov_freight_tax']	= $trans['ov_freight_tax'];
 				$info[$sale_index]['ov_discount']			= $trans['ov_discount'];
-				$info[$sale_index]['ov_discount']			= $trans['Total'];
+				$info[$sale_index]['Total']				= $trans['Total'];
 				$info[$sale_index]['alloc']						= $trans['alloc'];
 				$info[$sale_index]['rate']						= $trans['rate'];
 				$info[$sale_index]['ship_via']				= $trans['ship_via'];

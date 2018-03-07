@@ -1,3 +1,15 @@
+2018-02-18  Ap.Muthu     Charts Prepaid additions
+2018-02-18  Ap.Muthu     module api24: VARLIB_PATH and VARLOG_PATH changes included
+2018-02-18  Braathwaate  en_US ANSI core language files updated
+2018-02-10  Ap.Muthu     South African 4 digit Chart of Accounts added based on en_US-new.sql
+2018-02-01  Ap.Muthu     de_DE language translations updated and charset as iso-8859-1
+2018-01-25  Ap.Muthu     id_ID language translations updated and charset as iso-8859-1
+2018-01-20  BraathWaate  rep_bank_daily_sweep module added
+2018-01-20  BraathWaate  rep_batch_check_print module: guide by date
+2018-01-20  BraathWaate  Profit and Loss All Dimensions extension added
+2018-01-20  BraathWaate  osc_orders module: product attribute import added
+2018-01-20  BraathWaate  import_transactions module: reference pattern check added
+2018-01-20  BraathWaate  Added bank_auto_reconcile extension
 2018-01-18  Ap.Muthu     Updated EG, AU, CA, FR, GB, IN, SG, US-5, US-GAAP English Charts with upstream
 2018-01-07  Ap.Muthu     en_GB general 4 digit Chart of Accounts fixed typo
 2017-12-25  Ap.Muthu     import_transactions module: cart class synched with core

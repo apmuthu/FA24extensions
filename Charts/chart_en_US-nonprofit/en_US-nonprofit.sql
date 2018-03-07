@@ -1028,7 +1028,8 @@ INSERT INTO `0_payment_terms` VALUES
 ('1', 'Due 15th Of the Following Month', '0', '17', '0'),
 ('2', 'Due By End Of The Following Month', '0', '30', '0'),
 ('3', 'Payment due within 10 days', '10', '0', '0'),
-('4', 'Cash Only', '0', '0', '0');
+('4', 'Cash Only', '0', '0', '0'),
+('5', 'Prepaid', -1, 0, 0);
 
 ### Structure of table `0_prices` ###
 

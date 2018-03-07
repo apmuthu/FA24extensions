@@ -1,3 +1,5 @@
+2018-02-18 Ap.Muthu Sales transactions Total value fixed
+2018-02-18 Ap.Muthu Upstream VARLIB_PATH and VARLOG_PATH inclusions added
 2017-11-28 Ap.Muthu All define() statements consolidated into api_config.php.
 2017-11-27 Ap.Muthu POST / PUT consistency ensured. Associative array elements only.
 2017-11-24 Ap.Muthu Added Sepcific taxType endpoint. Fixed typos.
