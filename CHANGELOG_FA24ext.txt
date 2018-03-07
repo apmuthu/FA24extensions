@@ -1,3 +1,4 @@
+2018-03-07  BraathWaate  osc_orders module: products_status, new order, last_date / end_date fix
 2018-03-07  BraathWaate  Bank Auto Reconcile: CSV format extended, taxes added
 2018-02-28  Phuong       Kanban Project Management extension partial upstream synch
 2018-02-18  Ap.Muthu     Charts Prepaid additions
