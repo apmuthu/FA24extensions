@@ -1,3 +1,4 @@
+2018-03-07  BraathWaate  rep_batch_check_print: custom form sql now includes Quick Entries
 2018-03-07  BraathWaate  rep_bank_daily_sweep: rounded the $total_daily amount value
 2018-03-07  BraathWaate  rep_batch_check_print: order by redundancy removed, last column pushed a little
 2018-03-07  BraathWaate  osc_orders module: products_status, new order, last_date / end_date fix
