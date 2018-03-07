@@ -61,6 +61,7 @@ global $Refs;
         $rep->AmountCol(7, 8, $total_daily, $dec);
         $rep->NewLine(2);
 
+        $total_daily = round($total_daily, $dec);
         if ($sweep != '' && $total_daily != 0) {
                 new_doc_date($lastdate);
                 $trans_no = add_bank_transfer($acc, $sweep, sql2date($lastdate), $total_daily, $Refs->get_next(ST_BANKTRANSFER, null, sql2date($lastdate)), "Sweep from $act", 0, $total_daily);

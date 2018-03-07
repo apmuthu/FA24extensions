@@ -39,7 +39,7 @@ function get_bank_transactions_to_print($account, $start)
                 AND (b.type = " . ST_BANKPAYMENT . "
                 OR b.type = " . ST_SUPPAYMENT . ")
                 AND b.id >= $start
-                ORDER BY trans_date,b.id";
+                ORDER BY b.id";
         return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
 
@@ -174,7 +174,7 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
     // Check portion
     
     $rep->NewLine(1,0,20);
-    $rep->cols = array(63, 340, 470, 565);
+    $rep->cols = array(63, 340, 470, 600);
     $rep->aligns = array('left', 'left', 'right', 'right');
     
     // Date
