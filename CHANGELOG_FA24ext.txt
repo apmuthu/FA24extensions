@@ -1,3 +1,4 @@
+2018-03-17  Ap.Muthu     ar_EG, hi_IN, ta_IN, vi_VN core translations updated for all 3313 strings
 2018-03-07  BraathWaate  rep_batch_check_print: custom form sql now includes Quick Entries
 2018-03-07  BraathWaate  rep_bank_daily_sweep: rounded the $total_daily amount value
 2018-03-07  BraathWaate  rep_batch_check_print: order by redundancy removed, last column pushed a little
