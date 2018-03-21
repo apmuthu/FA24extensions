@@ -1,3 +1,4 @@
+2018-03-21  Ap.Muthu     en_ZA 4digit Chart updated for 15% VAT in RSA from 2018 onwards
 2018-03-17  Ap.Muthu     ar_EG, hi_IN, ta_IN, vi_VN core translations updated for all 3313 strings
 2018-03-07  BraathWaate  rep_batch_check_print: custom form sql now includes Quick Entries
 2018-03-07  BraathWaate  rep_bank_daily_sweep: rounded the $total_daily amount value
