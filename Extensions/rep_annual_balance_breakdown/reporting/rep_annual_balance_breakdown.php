@@ -270,7 +270,7 @@ function print_annual_balance_breakdown_detail()
 	elseif ($date_system == 2)
 		list($yr, $mo, $da) = islamic_to_gregorian($yr, $mo, $da);
 
-    $headers2[0] = 'Account';
+    $headers2[0] = _('Account');
     $headers[0] = '';
 	for ($i = 0; $i < 12; $i++)
 	{
@@ -279,7 +279,7 @@ function print_annual_balance_breakdown_detail()
 	   	$wrap_point = strpos($header_row[$i], ' ');
 	   	if ($wrap_point)
 	   	{
-			$headers2[] = substr($header_row[$i], 0, $wrap_point);
+			$headers2[] = _(substr($header_row[$i], 0, $wrap_point));
 			$headers[] = substr($header_row[$i], $wrap_point+1);
 	   	}
 	   	else
