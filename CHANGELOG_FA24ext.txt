@@ -1,3 +1,4 @@
+2018-04-19  Ap.Muthu     add_stock_adjustment parameters fixed for FA 2.4 changes in API
 2018-04-07  poncho1234   gettext strings for Account and Months extended in extensions
 2018-03-29  Ap.Muthu     nb_NO core language file updated on and from Transifex
 2018-03-21  Ap.Muthu     en_ZA 4digit Chart updated for 15% VAT in RSA from 2018 onwards
