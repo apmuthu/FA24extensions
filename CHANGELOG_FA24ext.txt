@@ -1,3 +1,4 @@
+2018-04-21  LiChun       zh_TW core language strings updated for all 3313 strings
 2018-04-19  LiChun       zh_TW core language strings updated
 2018-04-19  Ap.Muthu     add_stock_adjustment parameters fixed for FA 2.4 changes in API
 2018-04-07  poncho1234   gettext strings for Account and Months extended in extensions
