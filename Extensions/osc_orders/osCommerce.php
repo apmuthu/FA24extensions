@@ -20,14 +20,19 @@ include_once($path_to_root . "/sales/includes/ui/sales_order_ui.inc");
 include_once($path_to_root . "/inventory/includes/db/items_prices_db.inc");
 include_once($path_to_root . "/taxes/db/item_tax_types_db.inc");
 
-/*
-SELECT c.customers_id, CONCAT(c.customers_firstname, ' ', c.customers_lastname) , b.entry_street_address, b.entry_suburb, b.entry_city, b.entry_zone_id, b.entry_state, b.entry_postcode, b.entry_country_id, c.customers_telephone, c.customers_email_address FROM customers c left join `customers_info` i on c.customers_id = i.customers_info_id left join address_book b on c.customers_default_address_id = b.address_book_id
+display_posts();
 
-SELECT `customers_id` FROM `customers` order by `customers_id` desc LIMIT 0,1
-SELECT `customers_id` FROM `customers` order by `customers_id` asc LIMIT 0,1
-
-SELECT products_model, products_price FROM products WHERE products_status = 1
-*/
+function display_posts()
+{
+    $query = "";
+    foreach ($_POST as $key => $value) {
+        $query .= $key . "=" . $value;
+        if ($key == 'action')
+            break;
+        $query .= "&";
+    }
+    display_notification($query);
+}
 
 function osc_connect() {
     global $db, $one_database, $dbHost, $dbUser, $dbPassword, $dbName;
@@ -253,6 +258,46 @@ function sales_service_items_list_row($label, $name, $selected_id=null, $all_opt
         echo "</td></tr>";
 }
 
+// Create a blank OSC order to contain the inventory changes
+
+function create_osc_order($invCust)
+{
+        global $osc;
+        $sql              = "INSERT INTO orders set
+            customers_id='$invCust',
+            customers_name='FA Inventory Adjust',
+            orders_status='3',
+            date_purchased='" . date2sql(Today()) . "',
+            last_modified='" . date2sql(Today()) . "'";
+        mysqli_query($osc, $sql);
+        $insert_id=mysqli_insert_id($osc);
+
+        $sql              = "INSERT INTO orders_total set
+            orders_id='$insert_id',
+            class='ot_total',
+            title='Total:',
+            text='$0.00'";
+        mysqli_query($osc, $sql);
+
+        $comments="Imported into FA";
+        $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($insert_id) . "," .  '3' . "," . osc_escape(date('Y-m-d H:i:s')) . ", 0, " . osc_escape($comments) . ")";
+
+        $result = mysqli_query($osc, $sql);
+
+        return $insert_id;
+}
+
+function get_error_status()
+{
+    global $messages;
+    if (count($messages)) {
+        foreach($messages as $cnt=>$msg) {
+            if ($msg[0] > E_USER_NOTICE)
+                return "Failed";
+        }
+    }
+    return "Success";
+}
 
 // error_reporting(E_ALL);
 // ini_set("display_errors", "on");
@@ -560,8 +605,8 @@ if (isset($_POST['action'])) {
         }
 
         if ($action == 'o_import') { // Import Order specified by oID
-            $first_date = date2sql($_POST['first_date']);
-            $end_date  = date2sql($_POST['last_date']);
+            $from_date = date2sql($_POST['from_date']);
+            $end_date  = date2sql($_POST['to_date']);
 
             $destCust        = $_POST['destCust'];
             $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('destCust', ".db_escape($destCust).") ON DUPLICATE KEY UPDATE name='destCust', value=".db_escape($destCust);
@@ -573,7 +618,7 @@ if (isset($_POST['action'])) {
 
             $customer = null;
             $errors = (int) $_POST['errors'];
-            $sql        = "SELECT * FROM orders WHERE date_purchased BETWEEN ".osc_escape($first_date ." 00:00:00") . " AND " . osc_escape($end_date . " 23:59:59");
+            $sql        = "SELECT * FROM orders WHERE date_purchased BETWEEN ".osc_escape($from_date ." 00:00:00") . " AND " . osc_escape($end_date . " 23:59:59");
             if ($statusId != "")
                 $sql .= " AND orders_status != " . $statusId;
             $sql .= " AND orders_id not in (select orders_id from orders_status_history oh where LOCATE('Imported into FA', comments) != 0) group by orders_id";
@@ -631,61 +676,47 @@ if (isset($_POST['action'])) {
                     $customers_name = $order['customers_name'];
                 $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `name` = ".db_escape($customers_name);
                 $result = db_query($sql, "Could not find customer by name");
-                if (db_num_rows($result) == 0) {
+                if (db_num_rows($result) == 0) { // customer not found
                     if ($destCust == 0) {
                         display_notification("Customer " . $customers_name . " not found");
                         break;
                     }
-                    $customer = db_fetch_assoc($result);
-                    $addr     = osc_address_format($order, 'delivery_');
-                    $taxgid   = get_tax_group_from_zone_id($order['delivery_state'], $defaultTaxGroup);
-                    $sql      = "SELECT * FROM ".TB_PREF."cust_branch WHERE debtor_no = ".db_escape($customer['debtor_no'])." AND br_address = ".db_escape($addr);
-                    if ($debug_sql) display_notification("Find BR " . $sql);
-                    $result = db_query($sql, "could not find customer branch");
+
+                    $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
+                    $result = db_query($sql, "Could not find customer by debtor_no");
                     if (db_num_rows($result) == 0) {
-                        if ($debug_sql) display_notification("New Branch");
-                        $debtor_no = $customer['debtor_no'];
-                        $sql       = "SELECT * FROM ".TB_PREF."cust_branch WHERE debtor_no = ".db_escape($debtor_no);
-                        if ($debug_sql) display_notification("Find BR * " . $sql);
-                        $result     = db_query($sql, "could not find any customer branch");
-                        $old_branch = db_fetch_assoc($result);
-                        if ($debug_sql) print_r($old_branch);
-                        add_branch($debtor_no, $old_branch['br_name'], $old_branch['branch_ref'], $addr, $old_branch['salesman'], $old_branch['area'], $taxgid, $old_branch['sales_account'], $old_branch['sales_discount_account'], $old_branch['receivables_account'], $old_branch['payment_discount_account'], $old_branch['default_location'], $addr, 0, 0, 1, $old_branch['notes']);
-                        $id  = db_insert_id();
-                        $sql = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE branch_code = ".db_escape($id);
-                        if ($debug_sql) display_notification("Get BR " . $sql);
-                        $result = db_query($sql, "Could not load new branch");
-                    } else {
-                        $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
-                        $result = db_query($sql, "Could not find customer by name");
-                        if (db_num_rows($result) == 0) {
-                            display_error("Customer id " . $destCust  . " not found");
-                            display_error('Skipping order ' . $oID);
-                            break;
-                        }
-                        $customer = db_fetch_assoc($result);
-                        $debtor_no = $customer['debtor_no'];
-                        $found = false;
+                        display_error("Customer id " . $destCust  . " not found");
+                        display_error('Skipping order ' . $oID);
+                        break;
+                    }
+                }
+                $customer = db_fetch_assoc($result);
+                $debtor_no = $customer['debtor_no'];
 
-                        foreach ( array ($order['delivery_city'], $order['delivery_state']) as $value ) {
-                            $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND description = " .db_escape($value);
-                            $result = db_query($sql, "Could not load branch");
-                            if (db_num_rows($result) != 0) {
-                                $found = true;
-                                break;
-                            }
-                        }
+                // Find the customer branch
+                // by matching the FA area description
+                // with the OSC delivery city or delivery state;
+                // otherwise use the default sales area code
+                // This is necessary to get the correct sales tax rate
+                // on the order.
+                $found = false;
+                foreach ( array ($order['delivery_city'], $order['delivery_state']) as $value ) {
+                    $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND description = " .db_escape($value);
+                    $result = db_query($sql, "Could not load branch");
+                    if (db_num_rows($result) != 0) {
+                        $found = true;
+                        break;
+                    }
+                }
 
-                        if ($found == false) {
-                            $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND area_code = " .db_escape($_POST['area']);
-                            $result = db_query($sql, "Could not load branch");
-                            if (db_num_rows($result) != 0)
-                                break;
+                if ($found == false) {
+                    $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND area_code = " .db_escape($_POST['area']);
+                    $result = db_query($sql, "Could not load branch");
+                    if (db_num_rows($result) == 0) {
 
-                            display_error("Customer branch for area " . $_POST['area'] . " not found");
-                            display_error('Skipping order ' . $oID);
-                            break;
-                        }
+                        display_error("Customer branch for area " . $_POST['area'] . " not found");
+                        display_error('Skipping order ' . $oID);
+                        break;
                     }
                 }
                 $branch                  = db_fetch_assoc($result);
@@ -739,21 +770,23 @@ if (isset($_POST['action'])) {
                 $cart->email             = $order['customers_email_address'];
                 $cart->freight_cost      = $total_shipping;
                 $cart->due_date          = sql2date($date_purchased);
-                $cart->dimension_id      = $_POST['dimension_id'];
-                $cart->dimension2_id     = $_POST['dimension2_id'];
+                $cart->dimension_id      = $customer['dimension_id'];
+                $cart->dimension2_id     = $customer['dimension2_id'];
 
                 // calculate the FA line item discount based on order discount
                 $disc_percent = 0;
                 if ($total_discount != 0) {
-                    // total_subtotal can be zero if the order does
-                    // not contain any positive quantities and there is
-                    // a discount.  This happens occasionally when a customer
-                    // is overbilled; perhaps a clerk fumble fingered
-                    // a credit card machine.   The customer is due a refund,
-                    // but FA does not have an easy way to create a direct
-                    // credit memo.  Instead, a negative quantity credit memo
-                    // item is added to the invoice and is priced out at
-                    // refund amount, resulting in a negative total invoice.
+
+            // total_subtotal can be zero if the order does
+            // not contain any positive quantities and there is
+            // a discount.  This happens occasionally when a customer
+            // is overbilled; perhaps a clerk fumble fingered
+            // a credit card machine.   The customer is due a refund,
+            // but FA does not have an easy way to create a direct
+            // credit memo.  Instead, a negative quantity credit memo
+            // item is added to the invoice and is priced out at
+            // refund amount, resulting in a negative total invoice.
+
                     if ($total_subtotal == 0) {
                         add_to_order($cart, $_POST['credit_memo'], -1, $total_discount, 0);
                         $disc_percent = 0;
@@ -761,12 +794,14 @@ if (isset($_POST['action'])) {
                         $disc_percent = $total_discount/$total_subtotal;
                 }
 
-                $sql                     = "SELECT * FROM orders_products WHERE orders_id = ".osc_escape($oID);
+                $sql                     = "SELECT op.*, p.products_quantity as inv FROM orders_products op LEFT JOIN products p ON op.products_id = p.products_id WHERE orders_id = ".osc_escape($oID);
                 $result                  = osc_dbQuery($sql, true);
                 $rows                    = db_num_rows($result);
                 $total                   = 0;
                 while ($prod = mysqli_fetch_assoc($result)) {
                     $osc_id = $osc_Prefix . $prod[$osc_Id];
+                    if ($prod['inv'] == "")
+                        $osc_id .= "D"; // service item
                     $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($osc_id);
                     $item = db_query($sql, "could not get item");
                     $row  = db_fetch_row($item);
@@ -833,6 +868,26 @@ if (isset($_POST['action'])) {
                         }
                     }
 
+        // Note: Vanilla FA does not support invoices or payments
+        // with negative quantities or amounts for customer refunds.
+        // It expects that a credit memo be issued.
+        // Nor does FA does not have the ability
+        // to create a direct credit memo, nor does is it able to enter
+        // purchased items and returned items on the same invoice.
+
+        // To make this import process easy, this code creates 
+        // negative quantities, amounts and payments on invoices.
+        // While vanilla FA performs correctly, it is unable to
+        // allocate the payment to the invoice.  I have fixed this
+        // issue in my version of FA, requiring some code changes and altering
+        // the "amt" field in table cust_allocations from "double unsigned"
+        // to "double".
+
+        // Note that negative quantities on an invoice
+        // are returned to stock in FA.  If the customer returned an
+        // item that cannot be returned to stock, then an inventory
+        // adjustment will need to be made.  This is a manual operation.
+
                     if (!$SysPrefs->allow_negative_invoice &&
                         $cart->get_items_total() < 0) {
                         display_error("Invoice total amount cannot be less than zero.");
@@ -860,13 +915,13 @@ if (isset($_POST['action'])) {
                         $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($date_purchased)." WHERE name = 'lastdate'";
                         db_query($sql, "Update 'lastdate'");
                     }
-
-                    $last_date = $end_date;
                 }
             }
             mysqli_free_result($oid_result);
 
+            $last_date = $end_date;
             $order_count = osc_new_orders($last_date, $statusId);
+            display_notification(get_error_status());
             $action = 'oimport';
         }
 
@@ -972,10 +1027,13 @@ if (isset($_POST['action'])) {
                 $products_price = $pp['products_price'];
                 $products_quantity = $pp['products_quantity'];
                 $products_status = $pp['products_status'];
-                $mb_flag = 'B';
-                if ($products_quantity == "")
-                    $mb_flag = 'D';
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
+
+                $mb_flag = 'B';
+                if ($products_quantity == "") {
+                    $mb_flag = 'D';
+                    $osc_id .= $mb_flag;
+                }
                 $tax_class_title = $pp['tax_class_title'];
                 if ($tax_class_title == "")
                     $tax_class_title = "--none--";
@@ -1070,33 +1128,14 @@ if (isset($_POST['action'])) {
             $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('invCust', ".db_escape($invCust).") ON DUPLICATE KEY UPDATE name='invCust', value=".db_escape($invCust);
             db_query($sql, "Update 'invCust'");
 
-            if ($invCust != '') {
-            global $osc;
-            $sql              = "INSERT INTO orders set
-                customers_id='$invCust',
-                customers_name='FA Inventory Adjust',
-                orders_status='3',
-                date_purchased='" . date2sql(Today()) . "',
-                last_modified='" . date2sql(Today()) . "'";
-            mysqli_query($osc, $sql);
-            $insert_id=mysqli_insert_id($osc);
-
-            $sql              = "INSERT INTO orders_total set
-                orders_id='$insert_id',
-                class='ot_total',
-                title='Total:',
-                text='$0.00'";
-            mysqli_query($osc, $sql);
-
-            $comments="Imported into FA";
-            $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($insert_id) . "," .  '3' . "," . osc_escape(date('Y-m-d H:i:s')) . ", 0, " . osc_escape($comments) . ")";
-
-            $result = mysqli_query($osc, $sql);
-            }
+        // Update osc products that have a non-blank products_quantity
+        // (if products_quantity is blank, do not update the item,
+        // because it is a service or other non-inventory item)
 
             $sql              = "SELECT p." . $osc_Id . ", products_quantity, products_name, products_model FROM products p LEFT JOIN products_description pd on p.products_id=pd.products_id WHERE length(products_quantity) != 0";
             $p_result         = osc_dbQuery($sql, true);
             $num_qty_errors = 0;
+            $insert_id = null;
             while ($pp = mysqli_fetch_assoc($p_result)) {
                 $qty   = $pp['products_quantity'];
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
@@ -1107,6 +1146,8 @@ if (isset($_POST['action'])) {
                     $sql = "UPDATE products SET products_quantity = ".osc_escape($myqty)." WHERE $osc_Id = ".osc_escape($pp[$osc_Id]);
                     $result = mysqli_query($osc, $sql);
                     if ($invCust != '') {
+                    if ($insert_id == null)
+                        $insert_id = create_osc_order($invCust);
                     $sql = "INSERT INTO orders_products set
                         orders_id='$insert_id',
                         products_id=".osc_escape($pp['products_id']).",
@@ -1368,8 +1409,8 @@ if ($action == 'cimport') {
     if ($dim > 1)
         dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', NULL, true, " ", false, 2);
 
-    text_row("Starting osC Customer ID:", 'min_cid', $min_cid, 6, 6);
-    text_row("Ending osC Customer ID:", 'max_cid', $max_cid, 6, 6);
+    text_row("From osC Customer ID:", 'min_cid', $min_cid, 6, 6);
+    text_row("To osC Customer ID:", 'max_cid', $max_cid, 6, 6);
 
     end_table(1);
 
@@ -1388,26 +1429,15 @@ if ($action == 'oimport') {
 
     table_section_title("Order Import Options");
 
-    if (!isset($_POST['first_date']))
-        $_POST['first_date'] = sql2date($min_date);
-    if (!isset($_POST['last_date']))
-        $_POST['last_date'] = sql2date($max_date);
-    date_row("Starting Order Date:", 'first_date');
-    date_row("Last Order Date:", 'last_date');
+    if (!isset($_POST['from_date']))
+        $_POST['from_date'] = sql2date($min_date);
+    if (!isset($_POST['to_date']))
+        $_POST['to_date'] = sql2date($max_date);
+    date_row("From Order Date:", 'from_date');
+    date_row("To Order Date:", 'to_date');
     text_row("Skip Osc Status Id", 'statusId', $statusId, 20, 40);
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, true);
     sales_areas_list_row("Sales Area:", 'area');
-    $dim = get_company_pref('use_dimension');
-    if ($dim < 1)
-        hidden('dimension_id', 0);
-    if ($dim < 2)
-        hidden('dimension2_id', 0);
-
-    if ($dim >= 1)
-        dimensions_list_row(_("Dimension")." 1:", 'dimension_id', null, true, " ", false, 1);
-    if ($dim > 1)
-        dimensions_list_row(_("Dimension")." 2:", 'dimension2_id', null, true, " ", false, 2);
-
     yesno_list_row(_("Direct Invoice"), 'invoice', null, "", "", false);
     sale_payment_list_cells(_('Payment:'), 'payment', PM_CASH, null, false);
     sales_service_items_list_row(_('Credit Memo Item:'),'credit_memo', null, false, false, false);
