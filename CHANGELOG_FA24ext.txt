@@ -1,3 +1,4 @@
+2018-05-19  BraathWaate  Bank Auto Reconcile: module fixes
 2018-04-22  Ap.Muthu     All Charts updated with new sys_prefs record for ref_no_auto_increase flag
 2018-04-21  LiChun       zh_TW core language strings updated for all 3313 strings
 2018-04-19  LiChun       zh_TW core language strings updated

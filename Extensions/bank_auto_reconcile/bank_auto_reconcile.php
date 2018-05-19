@@ -87,7 +87,7 @@ function get_bank_transaction($account, $amount, $check, $current) {
             AND amount = '$amount'
             AND ISNULL(b.reconciled)";
     if ($check != '')
-        $sql .= " AND LOCATE('$check', memo_) != 0";
+        $sql .= " AND LOCATE(" . db_escape($check) . ", memo_) != 0";
     foreach ($current as $key => $value)
         $sql .= " AND b.id != $key ";
     // display_notification($sql);
@@ -108,7 +108,7 @@ function get_similar_bank_transaction($account, $search, $sign) {
             AND gl.account != '$bank_gl_account'
             AND SIGN(b.amount) = $sign
             AND (b.type != '" . ST_JOURNAL .
-            "') AND LOCATE('$search', c.memo_) != 0
+            "') AND LOCATE(" . db_escape($search) . ", c.memo_) != 0
             ORDER BY b.id DESC LIMIT 1";
 // display_notification($sql);
     return db_query($sql,"The transactions for '$account' could not be retrieved");
@@ -176,30 +176,34 @@ function bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_accou
     add_bank_trans($type, $curEntryId, $bank_account, $reference, $date, $inclusive_amt, $person_type_id, $person_id, $currency = "", $err_msg = "", $rate = 0);
     $id = db_insert_id();
 
-    display_notification_centered(_("Added to table 'bank_trans': $curEntryId, $bank_account, $reference, $date, $inclusive_amt, $person_type_id, $person_id"));
+    // display_notification_centered(_("Added to table 'bank_trans': $curEntryId, $bank_account, $reference, $date, $inclusive_amt, $person_type_id, $person_id"));
 
     add_gl_trans($type, $curEntryId, $date, $code, $dim1, $dim2, $memo, -$inclusive_amt, $currency = null, $person_type_id, $person_id, $err_msg = "", $rate = 0);
     add_audit_trail($type, $curEntryId, $date);
-    display_notification_centered(_("Added to table 'gl_trans Credit:': $curEntryId, $date, $code, $dim1, $dim2, -$inclusive_amt, $memo, $person_type_id, $person_id"));
+    // display_notification_centered(_("Added to table 'gl_trans Credit:': $curEntryId, $date, $code, $dim1, $dim2, -$inclusive_amt, $memo, $person_type_id, $person_id"));
 
     if ($person_type_id == PT_CUSTOMER) {
         write_customer_trans($type, $curEntryId, $person_id, $BranchNo, $date, $reference, $inclusive_amt);
+/*
         if ($inclusive_amt > 0)
             display_notification_centered(_("Added to table 'debtor_trans Credit: Payment from customer': $inclusive_amt"));
         else
             display_notification_centered(_("Added to table 'debtor_trans Debit:' Customer over-payment reimbursed -$inclusive_amt"));
+*/
     }
     if ($person_type_id == PT_SUPPLIER) {
         write_supp_trans($type, $curEntryId, $person_id, $date, $due_date = "", $reference, $supp_reference = "", $inclusive_amt, $amount_tax = 0, $discount = 0);
+/*
         if ($inclusive_amt < 0)
             display_notification_centered(_("Added to table 'supp_trans' Debit: Supplier paid -$inclusive_amt"));
         else
             display_notification_centered(_("Added to table 'supp_trans Credit: Our over-payment amount reimbursed': $inclusive_amt"));
+*/
     }
 
     add_gl_trans($type, $curEntryId, $date, $bank_account_gl_code, $dim1, $dim2, $memo, $inclusive_amt, $currency = null, $person_type_id, $person_id, $err_msg = "", $rate = 0);
     add_audit_trail($type, $curEntryId, $date);
-    display_notification_centered(_("Added to table 'gl_trans' Debit bank account: $curEntryId, $date, $bank_account_gl_code, $dim1, $dim2, $inclusive_amt, $memo, $person_type_id, $person_id"));
+    // display_notification_centered(_("Added to table 'gl_trans' Debit bank account: $curEntryId, $date, $bank_account_gl_code, $dim1, $dim2, $inclusive_amt, $memo, $person_type_id, $person_id"));
 
     return $id;
 }
@@ -207,15 +211,15 @@ function bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_accou
 function auto_create($current) {
     global $Refs;
 
-    $newdate=$_POST['reconcile_date'];
-    $reconcile_value =  ("'".date2sql($_POST['reconcile_date']) ."'");
     $bank_account_gl_code = get_bank_gl_account($_POST['bank_account']);
+    $reconcile_value =  ("'".date2sql($_POST['reconcile_date']) ."'");
     $BranchNo = "";
 
     foreach ($current as $key => $data) {
         $sim_id = $data[0];
         $amt = $data[1];
         $comment = $data[2];
+        $newdate=$data[3];
         $result = get_similar_bank_trans($sim_id, $bank_account_gl_code);
 
 // only simple (non-split) recurrent transactions can be auto-created
@@ -229,7 +233,7 @@ function auto_create($current) {
 
             update_reconciled_values($id, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
 
-            add_comments($sim['type'], $trans_no, $_POST['reconcile_date'], $comment);
+            add_comments($sim['type'], $trans_no, $newdate, $comment);
 
         } else
             display_error("$id $amt not found");
@@ -311,7 +315,7 @@ if (isset($_POST['import'])) {
                         if (db_num_rows($result) == 1) {
                             $sim = db_fetch($result);
                             display_notification("$date:$amount:$checkno:$comment will be created using account " . $sim['account'] . " " . $sim['account_name'] . " dimension " . $sim['dim1']); 
-                            $auto[] = array($sim['id'], $amount, $comment);
+                            $auto[] = array($sim['id'], $amount, $comment, $date);
                             $total_current += $amount;
                             $total += $amount;
                             continue;
@@ -351,7 +355,7 @@ start_table(TABLESTYLE2, "width=60%");
 table_section_title("Bank Auto Reconcile");
 bank_accounts_list_row("Bank Account", 'bank_account');
 check_row("Trial Run", 'trial', 1);
-date_row("Reconciliation Date:", 'reconcile_date');
+date_row("Reconciliation Period End Date:", 'reconcile_date');
 csv_format_list_row("CSV Format", 'csv_format');
 label_row('CSV Bank Statement Import File', "<input type='file' id='imp' name='imp'>");
 
