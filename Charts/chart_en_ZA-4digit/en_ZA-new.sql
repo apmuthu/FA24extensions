@@ -1492,6 +1492,7 @@ INSERT INTO `0_sys_prefs` (`name`,`category`,`type`,`length`,`value`) VALUES
 ,('print_item_images_on_quote', 'glsetup.inventory', 'tinyint', '1', '0')
 ,('profit_loss_year_act', 'glsetup.general', 'varchar', '15', '9990')
 ,('pyt_discount_act', 'glsetup.purchase', 'varchar', '15', '5060')
+,('ref_no_auto_increase','setup.company', 'tinyint', 1, '0')
 ,('retained_earnings_act', 'glsetup.general', 'varchar', '15', '3590')
 ,('round_to', 'setup.company', 'int', '5', '1')
 ,('shortname_name_in_list', 'setup.company', 'tinyint', '1', '0')
@@ -1514,7 +1515,7 @@ INSERT INTO `0_tax_groups` (`id`,`name`,`inactive`) VALUES
 ,('2', 'Tax Exempt', '0');
 
 INSERT INTO `0_tax_types`(`id`,`rate`,`sales_gl_code`,`purchasing_gl_code`,`name`,`inactive`) VALUES
- (1, 14, '2150', '2150', 'VAT', 0);
+ (1, 15, '2150', '2150', 'VAT', 0);
 
 /* default password set to be password with MD5 = 5f4dcc3b5aa765d61d8327deb882cf99 */
 INSERT INTO `0_users` (`id`,`user_id`,`password`,`real_name`,`role_id`,`phone`,`email`,`language`,`date_format`,`date_sep`,`tho_sep`,`dec_sep`,`theme`,`page_size`,`prices_dec`,`qty_dec`,`rates_dec`,`percent_dec`,`show_gl`,`show_codes`,`show_hints`,`last_visit_date`,`query_size`,`graphic_links`,`pos`,`print_profile`,`rep_popup`,`sticky_doc_date`,`startup_tab`,`transaction_days`,`save_report_selections`,`use_date_picker`,`def_print_destination`,`def_print_orientation`,`inactive`) VALUES

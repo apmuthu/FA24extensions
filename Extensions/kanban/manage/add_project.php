@@ -22,7 +22,7 @@ include_once($path_to_root . "/includes/ui.inc");
 include_once($path_to_root . "/modules/kanban/includes/kanban_db.inc");
 include_once($path_to_root . "/modules/kanban/includes/kanban_ui.inc");
 
-page(_($help_context = "Create Project"), true, false, "", $js, true);
+page(_($help_context = "Create Project"), false, false, "", $js);
 
 //-----------------------------------------------------------------------------
 

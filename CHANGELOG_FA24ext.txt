@@ -1,3 +1,18 @@
+2018-05-19  BraathWaate  Bank Auto Reconcile: module fixes
+2018-04-22  Ap.Muthu     All Charts updated with new sys_prefs record for ref_no_auto_increase flag
+2018-04-21  LiChun       zh_TW core language strings updated for all 3313 strings
+2018-04-19  LiChun       zh_TW core language strings updated
+2018-04-19  Ap.Muthu     add_stock_adjustment parameters fixed for FA 2.4 changes in API
+2018-04-07  poncho1234   gettext strings for Account and Months extended in extensions
+2018-03-29  Ap.Muthu     nb_NO core language file updated on and from Transifex
+2018-03-21  Ap.Muthu     en_ZA 4digit Chart updated for 15% VAT in RSA from 2018 onwards
+2018-03-17  Ap.Muthu     ar_EG, hi_IN, ta_IN, vi_VN core translations updated for all 3313 strings
+2018-03-07  BraathWaate  rep_batch_check_print: custom form sql now includes Quick Entries
+2018-03-07  BraathWaate  rep_bank_daily_sweep: rounded the $total_daily amount value
+2018-03-07  BraathWaate  rep_batch_check_print: order by redundancy removed, last column pushed a little
+2018-03-07  BraathWaate  osc_orders module: products_status, new order, last_date / end_date fix
+2018-03-07  BraathWaate  Bank Auto Reconcile: CSV format extended, taxes added
+2018-02-28  Phuong       Kanban Project Management extension partial upstream synch
 2018-02-18  Ap.Muthu     Charts Prepaid additions
 2018-02-18  Ap.Muthu     module api24: VARLIB_PATH and VARLOG_PATH changes included
 2018-02-18  Braathwaate  en_US ANSI core language files updated

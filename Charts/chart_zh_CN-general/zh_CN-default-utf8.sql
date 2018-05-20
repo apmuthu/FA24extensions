@@ -1258,6 +1258,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('print_item_images_on_quote', 'glsetup.inventory', 'tinyint', '1', '0'),
 ('profit_loss_year_act', 'glsetup.general', 'varchar', '15', '9990'),
 ('pyt_discount_act', 'glsetup.purchase', 'varchar', '15', '5060'),
+('ref_no_auto_increase','setup.company', 'tinyint', 1, '0'),
 ('retained_earnings_act', 'glsetup.general', 'varchar', '15', '3590'),
 ('round_to', 'setup.company', 'int', '5', '1'),
 ('shortname_name_in_list', 'setup.company', 'tinyint', '1', '0'),

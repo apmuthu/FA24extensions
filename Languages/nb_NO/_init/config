@@ -1,14 +1,15 @@
 Package: nb_NO
-Version: 2.4.1-2
-Description: Norwegian (Bokmal) translation Version merged from FA 2.3
+Version: 2.4.4-1
+Description: Norwegian (Bokmål) translation
 Author: Rolf Gunnar Hansen <rolf.g.hansen@marisoft.com>
 Maintenance: Rolf Gunnar Hansen <rolf.g.hansen@marisoft.com>
-Homepage: 
+Homepage: frontaccounting.com
 Language: nb_NO
 Encoding: iso-8859-1
 RTLDir: no
 Type: language
 Name: Norwegian
+Name-nb_NO: Norsk
 InstallPath: lang/nb_NO
-Filename: nb_NO-2.4.1-2
+Filename: nb_NO-2.4.4-1
 
