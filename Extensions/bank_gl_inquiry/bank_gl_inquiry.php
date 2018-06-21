@@ -74,7 +74,7 @@ date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
 if ($days >= 0) {
     date_cells(_("To:"), 'TransToDate');
 } else {
-    date_cells(_("To:"), 'TransToDate', '', null, 0, 0, 1);
+    date_cells(_("To:"), 'TransToDate', '', null, 0, 2);
 }
 
 submit_cells('Show',_("Show"),'','', 'default');
@@ -96,7 +96,7 @@ div_start('trans_tbl');
 start_table(TABLESTYLE);
 
 $th = array(_("Type"), _("#"), _("Reference"), _("Date"),
-	_("Debit"), _("Credit"), _("Balance"), _("Person/Item"), _("Memo"), "", "", "");
+	_("Debit"), _("Credit"), _("Balance"), _("Person/Item"), _("Memo"), _("X"), "", "", "");
 table_header($th);
 
 $bfw = get_balance_before_for_bank_account($_POST['bank_account'], $_POST['TransAfterDate']);
@@ -133,6 +133,7 @@ while ($myrow = db_fetch($result))
 	label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, get_post("TransAfterDate"),get_post("TransToDate")));
 
 	label_cell(get_comments_string($myrow["type"], $myrow["trans_no"]));
+    label_cell(empty($myrow["reconciled"]) ? "" : "X");
 	label_cell(get_gl_view_str($myrow["type"], $myrow["trans_no"]));
 
 	label_cell(trans_editor_link($myrow["type"], $myrow["trans_no"]));
@@ -156,7 +157,7 @@ while ($myrow = db_fetch($result))
         label_cell(gl_link($myrow['account'], $myrow['account_name']));
 
         label_cell($myrow['memo_']);
-        label_cell("", "colspan=3");
+        label_cell("", "colspan=4");
         end_row();
     }
 

@@ -62,7 +62,11 @@ function GetSalesOrders($from, $to, $category=0, $location=null, $backorder=0)
             	INNER JOIN ".TB_PREF."stock_category cat
             	    ON item.category_id = cat.category_id
             WHERE sorder.ord_date >='$fromdate'
-                AND sorder.ord_date <='$todate'";
+                AND sorder.ord_date <='$todate'"
+
+        // exclude voided transactions :
+
+            ." AND line.quantity != 0";
 	if ($category > 0)
 		$sql .= " AND item.category_id=".db_escape($category);
 	if ($location != null)
@@ -73,6 +77,7 @@ function GetSalesOrders($from, $to, $category=0, $location=null, $backorder=0)
 
 	return db_query($sql, "Error getting order details");
 }
+
 
 //----------------------------------------------------------------------------------------------------
 

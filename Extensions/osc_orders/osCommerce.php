@@ -292,15 +292,37 @@ function get_error_status()
     global $messages;
     if (count($messages)) {
         foreach($messages as $cnt=>$msg) {
-            if ($msg[0] > E_USER_NOTICE)
-                return "Failed";
+            if ($msg[0] == E_USER_ERROR)
+                return "FAILED";
         }
     }
-    return "Success";
+    // Note: some warnings are expected, like duplicate items in cart
+    return "SUCCESS";
+}
+
+// get FA qoh for an OSC item.  The quantity of OSC parent items is the sum
+// of the quantities of their attributes.  The quantity of FA parent items
+// should always be zero
+
+function get_fa_qoh($osc_id)
+{
+    $osc_attr = $osc_id . "-";
+    $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE LOCATE(" . db_escape($osc_attr) . ", stock_id) != 0";
+    $result = db_query($sql, "could not get item");
+    if (db_num_rows($result) == 0)
+        $myqty = get_qoh_on_date($osc_id, $_POST['default_location']);
+    else {
+        $myqty = 0;
+        while ($row=db_fetch($result)) {
+            $myqty += get_qoh_on_date($row['stock_id'], $_POST['default_location']);
+        }
+    }
+    return $myqty;
 }
 
 // error_reporting(E_ALL);
 // ini_set("display_errors", "on");
+$error_status="";
 
 global $db; // Allow access to the FA database connection
 $debug_sql = 0;
@@ -628,6 +650,7 @@ if (isset($_POST['action'])) {
 
             while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID         = $order['orders_id'];
+
                 $date_purchased = $order['date_purchased'];
 
                 $sql         = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID) . " ORDER BY sort_order";
@@ -772,6 +795,7 @@ if (isset($_POST['action'])) {
                 $cart->due_date          = sql2date($date_purchased);
                 $cart->dimension_id      = $customer['dimension_id'];
                 $cart->dimension2_id     = $customer['dimension2_id'];
+                $cart->payment_info      = $order['cc_owner'] . ' ' . $order['cc_number'];
 
                 // calculate the FA line item discount based on order discount
                 $disc_percent = 0;
@@ -788,7 +812,7 @@ if (isset($_POST['action'])) {
             // refund amount, resulting in a negative total invoice.
 
                     if ($total_subtotal == 0) {
-                        add_to_order($cart, $_POST['credit_memo'], -1, $total_discount, 0);
+                        add_to_order($cart, $_POST['adjustment'], -1, $total_discount, 0);
                         $disc_percent = 0;
                     } else
                         $disc_percent = $total_discount/$total_subtotal;
@@ -811,28 +835,34 @@ if (isset($_POST['action'])) {
                         break;  // total check below will fail
                     }
 
-            // Note: OSC attributes are handled in FA as two different
+            // Note: OSC attributes are handled in FA as separate
             // products. An OSC order of a product with attributes
-            // is an order of two products in FA:
-            // the parent product and the child attribute
+            // is an order of those stock ids in FA, rather than the
+            // parent product.
 
                     $sql = "select pa.products_attributes_id, opa.options_values_price FROM orders_products_attributes opa LEFT JOIN products_options po on opa.products_options = po.products_options_name LEFT JOIN products_options_values pov ON opa.products_options_values=pov.products_options_values_name LEFT JOIN orders_products op on op.orders_products_id=opa.orders_products_id LEFT JOIN products_attributes pa on op.products_id=pa.products_id AND po.products_options_id=pa.options_id AND pov.products_options_values_id=pa.options_values_id WHERE pa.products_id=".osc_escape($prod[$osc_Id])." AND opa.orders_products_id=".osc_escape($prod['orders_products_id']);
 
                     $pa_result = osc_dbQuery($sql, true);
-                    while ($pa = mysqli_fetch_assoc($pa_result)) {
-                        $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
-                        $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($pa_osc_id);
-                        $item = db_query($sql, "could not get item");
-                        $row  = db_fetch_row($item);
-                        if (!$row) {
+                    if (db_num_rows($pa_result) == 0) {
+                        add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $disc_percent);
 
-                            display_error("osC order " . $oID . " item " . $pa_osc_id . " not in FA.  Do an Item Import first.");
-                            break;  // total check below will fail
+                    } else {
+                        while ($pa = mysqli_fetch_assoc($pa_result)) {
+                            $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
+                            $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($pa_osc_id);
+                            $item = db_query($sql, "could not get item");
+                            $row  = db_fetch_row($item);
+                            if (!$row) {
+
+                                display_error("osC order " . $oID . " item " . $pa_osc_id . " not in FA.  Do an Item Import first.");
+                                break;  // total check below will fail
+                            }
+                            $total += round($prod['products_quantity'] * $prod['products_price'] * (1 -$disc_percent),2);
+                            // tmp: add in parent price until these are zeroed
+                            add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $prod['products_price'] + $pa['options_values_price'], $disc_percent);
                         }
-                        $total += round($prod['products_quantity'] * $prod['products_price'] * (1 -$disc_percent),2);
-                        add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $pa['options_values_price'], $disc_percent);
+                        mysqli_free_result($pa_result);
                     }
-                    mysqli_free_result($pa_result);
 
                     $line_total = round($prod['products_quantity'] * $prod['products_price'] * (1 - $disc_percent),2);
                     $total += $line_total;
@@ -840,19 +870,18 @@ if (isset($_POST['action'])) {
                     $total_osc = round($total_subtotal-$total_discount, 2);
 
                     // uh oh, rounding broke the invoice total
-                    // change the discount of the last item to fix it
+                    // add the credit memo item to adjust it
                     if ($rows == 0
                         && round($total,2) != $total_osc
                         && abs($total-$total_osc) < .05) {
-                        $disc_percent = 1 - (($line_total - ($total - $total_osc))/($prod['products_quantity'] * $prod['products_price']));
-                        display_notification("osC order $oID total $total not equal to $total_osc, new discount $disc_percent");
+                        add_to_order($cart, $_POST['adjustment'], 1, $total_osc- $total, 0);
+                        display_notification("osC order $oID OSC $total_osc not equal to FA total $total, added adjustment");
                     }
-                    add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $disc_percent);
                 }
                 mysqli_free_result($result);
 
                 if ($total_total != round($cart->get_trans_total(), 2)) {
-                    display_error("osC order $oID total $total_total does not match FA total " . $cart->get_trans_total() . ". (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent." " .print_r($branch, true).")");
+                    display_error("osC order $oID total OSC $total_total does not match FA total " . $cart->get_trans_total() . ". (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent." " .print_r($branch, true). print_r($cart->get_taxes()[1], true).")");
                     if ($errors == 0) {
                         display_error('Skipping order ' . $oID);
                         continue;
@@ -921,7 +950,7 @@ if (isset($_POST['action'])) {
 
             $last_date = $end_date;
             $order_count = osc_new_orders($last_date, $statusId);
-            display_notification(get_error_status());
+            $error_status = get_error_status();
             $action = 'oimport';
         }
 
@@ -985,7 +1014,8 @@ if (isset($_POST['action'])) {
                 if ($myprice === false) display_notification("$osc_id price not found in FA");
                 else if ($price != $myprice) {
                     display_notification("Updating $osc_id from $price to $myprice");
-                    $sql = "UPDATE products SET products_price = ".osc_escape($myprice)." WHERE $osc_Id = ".osc_escape($osc_id);
+                    $sql = "UPDATE products SET products_price = ".osc_escape($myprice)." WHERE $osc_Id = ".osc_escape($pp[$osc_Id]);
+display_notification($sql);
                     $result = mysqli_query($osc, $sql);
                     $num_price_errors++;
                 }
@@ -1086,14 +1116,15 @@ if (isset($_POST['action'])) {
 
         if ($action == 'i_check') { // Inventory Check
 
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_quantity, products_name FROM products p left join products_description pd on p.products_id = pd.products_id WHERE length(products_quantity) != 0";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_quantity, products_name FROM products p left join products_description pd on p.products_id = pd.products_id WHERE LENGTH(products_quantity) != 0";
             // echo $sql;
             $p_result         = osc_dbQuery($sql, true);
             $num_qty_errors = 0;
             while ($pp = mysqli_fetch_assoc($p_result)) {
-                $qty   = $pp['products_quantity'];
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
-                $myqty = get_qoh_on_date($osc_id, $_POST['default_location']);
+
+                $qty   = $pp['products_quantity'];
+                $myqty = get_fa_qoh($osc_id);
                 if ($qty != $myqty) {
                     $products_name=$pp['products_name'];
                     display_notification("$osc_id $products_name : FA quantity $myqty does not match osC $qty");
@@ -1103,9 +1134,10 @@ if (isset($_POST['action'])) {
                 // Check for product attributes
                 // FA item number like oscXXXX-AAAA
 
-                $sql = "select products_attributes_id, options_quantity, products_options_values_name from products_attributes pa left join products_options_values po on pa.options_values_id=products_options_values_id where options_quantity != '' AND products_id=" . $pp['products_id'];
+                $sql = "select products_attributes_id, options_quantity, products_options_values_name from products_attributes pa left join products_options_values po on pa.options_values_id=products_options_values_id WHERE LENGTH(options_quantity) != 0 AND products_id=" . $pp['products_id'];
 
                 $pa_result = osc_dbQuery($sql, true);
+
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
                     $pa_qty = $pa['options_quantity'];
                     $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
@@ -1137,23 +1169,25 @@ if (isset($_POST['action'])) {
             $num_qty_errors = 0;
             $insert_id = null;
             while ($pp = mysqli_fetch_assoc($p_result)) {
-                $qty   = $pp['products_quantity'];
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
-                $myqty = get_qoh_on_date($osc_id, $_POST['default_location']);
+                $p_insert_id='';
+
+                $qty   = $pp['products_quantity'];
+                $myqty = get_fa_qoh($osc_id);
                 $diff = $myqty - $qty;
                 if ($diff != 0) {
                     display_notification("Updating $osc_id from $qty to $myqty");
                     $sql = "UPDATE products SET products_quantity = ".osc_escape($myqty)." WHERE $osc_Id = ".osc_escape($pp[$osc_Id]);
                     $result = mysqli_query($osc, $sql);
                     if ($invCust != '') {
-                    if ($insert_id == null)
-                        $insert_id = create_osc_order($invCust);
-                    $sql = "INSERT INTO orders_products set
-                        orders_id='$insert_id',
-                        products_id=".osc_escape($pp['products_id']).",
-                        products_model=".osc_escape($pp['products_model']).",
-                        products_name=".osc_escape($pp['products_name']).",
-                        products_quantity=".osc_escape(-$diff);
+                        if ($insert_id == null)
+                            $insert_id = create_osc_order($invCust);
+                        $sql = "INSERT INTO orders_products set
+                            orders_id='$insert_id',
+                            products_id=".osc_escape($pp['products_id']).",
+                            products_model=".osc_escape($pp['products_model']).",
+                            products_name=".osc_escape($pp['products_name']).",
+                            products_quantity=".osc_escape(-$diff);
                         $result = mysqli_query($osc, $sql);
                         $p_insert_id=mysqli_insert_id($osc);
                     }
@@ -1164,7 +1198,7 @@ if (isset($_POST['action'])) {
                 // Check for product attributes
                 // FA item number like oscXXXX-AAAA
 
-                $sql = "select products_attributes_id, options_quantity, products_options_values_name from products_attributes pa left join products_options_values po on pa.options_values_id=products_options_values_id where options_quantity !='' AND products_id=" . $pp['products_id'];
+                $sql = "SELECT products_attributes_id, options_quantity, products_options_name, products_options_values_name FROM products_attributes pa LEFT JOIN products_options po on po.products_options_id=pa.options_id LEFT JOIN products_options_values pov on pa.options_values_id=products_options_values_id WHERE LENGTH(options_quantity) !=0 AND products_id=" . $pp['products_id'];
 
                 $pa_result = osc_dbQuery($sql, true);
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
@@ -1178,11 +1212,12 @@ if (isset($_POST['action'])) {
                         $sql = "UPDATE products_attributes SET options_quantity = ".osc_escape($pa_myqty)." WHERE products_attributes_id = ".osc_escape($pa_att_id);
                         $result = mysqli_query($osc, $sql);
 
-                        if ($invCust != '' && isset($p_insert_id)) {
+                        if (!empty($p_insert_id)) {
                             $sql = "INSERT INTO orders_products_attributes set
                                 orders_id='$insert_id',
                                 orders_products_id='$p_insert_id',
-                                products_id=".osc_escape($pp['products_id']);
+                                products_options=".osc_escape($pa['products_options_name']).",
+                                products_options_values=".osc_escape($pa['products_options_values_name']);
                             $result = mysqli_query($osc, $sql);
                         }
                         $num_qty_errors++;
@@ -1440,7 +1475,7 @@ if ($action == 'oimport') {
     sales_areas_list_row("Sales Area:", 'area');
     yesno_list_row(_("Direct Invoice"), 'invoice', null, "", "", false);
     sale_payment_list_cells(_('Payment:'), 'payment', PM_CASH, null, false);
-    sales_service_items_list_row(_('Credit Memo Item:'),'credit_memo', null, false, false, false);
+    sales_service_items_list_row(_('Adjustment Item:'),'adjustment', null, false, false, false);
 
     yesno_list_row(_("Errors"), 'errors', null, "Ignore", "Skip", false);
     yesno_list_row(_("Trial Run"), 'trial_run', null, "", "", false);
@@ -1451,6 +1486,7 @@ if ($action == 'oimport') {
             $row    = db_fetch_assoc($result);
 
     }
+    label_row("Operation Result", $error_status);
 
     end_table(1);
 
