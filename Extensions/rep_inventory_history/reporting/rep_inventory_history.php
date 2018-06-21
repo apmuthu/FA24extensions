@@ -21,7 +21,7 @@ include_once($path_to_root . "/inventory/includes/db/items_category_db.inc");
 
 print_inventory_history();
 
-function getTransactions($category, $location, $fromcust, $from, $to)
+function getTransactions($category, $location, $from, $to)
 {
 	$from = date2sql($from);
 	$to   = date2sql($to);
@@ -30,6 +30,7 @@ function getTransactions($category, $location, $fromcust, $from, $to)
 		stock_master.stock_id,
 		stock_master.description,
 		stock_master.units,
+		stock_master.inactive,
 		IFNULL(stokbrg.jml,0) stk_brg,
 		IFNULL(adjustment.jml,0) peny_brg,
 		IFNULL(production.jml,0) pro_brg,
@@ -157,7 +158,7 @@ function print_inventory_history()
     $rep->Info($params, $cols, $headers, $aligns);
     $rep->NewPage();
 
-	$res = getTransactions($category, $location, $fromcust, $from, $to);
+	$res = getTransactions($category, $location, $from, $to);
 	$total = $grandtotal = 0.0;
 	$catt = '';
 	while ($trans=db_fetch($res))
