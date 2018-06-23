@@ -1,0 +1,11 @@
+Package: rep_picklist
+Description: Print Deliveries Picklist
+Name: Print Deliveries Picklist
+Filename: rep_pick_list-2.4.0-1
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/pick_list
+Version: 2.4.0-1
+

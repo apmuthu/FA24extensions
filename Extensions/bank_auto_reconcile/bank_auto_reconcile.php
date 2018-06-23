@@ -14,72 +14,75 @@ add_access_extensions();
 
 include_once($path_to_root . "/includes/ui.inc");
 
-function csv_format_list($name, $selected_id=null, $submit_on_change=false) {
-    $items = array();
-    $items['0'] =  _("A: Date, Amount, Unused, Check Number, Comment");
-    $items['1'] =  _("B: Unused, Date, Unused, Comment, Amount");
+function csv_format_list($name, $selected_id=null, $submit_on_change=false)
+{
+        $items = array();
+        $items['0'] =  _("A: Date, Amount, Unused, Check Number, Comment");
+        $items['1'] =  _("B: Unused, Date, Unused, Comment, Amount");
 
-    return array_selector($name, $selected_id, $items,
-        array(
-              'select_submit'=> $submit_on_change,
-              'async' => false
-        )
-    ); // FIX?
+        return array_selector($name, $selected_id, $items,
+                array(
+                        'select_submit'=> $submit_on_change,
+                        'async' => false ) ); // FIX?
 }
 
-function csv_format_list_cells($label, $name, $selected_id=null, $submit_on_change=false) {
-    if ($label != null)
-        echo "<td>$label</td>\n";
-    echo "<td>";
-    echo csv_format_list($name, $selected_id, $submit_on_change);
-    echo "</td>\n";
+function csv_format_list_cells($label, $name, $selected_id=null, $submit_on_change=false)
+{
+        if ($label != null)
+                echo "<td>$label</td>\n";
+        echo "<td>";
+        echo csv_format_list($name, $selected_id, $submit_on_change);
+        echo "</td>\n";
 }
 
-function csv_format_list_row($label, $name, $selected_id=null, $submit_on_change=false) {
-    echo "<tr><td class='label'>$label</td>";
-    csv_format_list_cells(null, $name, $selected_id, $submit_on_change);
-    echo "</tr>\n";
+function csv_format_list_row($label, $name, $selected_id=null, $submit_on_change=false)
+{
+        echo "<tr><td class='label'>$label</td>";
+        csv_format_list_cells(null, $name, $selected_id, $submit_on_change);
+        echo "</tr>\n";
 }
 
-function show_balance($total_new, $total_miss, $reconciled) {
-    $result = get_max_reconciled($_POST['reconcile_date'], $_POST['bank_account']);
+function show_balance($total_new, $total_miss, $reconciled)
+{
+$result = get_max_reconciled($_POST['reconcile_date'], $_POST['bank_account']);
 
-    if ($row = db_fetch($result)) {
+if ($row = db_fetch($result)) {
         $total = $row["total"];
-        $_POST["reconciled"] = price_format($row["end_balance"]-$row["beg_balance"]);
-        if (!isset($_POST["beg_balance"])) { // new selected account/statement
-            $_POST["last_date"] = sql2date($row["last_date"]);
-            $_POST["beg_balance"] = price_format($row["beg_balance"]);
-        }
-        echo "<hr>";
+	$_POST["reconciled"] = price_format($row["end_balance"]-$row["beg_balance"]);
+	if (!isset($_POST["beg_balance"])) { // new selected account/statement
+		$_POST["last_date"] = sql2date($row["last_date"]);
+		$_POST["beg_balance"] = price_format($row["beg_balance"]);
+	} 
+echo "<hr>";
 
-        div_start('summary');
+div_start('summary');
 
-        start_table(TABLESTYLE);
-        $th = array(_("Reconcile Date"), _("Beginning<br>Balance"), 
-            _("Ending<br>Balance"), _("Current<br>Balance"),_("Reconciled<br>Amount"), _("Difference"));
-        table_header($th);
-        start_row();
+start_table(TABLESTYLE);
+$th = array(_("Reconcile Date"), _("Beginning<br>Balance"), 
+	_("Ending<br>Balance"), _("Current<br>Balance"),_("Reconciled<br>Amount"), _("Difference"));
+table_header($th);
+start_row();
 
-        echo "<td>" . $_POST['reconcile_date'] . "</td>";
-        echo "<td>" . $_POST['beg_balance'] . "</td>";
-        $end_balance = user_numeric($_POST['beg_balance']);
-        $end_balance += $total_new;
-        $_POST["end_balance"] = price_format($end_balance);
+echo "<td>" . $_POST['reconcile_date'] . "</td>";
+echo "<td>" . $_POST['beg_balance'] . "</td>";
+$end_balance = user_numeric($_POST['beg_balance']);
+$end_balance += $total_new;
+$_POST["end_balance"] = price_format($end_balance);
 
-        amount_cell($end_balance);
-        amount_cell($total);
-        amount_cell($reconciled);
-        amount_cell($total_miss, false, '', "difference");
+amount_cell($end_balance);
+amount_cell($total);
+amount_cell($reconciled);
+amount_cell($total_miss, false, '', "difference");
 
-        end_row();
-        end_table();
-        div_end();
-        echo "<hr>";
+end_row();
+end_table();
+div_end();
+echo "<hr>";
     }
 }
 
-function get_bank_transaction($account, $amount, $check, $current) {
+function get_bank_transaction($account, $amount, $check, $current)
+{
     $sql = "SELECT b.* FROM ".TB_PREF."bank_trans b
             LEFT JOIN ".TB_PREF."comments c
             ON b.type=c.type and c.id = b.trans_no
@@ -87,7 +90,7 @@ function get_bank_transaction($account, $amount, $check, $current) {
             AND amount = '$amount'
             AND ISNULL(b.reconciled)";
     if ($check != '')
-        $sql .= " AND LOCATE(" . db_escape($check) . ", memo_) != 0";
+        $sql .= " AND LOCATE('$check', memo_) != 0";
     foreach ($current as $key => $value)
         $sql .= " AND b.id != $key ";
     // display_notification($sql);
@@ -95,7 +98,8 @@ function get_bank_transaction($account, $amount, $check, $current) {
     return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
 
-function get_similar_bank_transaction($account, $search, $sign) {
+function get_similar_bank_transaction($account, $search, $sign)
+{
     $bank_gl_account=get_bank_gl_account($account);
     $sql = "SELECT b.*, gl.account, cm.account_name, gl.dimension_id as dim1, gl.dimension2_id as dim2 FROM ".TB_PREF."bank_trans b
             LEFT JOIN ".TB_PREF."comments c
@@ -110,11 +114,12 @@ function get_similar_bank_transaction($account, $search, $sign) {
             AND (b.type != '" . ST_JOURNAL .
             "') AND LOCATE(" . db_escape($search) . ", c.memo_) != 0
             ORDER BY b.id DESC LIMIT 1";
-// display_notification($sql);
+//display_notification($sql);
     return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
 
-function get_similar_bank_trans($id, $bank_account_gl_code) {
+function get_similar_bank_trans($id, $bank_account_gl_code)
+{
     $sql = "SELECT b.*, gl.account, cm.account_name, gl.dimension_id as dim1, gl.dimension2_id as dim2 FROM ".TB_PREF."bank_trans b
             LEFT JOIN ".TB_PREF."comments c
             ON b.type=c.type AND c.id = b.trans_no
@@ -168,8 +173,8 @@ function customer_name($person_id) {
     return $custname;
 }
 
-function bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_account_gl_code, $curEntryId, $code, $dim1, $dim2, $memo, $amt, $person_type_id, $person_id, $BranchNo) { // extra inclusive of tax column in csv
-
+function bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_account_gl_code, $curEntryId, $code, $dim1, $dim2, $memo, $amt, $person_type_id, $person_id, $BranchNo) // extra inclusive of tax column in csv
+{
     $inclusive_amt = $amt;
     $taxamt = 0;
 
@@ -178,26 +183,26 @@ function bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_accou
 
     // display_notification_centered(_("Added to table 'bank_trans': $curEntryId, $bank_account, $reference, $date, $inclusive_amt, $person_type_id, $person_id"));
 
-    add_gl_trans($type, $curEntryId, $date, $code, $dim1, $dim2, $memo, -$inclusive_amt, $currency = null, $person_type_id, $person_id, $err_msg = "", $rate = 0);
-    add_audit_trail($type, $curEntryId, $date);
-    // display_notification_centered(_("Added to table 'gl_trans Credit:': $curEntryId, $date, $code, $dim1, $dim2, -$inclusive_amt, $memo, $person_type_id, $person_id"));
+        add_gl_trans($type, $curEntryId, $date, $code, $dim1, $dim2, $memo, -$inclusive_amt, $currency = null, $person_type_id, $person_id, $err_msg = "", $rate = 0);
+        add_audit_trail($type, $curEntryId, $date);
+        // display_notification_centered(_("Added to table 'gl_trans Credit:': $curEntryId, $date, $code, $dim1, $dim2, -$inclusive_amt, $memo, $person_type_id, $person_id"));
 
-    if ($person_type_id == PT_CUSTOMER) {
-        write_customer_trans($type, $curEntryId, $person_id, $BranchNo, $date, $reference, $inclusive_amt);
+        if ($person_type_id == PT_CUSTOMER) {
+            write_customer_trans($type, $curEntryId, $person_id, $BranchNo, $date, $reference, $inclusive_amt);
 /*
-        if ($inclusive_amt > 0)
-            display_notification_centered(_("Added to table 'debtor_trans Credit: Payment from customer': $inclusive_amt"));
-        else
-            display_notification_centered(_("Added to table 'debtor_trans Debit:' Customer over-payment reimbursed -$inclusive_amt"));
+            if ($inclusive_amt > 0)
+                display_notification_centered(_("Added to table 'debtor_trans Credit: Payment from customer': $inclusive_amt"));
+            else
+                display_notification_centered(_("Added to table 'debtor_trans Debit:' Customer over-payment reimbursed -$inclusive_amt"));
 */
-    }
-    if ($person_type_id == PT_SUPPLIER) {
-        write_supp_trans($type, $curEntryId, $person_id, $date, $due_date = "", $reference, $supp_reference = "", $inclusive_amt, $amount_tax = 0, $discount = 0);
+        }
+        if ($person_type_id == PT_SUPPLIER) {
+            write_supp_trans($type, $curEntryId, $person_id, $date, $due_date = "", $reference, $supp_reference = "", $inclusive_amt, $amount_tax = 0, $discount = 0);
 /*
-        if ($inclusive_amt < 0)
-            display_notification_centered(_("Added to table 'supp_trans' Debit: Supplier paid -$inclusive_amt"));
-        else
-            display_notification_centered(_("Added to table 'supp_trans Credit: Our over-payment amount reimbursed': $inclusive_amt"));
+            if ($inclusive_amt < 0)
+                display_notification_centered(_("Added to table 'supp_trans' Debit: Supplier paid -$inclusive_amt"));
+            else
+                display_notification_centered(_("Added to table 'supp_trans Credit: Our over-payment amount reimbursed': $inclusive_amt"));
 */
     }
 
@@ -205,10 +210,11 @@ function bank_inclusive_tax($type, $reference, $date, $bank_account, $bank_accou
     add_audit_trail($type, $curEntryId, $date);
     // display_notification_centered(_("Added to table 'gl_trans' Debit bank account: $curEntryId, $date, $bank_account_gl_code, $dim1, $dim2, $inclusive_amt, $memo, $person_type_id, $person_id"));
 
-    return $id;
+   return $id;
 }
 
-function auto_create($current) {
+function auto_create($current)
+{
     global $Refs;
 
     $bank_account_gl_code = get_bank_gl_account($_POST['bank_account']);
@@ -296,7 +302,7 @@ if (isset($_POST['import'])) {
                     $checkno = "";
                 }
 
-                if (($checkno != "" && $i == 1)
+                 if (($checkno != "" && $i == 1)
                     || ($checkno == "" && $i == 0))
                     continue;
 
@@ -347,22 +353,23 @@ if (isset($_POST['import'])) {
 
     } else
         display_error("No CSV file selected");
+        
 }
 
-start_form(true);
-start_table(TABLESTYLE2, "width=60%");
+    start_form(true);
+    start_table(TABLESTYLE2, "width=60%");
 
-table_section_title("Bank Auto Reconcile");
-bank_accounts_list_row("Bank Account", 'bank_account');
-check_row("Trial Run", 'trial', 1);
-date_row("Reconciliation Period End Date:", 'reconcile_date');
-csv_format_list_row("CSV Format", 'csv_format');
-label_row('CSV Bank Statement Import File', "<input type='file' id='imp' name='imp'>");
+    table_section_title("Bank Auto Reconcile");
+    bank_accounts_list_row("Bank Account", 'bank_account');
+    check_row("Trial Run", 'trial', 1);
+    date_row("Reconciliation Period End Date:", 'reconcile_date');
+    csv_format_list_row("CSV Format", 'csv_format');
+    label_row('CSV Bank Statement Import File', "<input type='file' id='imp' name='imp'>");
 
-end_table(1);
+    end_table(1);
 
-submit_center('import', "Auto Reconcile");
+    submit_center('import', "Auto Reconcile");
 
-end_form();
+    end_form();
 
 end_page();
