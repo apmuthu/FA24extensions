@@ -19,6 +19,7 @@ use FAAPI\InventoryCosts;
 use FAAPI\Sales;
 use FAAPI\Dimensions;
 use FAAPI\Journal;
+use FAAPI\Purchases;
 
 /**********************************************
 Author: Andres Amaya

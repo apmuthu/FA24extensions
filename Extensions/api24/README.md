@@ -37,6 +37,9 @@ The following API endpoints have been implemented:
 - Bank Accounts
 - GL Accounts
 - GL Account Types
+- Dimensions
+- Journal
+- Purchases (work in progress)
 
 * Some of them have not been tested yet so be careful.
 * Checkout the evolving [documentation](http://cambell-prince.github.io/FrontAccountingSimpleAPI/) and the code at [Github](https://github.com/cambell-prince/FrontAccountingSimpleAPI).
