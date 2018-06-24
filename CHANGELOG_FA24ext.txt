@@ -1,3 +1,4 @@
+2018-06-24  BraathWaate  Added bank_gl_inquiry module - shows GL Account and memo as well
 2018-06-21  BraathWaate  Rep Inventory History: removed unused function argument
 2018-05-19  BraathWaate  Bank Auto Reconcile: module fixes
 2018-04-22  Ap.Muthu     All Charts updated with new sys_prefs record for ref_no_auto_increase flag
