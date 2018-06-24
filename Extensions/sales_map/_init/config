@@ -1,0 +1,12 @@
+Package: sales_map
+Name: Sales Map
+Description: Displays an interactive map of customers with active sales history
+Author: Tom Hallman
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/sales_map
+Type: extension
+Filename: sales-map-2.4.0-2
+Version: 2.4.0-2
+

@@ -840,6 +840,12 @@ if (isset($_POST['action'])) {
             // is an order of those stock ids in FA, rather than the
             // parent product.
 
+            // Note: This code supports one OSC attribute per item.
+            // The FA stock id format is :<parent>-<attr>.
+            // To support more than one OSC attribute, the FA
+            // stock id could be <parent>-<attr>-<attr> ...
+            // For example, a shirt with a size and a color option.
+
                     $sql = "select pa.products_attributes_id, opa.options_values_price FROM orders_products_attributes opa LEFT JOIN products_options po on opa.products_options = po.products_options_name LEFT JOIN products_options_values pov ON opa.products_options_values=pov.products_options_values_name LEFT JOIN orders_products op on op.orders_products_id=opa.orders_products_id LEFT JOIN products_attributes pa on op.products_id=pa.products_id AND po.products_options_id=pa.options_id AND pov.products_options_values_id=pa.options_values_id WHERE pa.products_id=".osc_escape($prod[$osc_Id])." AND opa.orders_products_id=".osc_escape($prod['orders_products_id']);
 
                     $pa_result = osc_dbQuery($sql, true);
@@ -858,8 +864,7 @@ if (isset($_POST['action'])) {
                                 break;  // total check below will fail
                             }
                             $total += round($prod['products_quantity'] * $prod['products_price'] * (1 -$disc_percent),2);
-                            // tmp: add in parent price until these are zeroed
-                            add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $prod['products_price'] + $pa['options_values_price'], $disc_percent);
+                            add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $pa['options_values_price'], $disc_percent);
                         }
                         mysqli_free_result($pa_result);
                     }
@@ -881,7 +886,7 @@ if (isset($_POST['action'])) {
                 mysqli_free_result($result);
 
                 if ($total_total != round($cart->get_trans_total(), 2)) {
-                    display_error("osC order $oID total OSC $total_total does not match FA total " . $cart->get_trans_total() . ". (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent." " .print_r($branch, true). print_r($cart->get_taxes()[1], true).")");
+                    display_error("osC order $oID total OSC $total_total does not match FA total " . $cart->get_trans_total() . "\n. (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent." " .print_r($branch, true). print_r($cart->get_taxes()[1], true).")\n" . print_r($cart, true));
                     if ($errors == 0) {
                         display_error('Skipping order ' . $oID);
                         continue;
@@ -964,12 +969,14 @@ if (isset($_POST['action'])) {
             $num_price_errors = 0;
             while ($pp = mysqli_fetch_assoc($p_result)) {
                 $price   = $pp['products_price'];
+                $products_name=$pp['products_name'];
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
-                $myprice = false;
+                if (get_item($osc_id) == false) {
+                    display_error("$osc_id $products_name not found in FA.  Do Item Import.");
+                    continue;
+                }
                 $myprice = get_kit_price($osc_id, $currency, $sales_type);
-                if ($myprice === false) display_notification("$osc_id price not found in FA");
-                else if ($price != $myprice) {
-                    $products_name=$pp['products_name'];
+                if ($price != $myprice) {
                     display_notification("$osc_id $products_name : FA price $myprice does not match osC $price");
                     $num_price_errors++;
                 }
@@ -983,11 +990,13 @@ if (isset($_POST['action'])) {
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
                     $pa_price = $price + $pa['options_values_price'];
                     $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
-                    $myprice = false;
+                    $pa_name=$pa['products_options_values_name'];
+                    if (get_item($pa_osc_id) == false) {
+                        display_error("$pa_osc_id $products_name $pa_name not found in FA.  Do Item Import.");
+                        continue;
+                    }
                     $myprice = get_kit_price($pa_osc_id, $currency, $sales_type);
-                    if ($myprice === false) display_notification("$osc_id price not found in FA");
-                    else if ($pa_price != $myprice) {
-                        $products_name=$pp['products_name'];
+                    if ($pa_price != $myprice) {
                         $pa_products_name=$pa['products_options_values_name'];
                         display_notification("$pa_osc_id $products_name $pa_products_name : FA price $myprice does not match osC $pa_price");
                         $num_price_errors++;
@@ -1008,11 +1017,14 @@ if (isset($_POST['action'])) {
             $num_price_errors = 0;
             while ($pp = mysqli_fetch_assoc($p_result)) {
                 $price   = $pp['products_price'];
+                $products_name=$pp['products_name'];
                 $osc_id = $osc_Prefix . $pp[$osc_Id];
-                $myprice = false;
+                if (get_item($osc_id) == false) {
+                    display_error("$osc_id $products_name not found in FA.  Do Item Import.");
+                    continue;
+                }
                 $myprice = get_kit_price($osc_id, $currency, $sales_type);
-                if ($myprice === false) display_notification("$osc_id price not found in FA");
-                else if ($price != $myprice) {
+                if ($price != $myprice) {
                     display_notification("Updating $osc_id from $price to $myprice");
                     $sql = "UPDATE products SET products_price = ".osc_escape($myprice)." WHERE $osc_Id = ".osc_escape($pp[$osc_Id]);
 display_notification($sql);
@@ -1029,11 +1041,14 @@ display_notification($sql);
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
                     $pa_price = $price + $pa['options_values_price'];
                     $pa_att_id = $pa['products_attributes_id']; 
+                    $pa_name=$pa['products_options_values_name'];
                     $pa_osc_id = $osc_id . "-" . $pa_att_id;
-                    $pa_myprice = false;
+                    if (get_item($pa_osc_id) == false) {
+                        display_error("$pa_osc_id $products_name $pa_name not found in FA.  Do Item Import.");
+                        continue;
+                    }
                     $pa_myprice = get_kit_price($pa_osc_id, $currency, $sales_type);
-                    if ($pa_myprice === false) display_notification("$pa_osc_id price not found in FA");
-                    else if ($pa_price != $pa_myprice) {
+                    if ($pa_price != $pa_myprice) {
                         display_notification("Updating $pa_osc_id from $pa_price to $pa_myprice");
                         $sql = "UPDATE products_attributes SET options_values_price = ".osc_escape($pa_myprice - $myprice)." WHERE products_attributes_id = ".osc_escape($pa_att_id);
                         $result = mysqli_query($osc, $sql);
