@@ -1,0 +1,12 @@
+Package: rep_cust_statement
+Description: Enhanced Customer Statement
+Name: Enhanced Customer Statement
+Filename: rep_cust_statement
+Author: Braathwaate
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_cust_statement
+Filename: rep_cust_statement-2.4.0-1
+Version: 2.4.0-1
+

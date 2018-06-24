@@ -1,3 +1,4 @@
+2018-06-24  BraathWaate  Added rep_cust_statement module - shows memo as well
 2018-06-24  BraathWaate  Added bank_gl_inquiry module - shows GL Account and memo as well
 2018-06-21  BraathWaate  Rep Inventory History: removed unused function argument
 2018-05-19  BraathWaate  Bank Auto Reconcile: module fixes
