@@ -4,7 +4,6 @@ Description: This extension is like the built-in bank inquiry, but it shows the 
 Author: Braathwaate
 Maintenance: Ap.Muthu
 Homepage: frontaccounting.com
-Depends: 
 InstallPath: modules/bank_gl_inquiry
 Type: extension
 Filename: bank_gl_inquiry-2.4.0-2

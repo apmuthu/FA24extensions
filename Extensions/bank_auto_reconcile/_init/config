@@ -1,13 +1,11 @@
 Package: bank_auto_reconcile
 Name: Bank Statement Auto Reconcile
-Description: This extension takes bank statement in CSV format
-and reconciles it against the FA bank account.
+Description: CSV bank statement econciled against FA bank account.
 Author: Tom Hallman
 Maintenance: Joe Hunt
 Homepage: frontaccounting.com
-Depends: 
-InstallPath: modules/bank_auto_reconcile
 Type: extension
+InstallPath: modules/bank_auto_reconcile
 Filename: bank_auto_reconcile-2.4.0-2
 Version: 2.4.0-2
 
