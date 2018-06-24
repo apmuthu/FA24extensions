@@ -14,7 +14,6 @@ class Purchases {
         $result = db_query($sql, 'oops');
         
         $body = array();
-
         while ($row = db_fetch_assoc($result)) {
             $body[] = $row;
         }
@@ -41,25 +40,25 @@ class Purchases {
 
     // Get Specific Item by Id
     public function getById($rest, $trans_no, $trans_type) {
-        include_once (API_ROOT . "/sales.inc");
+        include_once (API_ROOT . "/purchases.inc");
         sales_get($trans_no, $trans_type);
     }
 
     // Add Item
     public function post($rest) {
-        include_once (API_ROOT . "/sales.inc");
+        include_once (API_ROOT . "/purchases.inc");
         sales_add();
     }
 
     // Edit Specific Item
     public function put($rest, $trans_no, $trans_type) {
-        include_once (API_ROOT . "/sales.inc");
+        include_once (API_ROOT . "/purchases.inc");
         sales_edit($trans_no, $trans_type);
     }
 
     // Delete Specific Item
     public function delete($rest, $branch_id, $uuid) {
-        include_once (API_ROOT . "/sales.inc");
+        include_once (API_ROOT . "/purchases.inc");
         sales_cancel($branch_id, $uuid);
     }
 }

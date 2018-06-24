@@ -47,7 +47,7 @@ class Inventory {
         $this->inventory_delete($id);
     }
 
-    function inventory_all($from = null) {
+    public function inventory_all($from = null) {
         if ($from == null)
             $from = 0;
 
@@ -85,12 +85,12 @@ class Inventory {
         api_success_response(json_encode($info));
     }
 
-    function inventory_get($id) {
+    public function inventory_get($id) {
         $item = get_item($id);
         api_success_response(json_encode(api_ensureAssociativeArray($item)));
     }
 
-    function inventory_add() {
+    public function inventory_add() {
         $app = \Slim\Slim::getInstance('SASYS');
         $req = $app->request();
         $info = $req->post();
@@ -133,8 +133,8 @@ class Inventory {
         // TODO Validate Stock Id is Unique
 
         /*
-         * $stock_id, $description, $long_description, $category_id, $tax_type_id, $units, $mb_flag,    $sales_account,
-         * $inventory_account, $cogs_account, $adjustment_account,    $wip_account, $dimension_id, $dimension2_id,
+         * $stock_id, $description, $long_description, $category_id, $tax_type_id, $units, $mb_flag, $sales_account,
+         * $inventory_account, $cogs_account, $adjustment_account, $wip_account, $dimension_id, $dimension2_id,
          * $no_sale, $editable
          */
         add_item(
@@ -166,7 +166,7 @@ class Inventory {
         }
     }
 
-    function inventory_edit($id) {
+    public function inventory_edit($id) {
         $app = \Slim\Slim::getInstance('SASYS');
         $req = $app->request();
         $info = $req->post();
@@ -210,7 +210,7 @@ class Inventory {
 
         /*
          * $stock_id, $description, $long_description, $category_id, $tax_type_id, $units='', $mb_flag='',
-         * $sales_account, $inventory_account, $cogs_account,     $adjustment_account, $wip_account, $dimension_id,
+         * $sales_account, $inventory_account, $cogs_account, $adjustment_account, $wip_account, $dimension_id,
          * $dimension2_id, $no_sale, $editable
          */
         update_item(
@@ -236,7 +236,7 @@ class Inventory {
         api_success_response("Item has been updated");
     }
 
-    function inventory_delete($id) {
+    public function inventory_delete($id) {
         $app = \Slim\Slim::getInstance('SASYS');
         $req = $app->request();
         $info = $req->post();
@@ -256,5 +256,4 @@ class Inventory {
             api_success_response("Item has been deleted");
         }
     }
-
 }

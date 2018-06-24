@@ -73,5 +73,4 @@ class InventoryLocations {
             api_error(500, 'Could Not Save to Database');
         }
     }
-
 }

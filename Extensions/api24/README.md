@@ -8,7 +8,7 @@
 ## API Quick Start
 
 # Just copy the files into the modules directory under a folder called "api" or anything you want.
-# Edit the file util.php and change the $company, $username and $password variables so you can test. Use it at your own risk, to provide login from another software you need to send X-COMPANY, X-USER and X-PASSWORD headers in the request and the API will use those credentials, if they're wrong you will get a nice message telling "Bad Login"
+# Edit the file util.php and change the $company, $username and $password variables so you can test. Use it at your own risk, to provide login from another software you need to send X-COMPANY, X-USER and X-PASSWORD headers in the request and the API will use those credentials, if they're wrong you will get a nice message stating "Bad Login"
 # Try to access the API
 
 * To GET the Items Category List browse to:
@@ -16,6 +16,10 @@
 http://YOUR_FA_URL/modules/api/category
 ````
 You should see a JSON with all you're items categories, if not check the `util.php` file for test login credentials.
+
+## Documentation
+
+See the [API Documentation](https://andresamayadiaz.github.io/FrontAccountingSimpleAPI/) for descriptions of each endpoint.
 
 ## Methods
 

@@ -7,7 +7,7 @@ include_once ($path_to_root . "/sales/includes/db/customers_db.inc");
 include_once ($path_to_root . "/includes/db/crm_contacts_db.inc");
 
 class Customers {
-    // Get Items
+    // Get Customers
     public function get($rest) {
         $req = $rest->request();
 
@@ -22,13 +22,13 @@ class Customers {
         }
     }
 
-    // Get Specific Item by Id
+    // Get Specific Customer by Id
     public function getById($rest, $id) {
         $cust = get_customer($id);
         api_success_response(json_encode(api_ensureAssociativeArray($cust)));
     }
 
-    // Add Item
+    // Add Customer
     public function post($rest) {
         $req = $rest->request();
         $info = $req->post();
@@ -105,7 +105,7 @@ class Customers {
         }
 
         /*
-         * $CustName, $cust_ref, $address, $tax_id, $curr_code, $dimension_id, $dimension2_id, $credit_status,
+         * $CustName, $debtor_ref, $address, $tax_id, $curr_code, $dimension_id, $dimension2_id, $credit_status,
          * $payment_terms, $discount, $pymt_discount, $credit_limit, $sales_type, $notes
          */
         add_customer($info['name'], $info['debtor_ref'], $info['address'], $info['tax_id'], $info['curr_code'], 0, 0, $info['credit_status'], $info['payment_terms'], $info['discount'], $info['pymt_discount'], $info['credit_limit'], $info['sales_type'], $info['notes']);
@@ -132,7 +132,7 @@ class Customers {
         }
     }
 
-    // Edit Specific Item
+    // Edit Specific Customer
     public function put($rest, $id) {
         $req = $rest->request();
         $info = $req->post();
@@ -193,7 +193,7 @@ class Customers {
         api_success_response("Customer has been updated");
     }
 
-    // Delete Specific Item
+    // Delete Specific Customer
     public function delete($rest, $id) {
         $req = $rest->request();
         $info = $req->post();

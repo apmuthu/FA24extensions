@@ -90,6 +90,6 @@ function stock_adjustment_add()
     $_SESSION['gl_items']->clear_items();
     unset($_SESSION['gl_items']);
 
-    api_create_response("Stock Adjustment has been added");
+    api_create_response(json_encode(array("msg" => "Stock Adjustment has been added")));
 }
 ?>
