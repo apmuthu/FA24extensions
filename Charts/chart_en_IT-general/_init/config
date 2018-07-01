@@ -1,0 +1,14 @@
+Package: chart_en_IT-general
+Version: 2.4.1-1
+Name: Italian COA
+Description: This is an Italian chart of accounts for a new company.
+Encoding: utf-8
+Author: Ap.Muthu
+Maintenance: Joe Hunt
+Homepage: 
+Depends: 
+Type: chart
+InstallPath: sql
+SqlScript: en_IT-general.sql
+Filename: chart_en_IT-general-2.4.1-1
+
