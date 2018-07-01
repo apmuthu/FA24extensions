@@ -1,3 +1,4 @@
+2018-07-01  BraathWaate  sales_map extension added
 2018-07-01  Ap.Muthu     Added Italian Chart of Accounts en_IT-general.sql
 2018-06-26  Ap.Muthu     rep_cust_statement: Synched $rep for bulk reports with parent rep108.php
 2018-06-24  Ap.Muthu     Updated API to v2.4-1.6 without composer
