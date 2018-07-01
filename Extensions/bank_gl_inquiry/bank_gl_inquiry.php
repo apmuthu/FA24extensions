@@ -41,6 +41,12 @@ if (get_post('Show'))
 
 set_posts(array('bank_account', 'TransAfterDate', 'TransToDate'));
 //------------------------------------------------------------------------------------------------
+
+if (isset($_GET['message']))
+{
+    display_notification_centered($_GET['message']);
+}
+
 function gl_link($account, $name)
 {
     global $path_to_root;
@@ -116,6 +122,8 @@ else
 	$credit += $bfw;
 $j = 1;
 $k = 0; //row colour counter
+$dim = get_company_pref('use_dimension');
+
 while ($myrow = db_fetch($result))
 {
 
@@ -153,7 +161,14 @@ while ($myrow = db_fetch($result))
         alt_table_row_color($k);
         end_row();
         alt_table_row_color($k);
-        label_cell("", "colspan=7");
+        label_cell("", "colspan=2");
+        if ($dim >= 1)
+            label_cell(get_dimension_string($myrow['dimension_id'], true), "colspan=2");
+        if ($dim > 1)
+            label_cell(get_dimension_string($myrow['dimension2_id'], true));
+
+        display_debit_or_credit_cells($myrow["amount"]);
+        label_cell("");
         label_cell(gl_link($myrow['account'], $myrow['account_name']));
 
         label_cell($myrow['memo_']);
