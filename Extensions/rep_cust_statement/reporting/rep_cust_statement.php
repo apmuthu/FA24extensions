@@ -79,7 +79,7 @@ function print_cust_statements()
 	$orientation = ($orientation ? 'L' : 'P');
 	$dec = user_price_dec();
 
-	$cols = array(4, 100, 130, 190,	250, 320, 385, 450, 515);
+	$cols = array(4, 80, 130, 190,	250, 320, 385, 450, 515);
 
 	//$headers in doctext.inc
 

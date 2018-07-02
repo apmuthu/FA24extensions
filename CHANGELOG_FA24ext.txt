@@ -1,3 +1,4 @@
+2018-07-02  Ap.Muthu     rep_cust_statement: fixed column spacing
 2018-07-02  Ap.Muthu     sales_map and bank_gl_inquiry extensions fixed for missing functions
 2018-07-01  BraathWaate  sales_map extension added
 2018-07-01  Ap.Muthu     Added Italian Chart of Accounts en_IT-general.sql
