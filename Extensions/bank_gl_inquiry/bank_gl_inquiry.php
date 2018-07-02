@@ -29,7 +29,7 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array('bank_account', 'TransAfterDate', 'TransToDate'));
+//$js .= get_js_history(array('bank_account', 'TransAfterDate', 'TransToDate'));
 page(_($help_context = "Bank Account G/L Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransAfterDate']), false, "", $js, false, "", true);
 
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
@@ -42,7 +42,7 @@ if (get_post('Show'))
 	$Ajax->activate('trans_tbl');
 }
 
-set_posts(array('bank_account', 'TransAfterDate', 'TransToDate'));
+//set_posts(array('bank_account', 'TransAfterDate', 'TransToDate'));
 
 //------------------------------------------------------------------------------------------------
 
@@ -196,3 +196,45 @@ set_browser_title("bank_account");
 
 end_page(true);
 
+// These two functions should be in the includes/ui/ui_view.php file if it were in the core.
+//
+// This script updates the browser history when
+// any of the passed variables change.
+// This way, if the user changes these variables,
+// then uses the back button to return, it returns to the page
+// as the user modified it.
+function get_js_history($vars)
+{
+    $js = ' 
+    function changeVar() {
+        var stateObj = { foo: "bar" };
+        var state = "";
+';
+
+    $first = true;
+    foreach ( $vars as $var ) {
+        $js .= '
+        var element = document.getElementsByName("' . $var. '");
+        if (element[0])';
+        if ($first) {
+            $first = false;
+            $js .= '
+            state += "?';
+        } else
+            $js .= '
+            state += "&';
+        $js .= $var .'="' . ' + element[0].value;';
+    }
+
+    $js .= '
+        history.replaceState(stateObj, "page 2", location.protocol + "//" + location.host + location.pathname + state);
+    }';
+    return $js;
+}
+
+function set_posts($vars)
+{
+    foreach ( $vars as $var )
+        if (isset($_GET[$var]))
+            $_POST[$var] = $_GET[$var];
+}

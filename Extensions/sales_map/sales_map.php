@@ -22,7 +22,7 @@ include_once($path_to_root . "/includes/db/crm_contacts_db.inc");
 
 // ---------------------------------------------------------------------
 
-set_posts(array('stock_id', 'sales_type', 'debtor_no', 'noheader', 'action'));
+// set_posts(array('stock_id', 'sales_type', 'debtor_no', 'noheader', 'action'));
 
 add_css_file('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css');
 // does not work
@@ -370,7 +370,7 @@ if ($SysPrefs->use_popup_windows)
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= file_get_contents("https://unpkg.com/leaflet@1.3.1/dist/leaflet.js");
-$js .= get_js_history(array('debtor_no', 'stock_id'));
+//$js .= get_js_history(array('debtor_no', 'stock_id'));
 $js .= SCRIPT;
 
 
