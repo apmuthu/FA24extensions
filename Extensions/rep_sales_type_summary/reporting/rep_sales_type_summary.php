@@ -103,7 +103,7 @@ function print_inventory_sales()
 
 	$cols = array(0, 100, 260, 300, 350, 425, 430, 515);
 
-	$headers = array(_('Item/Category'), _('Description'), _('Qty Sold'), _('Amount'), '');
+	$headers = array(_('Item/Category'), _('Description'), _('Qty Sold'), _('Amount'), _('Remarks'));
 
 	$aligns = array('left',	'left',	'right', 'right', 'right');
 
@@ -130,8 +130,8 @@ function print_inventory_sales()
 			if ($catt != '')
 			{
 				$rep->NewLine(2, 3);
-				$rep->TextCol(0, 4, _('Total'));
-				$rep->AmountCol(4, 5, $total, $dec);
+				$rep->TextCol(0, 3, _('Total'));
+				$rep->AmountCol(3, 4, $total, $dec);
 				$rep->Line($rep->row - 2);
 				$rep->NewLine();
 				$rep->NewLine();
