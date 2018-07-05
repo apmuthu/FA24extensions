@@ -1,3 +1,4 @@
+2018-07-05  BraathWaate  bank_gl_inquiry: synched for use with core functions only
 2018-07-02  Ap.Muthu     rep_sales_type_summary: Total column position and Remarks heading fixed
 2018-07-02  Ap.Muthu     rep_cust_statement: fixed column spacing
 2018-07-02  Ap.Muthu     sales_map and bank_gl_inquiry extensions fixed for missing functions

@@ -136,7 +136,7 @@ while ($myrow = db_fetch($result))
 	display_debit_or_credit_cells($myrow["amount"]);
 	amount_cell($running_total);
 
-	label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, get_post("TransAfterDate"),get_post("TransToDate")));
+	label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true));
 
 	label_cell(get_comments_string($myrow["type"], $myrow["trans_no"]));
     label_cell(empty($myrow["reconciled"]) ? "" : "X");
@@ -189,13 +189,14 @@ label_cell("", "colspan=3");
 end_row();
 end_table();
 div_end();
-scroll_down("trans_tbl");
-set_browser_title("bank_account");
+// scroll_down("trans_tbl");
+// set_browser_title("bank_account");
 
 //------------------------------------------------------------------------------------------------
 
 end_page(true);
 
+/* these are not used in this this dispensation
 // These two functions should be in the includes/ui/ui_view.php file if it were in the core.
 //
 // This script updates the browser history when
@@ -238,3 +239,20 @@ function set_posts($vars)
         if (isset($_GET[$var]))
             $_POST[$var] = $_GET[$var];
 }
+
+// This function is present in @braathwaate's includes/ui/ui_controls.inc file
+function scroll_down($div)
+{
+    global $Ajax;
+
+    $js = "
+        var objDiv = document.getElementById('" . $div . "');
+        objDiv.scrollTop = objDiv.scrollHeight;
+    ";
+    if (in_ajax()) {
+        $Ajax->addScript(true, $js);
+    } else
+        add_js_source($js);
+}
+*/
+
