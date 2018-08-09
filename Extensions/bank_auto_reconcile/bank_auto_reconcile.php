@@ -90,7 +90,7 @@ function get_bank_transaction($account, $amount, $check, $current)
             AND amount = '$amount'
             AND ISNULL(b.reconciled)";
     if ($check != '')
-        $sql .= " AND LOCATE('$check', memo_) != 0";
+        $sql .= " AND LOCATE(" . db_escape($check) . ", memo_) != 0";
     foreach ($current as $key => $value)
         $sql .= " AND b.id != $key ";
     // display_notification($sql);

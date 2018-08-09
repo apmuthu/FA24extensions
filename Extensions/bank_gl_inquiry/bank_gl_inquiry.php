@@ -26,8 +26,8 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array('bank_account', 'TransAfterDate', 'TransToDate'));
-page(_($help_context = "Bank Account G/L Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransAfterDate']), false, "", $js, false, "", true);
+$js .= get_js_history(array('bank_account', 'TransAfterDate', 'TransToDate', 'date_'));
+page(_($help_context = "Bank Account G/L Inquiry"), isset($_GET['no_header']), false, "", $js, false, "", true);
 
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
@@ -39,7 +39,7 @@ if (get_post('Show'))
 	$Ajax->activate('trans_tbl');
 }
 
-set_posts(array('bank_account', 'TransAfterDate', 'TransToDate'));
+set_posts(array('bank_account', 'TransAfterDate', 'TransToDate', 'date_'));
 //------------------------------------------------------------------------------------------------
 
 if (isset($_GET['message']))
@@ -84,6 +84,7 @@ if ($days >= 0) {
 }
 
 submit_cells('Show',_("Show"),'','', 'default');
+hidden('date_');
 end_row();
 end_table();
 end_form();
@@ -191,8 +192,11 @@ amount_cell($debit);
 amount_cell(-$credit);
 //display_debit_or_credit_cells($running_total);
 amount_cell($debit+$credit);
-hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter Another &Payment"), "NewPayment=yes&bank_account=".$_POST['bank_account']);
-hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter A &Deposit"), "NewDeposit=yes&bank_account=".$_POST['bank_account']);
+$params="&bank_account=".$_POST['bank_account'];
+if (get_post('date_') != "")
+    $params .= "&date_=".$_POST['date_'];
+hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter Another &Payment"), "NewPayment=yes" . $params);
+hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter A &Deposit"), "NewDeposit=yes" . $params);
 
 label_cell("", "colspan=3");
 end_row();

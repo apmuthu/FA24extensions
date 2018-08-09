@@ -52,23 +52,24 @@ function get_bank_transactions($from, $to, $account)
 	return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
 
-function sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate)
+function sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate, $comments)
 {
-global $Refs;
+    global $Refs;
 
-        $rep->DateCol(3, 4,	$lastdate, true);
-        $rep->TextCol(4, 6, _("Total"));
-        $rep->AmountCol(7, 8, $total_daily, $dec);
-        $rep->NewLine(2);
+    $rep->DateCol(3, 4,	$lastdate, true);
+    $rep->TextCol(4, 6, _("Total"));
+    $rep->AmountCol(7, 8, $total_daily, $dec);
+    $rep->NewLine(2);
 
-        $total_daily = round($total_daily, $dec);
-        if ($sweep != '' && $total_daily != 0) {
-                new_doc_date($lastdate);
-                $trans_no = add_bank_transfer($acc, $sweep, sql2date($lastdate), $total_daily, $Refs->get_next(ST_BANKTRANSFER, null, sql2date($lastdate)), "Sweep from $act", 0, $total_daily);
+    $total_daily = round($total_daily, $dec);
+    if ($sweep != '' && $total_daily != 0) {
+        new_doc_date($lastdate);
+        $trans_no = add_bank_transfer($acc, $sweep, sql2date($lastdate), $total_daily, $Refs->get_next(ST_BANKTRANSFER, null, sql2date($lastdate)), "Sweep" . $comments, 0, $total_daily);
 
-                display_notification("Swept $lastdate $total_daily");
-        }
+        display_notification("Swept $lastdate $total_daily");
+    }
 }
+
 function print_bank_transactions_daily()
 {
 	global $path_to_root, $systypes_array;
@@ -128,8 +129,9 @@ function print_bank_transactions_daily()
 		$total = $prev_balance;
 		$rep->NewLine(2);
 		$total_debit = $total_credit = 0;
-                $total_daily = 0;
-                $lastdate = "";
+        $total_daily = 0;
+        $lastdate = "";
+        $comment_line = "";
 		if ($rows > 0)
 		{
 			// Keep a running total as we loop through
@@ -139,12 +141,13 @@ function print_bank_transactions_daily()
 			{
 				if ($zero == 0 && $myrow['amount'] == 0.0)
 					continue;
-                                if ($lastdate != ''
-                                    && $lastdate != $myrow['trans_date']) {
-sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate);
-                                        $total_daily = 0;
-                                }
-                                $lastdate = $myrow['trans_date'];
+                if ($lastdate != ''
+                    && $lastdate != $myrow['trans_date']) {
+                        sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate, $comment_line);
+                        $total_daily = 0;
+                        $comment_line = "";
+                }
+                $lastdate = $myrow['trans_date'];
 				$total_daily += $myrow['amount'];
 
 				$total += $myrow['amount'];
@@ -153,7 +156,10 @@ sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate);
 				$rep->TextCol(1, 2,	$myrow['trans_no']);
 				$rep->TextCol(2, 3,	$myrow['ref']);
 				$rep->DateCol(3, 4,	$myrow["trans_date"], true);
-				$rep->TextCol(4, 5,	get_counterparty_name($myrow["type"], $myrow["trans_no"], false));
+				$name = get_counterparty_name($myrow["type"], $myrow["trans_no"], false);
+                if ($name != "" && strpos($comment_line, $name) === false)
+                    $comment_line .= " " . $name;
+				$rep->TextCol(4, 5,	$name);
 				if ($myrow['amount'] > 0.0)
 				{
 					$rep->AmountCol(5, 6, abs($myrow['amount']), $dec);
@@ -173,9 +179,10 @@ sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate);
 				}
 			}
 			$rep->NewLine();
+
+            sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate, $comment_line);
 		}
 	
-                sweep($acc, $act, $sweep, $rep, $total_daily, $dec, $lastdate);
 
 		// Print totals for the debit and credit columns.
 		$rep->TextCol(3, 5, _("Total Debit / Credit"));

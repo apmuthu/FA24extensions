@@ -145,7 +145,7 @@ function clientarray_string($stock_id)
               $sql = "INSERT ".TB_PREF."sales_map (branch_code, latlong) VALUES('" . $cust["branch_code"] . "','" . $lat . "," . $lng . "')";
               db_query($sql,"No transactions were returned");
            } else {
-            display_notification("bad geocode for " . $cust["cust_name"] . " at " . $address . ";" . $status);
+            display_notification("bad geocode for " . $cust["cust_name"] . " at " . $address);
             // syslog(LOG_NOTICE, "sales_map: bad geocode for " . $cust["cust_name"] . " at " . $address . ";" . $status);
             continue;
            }
@@ -323,13 +323,55 @@ window.open(href, windowname, \'width=500,height=400,scrollbars=yes\');
 return false;
 }
 
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
+function formatXml(xml, tab)
+{
+    var formatted = "", indent= "";
+    tab = tab || "\t";
+    xml.split(/>\s*</).forEach(function(node) {
+        if (node.match( /^\/\w/ )) indent = indent.substring(tab.length); // decrease indent by one tab
+        formatted += indent + "<" + node + ">\r\n";
+        if (node.match( /^<?\w[^>]*[^\/]$/ )) indent += tab;              // increase indent
+    });
+    return formatted.substring(1, formatted.length-3);
+}
 
 var markers = [];
+var names = [];
+var drawnItems = new L.FeatureGroup();
+
+function getkml()
+{
+    var json = drawnItems.toGeoJSON();
+
+    for (i=0; i < names.length; i++)
+        json.features[i].properties.name=decodeHtml(names[i]);
+    var kml = tokml(json);
+    return formatXml(kml, "    ");
+}
+
+function downloadkml(filename, text) {
+  var element = document.createElement("a");
+  element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+  element.setAttribute("download", filename);
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
 
 function clickList(i) {
     markers[i].openPopup();
 }
-					
+
 
 function codeAddress(map, i) {
 	var htmlListing = "<P><H2 onclick=clickList(" + i + ") style=\'margin-bottom:2px;\'><a href=" + window.location.href +"#title>" + clientArray[i][0] + "</a></H2>"	//name
@@ -348,9 +390,10 @@ function codeAddress(map, i) {
     marker.addTo(map)
         .bindPopup(markerText)
         .openPopup();
+    drawnItems.addLayer(marker);
 
+    names[i] = clientArray[i][0];
     markers[i] = marker;    // store for list click
-
 }
 
 function stockFilter()
@@ -370,6 +413,7 @@ if ($SysPrefs->use_popup_windows)
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= file_get_contents("https://unpkg.com/leaflet@1.3.1/dist/leaflet.js");
+$js .= file_get_contents("https://raw.githubusercontent.com/mapbox/tokml/master/tokml.js");
 $js .= get_js_history(array('debtor_no', 'stock_id'));
 $js .= SCRIPT;
 
@@ -446,7 +490,7 @@ while ($item=db_fetch($res)) {
 
 $sel .= "</select>";
 
-table_header(array("Stock Locations", ($cat == "" ? "All Categories" : get_category_name($cat)) . " " . $sel));
+table_header(array("Sales Locations", ($cat == "" ? "All Categories" : get_category_name($cat)) . " " . $sel));
 ?>
 
 
@@ -479,7 +523,9 @@ Click on marker for more information.
 <?php
     hyperlink_params($_SERVER['PHP_SELF'], _("Configuration"), "action=show", false);
 ?>
-</td></tr>
+<a onclick='downloadkml("sales.kml", getkml());'>Download KML</a>
+</td>
+</tr>
 </tbody>
 <?php
 
