@@ -73,7 +73,12 @@ global $Ajax;
 $filename = (isset($_GET['filename']) ? $_GET['filename'] : '');
 if ($filename != "") {
     initialize_controls();
-    $_POST['type']             = ST_JOURNAL;
+    if (isset($_GET['type']))
+        $_POST['type']         = $_GET['type'];
+    else
+        $_POST['type']         = ST_JOURNAL;
+    if (isset($_GET['bank_account']))
+        $_POST['bank_account'] = $_GET['bank_account'];
     $_FILES['imp']['name']     = $filename;
     $_FILES['imp']['tmp_name'] = $filename;
     $_POST['sep']              = ",";
@@ -266,10 +271,9 @@ if ((isset($_POST['type']))) {
                     }
                 }
 
-                if ($reference == '') {
-                    display_error(_("$line does not have a reference. (line $line in import file '{$_FILES['imp']['name']}')"));
-                    $error = true;
-                } else if (!$Refs->is_valid($reference, $type)) {
+                if ($reference == '')
+                    $reference = $Refs->get_next($type);
+                if (!$Refs->is_valid($reference, $type)) {
                         display_notification("Reference " . $reference . " must match valid pattern in Setup->Transaction References");
                         $error = true;
                     }
