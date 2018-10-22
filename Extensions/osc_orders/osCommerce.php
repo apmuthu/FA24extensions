@@ -201,7 +201,7 @@ function get_sales_point_by_name($name)
         return db_fetch($result);
 }
 
-function addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase)
+function addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $barcode)
 {
         $inactive = ($products_status == 0 ? 1 : 0);
         $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($osc_id);
@@ -245,7 +245,16 @@ function addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $pro
         $row    = db_fetch_row($result);
         if (!$row) add_item_code($osc_id, $osc_id, $products_name, $cat, 1);
         else update_item_code($row[0], $osc_id, $osc_id, $products_name, $cat, 1);
-}
+
+        // barcode
+        if ($barcode != "" && strlen($barcode) <= 20) {
+            $sql    = "SELECT id from ".TB_PREF."item_codes WHERE item_code=".db_escape($barcode)." AND stock_id = ".db_escape($osc_id);
+            $result = db_query($sql, "item code could not be retreived");
+            $row    = db_fetch_row($result);
+            if (!$row) add_item_code($barcode, $osc_id, $products_name, $cat, 1, 1);
+            else update_item_code($row[0], $barcode, $osc_id, $products_name, $cat, 1, 1);
+        }
+    }
 
 function sales_service_items_list_row($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false)
 {
@@ -326,6 +335,37 @@ function get_osc_id($item_code, $qty)
     global $osc_Prefix;
     return $osc_Prefix . $item_code . ($qty == "" ? "D" : "");
 }
+
+function show_items($stock)
+{
+    $list="";
+    foreach ($stock as $stock_id) {
+        $item = get_item($stock_id);
+        $list.="{" . $stock_id . "=" . $item['description'] . "}";
+    }
+    return $list;
+}
+
+// Match FA payment_terms from osc payment method.
+// We need a matching POS Name to find the FA pos.
+// Then find the first FA payment terms that match the osc payment type
+// The idea is to generate payments for some osc payment types
+// and no payment for credit payment types.
+
+function get_FA_payment_terms($cart)
+{
+    $result = get_payment_terms_all(false);
+    while($row=db_fetch($result))
+    {
+        if (($cart->pos['cash_sale'] == 0
+            && $row['days_before_due'] != 0) ||
+            ($cart->pos['cash_sale']
+                && $row['days_before_due'] == 0))
+                return $row['terms_indicator'];
+    }
+    return null;
+}
+
 
 // error_reporting(E_ALL);
 // ini_set("display_errors", "on");
@@ -659,6 +699,7 @@ if (isset($_POST['action'])) {
 
             while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID         = $order['orders_id'];
+//display_notification($oID);
 
                 $date_purchased = $order['date_purchased'];
 
@@ -765,14 +806,15 @@ if (isset($_POST['action'])) {
                         }
                     }
                     $cart->pos=$pos;
-                    $cart->payment = $_POST['payment'];
-                    $cart->payment_terms = get_payment_terms($cart->payment);
-                    if ($pos['cash_sale'] == 0)
-                        $cart->payment_terms['cash_sale'] = 0;
-                    else if ($cart->payment_terms['cash_sale']) {
-                        $cart->Location = $cart->pos['pos_location'];
-                        $cart->location_name = $cart->pos['location_name'];
+                    $cart->Location = $cart->pos['pos_location'];
+                    $cart->location_name = $cart->pos['location_name'];
+
+                    $cart->payment = get_FA_payment_terms($cart);
+                    if ($cart->payment == null) {
+                        display_error('No matching payment terms for order ' . $oID);
+                        continue;
                     }
+                    $cart->payment_terms = get_payment_terms($cart->payment);
                 } else {
                     $cart                    = new Cart(ST_SALESORDER);
                     $cart->Location          = $branch['default_location'];
@@ -885,7 +927,7 @@ if (isset($_POST['action'])) {
             // (Partial payment: Move Balance To Order is not discounted)
 
                             $sales_discount = ($default_sales_act == $row[1]) ? $disc_percent : 0;
-                            $total += round($prod['products_quantity'] * $prod['products_price'] * (1 -$sales_discount),2);
+                            $total += round($prod['products_quantity'] * $pa['options_values_price'] * (1 -$sales_discount),2);
                             add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $pa['options_values_price'], $sales_discount);
                         }
                         mysqli_free_result($pa_result);
@@ -915,7 +957,7 @@ if (isset($_POST['action'])) {
 
                 if ($_POST['invoice'] == 1) {
                     if (!$SysPrefs->allow_negative_stock() && ($low_stock = $cart->check_qoh())) {
-                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . implode(' ', $low_stock) . " on " . $cart->document_date));
+                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . show_items($low_stock) . " on " . $cart->document_date));
                         if ($errors == 0) {
                             display_error('Skipping order ' . $oID);
                             continue;
@@ -1030,7 +1072,8 @@ if (isset($_POST['action'])) {
 
         if ($action == 'p_update') { // Price Update
             global $osc;
-            $sql              = "SELECT " . $osc_Id . ", products_price, products_quantity, products_name FROM products WHERE products_status = 1";
+            //$sql              = "SELECT " . $osc_Id . ", products_price, products_quantity, products_name FROM products WHERE products_status = 1";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_price, products_name, p.products_quantity FROM products p left join products_description pd on p.products_id = pd.products_id WHERE products_status = 1";
             $p_result         = osc_dbQuery($sql, true);
             $currency         = $_POST['currency'];
             $sales_type       = $_POST['sales_type'];
@@ -1081,7 +1124,7 @@ display_notification($sql);
             $action = 'pupdate';
         }
         if ($action == 'i_import') { // Item Import
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
@@ -1136,16 +1179,16 @@ display_notification($sql);
                     $no_purchase = $row['dflt_no_purchase'];
                 }
 
-                addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase);
+                addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $pp['products_barcode']);
 
                 // Check for product attributes
                 // FA item number like oscXXXX-AAAA
 
-                $sql = "select products_attributes_id, options_values_price, products_options_values_name from products_attributes pa left join products_options_values po on pa.options_values_id=products_options_values_id where products_id=" . $pp['products_id'];
+                $sql = "select products_attributes_id, options_values_price, products_options_values_name, options_barcode from products_attributes pa left join products_options_values po on pa.options_values_id=products_options_values_id where products_id=" . $pp['products_id'];
 
                 $pa_result = osc_dbQuery($sql, true);
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
-                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], $cat, $tax_type_id, $mb_flag, $pa['options_values_price'], $products_status, $no_sale, $no_purchase);
+                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], $cat, $tax_type_id, $mb_flag, $pa['options_values_price'], $products_status, $no_sale, $no_purchase, $pa['options_barcode']);
                 }
                 mysqli_free_result($pa_result);
             }
@@ -1513,7 +1556,6 @@ if ($action == 'oimport') {
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, true);
     sales_areas_list_row("Sales Area:", 'area');
     yesno_list_row(_("Direct Invoice"), 'invoice', null, "", "", false);
-    sale_payment_list_cells(_('Payment:'), 'payment', PM_CASH, null, false);
     sales_service_items_list_row(_('Adjustment Item:'),'adjustment', null, false, false, false);
 
     yesno_list_row(_("Errors"), 'errors', null, "Ignore", "Skip", false);
