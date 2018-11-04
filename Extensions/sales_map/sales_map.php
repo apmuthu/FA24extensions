@@ -22,24 +22,25 @@ include_once($path_to_root . "/includes/db/crm_contacts_db.inc");
 
 // ---------------------------------------------------------------------
 
-set_posts(array('stock_id', 'sales_type', 'debtor_no', 'noheader', 'action'));
+set_posts(array('stock_id', 'tax_group_id', 'debtor_no', 'noheader', 'action'));
+
 
 add_css_file('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css');
 // does not work
 // add_css_file('https://github.com/apmuthu/FA24extensions/files/2130882/leaflet.css.txt');
 
-function getTransactions($from, $to, $sales_type, $stock_id)
+function getTransactions($from, $to, $tax_group_id, $stock_id)
 {
     if (!empty($from)) {
         $fromdate = date2sql($from);
         $todate = date2sql($to);
     }
 
-    $sql = "SELECT d.debtor_no, d.name AS cust_name, st.sales_type, dt.type, dt.trans_no,  dt.tran_date, sm.latlong, cb.br_address, cb.br_post_address, dt.branch_code
+    $sql = "SELECT d.debtor_no, d.name AS cust_name, dt.type, dt.trans_no,  dt.tran_date, sm.latlong, cb.br_address, cb.br_post_address, dt.branch_code
         FROM ".TB_PREF."debtor_trans dt
             LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no=dt.debtor_no
-            LEFT JOIN ".TB_PREF."sales_types st ON d.sales_type=st.id
             LEFT JOIN ".TB_PREF."cust_branch cb ON dt.branch_code=cb.branch_code
+            LEFT JOIN ".TB_PREF."tax_groups st ON cb.tax_group_id=st.id
             LEFT JOIN ".TB_PREF."sales_map sm ON dt.branch_code=sm.branch_code
             LEFT JOIN ".TB_PREF."sales_order_details sod ON dt.order_ = sod.order_no
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
@@ -50,8 +51,8 @@ function getTransactions($from, $to, $sales_type, $stock_id)
     if (!empty($from))
         $sql .= "AND dt.tran_date >=".db_escape($fromdate)." AND dt.tran_date<=".db_escape($todate);
 
-    if (!empty($sales_type))
-        $sql .= " AND sales_type = '" . $sales_type . "'";
+    if (!empty($tax_group_id))
+        $sql .= " AND tax_group_id = '" . $tax_group_id . "'";
 
     $sql .= " GROUP BY debtor_no ORDER BY cust_name";
 
@@ -99,12 +100,13 @@ function clientarray_string($stock_id)
 
 	$count=0;
 
-    $res = getTransactions(null, null, get_post('sales_type'), get_post('stock_id'));
+    $res = getTransactions(null, null, get_post('tax_group_id'), get_post('stock_id'));
     while ($cust=db_fetch($res)) {
 
         $old_address = $cust["br_address"];
         $address = preg_replace("/^[^0-9]*/", "", $old_address);
-        if ($old_address != $address) {
+        if ($old_address != $address
+            && !isset($_POST['tax_group_id'])) {
             display_notification("old $old_address");
             display_notification("new $address");
         }
@@ -145,7 +147,8 @@ function clientarray_string($stock_id)
               $sql = "INSERT ".TB_PREF."sales_map (branch_code, latlong) VALUES('" . $cust["branch_code"] . "','" . $lat . "," . $lng . "')";
               db_query($sql,"No transactions were returned");
            } else {
-            display_notification("bad geocode for " . $cust["cust_name"] . " at " . $address);
+            if (!isset($_POST['tax_group_id']))
+                display_notification("bad geocode for " . $cust["cust_name"] . " at " . $address);
             // syslog(LOG_NOTICE, "sales_map: bad geocode for " . $cust["cust_name"] . " at " . $address . ";" . $status);
             continue;
            }

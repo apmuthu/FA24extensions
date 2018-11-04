@@ -1,0 +1,11 @@
+Package: rep_fixed_assets
+Description: Fixed Assets Report based on gl memo
+Name: Fixed Assets Report based on GL memo
+Filename: rep_fixed_assets
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_fixed_assets
+Version: 2.4.0-1
+

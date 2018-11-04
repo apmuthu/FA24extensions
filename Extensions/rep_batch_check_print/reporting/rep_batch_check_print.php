@@ -173,8 +173,8 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
     //////////////////
     // Check portion
     
-    $rep->NewLine(1,0,20);
-    $rep->cols = array(63, 340, 470, 600);
+    $rep->NewLine(1,0,30);
+    $rep->cols = array(80, 340, 470, 580);
     $rep->aligns = array('left', 'left', 'right', 'right');
     
     // Date
@@ -213,11 +213,11 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
         }
     }
 
-    $rep->NewLine(1,0,56 - $lines * 12);
+    $rep->NewLine(1,0,46 - $lines * 12);
     
     // Memo
     $rep->TextCol(0, 1, $memo);
-    $rep->NewLine(1,0,10);
+    // $rep->NewLine(1,0,10);
 }
 
 //--------------------------------------------------------------------------------

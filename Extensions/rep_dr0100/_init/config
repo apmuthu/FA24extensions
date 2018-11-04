@@ -1,0 +1,11 @@
+Package: rep_dr0100
+Description: Colorado DR0100 Tax Report
+Name: Colorado DR0100 Tax Report
+Filename: rep_dr0100
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_batch_check_print
+Version: 2.4.0-1
+

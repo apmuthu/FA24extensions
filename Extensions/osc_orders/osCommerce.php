@@ -687,15 +687,30 @@ if (isset($_POST['action'])) {
 
             $customer = null;
             $errors = (int) $_POST['errors'];
+
+/*
             $sql        = "SELECT * FROM orders WHERE date_purchased BETWEEN ".osc_escape($from_date ." 00:00:00") . " AND " . osc_escape($end_date . " 23:59:59");
             if ($statusId != "")
                 $sql .= " AND orders_status != " . $statusId;
             $sql .= " AND orders_id not in (select orders_id from orders_status_history oh where LOCATE('Imported into FA', comments) != 0) group by orders_id";
+*/
+            $sql        = "SELECT o.* FROM orders o LEFT OUTER JOIN orders_status_history oh ON oh.orders_id=o.orders_id AND comments='Imported into FA' WHERE date_purchased BETWEEN ".osc_escape($from_date ." 00:00:00") . " AND " . osc_escape($end_date . " 23:59:59") . " AND oh.comments IS NULL";
+            if ($statusId != "")
+                $sql .= " AND orders_status != " . $statusId;
+
+            display_notification($sql);
             $oid_result = osc_dbQuery($sql, true);
-            // display_notification($sql);
             display_notification("Found " . mysqli_num_rows($oid_result) . " New Orders");
 
             $default_sales_act = get_company_pref('default_sales_act');
+
+            // find the tax included sales type for osc orders without tax
+            $result = get_all_sales_types();
+            while ($sales_type = db_fetch($result)) {
+                if ($sales_type['tax_included'])
+                    $tax_included_sales_type_id  = $sales_type['id'];
+            }
+
 
             while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID         = $order['orders_id'];
@@ -706,6 +721,7 @@ if (isset($_POST['action'])) {
                 $sql         = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID) . " ORDER BY sort_order";
                 $total_shipping = 0;
                 $total_total = 0;
+                $total_tax = 0;
                 $total_discount = 0;
                 $total_subtotal = 0;
                 $found_subtotal = false;
@@ -723,6 +739,7 @@ if (isset($_POST['action'])) {
                             $found_subtotal = true;
                             break;
                         case 'ot_tax' :
+                            $total_tax = $total['value'];
                             break;
                         case 'ot_discount' :
                         default:
@@ -830,21 +847,28 @@ if (isset($_POST['action'])) {
                 // Now Add Sales_Order and Sales_Order_Details
                 $cart->customer_id       = $customer['debtor_no'];
                 $cart->customer_currency = $customer['curr_code'];
+
+                $addr = osc_address_format($order, 'delivery_');
                 $cart->set_branch(
                     $branch["branch_code"],
                     $branch["tax_group_id"],
-                    $branch["tax_group_name"]);
+                    $addr);
+                $cart->set_delivery($branch['default_ship_via'], $customers_name, $addr, $total_shipping);
 
                 $cart->cust_ref          = "osC Order # $oID";
                 $cart->Comments          = $comments;
                 $cart->document_date     = sql2date($date_purchased);
-                $cart->sales_type        = $customer['sales_type'];
-                $cart->ship_via          = $branch['default_ship_via'];
-                $cart->deliver_to        = $branch['br_name'];
-                $cart->delivery_address  = $branch['br_address'];
+
+                // If the osc order did not have tax, assume tax was included
+                // (if items are tax exempt, like food, this has no effect)
+                if ($total_tax == 0
+                    && isset($tax_included_sales_type_id))
+                    $cart->sales_type    = $tax_included_sales_type_id;
+                else
+                    $cart->sales_type    = $customer['sales_type'];
+
                 $cart->phone             = $order['customers_telephone'];
                 $cart->email             = $order['customers_email_address'];
-                $cart->freight_cost      = $total_shipping;
                 $cart->due_date          = sql2date($date_purchased);
                 $cart->dimension_id      = $customer['dimension_id'];
                 $cart->dimension2_id     = $customer['dimension2_id'];
