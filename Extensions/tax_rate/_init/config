@@ -1,0 +1,12 @@
+Package: tax_rate
+Name: Tax Rate Module
+Description: This module works with BraatWaate FrontAccounting
+ to return the tax rate from a Colorado address
+Author: Thomas A. Moulton <tom@moulton.us>
+Maintenance: Thomas A. Moulton <tom@moulton.us>
+Homepage: <none>
+Type: extension
+InstallPath: modules/tax_rate
+Filename: tax_rate-2.4.0-1
+Version: 2.4.0-1
+
