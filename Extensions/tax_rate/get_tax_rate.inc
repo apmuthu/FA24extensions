@@ -50,7 +50,7 @@ $csv[0] = array_slice($csv[0], 0, 7);
 
     function get_tax_rate($tax_group_name, $address)
     {
-        if ($tax_group_name == "Colorado Sales Tax")
+        if ($tax_group_name == "Colorado Sales Tax" && date('Ym') >= "201812")
             return get_tax_rates($tax_group_name, $address)['total'];
     }
 ?>

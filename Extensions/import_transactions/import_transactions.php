@@ -114,7 +114,7 @@ if ((isset($_POST['type']))) {
             display_error(_("Error opening file $filename"));
         } else {
             begin_transaction();
-			$supported_types = array(ST_JOURNAL, ST_BANKTRANSFER, ST_BANKDEPOSIT, ST_BANKPAYMENT, ST_SALESINVOICE, ST_SALESORDER);
+			$supported_types = array(ST_JOURNAL, ST_BANKDEPOSIT, ST_BANKPAYMENT, ST_SALESINVOICE, ST_SALESORDER);
 			if (in_array($type, $supported_types))
 				$curEntryId = get_next_trans_no($type);
             $line = 0;

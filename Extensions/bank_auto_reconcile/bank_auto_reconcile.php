@@ -81,7 +81,7 @@ echo "<hr>";
     }
 }
 
-function get_bank_transaction($account, $amount, $check, $current)
+function get_bank_transaction($toacct, $date, $account, $amount, $check, $current)
 {
     $sql = "SELECT b.* FROM ".TB_PREF."bank_trans b
             LEFT JOIN ".TB_PREF."comments c
@@ -89,11 +89,26 @@ function get_bank_transaction($account, $amount, $check, $current)
             WHERE b.bank_act = '$account'
             AND amount = '$amount'
             AND ISNULL(b.reconciled)";
+
+    // for electronic payments, limit the date range for the match
+    if ($check == "") {
+        $bank_date=date2sql($date);
+        $time = strtotime($bank_date . ' -5 days');
+        $from_date = date("Y-m-d", $time);
+        $time = strtotime($bank_date . ' +5 days');
+        $to_date = date("Y-m-d", $time);
+        $sql .= " AND trans_date BETWEEN '$from_date' AND '$to_date'";
+    }
+
+    // matching bank transfers require a matching account number
+    if ($toacct != "")
+        $sql .= " AND b.type = '" . ST_BANKTRANSFER ."'
+            AND EXISTS(SELECT * FROM ".TB_PREF."bank_trans bt LEFT JOIN ".TB_PREF."bank_accounts ba ON bt.bank_act=ba.id WHERE bt.type=b.type AND bt.trans_no=b.trans_no AND SUBSTRING(ba.bank_account_number,-4)=".db_escape($toacct).")";
     if ($check != '')
         $sql .= " AND LOCATE(" . db_escape($check) . ", memo_) != 0";
     foreach ($current as $key => $value)
         $sql .= " AND b.id != $key ";
-    // display_notification($sql);
+//   display_notification($sql);
 
     return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
@@ -132,6 +147,13 @@ function get_similar_bank_trans($id, $bank_account_gl_code)
                 "') AND gl.account != $bank_account_gl_code
             GROUP BY b.id";
     return db_query($sql,"The transaction for '$id' could not be retrieved");
+}
+
+function get_bank_transfer_account($type, $trans_no, $acct)
+{
+    $sql = "SELECT b.* FROM ".TB_PREF."bank_trans b
+            WHERE b.type='$type' AND b.trans_no='$trans_no' AND b.bank_act!='$acct'";
+    return db_query($sql,"The transaction for '$type' and '$trans_no' could not be retrieved");
 }
 
 function auto_reconcile($current)
@@ -235,7 +257,25 @@ function auto_create($current)
             $reference = $Refs->get_next($sim['type'], null, array('date' => $_POST['reconcile_date']));
             $trans_no = get_next_trans_no($sim['type']);
 
-            $id = bank_inclusive_tax($sim['type'], $reference, $newdate, $_POST['bank_account'], $bank_account_gl_code, $trans_no, $sim['account'], $sim['dim1'], $sim['dim2'], "", $amt, $sim['person_type_id'], $sim['person_id'], $BranchNo);
+            if ($sim['type'] == ST_BANKTRANSFER) {
+                $result = get_bank_transfer_account($sim['type'], $sim['trans_no'], $_POST['bank_account']);
+                if (db_num_rows($result) != 1) {
+                    display_error($sim['type'] ." " . $sim['trans_no'] . " not found");
+                    continue;
+                }
+                $acct = db_fetch($result);
+                if ($amt < 0) {
+                    $amt = -$amt;
+                    $from_account = $_POST['bank_account'];
+                    $to_account=$acct['bank_act'];
+                } else {
+                    $to_account = $_POST['bank_account'];
+                    $from_account=$acct['bank_act'];
+                }
+                // display_notification($from_account ." " .  $to_account . " " .  $newdate ." " .  $amt ." " . $reference);
+                $id = add_bank_transfer($from_account, $to_account, $newdate, $amt, $reference, "", 0, 0);
+            } else
+                $id = bank_inclusive_tax($sim['type'], $reference, $newdate, $_POST['bank_account'], $bank_account_gl_code, $trans_no, $sim['account'], $sim['dim1'], $sim['dim2'], "", $amt, $sim['person_type_id'], $sim['person_id'], $BranchNo);
 
             update_reconciled_values($id, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
 
@@ -306,7 +346,12 @@ if (isset($_POST['import'])) {
                     || ($checkno == "" && $i == 0))
                     continue;
 
-                $result = get_bank_transaction($_POST['bank_account'], $amount, $checkno, $current);
+                if (strpos($comment, "TRANSFER") !== false)
+                    $toacct = substr($comment, -4);
+                else
+                    $toacct = "";
+
+                $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current);
                 $row = db_fetch($result);
                 if ($row[0] == 0) {
 
@@ -328,13 +373,16 @@ if (isset($_POST['import'])) {
                         }
                     }
 
-                    display_notification("$date : $amount for $comment");
+                    display_notification("$date : $amount : $comment");
                     $total_miss += $amount;
                     $total += $amount;
-                } else {
+                } else if (db_num_rows($result) == 1) {
                     $current[$row['id']] = $comment;
                     $total_current += $row['amount'];
                     $total += $row['amount'];
+                } else {
+                    display_error("Multiple matches for $date : $check_no : $amount : $comment");
+                    display_error("Use manual reconcile for these transactions");
                 }
             } // while
             @fclose($fp);

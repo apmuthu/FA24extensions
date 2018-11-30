@@ -22,7 +22,7 @@ include_once($path_to_root . "/includes/db/crm_contacts_db.inc");
 
 // ---------------------------------------------------------------------
 
-set_posts(array('stock_id', 'tax_group_id', 'debtor_no', 'noheader', 'action'));
+set_posts(array('stock_id', 'debtor_no', 'noheader', 'action'));
 
 
 add_css_file('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css');
@@ -66,7 +66,7 @@ function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
         $todate = date2sql($to);
     }
 
-    $sql = "SELECT d.debtor_no, d.name AS cust_name, dt.type, dt.trans_no,  dt.tran_date, stk_code, sm.description
+    $sql = "SELECT stk_code, sm.description
         FROM ".TB_PREF."debtor_trans dt
             LEFT JOIN ".TB_PREF."voided as v
                 ON dt.trans_no=v.id AND dt.type=v.type
@@ -94,23 +94,23 @@ function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
     return db_query($sql,"No transactions were returned");
 }
 
-function clientarray_string($stock_id)
+function clientarray_string($stock_id, $tax_group_id)
 {
 	$clientArray="var clientArray = new Array();\n";
 
 	$count=0;
 
-    $res = getTransactions(null, null, get_post('tax_group_id'), get_post('stock_id'));
+    $res = getTransactions(null, null, $tax_group_id, get_post('stock_id'));
     while ($cust=db_fetch($res)) {
 
-        $old_address = $cust["br_address"];
+        $old_address = trim($cust["br_address"]);
+        if ($old_address == "")
+            continue;
         $address = preg_replace("/^[^0-9]*/", "", $old_address);
         if ($old_address != $address
-            && !isset($_POST['tax_group_id'])) {
-            display_notification("old $old_address");
-            display_notification("new $address");
+            && !isset($_POST['noheader'])) {
+            display_notification($cust["cust_name"] . "$old_address => $address");
         }
-        $address = trim($address);
         $address = str_replace(array("\n", "\r"), ' ', $address);
         $lastchar = substr($address, strlen($address)-1,1);
         if (!is_numeric($lastchar)) {
@@ -147,7 +147,7 @@ function clientarray_string($stock_id)
               $sql = "INSERT ".TB_PREF."sales_map (branch_code, latlong) VALUES('" . $cust["branch_code"] . "','" . $lat . "," . $lng . "')";
               db_query($sql,"No transactions were returned");
            } else {
-            if (!isset($_POST['tax_group_id']))
+            if (!isset($_POST['noheader']))
                 display_notification("bad geocode for " . $cust["cust_name"] . " at " . $address);
             // syslog(LOG_NOTICE, "sales_map: bad geocode for " . $cust["cust_name"] . " at " . $address . ";" . $status);
             continue;
@@ -228,6 +228,12 @@ if ($config_found) {
     $row     = db_fetch_row($result);
     if ($row)
         $cat_ = $row[1];
+
+    $sql     = "SELECT * FROM ".TB_PREF."sales_map_config WHERE name = 'tax_group_id'";
+    $result  = db_query($sql, "could not get tax_group");
+    $row     = db_fetch_row($result);
+    if ($row)
+        $tax_group_id_ = $row[1];
 }
 
 // -----------------------------------------------------------------
@@ -249,6 +255,7 @@ if ($config_found) {
             $centerLong = get_post('centerLong');
             $tileServer = get_post('tileServer');
             $cat = get_post('category');
+            $tax_group_id = get_post('tax_group_id');
 
             if ($centerLat == "") $sql = "DELETE FROM ".TB_PREF."sales_map_config WHERE name = 'center_lat'";
             else if (!isset($center_Lat)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('center_lat', ".db_escape($centerLat).")";
@@ -269,6 +276,11 @@ if ($config_found) {
             else if (!isset($cat_)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('cat', ".db_escape($cat).")";
             else $sql = "UPDATE  ".TB_PREF."sales_map_config SET value = ".db_escape($cat)." WHERE name = 'cat'";
             db_query($sql, "Update 'cat'");
+
+            if ($tax_group_id == '') $sql = "DELETE FROM ".TB_PREF."sales_map_config WHERE name = 'tax_group_id'";
+            else if (!isset($tax_group_id_)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('tax_group_id', ".db_escape($tax_group_id).")";
+            else $sql = "UPDATE  ".TB_PREF."sales_map_config SET value = ".db_escape($tax_group_id)." WHERE name = 'tax_group_id'";
+            db_query($sql, "Update 'tax_group_id'");
 
     } else {
 
@@ -291,12 +303,27 @@ if ($config_found) {
             $cat = $cat_;
         else
             $cat = "";
+        if (isset($tax_group_id_))
+            $tax_group_id = $tax_group_id_;
+        else
+            $tax_group_id = "";
     }
 
 // ----------------------------------------------------------------
+if (get_post('debtor_no')) {
+    page(_($help_context = "Sales Map"), true, false, "", "");
+    print get_customer_name(get_post('debtor_no')) . "<br><br>";
+    $res = getSalesItems($cat, get_post('debtor_no'));
+    while ($item=db_fetch($res)) {
+			print $item['description'] . "<br>";
+	}
+    exit();
+}
+
+$js = "";
 
 define ('SCRIPT', '
-' . clientarray_string(get_post('stock_id')) . '
+' . clientarray_string(get_post('stock_id'), $tax_group_id) . '
   var side_bar_html = "<DIV id=\'title\'></DIV>";
 
 function map_init()
@@ -410,7 +437,6 @@ Behaviour.addLoadEvent(map_init);
 
 ');
 
-$js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
@@ -423,14 +449,6 @@ $js .= SCRIPT;
 
 page(_($help_context = "Sales Map"), get_post('noheader'), false, "", $js);
 
-if (get_post('debtor_no')) {
-    
-    $res = getSalesItems($cat, get_post('debtor_no'));
-    while ($item=db_fetch($res)) {
-			print $item['description'] . "<br>";
-	}
-    exit();
-}
 
 // ----------------------------------------------------------------
 
@@ -456,6 +474,7 @@ if (get_post('action') == 'show') {
         text_row("Map Center Latitude", 'centerLat', $centerLat, 20, 40);
         text_row("Map Center Longitude", 'centerLong', $centerLong, 20, 40);
         stock_categories_list_row("Item Category", 'category', $cat, "All Categories");
+        tax_groups_list_row("Tax Group", 'tax_group_id', $tax_group_id);
     }
 
     end_table(1);

@@ -28,7 +28,7 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 
 print_inventory_sales();
 
-function getTransactions($supplier, $item_type, $sales_type, $from, $to)
+function getTransactions($cat, $supplier, $item_type, $sales_type, $from, $to)
 {
 	$from = date2sql($from);
 	$to = date2sql($to);
@@ -54,6 +54,8 @@ function getTransactions($supplier, $item_type, $sales_type, $from, $to)
 			$sql .= " AND item.mb_flag = 'M'";
 		if ($sales_type != 0)
 			$sql .= " AND d.sales_type = ".db_escape($sales_type);
+        if ($cat != -1)
+			$sql .= " AND item.category_id = ".db_escape($cat);
         if ($supplier != 0)
 			$sql .= " AND EXISTS (SELECT *
                 FROM ".TB_PREF."purch_data pd
@@ -146,12 +148,13 @@ function print_inventory_sales()
 
 	$from = $_POST['PARAM_0'];
 	$to = $_POST['PARAM_1'];
-    $supplier = $_POST['PARAM_2'];
-    $sales_type = $_POST['PARAM_3'];
-	$item_type = $_POST['PARAM_4'];
-	$comments = $_POST['PARAM_5'];
-	$orientation = $_POST['PARAM_6'];
-	$destination = $_POST['PARAM_7'];
+    $cat = $_POST['PARAM_2'];
+    $supplier = $_POST['PARAM_3'];
+    $sales_type = $_POST['PARAM_4'];
+	$item_type = $_POST['PARAM_5'];
+	$comments = $_POST['PARAM_6'];
+	$orientation = $_POST['PARAM_7'];
+	$destination = $_POST['PARAM_8'];
 	if ($destination)
 		include_once($path_to_root . "/reporting/includes/excel_report.inc");
 	else
@@ -183,7 +186,7 @@ function print_inventory_sales()
     $rep->Info($params, $cols, $headers, $aligns);
     $rep->NewPage();
 
-	$res = getTransactions($supplier, $item_type, $sales_type, $from, $to);
+	$res = getTransactions($cat, $supplier, $item_type, $sales_type, $from, $to);
 	$total = $total_cost = $total_net = 0.0;
 	while ($trans=db_fetch($res))
 	{

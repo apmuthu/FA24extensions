@@ -20,6 +20,7 @@ $reports->register_controls("item_type");
 $reports->addReport(RC_INVENTORY,"_sales_type_summary",_('&Item Sales Report By Quantity, Supplier and Type'),
 	array(	_('Start Date') => 'DATEBEGINM',
 			_('End Date') => 'DATEENDM',
+			_('Category') => 'CATEGORIES',
 			_('Suppliers') => 'SUPPLIERS_NO_FILTER',
 			_('Sales Types') => 'SALES_TYPES',
 			_('Item Type') => 'ITEM_TYPE',
