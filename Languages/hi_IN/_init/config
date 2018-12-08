@@ -1,5 +1,5 @@
 Package: hi_IN
-Version: 2.4.3-1
+Version: 2.4.5-1
 Description: Indian Hindi translation
 Author: Ap.Muthu <apmuthu@usa.net>
 Maintenance: Ap.Muthu <apmuthu@usa.net>
@@ -12,5 +12,5 @@ Type: language
 Name: Hindi
 Name-ta_IN: हिंदी (भारत)
 InstallPath: lang/hi_IN
-Filename: ta_IN-2.4.3-1
+Filename: ta_IN-2.4.5-1
 
