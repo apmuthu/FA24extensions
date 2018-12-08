@@ -1,3 +1,4 @@
+2018-12-08  Ap.Muthu     Removed non standard @braathwaate's constants ST_BULKDEPOSIT, ST_CASHDEPOSIT for now
 2018-12-08  Ap.Muthu     PHP 7.x strict variable scope and visibility fixed
 2018-12-08  Ap.Muthu     ta_IN core translations updated for all strings
 2018-07-05  BraathWaate  bank_gl_inquiry: synched for use with core functions only

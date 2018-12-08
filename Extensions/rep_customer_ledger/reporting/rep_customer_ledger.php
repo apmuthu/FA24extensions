@@ -86,7 +86,7 @@ function get_transactions($debtorno, $from, $to, $only_rec)
  			AND trans.debtor_no = ".db_escape($debtorno);
 
 			if ($only_rec)
-				$sql .= " AND trans.type IN (".ST_CUSTPAYMENT.",".ST_BULKDEPOSIT.",".ST_BANKDEPOSIT.",".ST_CASHDEPOSIT.")";
+				$sql .= " AND trans.type IN (".ST_CUSTPAYMENT.",".ST_BANKDEPOSIT.")";
 			else
 				$sql .= " AND trans.type <> ".ST_CUSTDELIVERY;
 
@@ -283,7 +283,7 @@ WHERE 1=1";
 			if ($trans['type'] == ST_SALESINVOICE)
 			if (!$hide_trans) $rep->DateCol(4, 5,	$trans['due_date'], true);
 			$item[0] = $item[1] = 0.0;
-			if ($trans['type'] == ST_CUSTCREDIT || $trans['type'] == ST_CUSTPAYMENT || $trans['type'] == ST_BANKDEPOSIT || $trans['type'] == ST_BULKDEPOSIT || $trans['type'] == ST_CASHDEPOSIT)
+			if ($trans['type'] == ST_CUSTCREDIT || $trans['type'] == ST_CUSTPAYMENT || $trans['type'] == ST_BANKDEPOSIT)
 				$trans['TotalAmount'] *= -1;
 			if ($trans['TotalAmount'] > 0.0)
 			{
