@@ -106,6 +106,7 @@ function print_bank_transactions()
 			$rep->AmountCol(6, 7, abs($prev_balance), $dec);
 		$rep->Font();
 		$total = $prev_balance;
+		$total_debit = $total_credit = 0;
 		$rep->NewLine(2);
 		if ($rows > 0)
 		{

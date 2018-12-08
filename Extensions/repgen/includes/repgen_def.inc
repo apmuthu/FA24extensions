@@ -47,7 +47,7 @@ if (!isset($group_type))
 define("REPGENDIR",dirname($PHP_SELF));  // Directory of Repgen, should be altered if you use another directory
 //////////////////////////////////////////////////////////////////////////
 define("VERSION","Version 2.0");    // Version Number
-
+$protocol = '';
 if(isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&  $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
 	$protocol = 'https://';
 else
