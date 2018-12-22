@@ -1,0 +1,12 @@
+Package: additional_fields
+Name: Additional Fields
+Description: Adds extra fields to Customers, Suppliers and Items
+Author: Chris Fuller <caf247247@gmail.com>
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/additional_fields
+Type: extension
+Filename: additional_fields-2.4.0-1
+Version: 2.4.0-1
+
