@@ -1,11 +1,11 @@
 Package: rep_annual_balance_breakdown
 Description: Annual balance breakdown report
 Name: Annual balance breakdown report
-Filename: rep_annual_balance_breakdown-2.4.0-2
+Filename: rep_annual_balance_breakdown-2.4.0-3
 Author: Joe Hunt <joe.hunt.consulting@gmail.com>
 Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
 Homepage: frontaccounting.com
 Type: extension
 InstallPath: modules/rep_annual_balance_breakdown
-Version: 2.4.0-2
+Version: 2.4.0-3
 
