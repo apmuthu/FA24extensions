@@ -1,3 +1,4 @@
+2019-01-01  Ap.Muthu     Updated extension repgen with upstream changes
 2018-12-31  kvvaradha    Missing dimensions parameters in report extensions fixed
 2018-12-22  poncho1234   Added additional_fields extension for Customers, Suppliers and Items
 2018-12-08  Ap.Muthu     hi_IN core translations updated for all strings in FA 2.4.5

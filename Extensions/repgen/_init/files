@@ -19,8 +19,9 @@
 /repgen_del.php: 9a90c219d44a1e1f85199ff105602a330cd3d2df
 /repgen_graphics.php: 7e5ee75b0ae5e25b1cd5b90c4afb891344dff1af
 /repgen_print.php: 3a18df2e14df2f68ece57426cb6280e261435564
+/repgen_print_4.php: 3a18df2e14df2f68ece57426cb6280e261435564
 /repgen_select.php: 70a9a7326393d7c34cbf904eafdc773c5cdd0692
-/repgen_strings.php: 560b8eda2e63eac9c8f4cc4a727101f5c7535a5c
-/repgen_test_sel.php: c9246e45aaec8ea0d3b79efed03bdb765b067fc6
+/repgen_strings.php: 2b8e28e3acc30d5e6d6705ba791b29334b8e3cb2
+/repgen_test_sel.php: 859a9283a8dcf1b401aa8860f98bed433076446a
 /sql/reports.sql: 19a552eb5c9cc06ce79ee04dd26e72d6f0c31a06
-/_init/config: e425795a14afb2f7517204a2df9956dbf505361a
+/_init/config: d83df370ca9c2d433c8c32d3bdc172dac63b1026

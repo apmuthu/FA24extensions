@@ -11,6 +11,6 @@ Homepage: frontaccounting.com
 Depends: 
 Type: extension
 InstallPath: modules/repgen
-Filename: repgen-2.4.0-2
-Version: 2.4.0-2
+Filename: repgen-2.4.0-4
+Version: 2.4.0-4
 

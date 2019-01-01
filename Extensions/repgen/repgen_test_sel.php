@@ -45,8 +45,7 @@ $num = db_num_fields($res);
 $i = 0;
 while ($i < $num) 
 {
-    $meta = mysql_fetch_field($res, $i);
-    $th[] = $meta->name;
+    $th[] = db_field_name($res, $i);
     $i++;
 }    
 /*
