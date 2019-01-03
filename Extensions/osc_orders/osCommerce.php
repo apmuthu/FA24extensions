@@ -916,6 +916,9 @@ if (isset($_POST['action'])) {
             // is an order of those stock ids in FA, rather than the
             // parent product.
 
+            // If a product with attributes is ordered, the import code
+            // assigns the product line price to the first attribute.
+
             // Note: This code supports one OSC attribute per item.
             // The FA stock id format is :<parent>-<attr>.
             // To support more than one OSC attribute, the FA
@@ -933,9 +936,9 @@ if (isset($_POST['action'])) {
                         $sales_discount = ($default_sales_act == $row[1]) ? $disc_percent : 0;
 
                         add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $sales_discount);
-
                         $total += round($prod['products_quantity'] * $prod['products_price'] * (1 - $sales_discount),2);
                     } else {
+                        $price = $prod['products_price'];
                         while ($pa = mysqli_fetch_assoc($pa_result)) {
                             $pa_osc_id = $osc_id . "-" . $pa['products_attributes_id']; 
                             $sql    = "SELECT stock_id, sales_account FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($pa_osc_id);
@@ -952,7 +955,8 @@ if (isset($_POST['action'])) {
 
                             $sales_discount = ($default_sales_act == $row[1]) ? $disc_percent : 0;
                             $total += round($prod['products_quantity'] * $pa['options_values_price'] * (1 -$sales_discount),2);
-                            add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $pa['options_values_price'], $sales_discount);
+                            add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, $sales_discount);
+                            $price = 0;
                         }
                         mysqli_free_result($pa_result);
                     }

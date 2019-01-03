@@ -1,0 +1,12 @@
+Package: quickreport
+Name: Quick Report
+Description: This extension is like the built-in g/l inquiry, but has a more compact form
+Author: Tom Hallman
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/quickreport
+Type: extension
+Filename: quickreport-2.4.0-2
+Version: 2.4.0-2
+

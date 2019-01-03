@@ -81,9 +81,9 @@ echo "<hr>";
     }
 }
 
-function get_bank_transaction($toacct, $date, $account, $amount, $check, $current)
+function get_bank_transaction($toacct, $date, $account, $amount, $check, $current, $early)
 {
-    $sql = "SELECT b.* FROM ".TB_PREF."bank_trans b
+    $sql = "SELECT b.*, c.memo_ FROM ".TB_PREF."bank_trans b
             LEFT JOIN ".TB_PREF."comments c
             ON b.type=c.type and c.id = b.trans_no
             WHERE b.bank_act = '$account'
@@ -91,21 +91,28 @@ function get_bank_transaction($toacct, $date, $account, $amount, $check, $curren
             AND ISNULL(b.reconciled)";
 
     // for electronic payments, limit the date range for the match
+    // usually payment date occurs on or after transaction entry date
     if ($check == "") {
         $bank_date=date2sql($date);
-        $time = strtotime($bank_date . ' -5 days');
+        $time = strtotime($bank_date . ' -7 days');
         $from_date = date("Y-m-d", $time);
-        $time = strtotime($bank_date . ' +5 days');
-        $to_date = date("Y-m-d", $time);
-        $sql .= " AND trans_date BETWEEN '$from_date' AND '$to_date'";
+        if ($early)
+            $sql .= " AND trans_date BETWEEN '$from_date' AND '$bank_date'";
+        else {
+            $time = strtotime($bank_date . ' +3 days');
+            $to_date = date("Y-m-d", $time);
+            $sql .= " AND trans_date BETWEEN '$from_date' AND '$to_date'";
+        }
     }
 
     // matching bank transfers require a matching account number
     if ($toacct != "")
         $sql .= " AND b.type = '" . ST_BANKTRANSFER ."'
             AND EXISTS(SELECT * FROM ".TB_PREF."bank_trans bt LEFT JOIN ".TB_PREF."bank_accounts ba ON bt.bank_act=ba.id WHERE bt.type=b.type AND bt.trans_no=b.trans_no AND SUBSTRING(ba.bank_account_number,-4)=".db_escape($toacct).")";
+
     if ($check != '')
         $sql .= " AND LOCATE(" . db_escape($check) . ", memo_) != 0";
+
     foreach ($current as $key => $value)
         $sql .= " AND b.id != $key ";
 //   display_notification($sql);
@@ -319,14 +326,12 @@ if (isset($_POST['import'])) {
         $total_current = 0;
         $total = 0;
 
+       $csv = array_reverse(
+            array_slice(array_map('str_getcsv', file($_FILES['imp']['tmp_name'])),1));
+
         // do checks first, then auto deducts
         for ($i=0; $i < 2; $i++) {
-            $filename = $_FILES['imp']['tmp_name'];
-            $fp = @fopen($filename, "r");
-            if (!$fp)
-                die("can not open file $filename");
-
-            while ($data = fgetcsv($fp, 4096, ",")) {
+            foreach ($csv as $data) {
                 if ($data[0] == null)   // blank line
                     continue;
 
@@ -351,9 +356,14 @@ if (isset($_POST['import'])) {
                 else
                     $toacct = "";
 
-                $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current);
-                $row = db_fetch($result);
-                if ($row[0] == 0) {
+                $early = true;
+                $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
+                if (db_num_rows($result) == 0 && $checkno == "") {
+                    $early = false;
+                    $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
+                }
+
+                if (db_num_rows($result) == 0) {
 
         // search for recurrent transactions for auto payments
 
@@ -376,13 +386,16 @@ if (isset($_POST['import'])) {
                     display_notification("$date : $amount : $comment");
                     $total_miss += $amount;
                     $total += $amount;
-                } else if (db_num_rows($result) == 1) {
+                } else if (db_num_rows($result) == 1 || $early) {
+                    $row = db_fetch($result);
                     $current[$row['id']] = $comment;
                     $total_current += $row['amount'];
                     $total += $row['amount'];
                 } else {
-                    display_error("Multiple matches for $date : $check_no : $amount : $comment");
-                    display_error("Use manual reconcile for these transactions");
+                    display_error("Multiple match for $date : $checkno : $amount : $comment");
+                    while ($row = db_fetch($result))
+                        display_error($row['trans_date'] . ":" . $row['amount'] . ":" . $row['memo_']);
+                    display_error("Hint: edit transaction dates to match bank statement.");
                 }
             } // while
             @fclose($fp);
@@ -398,7 +411,6 @@ if (isset($_POST['import'])) {
                 auto_reconcile($current);
             }
         }
-
     } else
         display_error("No CSV file selected");
         

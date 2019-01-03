@@ -27,12 +27,13 @@ $csv[0] = array_slice($csv[0], 0, 7);
         $tax_rates[$location] = $value;
     }
     $tax_rates['GRAND JUNCTION'] = $tax_rates['UNINCORPORATED MESA COUNTY'];
+    $tax_rates['ENGLEWOOD'] = $tax_rates['UNINCORPORATED DOUGLAS COUNTY'];
 }
 
     function get_tax_rates($tax_group_name, $address)
     {
         global $tax_rates;
-        if ($tax_group_name == "Colorado Sales Tax") {
+        if ($tax_group_name == "Local Sales Tax") {
             if ($tax_rates == array())
                 do_init_rate();
 //display_notification(print_r($tax_rates, true));
@@ -50,7 +51,8 @@ $csv[0] = array_slice($csv[0], 0, 7);
 
     function get_tax_rate($tax_group_name, $address)
     {
-        if ($tax_group_name == "Colorado Sales Tax" && date('Ym') >= "201812")
+//display_notification($tax_group_name);
+        if ($tax_group_name == "Colorado Sales Tax" && date('Ym') >= "201906")
             return get_tax_rates($tax_group_name, $address)['total'];
     }
 ?>

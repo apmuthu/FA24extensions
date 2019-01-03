@@ -29,16 +29,19 @@ define("FEIN", '84-1457020');
 define("CUSTOMER_GROUP_CHARITY", 'Government, Religious Or Charity');
 define("PRECISION",2); // force totals to round to whole numbers
 define("TAX_GROUP_PHYSICAL",'1'); // physical location
-define("TAX_GROUP_EXEMPT",'2'); // wholesale tax exempt
+define("TAX_GROUP_EXEMPT_WHOLESALE",'2');
 define("TAX_GROUP_THORNTON",'4');
 define("TAX_GROUP_COLORADO",'5'); // non-physical locations
 define("TAX_GROUP_DOUGLAS_COUNTY",'7');
-define("TAX_GROUP_TAX_INCLUDED",'9');
+define("TAX_GROUP_EXEMPT_OOS",'8');
+define("TAX_GROUP_EXEMPT_CHARITY",'10');
+define("TAX_GROUP_EXEMPT_USE",'11');
 
 //----------------------------------------------------------------------------------------------------
 
 print_dr0100();
 
+// Note: food includes grape sales, import adjustments, credit card testing
 function GetPhysicalSales($from, $to)
 {
     $fromdate = date2sql($from);
@@ -49,23 +52,36 @@ function GetPhysicalSales($from, $to)
                 THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) AS net,
 
-            SUM(CASE WHEN cb.tax_group_id=".TAX_GROUP_EXEMPT."
+            SUM(CASE WHEN cb.tax_group_id=".TAX_GROUP_EXEMPT_WHOLESALE."
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END) AS tax_exempt,
 
-            ROUND(SUM(CASE WHEN cb.tax_group_id!=".TAX_GROUP_EXEMPT." AND cb.tax_group_id!=".TAX_GROUP_PHYSICAL."
+            ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
+                    .TAX_GROUP_EXEMPT_WHOLESALE.","
+                    .TAX_GROUP_PHYSICAL.")
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS oota,
 
-            ROUND(SUM(CASE WHEN cb.tax_group_id!=".TAX_GROUP_COLORADO."
-                AND cb.tax_group_id!=".TAX_GROUP_EXEMPT."
-                AND cb.tax_group_id!=".TAX_GROUP_PHYSICAL."
+            ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
+                    .TAX_GROUP_EXEMPT_WHOLESALE.","
+                    .TAX_GROUP_COLORADO.","
+                    .TAX_GROUP_PHYSICAL.")
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS ootac,
 
-            ROUND(SUM(CASE WHEN cb.tax_group_id!=".TAX_GROUP_EXEMPT." AND ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS food,
+            ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
+                    .TAX_GROUP_EXEMPT_OOS.","
+                    .TAX_GROUP_EXEMPT_USE.","
+                    .TAX_GROUP_EXEMPT_CHARITY.","
+                    .TAX_GROUP_EXEMPT_WHOLESALE.")
+                 AND ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS food,
 
-            ROUND(SUM(CASE WHEN cb.tax_group_id!=".TAX_GROUP_EXEMPT." AND ttd.tax_type_id=2 THEN ttd.net_amount ELSE 0 END),2) AS candy
+            ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
+                    .TAX_GROUP_EXEMPT_OOS.","
+                    .TAX_GROUP_EXEMPT_USE.","
+                    .TAX_GROUP_EXEMPT_CHARITY.","
+                    .TAX_GROUP_EXEMPT_WHOLESALE.")
+                AND ttd.tax_type_id=2 THEN ttd.net_amount ELSE 0 END),2) AS candy
 
         FROM ".TB_PREF."debtor_trans dt
         LEFT JOIN ".TB_PREF."cust_branch cb ON cb.branch_code = dt.branch_code
@@ -73,6 +89,8 @@ function GetPhysicalSales($from, $to)
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.")
             AND dt.tran_date >='$fromdate'
             AND dt.tran_date <='$todate'";
+
+//display_notification($sql);
 
     return db_query($sql, "Error getting order details");
 }
@@ -102,12 +120,12 @@ function GetNonPhysicalSales($period, $from, $to)
             AND dt.tran_date >='$fromdate'
             AND dt.tran_date <='$todate'
             AND tax_group_id IN
-                (".($period >= "2018-12" ? TAX_GROUP_COLORADO."," : "")
+                (".($period >= "2019-06" ? TAX_GROUP_COLORADO."," : "")
                 .TAX_GROUP_THORNTON.","
-                .TAX_GROUP_DOUGLAS_COUNTY.","
-                .TAX_GROUP_TAX_INCLUDED.")
+                .TAX_GROUP_DOUGLAS_COUNTY.")
         GROUP BY location";
 
+//display_notification($sql);
     return db_query($sql, "Error getting order details");
 }
 
@@ -178,7 +196,7 @@ for ($i=0; $tax_rates[$i] != null; $i += 3) {
         case 'RTD' :
         case 'CD' :
             $service_fee['RTD']=$tax_rates[$i+2]/100;
-            $tax_rate['RTD']=$tax_rates[$i+1]/100;
+            $tax_rate['RTD']+=$tax_rates[$i+1]/100;
             break;
         default :
             $service_fee['SD']=$tax_rates[$i+2]/100;    // unclear which service fee to use
@@ -187,14 +205,17 @@ for ($i=0; $tax_rates[$i] != null; $i += 3) {
     }
 }
 
-if ($period >= "2018-12")
+if ($period >= "2019-06")
     $sales['ootac'] = $sales['oota'];
+
+if ($sales['food'] <= 1)
+    $sales['food'] = 0;
 
 $sales_taxed_state=$sales['net'] - $sales['tax_exempt'] - $sales['ootac'] -  $sales['food'];
 $sales_taxed_county=$sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'];
-$sales_taxed_rtdcd=$sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'];
-$sales_taxed_sd=$sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'];
-$sales_taxed_city=$sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'];
+$sales_taxed_rtdcd=($tax_rate['RTD']? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0);
+$sales_taxed_sd=($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0);
+$sales_taxed_city=($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0);
 
 $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 
@@ -221,7 +242,8 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 
     if ($tax_rates['HomeRule'] == 'Self-collected') {
         $rep->AmountCol(2, 3, $tax_due_city, $dec);
-        $tax_city = $service_fee_city = $tax_due_city = 0;
+        $tax_city = $service_fee_city = $tax_due_city = $sales_taxed_city = 00;
+        $tax_rate['City'] = 0;
     }
 
     $tax_due = $tax_due_sd + $tax_due_rtdcd + $tax_due_county + $tax_due_state + $tax_due_city; 
@@ -251,29 +273,30 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 	array('x' => 4.6, 'y' => 6.1, 'text' => $sales_customer[CUSTOMER_GROUP_CHARITY]),
 	array('x' => 7.2, 'y' => 6.1, 'text' => sprintf("%6.2f", $sales['tax_exempt'])),
 
+	array('x' => 1.0, 'y' => 5.6, 'text' => $sales['net'] - $sales['tax_exempt']),
 	array('x' => 2.5, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
-	array('x' => 3.7, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
-	array('x' => 5, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
+	array('x' => 3.7, 'y' => 5.5, 'text' => ($tax_rate['RTD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
+	array('x' => 5, 'y' => 5.5, 'text' => ($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
 	array('x' => 6, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
-	array('x' => 7.2, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
+	array('x' => 7.2, 'y' => 5.5, 'text' => ($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
 
 
 
 	array('x' => 2.5, 'y' => 5.0, 'text' => $sales['ootac']),
-	array('x' => 3.7, 'y' => 5.0, 'text' => $sales['oota']),
-	array('x' => 5, 'y' => 5.0, 'text' => $sales['oota']),
+	array('x' => 3.7, 'y' => 5.0, 'text' => ($tax_rate['RTD'] ? $sales['oota'] : "N/A")),
+	array('x' => 5, 'y' => 5.0, 'text' => ($tax_rate['SD'] ? $sales['oota'] : "N/A")),
 	array('x' => 6, 'y' => 5.0, 'text' => $sales['oota']),
-	array('x' => 7.2, 'y' => 5.0, 'text' => $sales['oota']),
+	array('x' => 7.2, 'y' => 5.0, 'text' => ($tax_rate['City'] ? $sales['oota'] : "N/A")),
 
 	array('x' => 2.5, 'y' => 4.5, 'text' => $sales['food']),
-	array('x' => 3.7, 'y' => 4.5, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 5, 'y' => 4.5, 'text' => $sales['food']+$sales['candy']),
+	array('x' => 3.7, 'y' => 4.5, 'text' => ($tax_rate['RTD'] ? $sales['food']+$sales['candy'] : "N/A")),
+	array('x' => 5, 'y' => 4.5, 'text' => ($tax_rate['SD'] ? $sales['food']+$sales['candy'] : "N/A")),
 	array('x' => 6, 'y' => 4.5, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 7.2, 'y' => 4.5, 'text' => $sales['food']+$sales['candy']),
+	array('x' => 7.2, 'y' => 4.5, 'text' => ($tax_rate['City'] ? $sales['food']+$sales['candy'] : "N/A")),
 
 	array('x' => 2.5, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_state)),
-	array('x' => 3.7, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_county)),
-	array('x' => 5, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_rtdcd)),
+	array('x' => 3.7, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_rtdcd)),
+	array('x' => 5, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_sd)),
 	array('x' => 6, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_county)),
 	array('x' => 7.2, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_city)),
 
