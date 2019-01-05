@@ -12,7 +12,6 @@
 
 $page_security = 'SA_GLTRANSVIEW';
 $path_to_root = "../..";
-include_once($path_to_root . "/includes/foo.inc");
 include_once($path_to_root . "/includes/session.inc");
 
 include($path_to_root . "/includes/db_pager.inc");
