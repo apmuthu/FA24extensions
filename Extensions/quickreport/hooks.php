@@ -15,7 +15,7 @@ class hooks_quickreport extends hooks {
 		switch($app->id) {
 			case 'GL':
 				$app->add_rapp_function(2, _('Quick Report'), 
-					$path_to_root.'/modules/'.$this->module_name.'/quickreport.php', 'SA_QUICKREPORT');
+					$path_to_root.'/modules/'.$this->module_name.'/quickreport_inquiry.php', 'SA_QUICKREPORT');
 		}
 	}
 

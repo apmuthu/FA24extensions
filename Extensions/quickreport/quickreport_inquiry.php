@@ -190,15 +190,16 @@ function show_results()
 		display_heading($_POST["account"]. "&nbsp;&nbsp;&nbsp;".$act_name);
 
 	// Only show balances if we're not filtering by amounts
-	$show_balances = input_num("amount_min") == 0 && 
+	$show_balances = $_POST['account'] == null &&
+                     input_num("amount_min") == 0 && 
                      input_num("amount_max") == 0;
 		
 	start_table(TABLESTYLE);
 	
-	$first_cols = array(_("Type"), _("#"), _("Reference"), _("Date"));
+	$first_cols = array(_("Type"), _("#"), _("Reference"), _("Date"), _("Account"));
 	
 	if ($_POST["account"] == null)
-	    $account_col = array(_("Account"));
+	    $account_col = array(_("Account 2"));
 	else
 	    $account_col = array();
 	
@@ -209,12 +210,17 @@ function show_results()
 	else
 		$dim_cols = array();
 	
-	if ($show_balances)
-	    $remaining_cols = array(_("Person/Item"), _("Amount"), _("Balance"), _("Memo"), "", "");
+	if ($_POST["person_id"] == null)
+	    $person_col = array(_("Person/Item"));
 	else
-	    $remaining_cols = array(_("Person/Item"), _("Amount"), _("Memo"), "", "");
+	    $person_col = array();
+
+	if ($show_balances)
+	    $remaining_cols = array(_("Amount"), _("Balance"), _("Memo"), "", "");
+	else
+	    $remaining_cols = array(_("Amount"), _("Memo"), "", "");
 	    
-	$th = array_merge($first_cols, $account_col, array("Account 2"), $dim_cols, $remaining_cols);
+	$th = array_merge($first_cols, $account_col, $person_col, $dim_cols, $remaining_cols);
 			
 	table_header($th);
 	if ($_POST["account"] != null && is_account_balancesheet($_POST["account"]))
@@ -243,6 +249,7 @@ function show_results()
 	$k = 0; //row colour counter
 
     $myrow = null;
+    $acct = null;
     $split = false;
 	while (($row2 = db_fetch($result)) || $myrow != null)
 	{
@@ -251,10 +258,10 @@ function show_results()
             continue;
         }
         if ($row2 != null && $myrow['type_no'] == $row2['type_no']) {
-            if (isset($myrow['act']))
-                $split=true;
-            $myrow['act']=$row2['account'];
+            $acct = $row2['account'];
             $myrow['amount'] = $row2['amount'];
+            if ($acct == $myrow['account'])
+                $split=true;
             continue;
         }
 
@@ -269,21 +276,30 @@ function show_results()
 		label_cell(get_trans_view_str($myrow["type"],$myrow["type_no"],$myrow['reference']));
     	label_cell($trandate);
     	
-    	if ($_POST["account"] == null)
-    	    label_cell($myrow["account"] . ' ' . get_gl_account_name($myrow["account"]));
-        if ($split)
+        if ($split) {
             label_cell("SPLIT");
-        else if (isset($myrow["act"]))
-            label_cell($myrow["act"] . ' ' . get_gl_account_name($myrow["act"]));
-        else
-            label_cell('');
+            if ($_POST['account'] == null) 
+                label_cell($acct . ' ' . get_gl_account_name($acct));
+        } else {
+            label_cell($myrow["account"] . ' ' . get_gl_account_name($myrow["account"]));
+            if ($_POST['account'] == null) {
+                if (isset($acct))
+                    label_cell($acct . ' ' . get_gl_account_name($acct));
+                else
+                    label_cell('');
+            }
+        }
     	
 		if ($dim >= 1)
 			label_cell(get_dimension_string($myrow['dimension_id'], true));
 		if ($dim > 1)
 			label_cell(get_dimension_string($myrow['dimension2_id'], true));
-		label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, $trandate));
-		amount_cell($myrow["amount"]);
+        if ($_POST["person_id"] == null)
+            label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, $trandate));
+        if ($split && $_POST['account'] != null)
+                label_cell('');
+        else
+            amount_cell($myrow["amount"]);
 		if ($show_balances)
 		    amount_cell($running_total);
     	label_cell($myrow['memo']);
@@ -302,6 +318,7 @@ function show_results()
     		table_header($th);
     	}
         $myrow = $row2;
+        $acct = null;
         $split=false;
 	}
 	//end of while loop
