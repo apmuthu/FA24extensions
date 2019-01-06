@@ -92,13 +92,14 @@ function gl_inquiry_controls()
     if (!isset($_POST['person_type']))
         $_POST['person_type'] = PT_MISC;
     payment_person_types_list_cells( _("Person Type:"), 'person_type', $_POST['person_type'], true);
-    if (list_updated('person_type'))
+    if (list_updated('person_type')) {
+        unset($_POST['person_id']);
         $Ajax->activate('header');
+    }
 
     switch ($_POST['person_type'])
     {
         case PT_MISC :
-            unset($_POST['person_id']);
             hidden('person_id');
             break;
         case PT_SUPPLIER :
