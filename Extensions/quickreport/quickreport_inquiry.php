@@ -37,7 +37,7 @@ page(_($help_context = "Quick Report"), false, false, '', $js, false, '', true);
 //----------------------------------------------------------------------------------------------------
 // Ajax updates
 //
-if (get_post('Show')) 
+if (get_post('Show') || get_post('person_id'))
 {
 	$Ajax->activate('trans_tbl');
 }
