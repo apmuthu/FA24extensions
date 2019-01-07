@@ -190,17 +190,17 @@ function show_results()
 		display_heading($_POST["account"]. "&nbsp;&nbsp;&nbsp;".$act_name);
 
 	// Only show balances if we're not filtering by amounts
-	$show_balances = $_POST['account'] == null &&
-                     input_num("amount_min") == 0 && 
+	$show_balances = input_num("amount_min") == 0 && 
                      input_num("amount_max") == 0;
 		
 	start_table(TABLESTYLE);
 	
 	$first_cols = array(_("Type"), _("#"), _("Reference"), _("Date"), _("Account"));
 	
-	if ($_POST["account"] == null)
+	if ($_POST["account"] == null) {
+        $colspan++;
 	    $account_col = array(_("Account 2"));
-	else
+	} else
 	    $account_col = array();
 	
 	if ($dim == 2)
@@ -210,9 +210,10 @@ function show_results()
 	else
 		$dim_cols = array();
 	
-	if (@$_POST["person_id"] == null)
+	if (@$_POST["person_id"] == null) {
+        $colspan--;
 	    $person_col = array(_("Person/Item"));
-	else
+	} else
 	    $person_col = array();
 
 	if ($show_balances)
@@ -220,7 +221,7 @@ function show_results()
 	else
 	    $remaining_cols = array(_("Amount"), _("Memo"), "", "");
 	    
-	$th = array_merge($first_cols, $account_col, $person_col, $dim_cols, $remaining_cols);
+	$th = array_merge($first_cols, $account_col, $dim_cols, $person_col, $remaining_cols);
 			
 	table_header($th);
 	if ($_POST["account"] != null && is_account_balancesheet($_POST["account"]))
