@@ -892,7 +892,14 @@ if (isset($_POST['action'])) {
                         add_to_order($cart, $_POST['adjustment'], -1, $total_discount, 0);
                         $disc_percent = 0;
                     } else
-                        $disc_percent = $total_discount/$total_subtotal;
+
+            // line discounts need a lot of precision (decimal) for import to work
+            // but percent_format() has to be called reducing precision because
+            // FA calls percent_format during order generation and if the order
+            // does not add up, a Foreign Exchange Currency adjustment will be made.
+            // 6 decimal places seems to be safe.
+
+                        $disc_percent = percent_format($total_discount/$total_subtotal);
                 }
 
                 $sql                     = "SELECT op.*, p.products_quantity as inv FROM orders_products op LEFT JOIN products p ON op.products_id = p.products_id WHERE orders_id = ".osc_escape($oID);

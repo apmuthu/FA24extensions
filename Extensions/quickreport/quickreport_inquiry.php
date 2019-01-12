@@ -169,6 +169,7 @@ function show_results()
     	$_POST["account"],
         $_POST['Dimension'],
         $_POST['Dimension2'],
+            ST_JOURNAL . "," .
             ST_BANKPAYMENT . "," .
             ST_BANKDEPOSIT . "," .
             ST_BANKTRANSFER . "," .
@@ -211,7 +212,7 @@ function show_results()
 		$dim_cols = array();
 	
 	if (@$_POST["person_id"] == null) {
-        $colspan--;
+        $colspan++;
 	    $person_col = array(_("Person/Item"));
 	} else
 	    $person_col = array();
@@ -327,7 +328,7 @@ function show_results()
 	if ($show_balances) {
     	start_row("class='inquirybg'");
     	label_cell("<b>" . _("Ending Balance") ." - ".$_POST['TransToDate']. "</b>", "colspan=$colspan");
-        display_debit_or_credit_cells($running_total-$bfw, true);
+        amount_cell($running_total-$bfw, true);
     	amount_cell($running_total, true);
     	end_row();
 	}
