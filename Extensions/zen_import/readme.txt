@@ -7,13 +7,18 @@ Free software under GNU GPL
 
 WHAT DOES THIS MODULE DO?
 
-This module creates a table in your FrontAccounting database containing information about your Zen Cart database including the name of the database, the username, and the password.
+This module creates a table in your FrontAccounting database containing 
+information about your Zen Cart database including the name of the database,
+the username, and the password.
 
-It may be a good idea to set up a user with readonly permissions on your Zen Cart database, and use this to access your Zen Cart data.
+It may be a good idea to set up a user with readonly permissions on your 
+Zen Cart database, and use this to access your Zen Cart data.
 
-Once set up, this module will import data from your Zen Cart database. Customer data and order data are imported separately.
+Once set up, this module will import data from your Zen Cart database. 
+Customer data and order data are imported separately.
 
-Imported orders can be accessed through the FrontAccounting "Sales" tab e.g. "Delivery Against Sales Orders", and processed accordingly.
+Imported orders can be accessed through the FrontAccounting "Sales" tab
+e.g. "Delivery Against Sales Orders", and processed accordingly.
 
 INSTALLATION:
 
@@ -33,19 +38,22 @@ INSTALLATION:
 
 3. FrontAccounting -> Banking and General Ledger -> Import Zen Cart Orders
 
-   Click on button -> Create Table
+   Click on the link 'Configuration'
  
    Fill in details for connecting to the Zen Cart databases -> Update Mysql
 
 4. BEFORE IMPORTING
  
-   Your inventory must be present in FrontAccounting before you can import orders, and the inventory numbers must match the product numbers of your Zen Cart products.
+   Your inventory must be present in FrontAccounting before you can import orders, and
+   the inventory numbers must match the product numbers of your Zen Cart products.
    
 5. Customer Import must be done before Order Import
 
-   Customer Import and Order Import will import data from the Zen Cart database and record the last customer number and order number imported.
+   Customer Import and Order Import will import data from the Zen Cart database and
+   record the last customer number and order number imported.
 
-   Your FrontAccounting inventory must correspond to your Zen Cart items before importing orders.  
+   Your FrontAccounting inventory must correspond to your Zen Cart items before
+   importing orders.
 
 ----------------------------------------------------------
 

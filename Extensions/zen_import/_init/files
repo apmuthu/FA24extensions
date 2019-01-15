@@ -1,10 +1,10 @@
 /hooks.php: 673a73a697440d008afa7d4e0b6c0bac6f1c4813
-/includes/zen_interface_db.inc: c1052187489f52db77e0ae1978188e653ec69a1d
-/includes/zen_orders_db.inc: 3e0bc99f39816d58ecc1dac60e2a956ea18c91d2
+/includes/zen_interface_db.inc: 2e4640edc6b15c0bc7ee23032fd771de065dcada
+/includes/zen_orders_db.inc: a96b8e3b990c0cdef35dd3fb78df874a6fa7a092
 /lang/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /lang/new_language_template/LC_MESSAGES/empty.po: 79ae6fca767828e0908b1337ef5e447ad09b4500
 /lang/pl_PL/LC_MESSAGES/pl_PL.mo: 645c5ebe90df042253a12bb180edbf7f48635b3e
 /lang/pl_PL/LC_MESSAGES/pl_PL.po: c286b37c84efa8d4bf79606d1b1b99d736ca86d1
-/readme.txt: 2182497b1552c94c0fdd36891dd5909975860038
-/zencart.php: 18f70b7b1faa0abf9ba6c425ea17ffe384078f1a
-/_init/config: 2a9d5477ca813825acbdeaf8d1220257c538bfba
+/readme.txt: 18c193fad9b86221c4a1c60075273e199505a28a
+/zencart.php: 239b78e6823b37630ae83d5420c197f39e0cfc56
+/_init/config: 80fcad9212a0bf168f748aa92d1f0ce87154c854

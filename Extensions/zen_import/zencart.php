@@ -21,8 +21,8 @@ include_once($path_to_root . "/sales/includes/db/sales_order_db.inc");
 include_once($path_to_root . "/sales/includes/cart_class.inc");
 include_once($path_to_root . "/sales/includes/ui/sales_order_ui.inc");
 
-include_once($path_to_root . "/modules/zen_orders/includes/zen_interface_db.inc");
-include_once($path_to_root . "/modules/zen_orders/includes/zen_orders_db.inc");
+include_once($path_to_root . "/modules/zen_import/includes/zen_interface_db.inc");
+include_once($path_to_root . "/modules/zen_import/includes/zen_orders_db.inc");
 
 function not_null($str) {
     if ($str != '' && $str != NULL) return 1;
@@ -209,16 +209,16 @@ if (isset($_POST['action'])) {
         if (isset($_POST['min_cid'])) $min_cid = $_POST['min_cid'];
         if (isset($_POST['max_cid'])) $max_cid = $_POST['max_cid'];
 
-        $zen = mysql_connect($dbHost, $dbUser, $dbPassword);
+        $zen = mysqli_connect($dbHost, $dbUser, $dbPassword);
 
         if (!$zen) display_notification("Failed to connect to Zen Cart Database");
         else {
-            mysql_select_db($dbName, $zen);
+            mysqli_select_db($zen, $dbName);
             $sql = "SELECT * FROM customers c left join address_book b on c.customers_default_address_id = b.address_book_id WHERE c.customers_id  >= $min_cid AND c.customers_id <= $max_cid";
-            $customers = mysql_query($sql, $zen);
+            $customers = mysqli_query($zen, $sql);
             display_notification("Found " . db_num_rows($customers) . " new customers");
             $i = $j = 0;
-            while ($cust = mysql_fetch_assoc($customers)) {
+            while ($cust = mysqli_fetch_assoc($customers)) {
                 $name = db_escape($cust['customers_firstname'] . ' ' . $cust['customers_lastname']);
                 $contact = db_escape($cust['entry_firstname'] . ' ' . $cust['entry_lastname']);
                 $addr = db_escape(zen_address_format($zen, $cust, 'entry_'));
@@ -279,32 +279,32 @@ if (isset($_POST['action'])) {
             $first_oid = 0;
             $last_oid = 0;
         }
-        $zen = mysql_connect($dbHost, $dbUser, $dbPassword);
+        $zen = mysqli_connect($dbHost, $dbUser, $dbPassword);
         if (!$zen) display_notification("Failed to connect to Zen Cart Database");
         else {
-            mysql_select_db($dbName, $zen);
+            mysqli_select_db($zen, $dbName);
             $sql = "SELECT * FROM orders WHERE orders_id >= $first_oid AND orders_id <= $last_oid";
-            $oid_result = mysql_query($sql, $zen);
-            display_notification("Found " . mysql_num_rows($oid_result) . " New Orders");
-            while ($order = mysql_fetch_assoc($oid_result)) {
+            $oid_result = mysqli_query($zen, $sql);
+            display_notification("Found " . mysqli_num_rows($oid_result) . " New Orders");
+            while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID = $order['orders_id'];
                 $sql = "SELECT * FROM orders_total WHERE orders_id = $oID AND class = 'ot_shipping'";
-                $result = mysql_query($sql, $zen);
-                $order_total = mysql_fetch_assoc($result);
-                mysql_free_result($result);
+                $result = mysqli_query($zen, $sql);
+                $order_total = mysqli_fetch_assoc($result);
+                mysqli_free_result($result);
                 $sql = "SELECT comments FROM orders_status_history WHERE orders_id = $oID";
-                $result = mysql_query($sql, $zen);
+                $result = mysqli_query($zen, $sql);
                 $comments = "";
-                while ($row = mysql_fetch_assoc($result)) {
+                while ($row = mysqli_fetch_assoc($result)) {
                         if (not_null($row['comments'])) $comments .= $row['comments'] . "\n";
                 }
-                mysql_free_result($result);
+                mysqli_free_result($result);
 
                 $sql = "SELECT DATE_FORMAT(date_purchased, '%m/%d/%Y') FROM orders WHERE orders_id = $oID";
-                $result = mysql_query($sql, $zen);
-                $date_purchased_result = mysql_fetch_assoc($result);
+                $result = mysqli_query($zen, $sql);
+                $date_purchased_result = mysqli_fetch_assoc($result);
                 $date_purchased = array_pop($date_purchased_result);
-                mysql_free_result($result);             
+                mysqli_free_result($result);
                 
                 $sql = "SELECT * FROM ".TB_PREF."debtors_master WHERE name=" . db_escape($order['customers_name']);
                 $result = db_query($sql, "Could not find customer by name");
@@ -357,9 +357,9 @@ FROM orders_products
 LEFT JOIN orders_products_attributes ON orders_products_attributes.orders_products_id = orders_products.orders_products_id
 WHERE orders_products.orders_id = $oID";
                 
-                $result = mysql_query($sql, $zen);
+                $result = mysqli_query($zen, $sql);
 
-                while ($prod = mysql_fetch_assoc($result)) {
+                while ($prod = mysqli_fetch_assoc($result)) {
                         
          if ($prod['products_priced_by_attribute'] == 1) {
                  $prod['quantity'] = $prod['products_quantity'] * (int)$prod["products_options_values"];
@@ -371,7 +371,7 @@ WHERE orders_products.orders_id = $oID";
                      $prod['final_price'] = ceil(1000000*($prod['final_price'] / $prod['quantity'] * $prod['products_quantity']))/1000000;
                      add_to_order($cart, $prod['products_id'], $prod['quantity'], $prod['final_price'], $customer['pymt_discount']);
                 }
-                mysql_free_result($result);
+                mysqli_free_result($result);
                 $order_no = $cart->write(0);
                 display_notification("Added Order Number $order_no");
                 
@@ -381,7 +381,7 @@ WHERE orders_products.orders_id = $oID";
 
                 }
             }
-            mysql_close($zen);
+            mysqli_close($zen);
         }
     }
 

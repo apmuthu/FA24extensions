@@ -79,8 +79,8 @@ function get_zen_customer_ids()
 	global $zen;
 
 	$sql = "SELECT MIN(`customers_id`) as min_cid, MAX(`customers_id`) as max_cid FROM `customers`";
-    $result = mysql_query($sql, $zen);
-    return mysql_fetch_assoc($result);
+    $result = mysqli_query($zen, $sql);
+    return mysqli_fetch_assoc($result);
 }
 
 function get_zen_order_ids()
@@ -88,6 +88,6 @@ function get_zen_order_ids()
 	global $zen;
 
 	$sql = "SELECT MIN(`orders_id`) as min_oid, MAX(`orders_id`) as max_oid FROM `orders`";
-   $result = mysql_query($sql, $zen);
-   return mysql_fetch_assoc($result);
+   $result = mysqli_query($zen, $sql);
+   return mysqli_fetch_assoc($result);
 }
