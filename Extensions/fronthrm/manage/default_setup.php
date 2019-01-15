@@ -69,8 +69,8 @@ $_POST['payroll_work_hours'] = $myrow['payroll_work_hours'];
 
 table_section_title(_("General GL"));
 
-gl_all_accounts_list_row(_("Payroll payable account:"), 'payroll_payable_act', $_POST['payroll_payable_act']);
-gl_all_accounts_list_row(_("Deductible account:"), 'payroll_deductleave_act', $_POST['payroll_deductleave_act']);
+gl_all_accounts_list_row(_("Accrued Payroll Expense Account:"), 'payroll_payable_act', $_POST['payroll_payable_act']);
+gl_all_accounts_list_row(_("Payroll Expense Account:"), 'payroll_deductleave_act', $_POST['payroll_deductleave_act']);
 gl_all_accounts_list_row(_("Overtime account:"), 'payroll_overtime_act', $_POST['payroll_overtime_act']);
 
 table_section_title(_("Other Parameters"));

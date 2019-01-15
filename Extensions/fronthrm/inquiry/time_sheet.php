@@ -30,6 +30,12 @@ include_once($path_to_root . "/modules/FrontHrm/includes/frontHrm_ui.inc");
 
 page(_($help_context = "Timesheet Inquiry"), false, false, "", $js);
 
+function fmt_time($row, $value)
+{
+	return float_to_time($value);
+}
+
+//-------------------------------------------------------------------------- 
 start_form();
 start_table(TABLESTYLE_NOBORDER);
 start_row();
@@ -47,7 +53,7 @@ end_table(1);
     
 //-------------------------------------------------------------------------- 
     
-$cols = array('Id'=>array('align'=>'center'), 'Employee Name');
+$cols = array(_('Id')=>array('align'=>'center'), _('Employee Name'));
     
 $from = new DateTime(date2sql($_POST['FromDate']));
 $to = new DateTime(date2sql($_POST['ToDate']).'+1 day');
@@ -57,9 +63,9 @@ $period = new DatePeriod($from, $interval, $to);
 foreach($period as $day) {
 	
     if($day->format('N') < 7)
-        $cols[$day->format('d').'<p hidden>'.$day->format('m').'</p>'] = array('align'=>'center');
+        $cols[$day->format('d').'<p hidden>'.$day->format('m').'</p>'] = array('align'=>'center', 'fun'=>'fmt_time');
     else
-        $cols["<div style='background:#FFCCCC'>".$day->format('d')."</div><p hidden>".$day->format('m')."</p>"] = array('align'=>'center');
+        $cols["<div style='background:#FFCCCC'>".$day->format('d')."</div><p hidden>".$day->format('m')."</p>"] = array('align'=>'center', 'fun'=>'fmt_time');
 }
 $sql = get_attendance($_POST['FromDate'], $_POST['ToDate'], $_POST['EmpId'], $_POST['DeptId'], $_POST['OvertimeId']);
 $table = & new_db_pager('emp_att_tbl', $sql, $cols);

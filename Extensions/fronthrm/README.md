@@ -1,20 +1,25 @@
-# [FrontHrm](https://github.com/notrinos/Front-Hrm)
+# FrontHrm
 [FrontAccounting](http://frontaccounting.com/) Payroll & Human Resource Module
 
-[DEMO](http://notrinos.cf)
+[DEMO](http://notrinos.webstarterz.com/act)
 
-## Requirement
+[Forum Discussion](http://frontaccounting.com/punbb/viewtopic.php?id=6860)
+
+
+Requirement
+-----------
 - FrontAccounting 2.4.x
 - [dejavu font](http://frontaccounting.com/wb3/modules/download_gallery/dlc.php?file=57)
 
-## Installation
-- Rename FrontHrm-master to FrontHrm then copy folder to the FA modules directory.
+Installation
+------------
+##### From 01/Apr/2018 FrontHrm can be installed without any changes in FA core so following steps 2, 4 can be ignored.
+1. Rename FrontHrm-master to `FrontHrm` then copy folder to the FA `modules` directory.
+2. ~~Copy `rep889.php` to FA `reporting` folder.~~
+3. Copy `dejavu font files` to FA `reporting/font` folder.
+4. ~~Replace `reporting/includes/reporting.inc` with `reporting.inc` in the FrontHrm.~~
+5. For FrontAccounting 2.4.4 up to now: just install and active normally. For the earlier versions, do the following:
+
 - Comment out block of codes from lines 215 to 220 of `admin/inst_module.php`.
-- Copy `rep889.php` to FA reporting folder.
-- Replace `reporting/includes/reporting.inc` with reporting.inc in the FrontHrm.
 - Install and active the module.
 - Uncomment lines 215-220 of `admin/inst_module.php`.
-- `admin/inst_module.php` manipulations above are no longer required after [this commit in the FA core](https://github.com/FrontAccountingERP/FA/commit/074e859275e21fa17943e19ade8ef75dbefea9d2).
-
-## Entity Relationship Diagram
-* [FrontHRM_ERD_001.png](https://github.com/apmuthu/FA24extensions/raw/master/Extensions/fronthrm/FrontHRM_ERD_001.png)

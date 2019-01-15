@@ -214,8 +214,8 @@ function get_sales_type_id($sales_type_name)
 
 function customer_branch_exists($customer_id, $branchNo)
 {
-        $sql = "SELECT * FROM ".TB_PREF."cust_branch WHERE branch_code=".db_escape($branchNo)." AND debtor_no = ".db_escape($customer_id);
-        $result = db_query($sql, "could not query customer branch records.");
+    $sql = "SELECT * FROM ".TB_PREF."cust_branch WHERE branch_code=".db_escape($branchNo)." AND debtor_no = ".db_escape($customer_id);
+    $result = db_query($sql, "could not query customer branch records.");
     if (db_num_rows($result) > 0) {return true;} else {return false;}     
 }
 

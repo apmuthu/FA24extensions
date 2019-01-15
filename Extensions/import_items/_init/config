@@ -11,6 +11,6 @@ Homepage: frontaccounting.com
 Depends: 
 InstallPath: modules/import_items
 Type: extension
-Filename: import_items-2.4.0-2
-Version: 2.4.0-2
+Filename: import_items-2.4.0-3
+Version: 2.4.0-3
 

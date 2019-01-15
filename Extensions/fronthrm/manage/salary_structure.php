@@ -3,7 +3,7 @@
 |                        FrontHrm                        |
 |--------------------------------------------------------|
 |   Creator: Phương                                      |
-|   Date :   09-07-2017                                  |
+|   Date :   09-Jul-2017                                 |
 |   Description: Frontaccounting Payroll & Hrm Module    |
 |   Free software under GNU GPL                          |
 |                                                        |
@@ -86,7 +86,7 @@ function handle_submit(&$selected_id) {
 	}
 
 	if(empty($payroll_rules))
-		display_error(_("No data entered"));
+		display_notification(_("No data entered"));
     else {
 	
 		if(exists_salary_structure($selected_id))
@@ -94,7 +94,7 @@ function handle_submit(&$selected_id) {
         
 		add_salary_structure($payroll_rules);
 			
-		display_notification(_("Salary structure updated."));		
+		display_notification(_("Salary structure has been updated."));		
 	}
 	$Ajax->activate('_page_body');
 }
@@ -119,9 +119,14 @@ function payroll_rules_settings($selected_id) {
 	$new = true;
 
 	$rules = array();
-
+    $basic_salary = '';
 	$payroll_structure = get_payroll_structure($selected_id);
-    
+	$pay_basis = get_salary_scale($selected_id)['pay_basis'];
+	foreach(get_salary_structure($selected_id) as $row) {
+		if($row['is_basic'] == 1)
+            $basic_salary = $row;
+	}
+
 	if($payroll_structure) {
 
 		foreach($payroll_structure['payroll_rule'] as $code) {
@@ -144,17 +149,24 @@ function payroll_rules_settings($selected_id) {
 			while($rowStr = db_fetch($rsStr)) {
                 
 				if($rowStr['type'] == DEBIT)
-					$_POST["Debit".$rowStr['pay_rule_id']] = $rowStr['pay_amount'];
+					$_POST["Debit".$rowStr['pay_rule_id']] = price_format($rowStr['pay_amount']);
                 else 
-					$_POST["Credit".$rowStr['pay_rule_id']] = $rowStr['pay_amount'];
+					$_POST["Credit".$rowStr['pay_rule_id']] = price_format($rowStr['pay_amount']);
 			}
 		}
 
 		br();
 		start_table(TABLESTYLE2);
-		$th = array(_("Payroll Rules"),_("Debit"),_("Credit"));
+		if($pay_basis == MONTHLY_SALARY)
+		    $th = array(_("Payroll Rules"),_("Monthly Earnings"),_("Monthly Deductions"));
+		if($pay_basis == DAILY_WAGE)
+			$th = array(_("Payroll Rules"),_("Daily Earnings"),_("Daily Deductions"));
 		table_header($th);
-        
+        start_row("class='inquirybg'");
+        label_cell($basic_salary["account_name"]);
+        amount_cell($basic_salary["pay_amount"]);
+        amount_cell('0');
+        end_row();
 		foreach($rules as $rule) {			
 			start_row();
 				hidden($rule['account_input'],$rule['account_code']);

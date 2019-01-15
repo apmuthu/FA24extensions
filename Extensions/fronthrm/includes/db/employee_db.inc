@@ -3,7 +3,7 @@
 |                        FrontHrm                        |
 |--------------------------------------------------------|
 |   Creator: Phương                                      |
-|   Date :   09-07-2017                                  |
+|   Date :   09-Jul-2017                                  |
 |   Description: Frontaccounting Payroll & Hrm Module    |
 |   Free software under GNU GPL                          |
 |                                                        |
@@ -58,29 +58,30 @@ function write_employee($id=false, $first_name, $last_name, $gender, $adrs, $mob
 
 //--------------------------------------------------------------------------
 
-function get_employees($id = false, $all = false, $department = false) {
+function get_employees_sql($all = false, $department = false) {
 	
 	$sql = "SELECT *, CONCAT(emp_first_name, ' ', emp_last_name) AS name FROM ".TB_PREF."employee";
 	$where = array();
 	
 	if(!$all)
 		$where[] = "!inactive";
-	if($id)
-		$where[] = "emp_id=".db_escape($id);
 	if($department)
 		$where[] = "department_id = ".db_escape($department);
-		
+
 	if(count($where))
 		$sql .= ' WHERE '.implode(' AND ', $where);
-	else
-		$sql .= ' WHERE 1';
 
-	$result = db_query($sql, "Could not get employee data.");
-	
-	if($id)
-		return db_fetch($result);
-	else
-		return $sql;
+	return $sql;
+}
+
+function get_employees($all = false, $department = false) {
+	return db_query(get_employees_sql($all, $department), 'Could not get all employee data.');
+}
+
+function get_employee($id) {
+	$sql = "SELECT *, CONCAT(emp_first_name, ' ', emp_last_name) AS name FROM ".TB_PREF."employee WHERE emp_id=".db_escape($id);
+	$result = db_query($sql, 'Could not get employee data.');
+	return db_fetch($result);
 }
 
 //--------------------------------------------------------------------------
@@ -103,7 +104,7 @@ function emp_img_name($emp_id) {
 function check_employee_hired($id, $date) {
 
     $sql = "SELECT emp_hiredate FROM ".TB_PREF."employee WHERE emp_id = ".db_escape($id);
-    $result = db_query($sql, "could not get employee data");
+    $result = db_query($sql, _('could not get employee data'));
     $check = db_fetch($result);
     
     if(sql_date_comp(date2sql($date), $check[0]) < 0)

@@ -1,7 +1,7 @@
 /hooks.php: 202ed99ccb59ac052a5453fe4af8946d18b41365
 /import_transactions.php: 44935d22a7dda6211104ba66ebeba5c172219812
-/includes/import_sales_cart_class.inc: 96f6db618ad1aadc35291cd3a41998b3bc66eddc
-/includes/import_sales_order_entry.inc: 92812eb21a81b4dcacb2b4178d3c092a50279b70
+/includes/import_sales_cart_class.inc: 32892afd0ca4868f8663e689ef8e2abd616e1e43
+/includes/import_sales_order_entry.inc: fd4afe8c403b0da1b2f1ca7e230a0dc22850ef14
 /includes/import_sales_order_ui.inc: 12eb96fa96ec79316e145778fd1170c7034fc1bc
 /includes/import_transactions.inc: 8ecede1b6cc23031841f1bb206fb3a7c8d3483b4
 /LICENSE: 23a1f87d806ce0330b3d85485e399a5f9f553409
@@ -15,4 +15,4 @@
 /templates/salesinvoices_two_invoices_multiitems_cash_sale_paymentid4.csv: 0bf65efbe920b356cf2f500d3ce9c608d8ca09b0
 /templates/salesinvoices_two_invoices_multiitems_credit_sale_paymentid1.csv: 80aef05fd1e35f261976ffb59bd4f1b5b838eec2
 /templates/single_line_salesinvoices.csv: 2432b7e06f46faa1acdbd2017080b836c9c73c44
-/_init/config: 036d4a0a0f958904e6214a024a983d03d0161f5a
+/_init/config: 6f2c2335f1de71f980d43a16da4d57d325a1e39d

@@ -21,7 +21,7 @@ include_once($path_to_root . "/modules/FrontHrm/includes/frontHrm_ui.inc");
 
 //--------------------------------------------------------------------------
 
-page(_($help_context = "Manage Overtime"));
+page(_($help_context = "Overtime Rates"));
 simple_page_mode(false);
 
 if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM') {
@@ -112,10 +112,10 @@ if ($selected_id != '') {
 		hidden('selected_id', $myrow["overtime_id"]);
 	}
 }
-if ($selected_id != '' && overtime_used($selected_id)) {
-    label_row(_("Overtime rate:"), $_POST['rate']);
-    hidden('rate', $_POST['rate']);
-} else
+// if ($selected_id != '' && overtime_used($selected_id)) {
+//     label_row(_("Overtime rate:"), $_POST['rate']);
+//     hidden('rate', $_POST['rate']);
+// } else
     text_row(_("Overtime rate:"), 'rate', null, 20, 20);
 
 text_row(_("Overtime Name:"), 'name', null, 40, 50);

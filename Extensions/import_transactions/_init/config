@@ -14,6 +14,6 @@ Homepage: frontaccounting.com
 Depends: 
 Type: extension
 InstallPath: modules/import_transactions
-Filename: import_transactions-2.4.0-4
-Version: 2.4.0-4
+Filename: import_transactions-2.4.0-5
+Version: 2.4.0-5
 

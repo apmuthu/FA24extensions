@@ -19,6 +19,6 @@ Homepage: frontaccounting.com
 Depends: 
 Type: extension
 InstallPath: modules/import_multijournalentries
-Filename: import_multijournalentries-2.4.0-1
-Version: 2.4.0-1
+Filename: import_multijournalentries-2.4.0-3
+Version: 2.4.0-3
 

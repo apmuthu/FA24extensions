@@ -1,11 +1,11 @@
 Package: rep_check_print
 Description: Check Printing based on Tom Hallman, USA
 Name: Check Printing based on Tom Hallman, USA
-Filename: rep_check_print-2.4.0-1
+Filename: rep_check_print-2.4.0-3
 Author: Joe Hunt <joe.hunt.consulting@gmail.com>
 Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
 Homepage: frontaccounting.com
 Type: extension
 InstallPath: modules/rep_check_print
-Version: 2.4.0-1
+Version: 2.4.0-3
 
