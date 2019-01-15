@@ -24,12 +24,14 @@
 		function shortcut($url, $label) 
 		{
 			echo "<li>";
-			echo menu_link($url, $label);
+			$pars = access_string($label);
+			echo "<a href='$url' class='menu_option' $pars[1]>$pars[0]</a>";
 			echo "</li>";
 		}
+		
 		function menu_header($title, $no_menu, $is_index)
 		{
-			global $path_to_root, $help_base_url, $power_by, $version, $db_connections;
+			global $path_to_root, $SysPrefs, $version;
 
 			$sel_app = $_SESSION['sel_app'];
 			echo "<div class='fa-main'>\n";
@@ -37,33 +39,39 @@
 			{
 				$applications = $_SESSION['App']->applications;
 				$local_path_to_root = $path_to_root;
-				$img = "<img src='$local_path_to_root/themes/elegant/images/login.gif' width='14' height='14' border='0' alt='"._('Logout')."'>&nbsp;&nbsp;";
-				$himg = "<img src='$local_path_to_root/themes/elegant/images/help.gif' width='14' height='14' border='0' alt='"._('Help')."'>&nbsp;&nbsp;";
+				$img = "<img src='$path_to_root/themes/".user_theme()."/images/login.gif' width='14' height='14' border='0' alt='"._('Logout')."'>&nbsp;&nbsp;";
+				$pimg = "<img src='$local_path_to_root/themes/".user_theme()."/images/preferences.gif' width='14' height='14' border='0' alt='"._('Preferences')."'>&nbsp;&nbsp;";
+				$limg = "<img src='$local_path_to_root/themes/".user_theme()."/images/lock.gif' width='14' height='14' border='0' alt='"._('Change Password')."'>&nbsp;&nbsp;";
+				$himg = "<img src='$path_to_root/themes/".user_theme()."/images/help.gif' width='14' height='14' border='0' alt='"._('Help')."'>&nbsp;&nbsp;";
 				echo "<div id='header'>\n";
 				echo "<ul>\n";
-				echo "  <li><a class='shortcut' href='$path_to_root/admin/display_prefs.php?'>" . _("Preferences") . "</a></li>\n";
-				echo "  <li><a class='shortcut' href='$path_to_root/admin/change_current_user_password.php?selected_id=" . $_SESSION["wa_current_user"]->username . "'>" . _("Change password") . "</a></li>\n";
-			 	if ($help_base_url != null)
+				echo "  <li><a class='shortcut' href='$path_to_root/admin/display_prefs.php?'>$pimg" . _("Preferences") . "</a></li>\n";
+				echo "  <li><a class='shortcut' href='$path_to_root/admin/change_current_user_password.php?selected_id=" . $_SESSION["wa_current_user"]->username . "'>$limg" . _("Change password") . "</a></li>\n";
+				if ($SysPrefs->help_base_url != null)
 					echo "  <li><a target = '_blank' onclick=" .'"'."javascript:openWindow(this.href,this.target); return false;".'" '. "href='". 
 						help_url()."'>$himg" . _("Help") . "</a></li>";
 				echo "  <li><a class='shortcut' href='$path_to_root/access/logout.php?'>$img" . _("Logout") . "</a></li>";
 				echo "</ul>\n";
 				$indicator = "$path_to_root/themes/".user_theme(). "/images/ajax-loader.gif";
-				echo "<h1>$power_by $version<span style='padding-left:300px;'><img id='ajaxmark' src='$indicator' align='center' style='visibility:hidden;'></span></h1>\n";
+				echo "<h1>$SysPrefs->power_by $version<span style='padding-left:300px;'><img id='ajaxmark' src='$indicator' align='center' style='visibility:hidden;'></span></h1>\n";
 				echo "</div>\n"; // header
 				echo "<div class='fa-menu'>";
 				echo "<ul>\n";
 				foreach($applications as $app)
 				{
-					$acc = access_string($app->name);
-					echo "<li ".($sel_app == $app->id ? "class='active' " : "") . "><a class='"
-						.($sel_app == $app->id ? 'selected' : 'menu_tab')
-						."' href='$local_path_to_root/index.php?application=" . $app->id
-						."'$acc[1]><b>" . $acc[0] . "</b></a></li>\n";
+                    if ($_SESSION["wa_current_user"]->check_application_access($app))
+                    {
+						$acc = access_string($app->name);
+						echo "<li ".($sel_app == $app->id ? "class='active' " : "") . "><a class='"
+							.($sel_app == $app->id ? 'selected' : 'menu_tab')
+							."' href='$path_to_root/index.php?application=" . $app->id
+							."'$acc[1]><b>" . $acc[0] . "</b></a></li>\n";
+					}		
 				}
 				echo "</ul>\n"; 
 				echo "</div>\n"; // menu
 				echo "<div class='clear'></div>\n";
+
 			}				
 			echo "<div class='fa-body'>\n";
 			if (!$no_menu)
@@ -107,6 +115,13 @@
 						$this->shortcut($local_path_to_root."/manufacturing/manage/bom_edit.php?", _("Bills Of Material"));
 						$this->shortcut($local_path_to_root."/reporting/reports_main.php?Class=3", _("Reports and Analysis"));
 						break;
+					case "assets":	
+						$this->shortcut($local_path_to_root."/purchasing/po_entry_items.php?NewInvoice=Yes&FixedAsset=1", _("Fixed Assets Purchase"));
+						$this->shortcut($local_path_to_root."/fixed_assets/inquiry/stock_inquiry.php?", _("Fixed Assets Inquiry"));
+						$this->shortcut($local_path_to_root."/inventory/manage/items.php?FixedAsset=1", _("Fixed Assets"));
+						$this->shortcut($local_path_to_root."/fixed_assets/process_depreciation.php?", _("Depreciations"));
+						$this->shortcut($local_path_to_root."/reporting/reports_main.php?Class=7", _("Reports and Analysis"));
+						break;
 					case "proj":	
 						$this->shortcut($local_path_to_root."/dimensions/dimension_entry.php?", _("Dimension Entry"));
 						$this->shortcut($local_path_to_root."/dimensions/inquiry/search_dimensions.php?", _("Dimension Inquiry"));
@@ -131,6 +146,7 @@
 						$this->shortcut($local_path_to_root."/admin/forms_setup.php?",_("Forms Setup"));
 						break;
 				}		
+				$this->shortcut($local_path_to_root."/admin/dashboard.php?sel_app=$sel_app", _("Dashboard"));
 				echo "</ul>\n";
 				echo "</div>\n"; // submenu
 				echo "<div class='clear'></div>\n";
@@ -151,7 +167,7 @@
 
 		function menu_footer($no_menu, $is_index)
 		{
-			global $path_to_root, $power_url, $power_by, $version, $db_connections;
+			global $path_to_root, $SysPrefs, $version, $db_connections;
 			include_once($path_to_root . "/includes/date_functions.inc");
 
 			if (!$no_menu)
@@ -162,7 +178,7 @@
 				echo "<div class='fa-footer'>\n";
 				if (isset($_SESSION['wa_current_user']))
 				{
-					echo "<span class='power'><a target='_blank' href='$power_url'>$power_by $version</a></span>\n";
+					echo "<span class='power'><a target='_blank' href='$SysPrefs->power_url'>$SysPrefs->power_by $version</a></span>\n";
 					echo "<span class='date'>".Today() . "&nbsp;" . Now()."</span>\n";
 					echo "<span class='date'>" . $db_connections[$_SESSION["wa_current_user"]->company]["name"] . "</span>\n";
 					echo "<span class='date'>" . $_SERVER['SERVER_NAME'] . "</span>\n";
@@ -180,22 +196,16 @@
 			global $path_to_root;
 			$i = 0;
 			$sel_app = $waapp->get_selected_application();
-
 			if (!$_SESSION["wa_current_user"]->check_application_access($sel_app))
 				return;
-
-			if (method_exists($sel_app, 'render_index'))
-			{
-				$sel_app->render_index();
-				return;
-			}
-
 			if ($sel_app->id == "system")
 				$imgs2 = array("page_edit.png", "page_edit.png", "page_edit.png", "page_edit.png", "folder.gif");
 			else	
 				$imgs2 = array("folder.gif", "report.png", "page_edit.png", "money.png", "folder.gif");
 			foreach ($sel_app->modules as $module)
 			{
+        		if (!$_SESSION["wa_current_user"]->check_module_access($module))
+        			continue;
 				// image
 				echo "<table width='95%' align='center'><tr>";
 				echo "<td valign='top' class='menu_group'>";
@@ -215,7 +225,7 @@
 						echo "<div class='empty'>&nbsp;<br></div>\n";
 					elseif ($_SESSION["wa_current_user"]->can_access_page($appfunction->access))
 						echo "<div>".$img.menu_link($appfunction->link, $appfunction->label."</div>");
-					else	
+					elseif (!$_SESSION["wa_current_user"]->hide_inaccessible_menu_items())	
 						echo "<div>".$img."<span class='inactive'>".access_string($appfunction->label, true)."</span></div>\n";
 				}
 				echo "</td>\n";
@@ -228,7 +238,7 @@
 							echo "<div class='empty'>&nbsp;<br></div>\n";
 						elseif ($_SESSION["wa_current_user"]->can_access_page($appfunction->access))
 							echo "<div>".$img.menu_link($appfunction->link, $appfunction->label."</div>");
-						else	
+						elseif (!$_SESSION["wa_current_user"]->hide_inaccessible_menu_items())	
 							echo "<div>".$img."<span class='inactive'>".access_string($appfunction->label, true)."</span></div>\n";
 					}
 					echo "</td>\n";
@@ -239,4 +249,3 @@
 		}
 	}
 	
-

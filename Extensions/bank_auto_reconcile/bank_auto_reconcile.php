@@ -129,8 +129,7 @@ function get_similar_bank_trans($id, $bank_account_gl_code) {
     return db_query($sql,"The transaction for '$id' could not be retrieved");
 }
 
-function auto_reconcile($current)
-{
+function auto_reconcile($current) {
     $newdate=$_POST['reconcile_date'];
     $reconcile_value =  ("'".date2sql($_POST['reconcile_date']) ."'");
     foreach ($current as $key => $comment) {
@@ -344,7 +343,6 @@ if (isset($_POST['import'])) {
                 auto_reconcile($current);
             }
         }
-
     } else
         display_error("No CSV file selected");
 }

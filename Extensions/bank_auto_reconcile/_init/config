@@ -1,6 +1,6 @@
 Package: bank_auto_reconcile
 Name: Bank Statement Auto Reconcile
-Description: CSV bank statement econciled against FA bank account.
+Description: CSV bank statement reconciled against FA bank account.
 Author: Tom Hallman
 Maintenance: Joe Hunt
 Homepage: frontaccounting.com
