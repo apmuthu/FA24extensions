@@ -351,9 +351,11 @@ if (isset($_POST['import'])) {
                     || ($checkno == "" && $i == 0))
                     continue;
 
-                if (strpos($comment, "TRANSFER") !== false)
+                if (strpos($comment, "TRANSFER") !== false) {
                     $toacct = substr($comment, -4);
-                else
+                    if (!is_numeric($toacct))
+                        $toacct = "";
+                } else
                     $toacct = "";
 
                 $early = true;

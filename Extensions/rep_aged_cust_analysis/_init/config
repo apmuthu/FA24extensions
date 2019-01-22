@@ -1,0 +1,11 @@
+Package: rep_aged_cust_analysis
+Description: Enhanced Aged Customer Analysis
+Name: Enhanced Aged Customer Analysis
+Filename: rep_aged_cust_analysis
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_aged_cust_analysis
+Version: 2.4.0-1
+
