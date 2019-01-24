@@ -1,3 +1,4 @@
+2019-01-24  BraathWaate  osCommerce Heading alignment
 2019-01-15  Ap.Muthu     Updated extensions with upstream version number bumps
 2019-01-15  Ap.Muthu     Updated zen_import with upstream for MySQLi usage
 2019-01-14  Ap.Muthu     Updated elegant theme for FA 2.4.6
