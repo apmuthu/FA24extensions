@@ -1,5 +1,5 @@
 Package: response
-Version: 2.4.0-3
+Version: 2.4.0-4
 Type: theme
 Name: Theme Response
 Description: Optional Theme. Dynamic Horizontal Menu.
@@ -10,5 +10,5 @@ Author: Joe Hunt <joe.hunt.consulting@gmail.com>
 Homepage: www.frontaccounting.com
 Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
 InstallPath: themes/response
-Filename: response-2.4.0-3
+Filename: response-2.4.0-4
 

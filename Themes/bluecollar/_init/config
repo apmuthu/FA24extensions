@@ -1,5 +1,5 @@
 Package: bluecollar
-Version: 2.4.0-2
+Version: 2.4.0-3
 Type: theme
 Name: Theme Bluecollar
 Description: Optiona Theme. Left expandable menu.
@@ -9,5 +9,5 @@ Author: Joe Hunt <joe.hunt.consulting@gmail.com>
 Homepage: www.frontaccounting.com
 Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
 InstallPath: themes/bluecollar
-Filename: bluecollar-2.4.0-2
+Filename: bluecollar-2.4.0-3
 
