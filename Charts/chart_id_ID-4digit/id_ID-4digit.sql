@@ -116,7 +116,7 @@ CREATE TABLE `0_bank_trans` (
   `trans_date` date NOT NULL DEFAULT '0000-00-00',
   `amount` double DEFAULT NULL,
   `dimension_id` int(11) NOT NULL DEFAULT '0',
-  `dimension0_id` int(11) NOT NULL DEFAULT '0',
+  `dimension2_id` int(11) NOT NULL DEFAULT '0',
   `person_type_id` int(11) NOT NULL DEFAULT '0',
   `person_id` tinyblob,
   `reconciled` date DEFAULT NULL,
@@ -162,9 +162,9 @@ CREATE TABLE `0_budget_trans` (
   `account` varchar(15) NOT NULL DEFAULT '',
   `amount` double NOT NULL DEFAULT '0',
   `dimension_id` int(11) DEFAULT '0',
-  `dimension0_id` int(11) DEFAULT '0',
+  `dimension2_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `Account` (`account`,`tran_date`,`dimension_id`,`dimension0_id`)
+  KEY `Account` (`account`,`tran_date`,`dimension_id`,`dimension2_id`)
 ) ENGINE=InnoDB ;
 
 ### Data of table `0_budget_trans` ###
@@ -490,7 +490,7 @@ CREATE TABLE `0_debtor_trans` (
   `rate` double NOT NULL DEFAULT '1',
   `ship_via` int(11) DEFAULT NULL,
   `dimension_id` int(11) NOT NULL DEFAULT '0',
-  `dimension0_id` int(11) NOT NULL DEFAULT '0',
+  `dimension2_id` int(11) NOT NULL DEFAULT '0',
   `payment_terms` int(11) DEFAULT NULL,
   `tax_included` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`type`,`trans_no`,`debtor_no`),
@@ -539,7 +539,7 @@ CREATE TABLE `0_debtors_master` (
   `curr_code` char(3) NOT NULL DEFAULT '',
   `sales_type` int(11) NOT NULL DEFAULT '1',
   `dimension_id` int(11) NOT NULL DEFAULT '0',
-  `dimension0_id` int(11) NOT NULL DEFAULT '0',
+  `dimension2_id` int(11) NOT NULL DEFAULT '0',
   `credit_status` int(11) NOT NULL DEFAULT '0',
   `payment_terms` int(11) DEFAULT NULL,
   `discount` double NOT NULL DEFAULT '0',
@@ -611,7 +611,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2013-01-01', '2013-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -1594,42 +1594,6 @@ INSERT INTO `0_sys_prefs` VALUES
 ('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
 ('version_id', 'system', 'varchar', '11', '2.4.1');
 
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
-
-INSERT INTO `0_sys_types` VALUES
-('0', '17', '1'),
-('1', '7', '1'),
-('2', '4', '1'),
-('4', '3', '1'),
-('10', '16', '1'),
-('11', '2', '1'),
-('12', '6', '1'),
-('13', '1', '1'),
-('16', '2', '1'),
-('17', '2', '1'),
-('18', '1', '1'),
-('20', '6', '1'),
-('21', '1', '1'),
-('22', '3', '1'),
-('25', '1', '1'),
-('26', '1', '1'),
-('28', '1', '1'),
-('29', '1', '1'),
-('30', '0', '1'),
-('32', '0', '1'),
-('35', '1', '1'),
-('40', '1', '1');
 
 ### Structure of table `0_tag_associations` ###
 

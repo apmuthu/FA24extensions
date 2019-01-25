@@ -864,9 +864,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('3', '2011-01-01', '2011-12-31', '1'),
-('4', '2012-01-01', '2012-12-31', '1'),
-('5', '2013-01-01', '2013-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '1');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -1831,7 +1829,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('domicile', 'setup.company', 'varchar', '55', 'Vestiginsplaats'),
 ('email', 'setup.company', 'varchar', '100', 'e-mail@adres.nl'),
 ('exchange_diff_act', 'glsetup.general', 'varchar', '15', '9030'),
-('f_year', 'setup.company', 'int', '11', '5'),
+('f_year', 'setup.company', 'int', '11', '1'),
 ('fax', 'setup.company', 'varchar', '30', '987-6543210'),
 ('freight_act', 'glsetup.customer', 'varchar', '15', '4420'),
 ('gl_closing_date', 'setup.closing_date', 'date', '8', ''),
@@ -1867,42 +1865,6 @@ INSERT INTO `0_sys_prefs` VALUES
 ('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
 ('version_id', 'system', 'varchar', '11', '2.4.1');
 
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
-
-INSERT INTO `0_sys_types` VALUES
-('0', '17', '1'),
-('1', '7', 'BET2013001'),
-('2', '4', 'ONTV2013001'),
-('4', '3', '1'),
-('10', '16', 'VF2013001'),
-('11', '2', 'C2013001'),
-('12', '6', 'DEB2013001'),
-('13', '1', 'PB2013001'),
-('16', '2', '1'),
-('17', '2', '1'),
-('18', '1', '1'),
-('20', '6', 'IF2013001'),
-('21', '1', 'C-IF2013001'),
-('22', '3', 'LEV2013001'),
-('25', '1', '1'),
-('26', '1', 'WO2013001'),
-('28', '1', '1'),
-('29', '1', '1'),
-('30', '0', 'VO2013001'),
-('32', '0', 'OF2013001'),
-('35', '1', '1'),
-('40', '1', '1');
 
 ### Structure of table `0_tag_associations` ###
 

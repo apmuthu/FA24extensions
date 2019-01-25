@@ -498,7 +498,7 @@ CREATE TABLE IF NOT EXISTS `0_fiscal_year` (
 ) ENGINE=InnoDB ;
 
 INSERT INTO `0_fiscal_year` VALUES
- ('1', '2016-01-01', '2016-12-31', '0');
+ ('1', '2018-01-01', '2018-12-31', '0');
 
 DROP TABLE IF EXISTS `0_gl_trans`;
 CREATE TABLE IF NOT EXISTS `0_gl_trans` (

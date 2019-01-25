@@ -1,5 +1,5 @@
 Package: chart_en_US-nonprofit
-Version: 2.4.1-1
+Version: 2.4.1-4
 Name: US COA for a nonprofit company
 Description: This is a 4 digit COA.
 Encoding: utf-8
@@ -10,5 +10,5 @@ Depends: frontaccounting.com
 Type: chart
 InstallPath: sql
 SqlScript: en_US-nonprofit.sql
-Filename: chart_en_US-nonprofit-2.4.1-1
+Filename: chart_en_US-nonprofit-2.4.1-4
 

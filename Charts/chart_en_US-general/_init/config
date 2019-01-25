@@ -1,5 +1,5 @@
 Package: chart_en_US-general
-Version: 2.4.1-1
+Version: 2.4.1-4
 Name: Default American coa (5 digits)
 Description: This is a default American chart of accounts (5 digits) for a new company.
 Encoding: utf-8
@@ -10,5 +10,5 @@ Depends:
 Type: chart
 InstallPath: sql
 SqlScript: en_US-general.sql
-Filename: chart_en_US-general-2.4.1-1
+Filename: chart_en_US-general-2.4.1-4
 

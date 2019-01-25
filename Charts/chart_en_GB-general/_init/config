@@ -1,5 +1,5 @@
 Package: chart_en_GB-general
-Version: 2.4.1-1
+Version: 2.4.1-5
 Name: British COA
 Description: This is a British chart of accounts for a new company.
 Encoding: utf-8
@@ -10,5 +10,5 @@ Depends:
 Type: chart
 InstallPath: sql
 SqlScript: en_GB-general.sql
-Filename: chart_en_GB-general-2.4.1-1
+Filename: chart_en_GB-general-2.4.1-5
 

@@ -746,7 +746,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2008-01-01', '2008-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -1732,42 +1732,6 @@ INSERT INTO `0_sys_prefs` VALUES
 ('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
 ('version_id', 'system', 'varchar', '11', '2.4.1');
 
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
-
-INSERT INTO `0_sys_types` VALUES
-('0', '0', '1'),
-('1', '0', '1'),
-('2', '0', '1'),
-('4', '0', '1'),
-('10', '0', '1'),
-('11', '0', '1'),
-('12', '0', '1'),
-('13', '0', '1'),
-('16', '0', '1'),
-('17', '0', '1'),
-('18', '0', '1'),
-('20', '0', '1'),
-('21', '0', '1'),
-('22', '0', '1'),
-('25', '0', '1'),
-('26', '0', '1'),
-('28', '0', '1'),
-('29', '0', '1'),
-('30', '0', '1'),
-('32', '0', '1'),
-('35', '0', '1'),
-('40', '0', '1');
 
 ### Structure of table `0_tag_associations` ###
 

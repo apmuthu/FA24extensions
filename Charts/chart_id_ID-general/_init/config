@@ -1,5 +1,5 @@
 Package: chart_id_ID-general
-Version: 2.4.1-1
+Version: 2.4.1-4
 Name: Indonesian general 8 digit COA
 Description: This is an Indonesian chart of (8 digit) accounts for a starting company.
 Encoding: utf-8
@@ -10,5 +10,5 @@ Depends:
 Type: chart
 InstallPath: sql
 SqlScript: id_ID-general.sql
-Filename: chart_id_ID-general-2.4.1-1
+Filename: chart_id_ID-general-2.4.1-4
 

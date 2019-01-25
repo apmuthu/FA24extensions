@@ -1,5 +1,5 @@
 Package: chart_ro_RO-general
-Version: 2.4.1-1
+Version: 2.4.1-4
 Name: Romanian COA - Default
 Description: This is a Romanian chart of accounts for a starting company.
 Encoding: utf-8
@@ -10,5 +10,5 @@ Depends:
 Type: chart
 InstallPath: sql
 SqlScript: ro_RO-general.sql
-Filename: chart_ro_RO-general-2.4.1-1
+Filename: chart_ro_RO-general-2.4.1-4
 

@@ -1,5 +1,5 @@
 Package: chart_nl_NL-general
-Version: 2.4.1-1
+Version: 2.4.1-4
 Name: Dutch general COA
 Description: This is a Dutch 4 digit chart of accounts for a starting company.
 Encoding: utf-8
@@ -10,5 +10,5 @@ Depends:
 Type: chart
 InstallPath: sql
 SqlScript: nl_NL-default.sql
-Filename: chart_nl_NL-general-2.4.1-1
+Filename: chart_nl_NL-general-2.4.1-4
 

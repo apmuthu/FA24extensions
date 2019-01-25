@@ -307,7 +307,7 @@ INSERT INTO `0_chart_types` VALUES
 ('9', 'Other Revenue', '3', '', '0'),
 ('10', 'Cost of Goods Sold', '4', '', '0'),
 ('11', 'Payroll Expenses', '4', '', '0'),
-('12', 'General and Admin Expenses', '4', '', '0')';
+('12', 'General and Admin Expenses', '4', '', '0');
 
 ### Structure of table `0_comments` ###
 
@@ -627,8 +627,8 @@ CREATE TABLE IF NOT EXISTS `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2017-01-01', '2017-12-31', '0'),
-('2', '2018-01-01', '2018-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0'),
+('2', '2019-01-01', '2019-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -1572,19 +1572,6 @@ INSERT INTO `0_sys_prefs` VALUES
 ('use_fixed_assets', 'setup.company', 'tinyint', '1', '1'),
 ('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
 ('version_id', 'system', 'varchar', '11', '2.4.1');
-
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
 
 
 ### Structure of table `0_tag_associations` ###

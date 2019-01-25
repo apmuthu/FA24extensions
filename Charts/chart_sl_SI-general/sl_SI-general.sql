@@ -2163,42 +2163,6 @@ INSERT INTO `0_sys_prefs` VALUES
 ('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
 ('version_id', 'system', 'varchar', '11', '2.4.1');
 
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
-
-INSERT INTO `0_sys_types` VALUES
-('0', '17', '20150001'),
-('1', '7', '20150001'),
-('2', '4', '20150001'),
-('4', '3', '20150001'),
-('10', '16', '20150001'),
-('11', '2', '20150001'),
-('12', '6', '20150001'),
-('13', '1', '20150001'),
-('16', '2', '20150001'),
-('17', '2', '20150001'),
-('18', '1', '20150001'),
-('20', '6', '20150001'),
-('21', '1', '20150001'),
-('22', '3', '20150001'),
-('25', '1', '20150001'),
-('26', '1', '20150001'),
-('28', '1', '20150001'),
-('29', '1', '20150001'),
-('30', '0', '20150001'),
-('32', '0', '20150001'),
-('35', '1', '20150001'),
-('40', '1', '20150001');
 
 ### Structure of table `0_tag_associations` ###
 

@@ -1,5 +1,5 @@
 Package: chart_en_US-demo2
-Version: 2.4.1-1
+Version: 2.4.1-4
 Name: 5 digit American coa wit educational data
 Description: This is a 5 digit American chart of accounts. It has very good educational
  data and this company is called Modern Factory Co.
@@ -11,5 +11,5 @@ Depends:
 Type: chart
 InstallPath: sql
 SqlScript: en_US-demo2.sql
-Filename: chart_en_US-demo2-2.4.1-1
+Filename: chart_en_US-demo2-2.4.1-4
 

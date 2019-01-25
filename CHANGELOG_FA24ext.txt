@@ -1,3 +1,4 @@
+2019-01-25  Ap.Muthu     Updated charts with upstream version number bumps, sys_types table removed
 2019-01-25  Ap.Muthu     Updated themes with upstream version number bumps
 2019-01-24  BraathWaate  osCommerce Heading alignment
 2019-01-15  Ap.Muthu     Updated extensions with upstream version number bumps

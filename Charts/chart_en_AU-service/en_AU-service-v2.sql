@@ -702,9 +702,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('2', '2009-07-01', '2010-06-30', '0'),
-('3', '2008-07-01', '2009-06-30', '0'),
-('4', '2007-07-01', '2008-06-30', '1');
+('1', '2018-07-01', '2019-06-30', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -1742,7 +1740,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('domicile', 'setup.company', 'varchar', '55', 'Victoria, Australia'),
 ('email', 'setup.company', 'varchar', '100', 'info@mycompany.au'),
 ('exchange_diff_act', 'glsetup.general', 'varchar', '15', '6050'),
-('f_year', 'setup.company', 'int', '11', '3'),
+('f_year', 'setup.company', 'int', '11', '1'),
 ('fax', 'setup.company', 'varchar', '30', ''),
 ('freight_act', 'glsetup.customer', 'varchar', '15', '6800'),
 ('gl_closing_date', 'setup.closing_date', 'date', '8', ''),
@@ -1778,42 +1776,6 @@ INSERT INTO `0_sys_prefs` VALUES
 ('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
 ('version_id', 'system', 'varchar', '11', '2.4.1');
 
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
-
-INSERT INTO `0_sys_types` VALUES
-('0', '18', '34'),
-('1', '10', '10'),
-('2', '6', '16'),
-('4', '3', '6'),
-('10', '39', '39'),
-('11', '4', '4'),
-('12', '29', '29'),
-('13', '41', '12'),
-('16', '2', '2'),
-('17', '2', '2'),
-('18', '1', '16'),
-('20', '13', '34'),
-('21', '1', '2'),
-('22', '4', '4'),
-('25', '1', '14'),
-('26', '1', '8'),
-('28', '1', '2'),
-('29', '1', '201'),
-('30', '0', '1'),
-('32', '0', '1'),
-('35', '6', '1'),
-('40', '1', '3');
 
 ### Structure of table `0_tag_associations` ###
 

@@ -1,5 +1,5 @@
 Package: chart_fr_FR-general
-Version: 2.4.1-1
+Version: 2.4.1-4
 Name: French COA - General
 Description: This is a French chart of accounts for a starting company.
 Encoding: utf-8
@@ -10,5 +10,5 @@ Depends:
 Type: chart
 InstallPath: sql
 SqlScript: fr_FR-general.sql
-Filename: chart_fr_FR-general-2.4.1-1
+Filename: chart_fr_FR-general-2.4.1-4
 

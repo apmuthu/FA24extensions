@@ -897,12 +897,7 @@ CREATE TABLE `0_fiscal_year` (
 ### Data of table `0_fiscal_year` ###
 
 INSERT INTO `0_fiscal_year` VALUES
-('1', '2008-01-01', '2008-12-31', '0'),
-('2', '2009-01-01', '2009-12-31', '0'),
-('3', '2010-01-01', '2010-12-31', '0'),
-('4', '2011-01-01', '2011-12-31', '0'),
-('5', '2012-01-01', '2012-12-31', '0'),
-('6', '2013-01-01', '2013-12-31', '0');
+('1', '2018-01-01', '2018-12-31', '0');
 
 ### Structure of table `0_gl_trans` ###
 
@@ -1859,7 +1854,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('domicile', 'setup.company', 'varchar', '55', ''),
 ('email', 'setup.company', 'varchar', '100', 'rolf.g.hansenmarisoft.com'),
 ('exchange_diff_act', 'glsetup.general', 'varchar', '15', '8080'),
-('f_year', 'setup.company', 'int', '11', '5'),
+('f_year', 'setup.company', 'int', '11', '1'),
 ('fax', 'setup.company', 'varchar', '30', '38 17 98 95'),
 ('freight_act', 'glsetup.customer', 'varchar', '15', '4010'),
 ('gl_closing_date', 'setup.closing_date', 'date', '8', ''),
@@ -1895,42 +1890,6 @@ INSERT INTO `0_sys_prefs` VALUES
 ('use_manufacturing', 'setup.company', 'tinyint', '1', '1'),
 ('version_id', 'system', 'varchar', '11', '2.4.1');
 
-### Structure of table `0_sys_types` ###
-
-DROP TABLE IF EXISTS `0_sys_types`;
-
-CREATE TABLE `0_sys_types` (
-  `type_id` smallint(6) NOT NULL DEFAULT '0',
-  `type_no` int(11) NOT NULL DEFAULT '1',
-  `next_reference` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB ;
-
-### Data of table `0_sys_types` ###
-
-INSERT INTO `0_sys_types` VALUES
-('0', '17', '10000'),
-('1', '7', '20000'),
-('2', '4', '30000'),
-('4', '3', '40000'),
-('10', '16', '503000'),
-('11', '2', '903000'),
-('12', '6', '50000'),
-('13', '1', '203000'),
-('16', '2', '1000'),
-('17', '2', '90000'),
-('18', '1', '103000'),
-('20', '6', '603000'),
-('21', '1', '983000'),
-('22', '3', '60000'),
-('25', '1', '123000'),
-('26', '1', '143000'),
-('28', '1', '163000'),
-('29', '1', '183000'),
-('30', '0', '403000'),
-('32', '0', '303000'),
-('35', '1', '70000'),
-('40', '1', '80000');
 
 ### Structure of table `0_tag_associations` ###
 
