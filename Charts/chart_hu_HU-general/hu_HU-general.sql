@@ -155,6 +155,7 @@ CREATE TABLE `0_budget_trans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tran_date` date NOT NULL DEFAULT '0000-00-00',
   `account` varchar(15) NOT NULL DEFAULT '',
+  `memo_` tinytext NOT NULL,
   `amount` double NOT NULL DEFAULT '0',
   `dimension_id` int(11) DEFAULT '0',
   `dimension2_id` int(11) DEFAULT '0',
