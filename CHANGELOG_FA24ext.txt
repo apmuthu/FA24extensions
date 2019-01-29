@@ -1,3 +1,4 @@
+2019-01-29  Ap.Muthu     Fixed charts - debtors_master.debtor_ref ordered after name field
 2019-01-29  Ap.Muthu     Fixed charts - cust_branch.branch_ref ordered after br_name field
 2019-01-28  Ap.Muthu     Fixed charts - budget_trans.memo_ field added, bank_trans.bank_trans_type_id removed
 2019-01-25  Ap.Muthu     Updated charts with upstream version number bumps, sys_types table removed

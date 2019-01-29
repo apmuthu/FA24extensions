@@ -544,6 +544,7 @@ DROP TABLE IF EXISTS `0_debtors_master`;
 CREATE TABLE `0_debtors_master` (
   `debtor_no` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT '',
+  `debtor_ref` varchar(30) NOT NULL,
   `address` tinytext,
   `tax_id` varchar(55) NOT NULL DEFAULT '',
   `curr_code` char(3) NOT NULL DEFAULT '',
@@ -557,7 +558,6 @@ CREATE TABLE `0_debtors_master` (
   `credit_limit` float NOT NULL DEFAULT '1000',
   `notes` tinytext,
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
-  `debtor_ref` varchar(30) NOT NULL,
   PRIMARY KEY (`debtor_no`),
   UNIQUE KEY `debtor_ref` (`debtor_ref`),
   KEY `name` (`name`)
