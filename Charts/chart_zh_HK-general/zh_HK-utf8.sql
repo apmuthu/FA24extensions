@@ -455,6 +455,7 @@ CREATE TABLE `0_cust_branch` (
   `branch_code` int(11) NOT NULL AUTO_INCREMENT,
   `debtor_no` int(11) NOT NULL DEFAULT '0',
   `br_name` varchar(60) NOT NULL DEFAULT '',
+  `branch_ref` varchar(30) NOT NULL,
   `br_address` tinytext NOT NULL,
   `area` int(11) DEFAULT NULL,
   `salesman` int(11) NOT NULL DEFAULT '0',
@@ -470,7 +471,6 @@ CREATE TABLE `0_cust_branch` (
   `notes` tinytext,
   `bank_account` varchar(60) DEFAULT NULL,
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
-  `branch_ref` varchar(30) NOT NULL,
   PRIMARY KEY (`branch_code`,`debtor_no`),
   KEY `branch_ref` (`branch_ref`),
   KEY `group_no` (`group_no`)
