@@ -177,6 +177,13 @@ function print_cust_statements()
 			if ($rep->row < $rep->bottomMargin + (10 * $rep->lineHeight))
 				$rep->NewPage();
 		}
+        if ($first) {
+            $rep->TextCol(0, 2, _("Balance Forward Prior To"));
+            $rep->TextCol(2, 3,	$startdate, -2);
+            $rep->TextCol(7, 8,	number_format2($total, $dec), -2);
+            $rep->NewLine();
+        }
+
 		$nowdue = "1-" . $PastDueDays1 . " " . _("Days");
 		$pastdue1 = $PastDueDays1 + 1 . "-" . $PastDueDays2 . " " . _("Days");
 		$pastdue2 = _("Over") . " " . $PastDueDays2 . " " . _("Days");

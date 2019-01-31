@@ -14,16 +14,24 @@ add_access_extensions();
 
 include_once($path_to_root . "/includes/ui.inc");
 
+// CSV formats
+// To add a new format, create an array element with fields in desired positions
+// The first field is the bank account name up to the first whitespace
+$items = array();
+$items[] =  array("Wells", array( "date", "amount", "", "checkno", "comment" ));
+$items[] =  array("United", array( "card", "date", "postdate", "comment", "category", "type", "amount", "memo"));
+
 function csv_format_list($name, $selected_id=null, $submit_on_change=false)
 {
-        $items = array();
-        $items['0'] =  _("A: Date, Amount, Unused, Check Number, Comment");
-        $items['1'] =  _("B: Unused, Date, Unused, Comment, Amount");
+    global $items;
+    $sel = array();
+    foreach ($items as $key => $value)
+        $sel[] = $value[0];
 
-        return array_selector($name, $selected_id, $items,
-                array(
-                        'select_submit'=> $submit_on_change,
-                        'async' => false ) ); // FIX?
+    return array_selector($name, $selected_id, $sel,
+            array(
+                    'select_submit'=> $submit_on_change,
+                    'async' => false ) ); // FIX?
 }
 
 function csv_format_list_cells($label, $name, $selected_id=null, $submit_on_change=false)
@@ -335,19 +343,14 @@ if (isset($_POST['import'])) {
                 if ($data[0] == null)   // blank line
                     continue;
 
-                if ($_POST['csv_format'] == 0) {
-                    $date = $data[0];
-                    $amount = $data[1];
-                    $checkno = $data[3];
-                    $comment = $data[4];
-                } else {
-                    $date = $data[2];
-                    $amount = $data[4];
-                    $comment = $data[3];
-                    $checkno = "";
+                $checkno = "";
+                foreach ($items[$_POST['csv_format']][1] as $key => $value) {
+                    if ($value == "")
+                        continue;
+                    $$value = $data[$key];
                 }
 
-                 if (($checkno != "" && $i == 1)
+                if (($checkno != "" && $i == 1)
                     || ($checkno == "" && $i == 0))
                     continue;
 
@@ -357,6 +360,9 @@ if (isset($_POST['import'])) {
                         $toacct = "";
                 } else
                     $toacct = "";
+
+                if (isset($card))
+                    $comment .= " ($card)";
 
                 $early = true;
                 $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
@@ -418,13 +424,25 @@ if (isset($_POST['import'])) {
         
 }
 
+    global $Ajax;
     start_form(true);
     start_table(TABLESTYLE2, "width=60%");
 
     table_section_title("Bank Auto Reconcile");
-    bank_accounts_list_row("Bank Account", 'bank_account');
+    bank_accounts_list_row("Bank Account", 'bank_account', null, true);
     check_row("Trial Run", 'trial', 1);
     date_row("Reconciliation Period End Date:", 'reconcile_date');
+
+/*
+    if (list_updated('bank_account'))
+        $Ajax->activate('csv_format');
+*/
+    $name = explode(" ", get_bank_account($_POST['bank_account'])['bank_account_name'])[0];
+    foreach ($items as $key => $value)
+        if ($value[0] == $name) {
+            $_POST['csv_format'] = $key;
+            break;
+        }
     csv_format_list_row("CSV Format", 'csv_format');
     label_row('CSV Bank Statement Import File', "<input type='file' id='imp' name='imp'>");
 

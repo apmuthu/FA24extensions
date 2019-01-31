@@ -241,7 +241,6 @@ function show_results()
     	start_row("class='inquirybg'");
     	label_cell("<b>"._("Opening Balance")." - ".$_POST['TransFromDate']."</b>", "colspan=$colspan");
     	label_cell("");
-    	label_cell("");
     	amount_cell($bfw, true);
     	end_row();
 	}
