@@ -1373,7 +1373,6 @@ DROP TABLE IF EXISTS `0_stock_category`;
 CREATE TABLE `0_stock_category` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(60) NOT NULL DEFAULT '',
-  `inactive` tinyint(1) NOT NULL DEFAULT '0',
   `dflt_tax_type` int(11) NOT NULL DEFAULT '1',
   `dflt_units` varchar(20) NOT NULL DEFAULT 'each',
   `dflt_mb_flag` char(1) NOT NULL DEFAULT 'B',
@@ -1384,6 +1383,7 @@ CREATE TABLE `0_stock_category` (
   `dflt_wip_act` varchar(15) NOT NULL DEFAULT '',
   `dflt_dim1` int(11) DEFAULT NULL,
   `dflt_dim2` int(11) DEFAULT NULL,
+  `inactive` tinyint(1) NOT NULL DEFAULT '0',
   `dflt_no_sale` tinyint(1) NOT NULL DEFAULT '0',
   `dflt_no_purchase` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`category_id`),
