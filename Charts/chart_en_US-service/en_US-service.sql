@@ -1490,6 +1490,7 @@ DROP TABLE IF EXISTS `0_suppliers`;
 CREATE TABLE `0_suppliers` (
   `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
   `supp_name` varchar(60) NOT NULL DEFAULT '',
+  `supp_ref` varchar(30) NOT NULL DEFAULT '',
   `address` tinytext NOT NULL,
   `supp_address` tinytext NOT NULL,
   `gst_no` varchar(25) NOT NULL DEFAULT '',
@@ -1509,7 +1510,6 @@ CREATE TABLE `0_suppliers` (
   `payment_discount_account` varchar(15) NOT NULL DEFAULT '',
   `notes` tinytext NOT NULL,
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
-  `supp_ref` varchar(30) NOT NULL,
   PRIMARY KEY (`supplier_id`),
   KEY `supp_ref` (`supp_ref`)
 ) ENGINE=InnoDB ;

@@ -1775,7 +1775,7 @@ DROP TABLE IF EXISTS `0_suppliers`;
 CREATE TABLE `0_suppliers` (
   `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
   `supp_name` varchar(60) NOT NULL DEFAULT '',
-  `supp_ref` varchar(30) NOT NULL,
+  `supp_ref` varchar(30) NOT NULL DEFAULT '',
   `address` tinytext NOT NULL,
   `supp_address` tinytext NOT NULL,
   `gst_no` varchar(25) NOT NULL DEFAULT '',
