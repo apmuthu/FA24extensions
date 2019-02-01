@@ -301,11 +301,23 @@ function auto_create($current)
     }
 }
 
+// Recurrent transaction discovery relies on comment matching.
+// This is usually successful because recurrent transactions often have the same comment
+// on each statement (e.g. UTILITY ELEC CO blah blah blah)
+// However, in order to match similar past transactions with different transaction numbers,
+// strip the transaction numbers from the comments before matching past transactions in the database
+// (e.g. UTILITY ELEC CO #5815AZ251 becomes just UTILITY ELEC CO)
+// The code deliberately does not match on amounts, because often these amounts differ
+// on each statement.
+
 function my_offset($text) {
+
+    // strip off after the first space followed by a number
     preg_match('/ \d/', $text, $m, PREG_OFFSET_CAPTURE);
     if (sizeof($m))
         return $m[0][1];
 
+    // strip off after the first space followed by a hash mark
     preg_match('/ #/', $text, $m, PREG_OFFSET_CAPTURE);
     if (sizeof($m))
         return $m[0][1];
@@ -361,9 +373,6 @@ if (isset($_POST['import'])) {
                 } else
                     $toacct = "";
 
-                if (isset($card))
-                    $comment .= " ($card)";
-
                 $early = true;
                 $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
                 if (db_num_rows($result) == 0 && $checkno == "") {
@@ -377,7 +386,14 @@ if (isset($_POST['import'])) {
 
                     if ($checkno == ""
                         && $comment != "") {
-                        $result = get_similar_bank_transaction($_POST['bank_account'], substr($comment, 0, my_offset($comment)), sign($amount));
+                        $min_match_length=min(strlen($comment), 5); // minimum length for comment matching
+                        $result = get_similar_bank_transaction(
+                            $_POST['bank_account'],
+                            substr($comment, 0, my_offset(substr($comment,$min_match_length))+$min_match_length),
+                            sign($amount));
+
+                        if (isset($card))
+                            $comment .= " ($card)";
 
         // only simple (non-split) recurrent transactions can be auto-created
 
