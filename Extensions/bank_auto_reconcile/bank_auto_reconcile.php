@@ -17,9 +17,11 @@ include_once($path_to_root . "/includes/ui.inc");
 // CSV formats
 // To add a new format, create an array element with fields in desired positions
 // The first field is the bank account name up to the first whitespace
+// The second field is the number of header lines that should be ignored
+// The third field is the array of columns
 $items = array();
-$items[] =  array("Wells", array( "date", "amount", "", "checkno", "comment" ));
-$items[] =  array("United", array( "card", "date", "postdate", "comment", "category", "type", "amount", "memo"));
+$items[] =  array("Wells", 0, array( "date", "amount", "", "checkno", "comment" ));
+$items[] =  array("United", 1, array( "card", "date", "postdate", "comment", "category", "type", "amount", "memo"));
 
 function csv_format_list($name, $selected_id=null, $submit_on_change=false)
 {
@@ -89,14 +91,15 @@ echo "<hr>";
     }
 }
 
-function get_bank_transaction($toacct, $date, $account, $amount, $check, $current, $early)
+function get_bank_transaction($rec_date, $toacct, $date, $account, $amount, $check, $current, $early)
 {
+    $rec_date = date2sql($rec_date);
     $sql = "SELECT b.*, c.memo_ FROM ".TB_PREF."bank_trans b
             LEFT JOIN ".TB_PREF."comments c
             ON b.type=c.type and c.id = b.trans_no
             WHERE b.bank_act = '$account'
             AND amount = '$amount'
-            AND ISNULL(b.reconciled)";
+            AND (ISNULL(b.reconciled) OR b.reconciled = " . db_escape($rec_date) . ")";
 
     // for electronic payments, limit the date range for the match
     // usually payment date occurs on or after transaction entry date
@@ -123,7 +126,7 @@ function get_bank_transaction($toacct, $date, $account, $amount, $check, $curren
 
     foreach ($current as $key => $value)
         $sql .= " AND b.id != $key ";
-//   display_notification($sql);
+    // display_notification($sql);
 
     return db_query($sql,"The transactions for '$account' could not be retrieved");
 }
@@ -347,7 +350,7 @@ if (isset($_POST['import'])) {
         $total = 0;
 
        $csv = array_reverse(
-            array_slice(array_map('str_getcsv', file($_FILES['imp']['tmp_name'])),1));
+            array_slice(array_map('str_getcsv', file($_FILES['imp']['tmp_name'])),$items[$_POST['csv_format']][1]));
 
         // do checks first, then auto deducts
         for ($i=0; $i < 2; $i++) {
@@ -356,7 +359,7 @@ if (isset($_POST['import'])) {
                     continue;
 
                 $checkno = "";
-                foreach ($items[$_POST['csv_format']][1] as $key => $value) {
+                foreach ($items[$_POST['csv_format']][2] as $key => $value) {
                     if ($value == "")
                         continue;
                     $$value = $data[$key];
@@ -374,10 +377,10 @@ if (isset($_POST['import'])) {
                     $toacct = "";
 
                 $early = true;
-                $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
+                $result = get_bank_transaction($_POST['reconcile_date'], $toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
                 if (db_num_rows($result) == 0 && $checkno == "") {
                     $early = false;
-                    $result = get_bank_transaction($toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
+                    $result = get_bank_transaction($_POST['reconcile_date'], $toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
                 }
 
                 if (db_num_rows($result) == 0) {
