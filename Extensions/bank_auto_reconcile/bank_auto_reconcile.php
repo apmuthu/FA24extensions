@@ -22,6 +22,7 @@ include_once($path_to_root . "/includes/ui.inc");
 $items = array();
 $items[] =  array("Wells", 0, array( "date", "amount", "", "checkno", "comment" ));
 $items[] =  array("United", 1, array( "card", "date", "postdate", "comment", "category", "type", "amount", "memo"));
+$items[] =  array("Vanguard", 5, array( "", "date", "postdate", "ttype", "comment", "investment", "shareprice", "shares", "gross", "amount"));
 
 function csv_format_list($name, $selected_id=null, $submit_on_change=false)
 {
@@ -364,6 +365,14 @@ if (isset($_POST['import'])) {
                         continue;
                     $$value = $data[$key];
                 }
+
+        // vanguard format has the check numbers in the comments
+                if (strpos($comment, "CHECKWRITING") !== false)
+                    $checkno = substr($comment, 13);
+
+        // ignore dividends that are distributed rather than reinvested
+                if (isset($shares) && $shares == 0)
+                    continue;
 
                 if (($checkno != "" && $i == 1)
                     || ($checkno == "" && $i == 0))
