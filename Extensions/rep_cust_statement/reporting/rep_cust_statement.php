@@ -70,10 +70,9 @@ function print_cust_statements()
 	$startdate = $_POST['PARAM_0'];
 	$customer = $_POST['PARAM_1'];
 	$currency = $_POST['PARAM_2'];
-	$show_also_allocated = $_POST['PARAM_3'];
-	$email = $_POST['PARAM_4'];
-	$comments = $_POST['PARAM_5'];
-	$orientation = $_POST['PARAM_6'];
+	$email = $_POST['PARAM_3'];
+	$comments = $_POST['PARAM_4'];
+	$orientation = $_POST['PARAM_5'];
 
 	$orientation = ($orientation ? 'L' : 'P');
 	$dec = user_price_dec();
@@ -109,7 +108,7 @@ function print_cust_statements()
 
 		$myrow['order_'] = "";
 
-		$TransResult = getTransactions($myrow['debtor_no'], $date, $show_also_allocated);
+		$TransResult = getTransactions($myrow['debtor_no'], $date, true);
 		$baccount = get_default_bank_account($myrow['curr_code']);
 		$params['bankaccount'] = $baccount['id'];
 		if (db_num_rows($TransResult) == 0)
@@ -145,8 +144,9 @@ function print_cust_statements()
 			$total_amount = Abs($myrow2["TotalAmount"]);
             $prev_total = $total;
 
-			if ($myrow2['type'] == ST_SALESINVOICE || $myrow2['type'] == ST_BANKPAYMENT || 
-				($myrow2['type'] == ST_JOURNAL && $myrow2["TotalAmount"] > 0.0))
+			if ($myrow2['type'] == ST_SALESINVOICE
+                || $myrow2['type'] == ST_BANKPAYMENT
+                || ($myrow2['type'] == ST_JOURNAL && $myrow2["TotalAmount"] > 0.0))
                 $total += $total_amount;
             else
                 $total -= $total_amount;
