@@ -28,7 +28,7 @@ if (user_use_date_picker())
 	$js = get_js_date_picker();
 $js .= get_js_history(array('TransFromDate', 'TransToDate', 'Dimension'));
 
-page(_($help_context = "Profit & Loss Drilldown"), false, false, "", $js);
+page(_($help_context = "Profit & Loss All Dimensions"), false, false, "", $js);
 
 $compare_types = array(
 	_("Accumulated"),
@@ -43,7 +43,7 @@ if (get_post('Show'))
 	$Ajax->activate('pl_tbl');
 }
 
-set_posts(array("TransFromDate", "TransToDate", "Compare", "Dimension", "AccGrp", "Filter"));
+set_posts(array("TransFromDate", "TransToDate", "Compare", "Dimension", "AccGrp"));
 
 //----------------------------------------------------------------------------------------------------
 function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $convert,
@@ -88,10 +88,6 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 			$url = "<a href='$path_to_root/gl/inquiry/gl_account_inquiry.php?TransFromDate=" 
 				. $from . "&TransToDate=" . $to
 				. "&account=" . $account['account_code'];
-                        if ($filter)
-                                $url .="&Dimension=" . $dimension;
-                        else
-                                $url .="&Dimension=-1";
                         $url .= "'>" . $account['account_code'] 
 				." ". $account['account_name'] ."</a>";				
 				
@@ -137,10 +133,13 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		if ($drilldown && $parent1 == $_POST["AccGrp"])
 		//END Patch#2		
 		//elseif ($drilldown && $type != $_POST["AccGrp"])
-		{	
-			$url = "<a href='$path_to_root/$path_to_file?TransFromDate=" 
+		{
+            if ($dimension != 0)
+                $url = "<a href='$path_to_root/$path_to_file";
+            else
+                $url = "<a href='$path_to_root/gl/inquiry/profit_loss.php";
+            $url .= "?TransFromDate=" 
 				. $from . "&TransToDate=" . $to . "&Compare=" . $compare . "&Dimension=" . $dimension 
-                                . "&Filter=$filter"
 				. "&AccGrp=" . $type ."'>" . $type . " " . $typename ."</a>";
 				
 			alt_table_row_color($k);
@@ -204,8 +203,7 @@ function display_profit_and_loss($compare)
     div_start('pl_tbl');
     if (isset($_POST['Dimension'])
         && $_POST['Dimension'] != 0)
-        display_profit_and_loss_dimension($compare, $_POST['Dimension'], "",
-            (isset($_POST['Filter']) && $_POST['Filter'] != 0));
+        display_profit_and_loss_dimension($compare, $_POST['Dimension'], "", false);
     else {
         $_POST['Dimension']=0;
         $result=get_dimensions();
@@ -289,9 +287,12 @@ function display_profit_and_loss_dimension($compare, $dimension, $name, $filter=
 
 				if ($TypeTotal[0] != 0 || $TypeTotal[1] != 0 )
 				{
-					$url = "<a href='$path_to_root/$path_to_file?TransFromDate=" 
+                    if (!$filter || $dimension == -1)
+                        $url = "<a href='$path_to_root/$path_to_file";
+                    else
+                        $url = "<a href='$path_to_root/gl/inquiry/profit_loss.php";
+					$url .= "?TransFromDate=" 
 						. $from . "&TransToDate=" . $to . "&Compare=" . $compare . "&Dimension=" . $dimension
-                                                . "&Filter=$filter"
 						. "&AccGrp=" . $accounttype['id'] ."'>" . $accounttype['id'] . " " . $accounttype['name'] ."</a>";
 						
 					alt_table_row_color($k);
