@@ -1,3 +1,4 @@
+2019-03-10  BraathWaate  Enhanced Customer Statement - remove show also allocated
 2019-01-31  Ap.Muthu     Fixed charts - suppliers.supp_ref ordered after supp_name field
 2019-01-31  Ap.Muthu     Fixed charts - stock_category.inactive ordered after dflt_dim2 field
 2019-01-29  Ap.Muthu     Fixed charts - debtors_master.debtor_ref ordered after name field

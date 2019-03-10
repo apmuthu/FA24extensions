@@ -36,7 +36,7 @@ print_cust_statements();
 function getTransactions($debtorno, $date, $show_also_allocated)
 {
     $sql = "SELECT d.*, memo_,
-    			(ov_amount + ov_gst + ov_freight + ov_freight_tax + ov_discount) AS TotalAmount, alloc AS Allocated,
+    			(ov_amount + ov_gst + ov_freight + ov_freight_tax + ov_discount) AS TotalAmount,
 				((d.type = ".ST_SALESINVOICE.") AND due_date < '$date') AS OverDue
 			FROM ".TB_PREF."debtor_trans d
             LEFT JOIN ".TB_PREF."comments c ON c.type = d.type AND c.id = d.trans_no
@@ -61,6 +61,7 @@ function statement_type($type, $memo)
     else
         return $systypes_array[$type];
 }
+
 //----------------------------------------------------------------------------------------------------
 
 function print_cust_statements()
@@ -69,9 +70,9 @@ function print_cust_statements()
 
 	include_once($path_to_root . "/reporting/includes/pdf_report.inc");
 
-	$customer = $_POST['PARAM_0'];
-	$currency = $_POST['PARAM_1'];
-	$show_also_allocated = $_POST['PARAM_2'];
+	$startdate = $_POST['PARAM_0'];
+	$customer = $_POST['PARAM_1'];
+	$currency = $_POST['PARAM_2'];
 	$email = $_POST['PARAM_3'];
 	$comments = $_POST['PARAM_4'];
 	$orientation = $_POST['PARAM_5'];
@@ -79,7 +80,7 @@ function print_cust_statements()
 	$orientation = ($orientation ? 'L' : 'P');
 	$dec = user_price_dec();
 
-	$cols = array(4, 80, 130, 190,	250, 320, 385, 450, 515);
+	$cols = array(4, 100, 130, 190,	250, 320, 385, 450, 515);
 
 	//$headers in doctext.inc
 
@@ -113,7 +114,7 @@ function print_cust_statements()
 
 		$myrow['order_'] = "";
 
-		$TransResult = getTransactions($myrow['debtor_no'], $date, $show_also_allocated);
+		$TransResult = getTransactions($myrow['debtor_no'], $date, true);
 		$baccount = get_default_bank_account($myrow['curr_code']);
 		$params['bankaccount'] = $baccount['id'];
 		if (db_num_rows($TransResult) == 0)
@@ -136,16 +137,32 @@ function print_cust_statements()
 		$rep->SetHeaderType('Header2');
 		$rep->NewPage();
 		$rep->NewLine();
-		$doctype = ST_STATEMENT;
 		$rep->fontSize += 2;
 		$rep->TextCol(0, 8, _("Outstanding Transactions"));
 		$rep->fontSize -= 2;
 		$rep->NewLine(2);
+        $total = 0;
+        $first = true;
 		while ($myrow2=db_fetch($TransResult))
 		{
-			$DisplayTotal = number_format2(Abs($myrow2["TotalAmount"]),$dec);
-			$DisplayAlloc = number_format2($myrow2["Allocated"],$dec);
-			$DisplayNet = number_format2($myrow2["TotalAmount"] - $myrow2["Allocated"],$dec);
+			$total_amount = Abs($myrow2["TotalAmount"]);
+            $prev_total = $total;
+
+			if ($myrow2['type'] == ST_SALESINVOICE
+                || $myrow2['type'] == ST_BANKPAYMENT
+                || ($myrow2['type'] == ST_JOURNAL && $myrow2["TotalAmount"] > 0.0))
+                $total += $total_amount;
+            else
+                $total -= $total_amount;
+            if ($myrow2['tran_date'] < date2sql($startdate))
+                continue;
+            if ($first) {
+                $first = false;
+                $rep->TextCol(0, 2, _("Balance Forward Prior To"));
+                $rep->TextCol(2, 3,	$startdate, -2);
+                $rep->TextCol(7, 8,	number_format2($prev_total, $dec), -2);
+                $rep->NewLine();
+            }
 
 			$rep->TextCol(0, 1, statement_type($myrow2['type'], $myrow2['memo_']), -2);
 			$rep->TextCol(1, 2,	$myrow2['reference'], -2);
@@ -154,19 +171,27 @@ function print_cust_statements()
 				$rep->TextCol(3, 4,	sql2date($myrow2['due_date']), -2);
 			if ($myrow2['type'] == ST_SALESINVOICE || $myrow2['type'] == ST_BANKPAYMENT || 
 				($myrow2['type'] == ST_JOURNAL && $myrow2["TotalAmount"] > 0.0))
-				$rep->TextCol(4, 5,	$DisplayTotal, -2);
+				$rep->TextCol(4, 5,	number_format2($total_amount, $dec), -2);
 			else
-				$rep->TextCol(5, 6,	$DisplayTotal, -2);
-			$rep->TextCol(6, 7,	$DisplayAlloc, -2);
+				$rep->TextCol(5, 6,	number_format2($total_amount, $dec), -2);
+
+            $DisplayNet = number_format2($total, $dec);
 			$rep->TextCol(7, 8,	$DisplayNet, -2);
 			$rep->NewLine();
 			if ($rep->row < $rep->bottomMargin + (10 * $rep->lineHeight))
 				$rep->NewPage();
 		}
+        if ($first) {
+            $rep->TextCol(0, 2, _("Balance Forward Prior To"));
+            $rep->TextCol(2, 3,	$startdate, -2);
+            $rep->TextCol(7, 8,	number_format2($total, $dec), -2);
+            $rep->NewLine();
+        }
+
 		$nowdue = "1-" . $PastDueDays1 . " " . _("Days");
 		$pastdue1 = $PastDueDays1 + 1 . "-" . $PastDueDays2 . " " . _("Days");
 		$pastdue2 = _("Over") . " " . $PastDueDays2 . " " . _("Days");
-		$CustomerRecord = get_customer_details($myrow['debtor_no'], null, $show_also_allocated);
+		$CustomerRecord = get_customer_details($myrow['debtor_no'], null, false);
 		$str = array(_("Current"), $nowdue, $pastdue1, $pastdue2, _("Total Balance"));
 		$str2 = array(number_format2(($CustomerRecord["Balance"] - $CustomerRecord["Due"]),$dec),
 			number_format2(($CustomerRecord["Due"]-$CustomerRecord["Overdue1"]),$dec),
