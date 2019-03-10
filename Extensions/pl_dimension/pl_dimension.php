@@ -203,7 +203,9 @@ function inquiry_controls()
 function display_profit_and_loss($compare)
 {
     div_start('pl_tbl');
-    if (@$_POST['Dimension'] > 0)
+    if (@$_GET['Dimension'] == -1)
+        display_profit_and_loss_dimension($compare, -1, -1, "No Dimension");
+    else if (@$_POST['Dimension'] > 0)
         display_profit_and_loss_dimension($compare, @$_POST['Dimension'], 0, "Dimension Excluded", false);
     else {
         $_POST['Dimension']=0;
@@ -215,6 +217,7 @@ function display_profit_and_loss($compare)
                 $dim['name']);
         }
         display_profit_and_loss_dimension($compare, -1, -1, "No Dimension");
+        display_profit_and_loss_dimension($compare, 0, 0, "All Dimensions");
     }
     div_end();
 }
