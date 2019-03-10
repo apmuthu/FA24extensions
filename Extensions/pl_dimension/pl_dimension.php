@@ -26,7 +26,7 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 $js = "";
 if (user_use_date_picker())
 	$js = get_js_date_picker();
-$js .= get_js_history(array('TransFromDate', 'TransToDate', 'Dimension'));
+$js .= get_js_history(array('TransFromDate', 'TransToDate', 'AccGrp', 'Dimension'));
 
 page(_($help_context = "Profit & Loss All Dimensions"), false, false, "", $js);
 
@@ -47,7 +47,7 @@ set_posts(array("TransFromDate", "TransToDate", "Compare", "Dimension", "AccGrp"
 
 //----------------------------------------------------------------------------------------------------
 function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $convert,
-	$dimension=0, $drilldown, $path_to_root, $filter)
+	$dimension=0, $dimension2=0, $drilldown, $path_to_root, $filter)
 {
 	global $levelptr, $k;
 	global $path_to_file;
@@ -65,20 +65,20 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 	while ($account=db_fetch($result))
 	{
                 if (!$filter)
-                    $per_balance = get_gl_trans_from_to($from, $to, $account["account_code"]) - get_gl_trans_from_to($from, $to, $account["account_code"], $dimension);
+                    $per_balance = get_gl_trans_from_to($from, $to, $account["account_code"]) - get_gl_trans_from_to($from, $to, $account["account_code"], $dimension, $dimension2);
                 else
-                    $per_balance = get_gl_trans_from_to($from, $to, $account["account_code"], $dimension);
+                    $per_balance = get_gl_trans_from_to($from, $to, $account["account_code"], $dimension, $dimension2);
 
 		if ($compare == 2) {
                     if (!$filter)
-			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"]) - get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension);
+			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"]) - get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
                     else
-			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension);
+			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
 		} else {
                     if (!$filter)
-			$acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"]) - get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension);
+			$acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"]) - get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
                     else
-			$acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension);
+			$acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
                 }
 		if (!$per_balance && !$acc_balance)
 			continue;
@@ -86,8 +86,10 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		if ($drilldown && $levelptr == 0)
 		{
 			$url = "<a href='$path_to_root/gl/inquiry/gl_account_inquiry.php?TransFromDate=" 
-				. $from . "&TransToDate=" . $to
-				. "&account=" . $account['account_code'];
+				. $from . "&TransToDate=" . $to;
+            if ($filter)
+                $url .= "&Dimension=$dimension&Dimension2=$dimension2";
+            $url .= "&account=" . $account['account_code'];
                         $url .= "'>" . $account['account_code'] 
 				." ". $account['account_name'] ."</a>";				
 				
@@ -110,7 +112,7 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 	while ($accounttype=db_fetch($result))
 	{	
 		$totals_arr = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, 
-			$compare, $convert, $dimension, $drilldown, $path_to_root, $filter);
+			$compare, $convert, $dimension, $dimension2, $drilldown, $path_to_root, $filter);
 		$per_balance_total += $totals_arr[0];
 		$acc_balance_total += $totals_arr[1];
 	}
@@ -134,12 +136,12 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		//END Patch#2		
 		//elseif ($drilldown && $type != $_POST["AccGrp"])
 		{
-            if ($dimension != 0)
+            if (!$filter || ($dimension <= 0  && $dimension2 <= 0))
                 $url = "<a href='$path_to_root/$path_to_file";
             else
                 $url = "<a href='$path_to_root/gl/inquiry/profit_loss.php";
             $url .= "?TransFromDate=" 
-				. $from . "&TransToDate=" . $to . "&Compare=" . $compare . "&Dimension=" . $dimension 
+				. $from . "&TransToDate=" . $to . "&Compare=" . $compare .  "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
 				. "&AccGrp=" . $type ."'>" . $type . " " . $typename ."</a>";
 				
 			alt_table_row_color($k);
@@ -201,21 +203,23 @@ function inquiry_controls()
 function display_profit_and_loss($compare)
 {
     div_start('pl_tbl');
-    if (isset($_POST['Dimension'])
-        && $_POST['Dimension'] != 0)
-        display_profit_and_loss_dimension($compare, $_POST['Dimension'], "", false);
+    if (@$_POST['Dimension'] > 0)
+        display_profit_and_loss_dimension($compare, @$_POST['Dimension'], 0, "Dimension Excluded", false);
     else {
         $_POST['Dimension']=0;
         $result=get_dimensions();
         while ($dim = db_fetch($result)) {
-            display_profit_and_loss_dimension($compare, $dim['id'], $dim['name']);
+            display_profit_and_loss_dimension($compare,
+                $dim['type_'] == 1 ? $dim['id'] : 0,
+                $dim['type_'] == 2 ? $dim['id'] : 0,
+                $dim['name']);
         }
-        display_profit_and_loss_dimension($compare, -1, "No Dimension");
+        display_profit_and_loss_dimension($compare, -1, -1, "No Dimension");
     }
     div_end();
 }
 
-function display_profit_and_loss_dimension($compare, $dimension, $name, $filter=true)
+function display_profit_and_loss_dimension($compare, $dimension, $dimension2, $name, $filter=true)
 {
 	global $path_to_root, $path_to_file, $compare_types;
 	global $levelptr, $k;
@@ -225,8 +229,6 @@ function display_profit_and_loss_dimension($compare, $dimension, $name, $filter=
 
 	$from = $_POST['TransFromDate'];
 	$to = $_POST['TransToDate'];
-        file_put_contents("/tmp/foo", "heasdf" . $_POST["TransFromDate"], FILE_APPEND);
-
 	
 	if (isset($_POST["AccGrp"]) && (strlen($_POST['AccGrp']) > 0))
 		$drilldown = 1; // Deeper Level
@@ -281,18 +283,18 @@ function display_profit_and_loss_dimension($compare, $dimension, $name, $filter=
 			while ($accounttype=db_fetch($typeresult))
 			{
 				$TypeTotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, 
-					$dimension, $drilldown, $path_to_root, $filter);
+					$dimension, $dimension2, $drilldown, $path_to_root, $filter);
 				$class_per_total += $TypeTotal[0];
 				$class_acc_total += $TypeTotal[1];	
 
 				if ($TypeTotal[0] != 0 || $TypeTotal[1] != 0 )
 				{
-                    if (!$filter || $dimension == -1)
+                    if (!$filter || ($dimension <= 0 && $dimension2 <= 0))
                         $url = "<a href='$path_to_root/$path_to_file";
                     else
                         $url = "<a href='$path_to_root/gl/inquiry/profit_loss.php";
 					$url .= "?TransFromDate=" 
-						. $from . "&TransToDate=" . $to . "&Compare=" . $compare . "&Dimension=" . $dimension
+						. $from . "&TransToDate=" . $to . "&Compare=" . $compare .  "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
 						. "&AccGrp=" . $accounttype['id'] ."'>" . $accounttype['id'] . " " . $accounttype['name'] ."</a>";
 						
 					alt_table_row_color($k);
@@ -337,11 +339,12 @@ function display_profit_and_loss_dimension($compare, $dimension, $name, $filter=
 		$convert = get_class_type_convert($class["ctype"]); 
 		
 		//Print Class Name	
+		table_section_title($name,4);
 		table_section_title($_POST["AccGrp"] . " " . get_account_type_name($_POST["AccGrp"]),4);	
 		echo $tableheader;
 		
 		$classtotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, 
-			$dimension, $drilldown, $path_to_root, $filter);
+			$dimension, $dimension2, $drilldown, $path_to_root, $filter);
 		
 	}
 		
