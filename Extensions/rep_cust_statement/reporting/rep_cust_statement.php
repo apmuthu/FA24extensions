@@ -10,14 +10,14 @@
     See the License here <http://www.gnu.org/licenses/gpl-3.0.html>.
 ***********************************************************************/
 
-// based on rep108.php - Print Statements
-
 $page_security = 'SA_CUSTSTATREP';
 // ----------------------------------------------------------------
 // $ Revision:	2.0 $
 // Creator:	Joe Hunt
-// date_:	2005-05-19
+// Modified: BraathWaate
+// date_:	2019-03-14
 // Title:	Print Statements
+// Based On rep108.php - this module will replace it
 // ----------------------------------------------------------------
 $path_to_root="..";
 
@@ -71,11 +71,12 @@ function print_cust_statements()
 	include_once($path_to_root . "/reporting/includes/pdf_report.inc");
 
 	$startdate = $_POST['PARAM_0'];
-	$customer = $_POST['PARAM_1'];
-	$currency = $_POST['PARAM_2'];
-	$email = $_POST['PARAM_3'];
-	$comments = $_POST['PARAM_4'];
-	$orientation = $_POST['PARAM_5'];
+	$enddate     = $_POST['PARAM_1'];
+	$customer    = $_POST['PARAM_2'];
+	$currency    = $_POST['PARAM_3'];
+	$email       = $_POST['PARAM_4'];
+	$comments    = $_POST['PARAM_5'];
+	$orientation = $_POST['PARAM_6'];
 
 	$orientation = ($orientation ? 'L' : 'P');
 	$dec = user_price_dec();
@@ -110,11 +111,10 @@ function print_cust_statements()
 		if ($currency != ALL_TEXT && $myrow['curr_code'] != $currency) {
 			continue;
 		}	
-		$date = date('Y-m-d');
 
 		$myrow['order_'] = "";
 
-		$TransResult = getTransactions($myrow['debtor_no'], $date, true);
+		$TransResult = getTransactions($myrow['debtor_no'], date2sql($enddate), true);
 		$baccount = get_default_bank_account($myrow['curr_code']);
 		$params['bankaccount'] = $baccount['id'];
 		if (db_num_rows($TransResult) == 0)
@@ -207,7 +207,7 @@ function print_cust_statements()
 		for ($i = 0; $i < 5; $i++)
 			$rep->TextWrap($col[$i], $rep->row, $col[$i + 1] - $col[$i], $str2[$i], 'right');
 		if ($email == 1)
-			$rep->End($email, _("Statement") . " " . _("as of") . " " . sql2date($date));
+			$rep->End($email, _("Statement") . " " . _("as of") . " " . $enddate);
 
 	}
 
