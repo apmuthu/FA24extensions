@@ -65,13 +65,12 @@ function print_aged_customer_analysis()
     $to = $_POST['PARAM_1'];
     $fromcust = $_POST['PARAM_2'];
     $currency = $_POST['PARAM_3'];
-    $show_all = $_POST['PARAM_4'];
-	$summaryOnly = $_POST['PARAM_5'];
-    $no_zeros = $_POST['PARAM_6'];
-    $graphics = $_POST['PARAM_7'];
-    $comments = $_POST['PARAM_8'];
-	$orientation = $_POST['PARAM_9'];
-	$destination = $_POST['PARAM_10'];
+	$summaryOnly = $_POST['PARAM_4'];
+    $no_zeros = $_POST['PARAM_5'];
+    $graphics = $_POST['PARAM_6'];
+    $comments = $_POST['PARAM_7'];
+	$orientation = $_POST['PARAM_8'];
+	$destination = $_POST['PARAM_9'];
 	if ($destination)
 		include_once($path_to_root . "/reporting/includes/excel_report.inc");
 	else
@@ -103,8 +102,6 @@ function print_aged_customer_analysis()
 
 	if ($no_zeros) $nozeros = _('Yes');
 	else $nozeros = _('No');
-	if ($show_all) $show = _('Yes');
-	else $show = _('No');
 
 	$PastDueDays1 = get_company_pref('past_due_days');
 	$PastDueDays2 = 2 * $PastDueDays1;
@@ -123,8 +120,7 @@ function print_aged_customer_analysis()
     				2 => array('text' => _('Customer'),	'from' => $from, 'to' => ''),
     				3 => array('text' => _('Currency'), 'from' => $currency, 'to' => ''),
                     		4 => array('text' => _('Type'),		'from' => $summary,'to' => ''),
-                    5 => array('text' => _('Show Also Allocated'), 'from' => $show, 'to' => ''),		
-				6 => array('text' => _('Suppress Zeros'), 'from' => $nozeros, 'to' => ''));
+				5 => array('text' => _('Suppress Zeros'), 'from' => $nozeros, 'to' => ''));
 
 	if ($convert)
 		$headers[2] = _('Currency');
@@ -179,7 +175,7 @@ function print_aged_customer_analysis()
 		$rep->NewLine(1, 2);
 		if (!$summaryOnly)
 		{
-			$res = getTransactions($myrow['debtor_no'], date2sql($to), $show_all);
+			$res = getTransactions($myrow['debtor_no'], date2sql($to), true);
     		if (db_num_rows($res)==0)
 				continue;
     		$rep->Line($rep->row + 4);
@@ -187,7 +183,7 @@ function print_aged_customer_analysis()
             $balance=0;
 			while ($trans=db_fetch($res))
 			{
-            $DisplayTotal = $trans["TotalAmount"];
+            $DisplayTotal = Abs($trans["TotalAmount"]);
             $prev_balance = $balance;
 
             if ($trans['type'] == ST_SALESINVOICE || $trans['type'] == ST_BANKPAYMENT ||

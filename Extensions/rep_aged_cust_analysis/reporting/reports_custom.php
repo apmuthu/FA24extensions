@@ -7,7 +7,6 @@ $reports->addReport(RC_CUSTOMER, "_aged_cust_analysis", _('&Aged Customer Analys
             _('End Date') => 'DATEEND',
             _('Customer') => 'CUSTOMERS_NO_FILTER',
             _('Currency Filter') => 'CURRENCY',
-            _('Show Also Allocated') => 'YES_NO',
             _('Summary Only') => 'YES_NO',
             _('Suppress Zeros') => 'YES_NO',
             _('Graphics') => 'GRAPHIC',
