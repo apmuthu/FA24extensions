@@ -188,6 +188,7 @@ function print_inventory_sales()
 
 	$res = getTransactions($cat, $supplier, $item_type, $sales_type, $from, $to);
 	$total = $total_cost = $total_net = 0.0;
+    $total_qty = 0;
 	while ($trans=db_fetch($res))
 	{
         $unit_cost = trans_qty_unit_cost($trans['stock_id'], null, $from, $to, false);
@@ -204,12 +205,14 @@ function print_inventory_sales()
 		$rep->AmountCol(5, 6, $trans['amount'] - $cost, $dec);
 		$rep->fontSize += 2;
 		$total += $trans['amount'];
+		$total_qty += $trans['quantity'];
 		$total_cost += $cost;
 		$total_net += $trans['amount'] - $cost;
 	}
 	$rep->Line($rep->row  - 4);
 	$rep->NewLine(2, 3);
-	$rep->TextCol(0, 4, _('Total'));
+	$rep->TextCol(0, 3, _('Total'));
+	$rep->AmountCol(2, 3, $total_qty, $dec);
 	$rep->AmountCol(3, 4, $total, $dec);
 	$rep->AmountCol(4, 5, $total_cost, $dec);
 	$rep->AmountCol(5, 6, $total_net, $dec);
