@@ -37,7 +37,10 @@ page(_($help_context = "Quick Report"), false, false, '', $js, false, '', true);
 //----------------------------------------------------------------------------------------------------
 // Ajax updates
 //
-if (get_post('Show') || get_post('person_id'))
+if (get_post('Show')
+    || list_updated('account')
+    || list_updated('person_type')
+    || list_updated('person_id'))
 {
 	$Ajax->activate('trans_tbl');
 }
@@ -90,8 +93,8 @@ function gl_inquiry_controls()
 	small_amount_cells(_("Amount max:"), 'amount_max', null, " ");
 
     if (!isset($_POST['person_type']))
-        $_POST['person_type'] = PT_MISC;
-    payment_person_types_list_cells( _("Person Type:"), 'person_type', $_POST['person_type'], true);
+        $_POST['person_type'] = '';
+    payment_person_types_list_cells( _("Person Type:"), 'person_type', $_POST['person_type'], true, true);
     if (list_updated('person_type')) {
         unset($_POST['person_id']);
         $Ajax->activate('header');
@@ -99,8 +102,11 @@ function gl_inquiry_controls()
 
     switch ($_POST['person_type'])
     {
-        case PT_MISC :
+        case '' :
             hidden('person_id');
+            break;
+        case PT_MISC :
+            text_cells_ex(_("Name:"), 'person_id', 40, 50);
             break;
         case PT_SUPPLIER :
             supplier_list_cells(_("Supplier:"), 'person_id', null, false, true, false, true);
@@ -252,6 +258,15 @@ function show_results()
     $myrow = null;
     $acct = null;
     $split = false;
+
+    // TEMPORARY: this needs to be converted to db_pager to prevent ajax timeouts
+    if (db_num_rows($result) > 5000) {
+        db_seek($result, db_num_rows($result) - 5000);
+        alt_table_row_color($k);
+        label_cell("Earlier data is not shown for performance reasons.  Adjust search criteria to reduce number of rows.", "align=center colspan=100%");
+        end_row();
+    }
+
 	while (($row2 = db_fetch($result)) || $myrow != null)
 	{
         if ($myrow == null) {
@@ -345,8 +360,9 @@ gl_inquiry_controls();
 div_start('trans_tbl');
 
 if (get_post('Show')
-    || get_post('account')
-    || get_post('person_id'))
+    || list_updated('account')
+    || list_updated('person_type')
+    || list_updated('person_id'))
     show_results();
 
 div_end();
