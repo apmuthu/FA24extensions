@@ -1,0 +1,11 @@
+Package: rep_dr0442
+Description: Colorado DR0442 Excise Tax Report
+Name: Colorado DR0442 Excise Tax Report
+Filename: rep_dr0442
+Author: Joe Hunt <joe.hunt.consulting@gmail.com>
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>
+Homepage: frontaccounting.com
+Type: extension
+InstallPath: modules/rep_dr0442
+Version: 2.4.0-1
+
