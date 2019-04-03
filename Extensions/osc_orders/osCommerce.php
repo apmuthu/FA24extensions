@@ -201,7 +201,7 @@ function get_sales_point_by_name($name)
         return db_fetch($result);
 }
 
-function addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $barcode)
+function addItemToFA($osc_id, $products_name, $desc, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $barcode)
 {
         $inactive = ($products_status == 0 ? 1 : 0);
         $sql    = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($osc_id);
@@ -211,7 +211,7 @@ function addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $pro
             $sql = "INSERT INTO ".TB_PREF."stock_master (stock_id, description, long_description, category_id,
                     tax_type_id, units, mb_flag, sales_account, inventory_account, cogs_account,
                     adjustment_account, wip_account, dimension_id, dimension2_id, inactive, no_sale, no_purchase)
-                    VALUES ('$osc_id', " . db_escape($products_name) . ", '',
+                    VALUES ('$osc_id', " . db_escape($products_name) . ", " . db_escape($desc) . ",
                     '$cat', '$tax_type_id', '{$_POST['units']}', '$mb_flag',
                     '{$_POST['sales_account']}', '{$_POST['inventory_account']}', '{$_POST['cogs_account']}',
                     '{$_POST['adjustment_account']}', '{$_POST['wip_account']}', '{$_POST['dimension_id']}', '{$_POST['dimension2_id']}', '$inactive', '$no_sale', '$no_purchase')";
@@ -233,7 +233,7 @@ function addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $pro
             // Conversely, product name, category, tax class are controlled
             // by osCommerce so it is pointless to change them
             // in FA, as they will be overwritten.
-            $sql = "UPDATE ".TB_PREF."stock_master SET description=" . db_escape($products_name) .", category_id='$cat', tax_type_id='$tax_type_id'
+            $sql = "UPDATE ".TB_PREF."stock_master SET description=" . db_escape($products_name) .", long_description=" . db_escape($desc) . ", category_id='$cat', tax_type_id='$tax_type_id'
                 WHERE stock_id=" . db_escape($osc_id);
 
             db_query($sql, "The item could not be updated");
@@ -1159,7 +1159,7 @@ display_notification($sql);
             $action = 'pupdate';
         }
         if ($action == 'i_import') { // Item Import
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, CONCAT(pd.products_description, ' (wt:', p.products_weight, ')') AS description, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
@@ -1167,6 +1167,7 @@ display_notification($sql);
                 // default FA iso-8859-1 requires utf8_decode
                 // $products_name = utf8_decode($pp['products_name']);
                 $products_name = $pp['products_name'];
+                $description = $pp['description'];
                 $products_price = $pp['products_price'];
                 $products_quantity = $pp['products_quantity'];
                 $products_status = $pp['products_status'];
@@ -1214,7 +1215,7 @@ display_notification($sql);
                     $no_purchase = $row['dflt_no_purchase'];
                 }
 
-                addItemToFA($osc_id, $products_name, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $pp['products_barcode']);
+                addItemToFA($osc_id, $products_name, $description, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $pp['products_barcode']);
 
                 // Check for product attributes
                 // FA item number like oscXXXX-AAAA
@@ -1223,7 +1224,7 @@ display_notification($sql);
 
                 $pa_result = osc_dbQuery($sql, true);
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
-                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], $cat, $tax_type_id, $mb_flag, $pa['options_values_price'], $products_status, $no_sale, $no_purchase, $pa['options_barcode']);
+                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], '', $cat, $tax_type_id, $mb_flag, $pa['options_values_price'], $products_status, $no_sale, $no_purchase, $pa['options_barcode']);
                 }
                 mysqli_free_result($pa_result);
             }
