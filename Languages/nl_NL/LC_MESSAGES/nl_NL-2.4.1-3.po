@@ -4,6 +4,7 @@
 # Erwin de Bruin <erwin@mpe-solutions.nl>, 2015.
 # 
 # Translators:
+# Stefan <phpfan@xs4all.nl>, 2019
 # Ap.Muthu <apmuthu@usa.net>, 2019
 # 
 #, fuzzy
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: FrontAccounting 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 20:11+0100\n"
-"PO-Revision-Date: 2019-04-20 09:39+0530\n"
-"Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2019\n"
+"PO-Revision-Date: 2019-04-21 16:39+0000\n"
+"Last-Translator: Stefan <phpfan@xs4all.nl>, 2019\n"
 "Language-Team: Dutch (Netherlands) (https://www.transifex.com/gnuacademy/teams/55037/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -528,15 +529,15 @@ msgstr "Belastingperioden moeten een positief nummer zijn."
 
 #: admin/company_preferences.php:47
 msgid "Tax Last Periods must be positive number."
-msgstr ""
+msgstr "Laatste belastingperioden moeten een positief getal zijn."
 
 #: admin/company_preferences.php:53
 msgid "Round Calculated field must be a positive number."
-msgstr ""
+msgstr "Het afgeronde berekende veld moet een positief getal zijn."
 
 #: admin/company_preferences.php:59
 msgid "Add Price from Std Cost field must be number."
-msgstr ""
+msgstr "De toe te voegen prijs uit het veld Std-kosten moet een nummer zijn."
 
 #: admin/company_preferences.php:70
 msgid "Error uploading logo file."
@@ -644,15 +645,15 @@ msgstr "Vermeld tijdzone op rapportages:"
 
 #: admin/company_preferences.php:245
 msgid "Company Logo on Reports"
-msgstr ""
+msgstr "Bedrijfslogo op rapportages"
 
 #: admin/company_preferences.php:246
 msgid "Use Barcodes on Stocks"
-msgstr ""
+msgstr "Gebruik streepjescodes op voorraden"
 
 #: admin/company_preferences.php:247
 msgid "Auto Increase of Document References"
-msgstr ""
+msgstr "Automatische verhoging van documentverwijzingen"
 
 #: admin/company_preferences.php:248
 msgid "Database Scheme Version"
@@ -684,7 +685,7 @@ msgstr "maanden terug"
 
 #: admin/company_preferences.php:256
 msgid "Put alternative Tax Include on Docs"
-msgstr ""
+msgstr "Plaats alternatieve btw-tarief op documenten"
 
 #: admin/company_preferences.php:257
 msgid "Suppress Tax Rates on Docs"
@@ -730,15 +731,15 @@ msgstr "Gebruik projectboekhouding:"
 
 #: admin/company_preferences.php:274
 msgid "User Interface Options"
-msgstr ""
+msgstr "Gebruikersinterface-opties"
 
 #: admin/company_preferences.php:276
 msgid "Short Name and Name in List"
-msgstr ""
+msgstr "Korte naam en naam in lijst"
 
 #: admin/company_preferences.php:277
 msgid "Open Print Dialog Direct on Reports"
-msgstr ""
+msgstr "Open het afdrukvenster rechtstreeks vanuit de rapporten"
 
 #: admin/company_preferences.php:278
 msgid "Search Item List"
@@ -795,7 +796,7 @@ msgstr "De database instellingen zijn niet ingevoerd."
 
 #: admin/create_coy.php:48
 msgid "Database port has to be numeric or empty."
-msgstr ""
+msgstr "De databasepoort moet numeriek of leeg zijn."
 
 #: admin/create_coy.php:59
 msgid "This database settings are already used by another company."
@@ -891,7 +892,7 @@ msgstr "Server"
 
 #: admin/create_coy.php:247
 msgid "Database Port"
-msgstr ""
+msgstr "Databasepoort"
 
 #: admin/create_coy.php:247 admin/create_coy.php:333 admin/create_coy.php:344
 msgid "Database User"
@@ -963,6 +964,7 @@ msgstr ""
 #: admin/create_coy.php:284
 msgid "Set Only Port value if you cannot use the default port 3306."
 msgstr ""
+"Stel alleen de poortwaarde in als u standaardpoort 3306 niet kunt gebruiken."
 
 #: admin/create_coy.php:331 admin/create_coy.php:342 admin/printers.php:84
 msgid "Host"
@@ -1057,7 +1059,7 @@ msgstr "Categorie omschrijving:"
 #: admin/dashboard.php:27 themes/default/renderer.php:70
 #: themes/default/renderer.php:78
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: admin/display_prefs.php:16
 msgid "Display Setup"
@@ -1121,7 +1123,7 @@ msgstr "Scheidingsteken decimalen:"
 
 #: admin/display_prefs.php:98
 msgid "Use Date Picker"
-msgstr ""
+msgstr "Gebruik datumkiezer"
 
 #: admin/display_prefs.php:103
 msgid "Reports"
@@ -1129,7 +1131,7 @@ msgstr "Rapportage ID"
 
 #: admin/display_prefs.php:105
 msgid "Save Report Selection Days:"
-msgstr ""
+msgstr "Bewaar selectiedagen:"
 
 #: admin/display_prefs.php:107
 msgid "Default Report Destination:"
@@ -1137,7 +1139,7 @@ msgstr "Standaard printer lokatie"
 
 #: admin/display_prefs.php:108
 msgid "Excel"
-msgstr ""
+msgstr "Excel"
 
 #: admin/display_prefs.php:108 reporting/includes/reports_classes.inc:235
 msgid "PDF/Printer"
@@ -1351,19 +1353,19 @@ msgstr "Het interval van de vervaldagreeks moet tussen 0 en 100 liggen."
 
 #: admin/gl_setup.php:41
 msgid "Quote Valid Days is not valid number."
-msgstr ""
+msgstr "De geldigheidsduur van de offerte is geen geldig getal."
 
 #: admin/gl_setup.php:48
 msgid "Delivery Required By is not valid number."
-msgstr ""
+msgstr "'Bezorging vereist door' is geen geldig getal."
 
 #: admin/gl_setup.php:55
 msgid "Receival Required By is not valid number."
-msgstr ""
+msgstr "'Ontvangst vereist door' is geen geldig nummer."
 
 #: admin/gl_setup.php:62
 msgid "Work Order Required By After is not valid number."
-msgstr ""
+msgstr "'Aanmaken werkorder nodig na' is geen geldig getal."
 
 #: admin/gl_setup.php:69
 msgid "The delivery over-receive allowance must be between 0 and 100."
@@ -1430,7 +1432,7 @@ msgstr "Rekening bankkosten:"
 
 #: admin/gl_setup.php:203
 msgid "Tax Algorithm:"
-msgstr ""
+msgstr "Btw-tarief:"
 
 #: admin/gl_setup.php:207
 msgid "Dimension Defaults"
@@ -1609,7 +1611,7 @@ msgstr "Waarschuwing: dit kan leiden tot vertraagde boekingen"
 
 #: admin/gl_setup.php:274
 msgid "No zero-amounts (Service):"
-msgstr ""
+msgstr "Geen nulbedragen (dienst):"
 
 #: admin/gl_setup.php:276
 msgid "Location Notifications:"
@@ -1641,7 +1643,7 @@ msgstr "Rekening voorraadverschillen:"
 
 #: admin/gl_setup.php:289 inventory/manage/items.php:482
 msgid "WIP Account:"
-msgstr ""
+msgstr "WIP-account:"
 
 #: admin/gl_setup.php:293 sql/alter2.4rc1.php:34
 msgid "Fixed Assets Defaults"
@@ -1649,7 +1651,7 @@ msgstr "Standaardinstellingen voorraad"
 
 #: admin/gl_setup.php:295 sql/alter2.4rc1.php:35
 msgid "Loss On Asset Disposal Account:"
-msgstr ""
+msgstr "Verlies op de rekening voor het afstoten van activa:"
 
 #: admin/gl_setup.php:297
 msgid "Depreciation Period:"
@@ -1685,7 +1687,7 @@ msgstr "Het geselecteerde rekeningschema is verwijderd."
 
 #: admin/inst_chart.php:57
 msgid "No optional chart of accounts is currently available."
-msgstr ""
+msgstr "Er is momenteel geen optioneel rekeningschema beschikbaar."
 
 #: admin/inst_chart.php:62
 msgid "Chart"
@@ -1862,11 +1864,14 @@ msgid ""
 "Package '%s' is incompatible with current application version and cannot be "
 "activated.\n"
 msgstr ""
+"De module '1%s' is niet compatibel met de huidige versie van de applicatie  "
+"en kan niet worden geactiveerd.\n"
 
 #: admin/inst_module.php:228
 #, php-format
 msgid "Check Install/Activate page for newer package version."
 msgstr ""
+"Controleer de installatie-/activeringspagina voor een nieuwere versie."
 
 #: admin/inst_module.php:244
 msgid "Status change for some extensions failed."
@@ -1882,7 +1887,7 @@ msgstr "Extenties:"
 
 #: admin/inst_module.php:277
 msgid "No optional extension module is currently available."
-msgstr ""
+msgstr "Er is momenteel geen optionele uitbreidingsmodule beschikbaar."
 
 #: admin/inst_theme.php:23
 msgid "Install Themes"
@@ -1898,7 +1903,7 @@ msgstr "Thema"
 
 #: admin/inst_theme.php:61
 msgid "No optional theme is currently available."
-msgstr ""
+msgstr "Er is momenteel geen optioneel thema beschikbaar."
 
 #: admin/inst_upgrade.php:19
 msgid "Software Upgrade"
@@ -1910,7 +1915,7 @@ msgstr "De geselecteerde administratie is verwijderd"
 
 #: admin/inst_upgrade.php:43
 msgid "Company upgraded successfully."
-msgstr ""
+msgstr "Bedrijf succesvol geüpgraded."
 
 #: admin/inst_upgrade.php:63
 msgid "Table set"
@@ -1934,7 +1939,7 @@ msgstr "Bekijk"
 
 #: admin/inst_upgrade.php:84
 msgid "Clear"
-msgstr ""
+msgstr "Opschonen"
 
 #: admin/inst_upgrade.php:84
 msgid "Clear log"
@@ -1942,7 +1947,7 @@ msgstr "Gebruikersnaam"
 
 #: admin/inst_upgrade.php:85
 msgid "Do you really want to clear this upgrade log?"
-msgstr ""
+msgstr "Wilt u het logbestand inderdaad opschonen?"
 
 #: admin/inst_upgrade.php:95
 msgid "Up to date"
@@ -2625,7 +2630,7 @@ msgstr "Boekingstype:"
 
 #: admin/void_transaction.php:194
 msgid "Marked transactions will be voided."
-msgstr ""
+msgstr "Gemarkeerde boekingen zullen worden teruggeboekt."
 
 #: admin/void_transaction.php:211
 msgid "Transaction #:"
@@ -2664,6 +2669,8 @@ msgid ""
 "The void cannot be processed because there is an insufficient quantity for "
 "item:"
 msgstr ""
+"De terugboeking kan niet worden verwerkt omdat er onvoldoende voorraad is "
+"voor product:"
 
 #: admin/void_transaction.php:242 inventory/reorder_level.php:71
 #: inventory/inquiry/stock_movements.php:109
@@ -2795,6 +2802,8 @@ msgid ""
 "This is new format backup file which cannot be restored on database not "
 "migrated to utf8."
 msgstr ""
+"Dit is een back-upbestand met een nieuwe indeling die niet kan worden "
+"hersteld in een database die niet gemigreerd is naar utf8."
 
 #: admin/db/maintenance_db.inc:486
 #, php-format
@@ -2819,12 +2828,17 @@ msgstr "Deze boeking werd tegengeboekt."
 msgid ""
 "This transaction cannot be voided because it is part of Work Order %s costs."
 msgstr ""
+"Deze boeking kan niet worden teruggedraaid omdat deze onderdeel is van "
+"werkorder %s."
 
 #: admin/db/voiding_db.inc:37 admin/db/voiding_db.inc:46
 msgid ""
 "This transaction cannot be voided because the operation would decrease "
 "account balance below allowed limit in some point of account history."
 msgstr ""
+"Deze transactie kan niet ongeldig worden verklaard omdat de bewerking het "
+"rekeningsaldo onder de toegestane limiet zou verlagen in enig punt van de "
+"accountgeschiedenis."
 
 #: admin/db/voiding_db.inc:49
 msgid "This invoice cannot be voided because it was already credited."
@@ -2845,7 +2859,7 @@ msgstr "Dit project kan niet worden verwijderd omdat het al verwerkt is."
 
 #: admin/db/voiding_db.inc:83 admin/db/voiding_db.inc:92
 msgid "Error encountered when voiding transaction."
-msgstr ""
+msgstr "Er is een fout opgetreden bij het tegenboeken van de transactie."
 
 #: admin/db/voiding_db.inc:105 admin/db/voiding_db.inc:113
 #, php-format
@@ -2853,6 +2867,8 @@ msgid ""
 "Selected document cannot be voided because related Work Order %s is already "
 "closed."
 msgstr ""
+"Het geselecteerde document kan niet ongeldig worden verklaard omdat de "
+"gerelateerde werkorder %s al is gesloten."
 
 #: admin/db/voiding_db.inc:127 sales/includes/db/sales_invoice_db.inc:250
 msgid "Voided."
@@ -3017,7 +3033,7 @@ msgstr "Activa"
 
 #: applications/fixed_assets.php:19
 msgid "Fixed Assets &Purchase"
-msgstr ""
+msgstr "Aankoop vaste activa"
 
 #: applications/fixed_assets.php:21
 msgid "Fixed Assets Location &Transfers"
@@ -3025,11 +3041,11 @@ msgstr "Invoeren voorraad &relocatie"
 
 #: applications/fixed_assets.php:23
 msgid "Fixed Assets &Disposal"
-msgstr ""
+msgstr "Vaste activa Verwij&dering"
 
 #: applications/fixed_assets.php:25
 msgid "Fixed Assets &Sale"
-msgstr ""
+msgstr "Verkoop van vaste activa"
 
 #: applications/fixed_assets.php:27
 msgid "Process &Depreciation"
@@ -3057,11 +3073,11 @@ msgstr "Op locatie"
 
 #: applications/fixed_assets.php:49
 msgid "Fixed Assets &Categories"
-msgstr ""
+msgstr "&Categorieën vaste activa"
 
 #: applications/fixed_assets.php:51
 msgid "Fixed Assets Cl&asses"
-msgstr ""
+msgstr "Vaste activakl&assen"
 
 #: applications/generalledger.php:16
 msgid "&Banking and General Ledger"
@@ -3481,7 +3497,7 @@ msgstr "Secleteer een bestaand project"
 
 #: dimensions/dimension_entry.php:99
 msgid "&Add Attachment"
-msgstr ""
+msgstr "Bijlage toevoegen"
 
 #: dimensions/dimension_entry.php:121
 msgid "The dimension name must be entered."
@@ -4043,7 +4059,7 @@ msgstr "Aansluiten"
 
 #: gl/bank_account_reconcile.php:285
 msgid "Reconcile All"
-msgstr ""
+msgstr "Alles aansluiten"
 
 #: gl/bank_transfer.php:30
 msgid "Modify Bank Account Transfer"
@@ -4458,16 +4474,21 @@ msgid ""
 "Check tax register records before processing transaction or switch off "
 "'Include in tax register' option."
 msgstr ""
+"Controleer de belastingtabel voordat u de transactie verwerkt of schakel de "
+"optie 'Opnemen in belastingtabel' uit."
 
 #: gl/gl_journal.php:286
 msgid ""
 "Cannot determine tax register to be used. You have to make at least one "
 "posting either to tax or customer/supplier account to use tax register."
 msgstr ""
+"Kan niet bepalen welke belastingtabel moet worden gebruikt. U moet ten "
+"minste één boeking uitvoeren op een belastingnummer of een "
+"klant-/leveranciersaccount om de belastingtabel te gebruiken."
 
 #: gl/gl_journal.php:355 gl/manage/gl_quick_entries.php:121
 msgid "You must select GL account."
-msgstr ""
+msgstr "U moet een grootboekrekening selecteren."
 
 #: gl/gl_journal.php:361
 msgid "You must select subledger account."
@@ -4518,7 +4539,7 @@ msgstr "Journaalregels"
 
 #: gl/gl_journal.php:548
 msgid "Tax register record"
-msgstr ""
+msgstr "Belastingregister record"
 
 #: gl/gl_journal.php:551
 msgid "VAT date:"
@@ -4609,7 +4630,7 @@ msgstr "Vermogen"
 
 #: gl/inquiry/bank_inquiry.php:29
 msgid "Bank Account Inquiry"
-msgstr ""
+msgstr "Bankrekeningonderzoek"
 
 #: gl/inquiry/bank_inquiry.php:79 gl/inquiry/gl_account_inquiry.php:164
 #: reporting/rep601.php:104 reporting/rep602.php:103 reporting/rep704.php:143
@@ -4956,7 +4977,7 @@ msgstr ""
 
 #: gl/manage/close_period.php:51
 msgid "You are not allowed to reopen already closed transactions."
-msgstr ""
+msgstr "U bent niet geautoriseerd om reeds gesloten transacties te heropenen."
 
 #: gl/manage/close_period.php:69
 #, php-format
@@ -4964,6 +4985,8 @@ msgid ""
 "All transactions resulting in GL accounts changes up to %s has been closed "
 "for further edition."
 msgstr ""
+"Alle transacties die resulteren in wijzigingen op grootboekrekeningen tot %s"
+" zijn gesloten voor verdere bewerking."
 
 #: gl/manage/close_period.php:88
 msgid ""
@@ -4971,10 +4994,13 @@ msgid ""
 "\tand disable edition of already entered transactions up to specified date.<br>\n"
 "\tOnly transactions which can generate GL postings are subject to the constraint."
 msgstr ""
+"Met behulp van deze functie kunt u voorkomen dat u nieuwe transacties  aanmaakt <br>\n"
+"en deactiveer de bewerking van reeds ingevoerde transacties tot de gespecificeerde datum. <br>\n"
+"Alleen transacties die GL-boekingen kunnen genereren, zijn onderworpen aan de beperking."
 
 #: gl/manage/close_period.php:101
 msgid "End date of closing period:"
-msgstr ""
+msgstr "Einddatum van de sluitingsperiode:"
 
 #: gl/manage/close_period.php:104
 msgid "Close Transactions"
@@ -5467,7 +5493,7 @@ msgstr "Bedrag"
 
 #: gl/manage/gl_quick_entries.php:190 gl/manage/gl_quick_entries.php:231
 msgid "Usage"
-msgstr ""
+msgstr "Gebruik"
 
 #: gl/manage/gl_quick_entries.php:233
 msgid "Entry Type"
@@ -5878,7 +5904,7 @@ msgstr "Rapportagedatum"
 
 #: gl/includes/ui/gl_journal_ui.inc:45
 msgid "Source ref:"
-msgstr ""
+msgstr "Bron ref:"
 
 #: gl/includes/ui/gl_journal_ui.inc:57 includes/sysnames.inc:103
 msgid "Quick Entry"
@@ -5894,11 +5920,11 @@ msgstr "Bijkomende kosten:"
 
 #: gl/includes/ui/gl_journal_ui.inc:81
 msgid "Include in tax register:"
-msgstr ""
+msgstr "Opnemen in belastingregister:"
 
 #: gl/includes/ui/gl_journal_ui.inc:88
 msgid "Reconciled:"
-msgstr ""
+msgstr "verzoend"
 
 #: gl/includes/ui/gl_journal_ui.inc:161
 msgid "Edit journal line"
@@ -6320,11 +6346,11 @@ msgstr "Onderhoud artikelen"
 
 #: includes/access_levels.inc:201
 msgid "Fixed Asset categories"
-msgstr ""
+msgstr "Vaste activacategorieën"
 
 #: includes/access_levels.inc:202
 msgid "Fixed Asset classes"
-msgstr ""
+msgstr "Vaste activa klasse"
 
 #: includes/access_levels.inc:204
 msgid "Fixed Asset transactions view"
@@ -6338,7 +6364,7 @@ msgstr "Invoeren voorraad relocaties"
 
 #: includes/access_levels.inc:206
 msgid "Fixed Asset disposals"
-msgstr ""
+msgstr "Vaste Activa verkopen"
 
 #: includes/access_levels.inc:207 inventory/manage/items.php:403
 msgid "Depreciation"
@@ -6621,7 +6647,7 @@ msgstr "Leverancier"
 
 #: includes/dashboard.inc:103
 msgid "Purchase"
-msgstr ""
+msgstr "Inkoop"
 
 #: includes/dashboard.inc:120 includes/dashboard.inc:165
 #: includes/ui/ui_controls.inc:512 includes/ui/ui_controls.inc:514
@@ -6640,36 +6666,36 @@ msgstr "Kosten"
 
 #: includes/dashboard.inc:134
 msgid "Performance"
-msgstr ""
+msgstr "Prestatie"
 
 #: includes/dashboard.inc:162
 msgid "Purchases"
-msgstr ""
+msgstr "Inkopen"
 
 #: includes/dashboard.inc:187
 #, php-format
 msgid "Top %s customers in fiscal year"
-msgstr ""
+msgstr "Top %s klanten in boekjaar"
 
 #: includes/dashboard.inc:224
 #, php-format
 msgid "Top %s suppliers in fiscal year"
-msgstr ""
+msgstr "Top %s leveranciers in boekjaar"
 
 #: includes/dashboard.inc:285
 #, php-format
 msgid "Top %s Manufactured Items in fiscal year"
-msgstr ""
+msgstr "Top %s geproduceerde producten in boekjaar"
 
 #: includes/dashboard.inc:287
 #, php-format
 msgid "Top %s Fixed Assets"
-msgstr ""
+msgstr "Top %s vaste activa"
 
 #: includes/dashboard.inc:289
 #, php-format
 msgid "Top %s Sold Items in fiscal year"
-msgstr ""
+msgstr "Top %s verkochte artikelen in boekjaar"
 
 #: includes/dashboard.inc:292 includes/dashboard.inc:294
 #: manufacturing/search_work_orders.php:161
@@ -6710,23 +6736,23 @@ msgstr "Aantal"
 #: includes/dashboard.inc:334
 #, php-format
 msgid "Top %s Dimensions in fiscal year"
-msgstr ""
+msgstr "Top %s projecten in boekjaar"
 
 #: includes/dashboard.inc:372
 msgid "Class Balances"
-msgstr ""
+msgstr "Klasse Saldi"
 
 #: includes/dashboard.inc:438
 msgid "Week"
-msgstr ""
+msgstr "Week"
 
 #: includes/dashboard.inc:484
 msgid " overdue Sales Invoices"
-msgstr ""
+msgstr "Achterstallige verkoopfacturen"
 
 #: includes/dashboard.inc:486 includes/dashboard.inc:571
 msgid "Ref."
-msgstr ""
+msgstr "Ref."
 
 #: includes/dashboard.inc:486 includes/dashboard.inc:526
 #: reporting/rep105.php:110 reporting/rep106.php:89 reporting/rep112.php:180
@@ -6766,7 +6792,7 @@ msgstr "dagen"
 
 #: includes/dashboard.inc:524
 msgid "Overdue Recurrent Invoices"
-msgstr ""
+msgstr "Achterstallige herhalingsfacturen"
 
 #: includes/dashboard.inc:526 sales/create_recurrent_invoices.php:203
 #: sales/manage/recurrent_invoices.php:128
@@ -6779,20 +6805,21 @@ msgstr "Directe factuur"
 
 #: includes/dashboard.inc:569
 msgid " overdue Purchase Invoices"
-msgstr ""
+msgstr "Achterstallige inkoopfacturen"
 
 #: includes/dashboard.inc:604
 msgid "Bank Account Balances"
-msgstr ""
+msgstr "Banksaldo"
 
 #: includes/data_checks.inc:612
 #, php-format
 msgid "%s #%s is closed for further edition."
-msgstr ""
+msgstr "%s #%s is gesloten voor verdere editie."
 
 #: includes/data_checks.inc:654
 msgid "You have no edit access to transactions created by other users."
 msgstr ""
+"U heeft geen rechten om transacties van andere gebruikers te bewerken."
 
 #: includes/data_checks.inc:669
 msgid "The entered reference is invalid."
@@ -6807,7 +6834,7 @@ msgstr "De ingevoerde projectcode is reeds in gebruik."
 #: includes/errors.inc:94
 #, php-format
 msgid "Unhandled exception [%s]: %s."
-msgstr ""
+msgstr "Onbehandelde uitzondering [%s]: %s."
 
 #: includes/errors.inc:132
 msgid "in file"
@@ -6901,11 +6928,11 @@ msgstr "Ongeldige datum ingevoerd"
 #: includes/references.inc:113
 #, php-format
 msgid "Missing refline context data: '%s'"
-msgstr ""
+msgstr "Ontbrekende refline contextgegevens: '%s'"
 
 #: includes/references.inc:156
 msgid "Missing numeric placeholder in refline definition."
-msgstr ""
+msgstr "Ontbrekende numerieke tijdelijke aanduiding in refline definitie."
 
 #: includes/session.inc:138
 msgid "Incorrect Password"
@@ -6937,6 +6964,8 @@ msgid ""
 "The email address does not exist in the system, or is used by more than one "
 "user."
 msgstr ""
+"Het e-mailadres bestaat niet in het systeem of wordt door meer dan één "
+"gebruiker gebruikt."
 
 #: includes/session.inc:156
 msgid ""
@@ -7087,7 +7116,7 @@ msgstr "Kosten actualiseren"
 
 #: includes/sysnames.inc:47 inventory/adjustments.php:32
 msgid "Fixed Assets Disposal"
-msgstr ""
+msgstr "Vaste Activa verkopen"
 
 #: includes/sysnames.inc:48
 msgid "Fixed Assets Revaluation"
@@ -7311,11 +7340,11 @@ msgstr "op regel"
 
 #: includes/sysnames.inc:164
 msgid "Sum of the Year Digits"
-msgstr ""
+msgstr "Som van de jaarcijfers"
 
 #: includes/sysnames.inc:165
 msgid "One-time"
-msgstr ""
+msgstr "Eenmalig"
 
 #: includes/sysnames.inc:171 manufacturing/search_work_orders.php:163
 #: manufacturing/includes/manufacturing_ui.inc:293 reporting/rep402.php:134
@@ -7356,7 +7385,7 @@ msgstr "Dagen (of dag in de volgende maand):"
 
 #: includes/sysnames.inc:201
 msgid "Sum per line taxes"
-msgstr ""
+msgstr "Btw per regel"
 
 #: includes/sysnames.inc:202
 msgid "Taxes from totals"
@@ -7412,63 +7441,63 @@ msgstr "Dec"
 
 #: includes/sysnames.inc:220
 msgid "Unicode (multilanguage)"
-msgstr ""
+msgstr "Unicode (meertalig)"
 
 #: includes/sysnames.inc:221
 msgid "Icelandic"
-msgstr ""
+msgstr "IJslands"
 
 #: includes/sysnames.inc:222
 msgid "Latvian"
-msgstr ""
+msgstr "Lets"
 
 #: includes/sysnames.inc:223
 msgid "Romanian"
-msgstr ""
+msgstr "Roemeens"
 
 #: includes/sysnames.inc:224
 msgid "Slovenian"
-msgstr ""
+msgstr "Sloveens"
 
 #: includes/sysnames.inc:225
 msgid "Polish"
-msgstr ""
+msgstr "Pools"
 
 #: includes/sysnames.inc:226
 msgid "Estonian"
-msgstr ""
+msgstr "Estlands"
 
 #: includes/sysnames.inc:227
 msgid "Spanish"
-msgstr ""
+msgstr "Spaans"
 
 #: includes/sysnames.inc:228
 msgid "Swedish"
-msgstr ""
+msgstr "Zweeds"
 
 #: includes/sysnames.inc:229
 msgid "Turkish"
-msgstr ""
+msgstr "Turks"
 
 #: includes/sysnames.inc:230
 msgid "Czech"
-msgstr ""
+msgstr "Tsjechisch"
 
 #: includes/sysnames.inc:231
 msgid "Danish"
-msgstr ""
+msgstr "Deens"
 
 #: includes/sysnames.inc:232
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litouws"
 
 #: includes/sysnames.inc:233
 msgid "Slovak"
-msgstr ""
+msgstr "Slowaaks"
 
 #: includes/sysnames.inc:234
 msgid "Spanish (alternative)"
-msgstr ""
+msgstr "Spaans (alternatief)"
 
 #: includes/sysnames.inc:235
 msgid "Persian"
@@ -7476,15 +7505,15 @@ msgstr "Versie"
 
 #: includes/sysnames.inc:236
 msgid "Hungarian"
-msgstr ""
+msgstr "Hongaars"
 
 #: includes/sysnames.inc:237
 msgid "French"
-msgstr ""
+msgstr "Frans"
 
 #: includes/sysnames.inc:238
 msgid "Italian"
-msgstr ""
+msgstr "Italiaans"
 
 #: includes/system_tests.inc:15 includes/ui/ui_view.inc:210
 #: reporting/rep705.php:251 reporting/rep705.php:262 reporting/rep705.php:271
@@ -7761,12 +7790,12 @@ msgstr ""
 
 #: includes/db/class.data_set.inc:77
 msgid "Invalid validator string"
-msgstr ""
+msgstr "Ongeldige validatiereeks"
 
 #: includes/db/class.data_set.inc:113
 #, php-format
 msgid "Input parameter '%s' have to be set."
-msgstr ""
+msgstr "Invoerparameter '%s' moet worden ingesteld."
 
 #: includes/db/class.data_set.inc:121
 #, php-format
@@ -7776,12 +7805,12 @@ msgstr "De naam van de printer kan niet leeg zijn"
 #: includes/db/class.data_set.inc:128
 #, php-format
 msgid "Parameter '%s' contains invalid characters."
-msgstr ""
+msgstr "Parameter '%s' bevat ongeldige tekens."
 
 #: includes/db/class.data_set.inc:134
 #, php-format
 msgid "Parameter '%s' has invalid value."
-msgstr ""
+msgstr "Parameter '%s' heeft een ongeldige waarde."
 
 #: includes/db/class.data_set.inc:277
 #, php-format
@@ -7790,12 +7819,12 @@ msgstr "Ongeldig wachtwoord ingevoerd."
 
 #: includes/db/class.data_set.inc:329
 msgid "Empty update data for table "
-msgstr ""
+msgstr "Lege updategegevens voor tabel "
 
 #: includes/db/class.data_set.inc:339 includes/db/class.data_set.inc:368
 #, php-format
 msgid "Invalid key for update '%s'"
-msgstr ""
+msgstr "Ongeldige sleutel voor update '%s'"
 
 #: includes/db/class.data_set.inc:376
 msgid "Cannot update record in "
@@ -7803,7 +7832,7 @@ msgstr "De banktransacties kunnen niet bijgewerkt worden."
 
 #: includes/db/class.data_set.inc:395
 msgid "Empty data set for insertion into "
-msgstr ""
+msgstr "Lege gegevensset om in te voegen in"
 
 #: includes/db/class.data_set.inc:401
 msgid "Cannot insert record into "
@@ -7811,17 +7840,19 @@ msgstr "Kan voorraad ID niet in artikel_codes invoeren"
 
 #: includes/db/class.data_set.inc:482
 msgid "Empty update data for array "
-msgstr ""
+msgstr "Lege updategegevens voor array"
 
 #: includes/db/class.data_set.inc:510
 msgid "Empty data for array "
-msgstr ""
+msgstr "Leeg gegevens voor array"
 
 #: includes/db/class.reflines_db.inc:22
 msgid ""
 "This prefix conflicts with another one already defined. Prefix have to be "
 "unambigous."
 msgstr ""
+"Dit voorvoegsel conflicteert met een ander dat al is gedefinieerd. "
+"Voorvoegsel moet ondubbelzinnig zijn."
 
 #: includes/db/class.reflines_db.inc:23
 msgid "Invalid template format."
@@ -7837,11 +7868,11 @@ msgstr "Het contact referentienummer moet ingevuld zijn."
 
 #: includes/db/class.reflines_db.inc:50
 msgid "You cannot use placeholders in refline prefix."
-msgstr ""
+msgstr "U kunt placeholders niet gebruiken in prefix refline."
 
 #: includes/db/class.reflines_db.inc:53
 msgid "Curly brackets does not balance."
-msgstr ""
+msgstr "De accolades zijn niet in evenwicht."
 
 #: includes/db/class.reflines_db.inc:67
 #, php-format
@@ -7849,17 +7880,23 @@ msgid ""
 "Invalid placeholder '%s'. Placeholders allowed for this transaction type "
 "are: %s."
 msgstr ""
+"Ongeldige aanduiding '%s'. Aanduidingen die zijn toegestaan voor dit "
+"transactietype zijn: %s."
 
 #: includes/db/class.reflines_db.inc:73
 msgid ""
 "Missing numeric placeholder. If you want to use template based references, "
 "you have to define numeric placeholder too."
 msgstr ""
+"Ontbrekende numerieke aanduiding. Als u op sjablonen gebaseerde verwijzingen"
+" wilt gebruiken, moet u ook een numerieke aanduiding definiëren."
 
 #: includes/db/class.reflines_db.inc:99
 msgid ""
 "Reference line which is default for any transaction type cannot be deleted."
 msgstr ""
+"De verwijzing die standaard is voor elk transactietype kan niet worden "
+"verwijderd."
 
 #: includes/db/class.reflines_db.inc:102
 msgid "Reference line cannot be deleted because it is already in use."
@@ -7962,11 +7999,11 @@ msgstr "Soort transactie"
 
 #: includes/ui/class.reflines_crud.inc:37
 msgid "Prefix"
-msgstr ""
+msgstr "Voorvoegsel"
 
 #: includes/ui/class.reflines_crud.inc:38
 msgid "Pattern"
-msgstr ""
+msgstr "Patroon"
 
 #: includes/ui/class.reflines_crud.inc:98
 msgid "Reference Pattern:"
@@ -7974,11 +8011,11 @@ msgstr "Referentie:"
 
 #: includes/ui/class.reflines_crud.inc:101
 msgid "Default for This Type:"
-msgstr ""
+msgstr "Standaard voor dit type:"
 
 #: includes/ui/class.reflines_crud.inc:103
 msgid "Set as Default for This Type:"
-msgstr ""
+msgstr "Instellen als standaard voor dit type:"
 
 #: includes/ui/contacts_view.inc:40
 msgid "Assignment"
@@ -8256,7 +8293,7 @@ msgstr "Verkoop facturen"
 
 #: includes/ui/ui_lists.inc:2140 includes/ui/ui_lists.inc:2173
 msgid "Unsettled transactions"
-msgstr ""
+msgstr "Niet-afgewikkelde transacties"
 
 #: includes/ui/ui_lists.inc:2141 includes/ui/ui_lists.inc:2157
 #: includes/ui/ui_lists.inc:2174 includes/ui/ui_view.inc:609
@@ -8340,15 +8377,15 @@ msgstr "Geen betalingslink"
 
 #: includes/ui/ui_lists.inc:2683
 msgid "Numeric"
-msgstr ""
+msgstr "Numeriek"
 
 #: includes/ui/ui_lists.inc:2683
 msgid "Alpha Numeric"
-msgstr ""
+msgstr "Alfanumeriek"
 
 #: includes/ui/ui_lists.inc:2683
 msgid "ALPHA NUMERIC"
-msgstr ""
+msgstr "ALFANUMERIEK"
 
 #: includes/ui/ui_lists.inc:2699
 msgid "All users"
@@ -8631,7 +8668,7 @@ msgstr "Product:"
 
 #: inventory/cost_update.php:133
 msgid "Unit cost"
-msgstr ""
+msgstr "Kosten per eenheid"
 
 #: inventory/cost_update.php:137
 msgid "Standard Labour Cost Per Unit"
@@ -9034,6 +9071,8 @@ msgstr ""
 msgid ""
 "Cannot delete this item because there are existing sales order items for it."
 msgstr ""
+"Kan dit item niet verwijderen omdat er bestaande verkooporders naar "
+"verwijzen."
 
 #: inventory/includes/db/items_db.inc:148
 msgid ""
@@ -9059,7 +9098,7 @@ msgstr "De prijs was %s en is veranderd in %s x aantal voor artikel '%s'"
 
 #: inventory/inquiry/stock_movements.php:30
 msgid "Fixed Assets Movement"
-msgstr ""
+msgstr "Wijzigingen in vaste activa"
 
 #: inventory/inquiry/stock_movements.php:32
 msgid "Inventory Item Movement"
@@ -9179,7 +9218,7 @@ msgstr "Opbrengsten / kosten rekening"
 
 #: inventory/manage/item_categories.php:119
 msgid "Depreciation/Disposal Account"
-msgstr ""
+msgstr "Account voor afschrijving / verwijdering"
 
 #: inventory/manage/item_categories.php:122
 msgid "Inventory Account"
@@ -9235,7 +9274,7 @@ msgstr "Standaard kasrekening"
 
 #: inventory/manage/item_categories.php:240 inventory/manage/items.php:465
 msgid "Depreciation/Disposal account:"
-msgstr ""
+msgstr "Account voor afschrijving / verwijdering"
 
 #: inventory/manage/item_categories.php:251
 msgid "Item Assembly Costs Account:"
@@ -9321,12 +9360,17 @@ msgid ""
 "There are no fixed asset categories defined in the system. At least one "
 "fixed asset category is required to add a fixed asset."
 msgstr ""
+"Er zijn geen vaste activacategorieën gedefinieerd in het systeem. Ten minste"
+" één categorie met vaste activa is vereist om een vast activum toe te "
+"voegen."
 
 #: inventory/manage/items.php:147
 msgid ""
 "There are no fixed asset classes defined in the system. At least one fixed "
 "asset class is required to add a fixed asset."
 msgstr ""
+"Er zijn geen vaste activaklassen gedefinieerd in het systeem. Ten minste één"
+" vaste activaklasse is vereist om een vast activum toe te voegen."
 
 #: inventory/manage/items.php:149
 msgid ""
@@ -9383,7 +9427,7 @@ msgstr "&Algemene instellingen"
 
 #: inventory/manage/items.php:334
 msgid "Generate EAN-8 Barcode"
-msgstr ""
+msgstr "Genereer EAN-8 barcode"
 
 #: inventory/manage/items.php:341 inventory/manage/items.php:351
 msgid "Item Code:"
@@ -9395,11 +9439,11 @@ msgstr "Aanpasbare omschrijving:"
 
 #: inventory/manage/items.php:405
 msgid "Fixed Asset Class"
-msgstr ""
+msgstr "Vaste activaklasse"
 
 #: inventory/manage/items.php:407
 msgid "Depreciation Method"
-msgstr ""
+msgstr "Afschrijvingsmethode"
 
 #: inventory/manage/items.php:418 inventory/manage/items.php:427
 msgid "Depreciation Rate"
@@ -9407,11 +9451,11 @@ msgstr "Locatienaam"
 
 #: inventory/manage/items.php:422
 msgid "Depreciation Years"
-msgstr ""
+msgstr "Afschrijvingsjaren"
 
 #: inventory/manage/items.php:422
 msgid "years"
-msgstr ""
+msgstr "jaren"
 
 #: inventory/manage/items.php:425
 msgid "Base Rate"
@@ -9423,7 +9467,7 @@ msgstr "Leverancier aanpassen"
 
 #: inventory/manage/items.php:434 inventory/manage/items.php:437
 msgid "Depreciation Start"
-msgstr ""
+msgstr "Begindatum afschrijving"
 
 #: inventory/manage/items.php:438
 msgid "Last Depreciation"
@@ -10169,15 +10213,15 @@ msgstr "Bekijk werkorderpunt"
 
 #: manufacturing/view/wo_costs_view.php:60 reporting/rep402.php:139
 msgid "Transaction"
-msgstr ""
+msgstr "Transacties"
 
 #: manufacturing/view/wo_costs_view.php:66 reporting/rep402.php:186
 msgid "Finished Product Requirements"
-msgstr ""
+msgstr "Eindproductvereisten"
 
 #: manufacturing/view/wo_costs_view.php:69 reporting/rep402.php:189
 msgid "Additional Material Issues"
-msgstr ""
+msgstr "Aanvullende materiële problemen"
 
 #: manufacturing/view/wo_costs_view.php:72
 #: manufacturing/view/work_order_view.php:66
@@ -10187,12 +10231,12 @@ msgstr "Bijkomende kosten"
 
 #: manufacturing/view/wo_costs_view.php:75 reporting/rep402.php:195
 msgid "Finished Product Receival"
-msgstr ""
+msgstr "Ontvangst van gereed product"
 
 #: manufacturing/view/wo_costs_view.php:80
 #, php-format
 msgid "Production Costs for Work Order # %d"
-msgstr ""
+msgstr "Productiekosten voor werkorder # %d"
 
 #: manufacturing/view/wo_issue_view.php:19
 msgid "View Work Order Issue"
@@ -10412,11 +10456,11 @@ msgstr "Kosten"
 
 #: manufacturing/includes/manufacturing_ui.inc:66
 msgid "Standard Labour Cost"
-msgstr ""
+msgstr "Standaard arbeidskosten"
 
 #: manufacturing/includes/manufacturing_ui.inc:74
 msgid "Standard Overhead Cost"
-msgstr ""
+msgstr "Standaard overheadkosten"
 
 #: manufacturing/includes/manufacturing_ui.inc:78
 msgid "Total Cost"
@@ -10510,12 +10554,12 @@ msgstr "Verwerk producten in werkorder"
 #: manufacturing/includes/db/work_order_costing_db.inc:98
 #, php-format
 msgid "COGS changed from %s to %s for %d %s of '%s'"
-msgstr ""
+msgstr "COGS gewijzigd van %s in %s voor %d %s van '%s'"
 
 #: manufacturing/includes/db/work_order_costing_db.inc:240
 #, php-format
 msgid "Voided WO #%s"
-msgstr ""
+msgstr "nietigverklaarde WO #%s"
 
 #: manufacturing/includes/db/work_order_issues_db.inc:66
 msgid "Issue of"
@@ -11111,7 +11155,7 @@ msgstr ""
 
 #: purchasing/po_entry_items.php:406
 msgid "Required prepayment is greater than total invoice value."
-msgstr ""
+msgstr "Vereiste vooruitbetaling is groter dan de totale factuurwaarde."
 
 #: purchasing/po_entry_items.php:491 sales/sales_order_entry.php:731
 msgid "Place Order"
@@ -11780,7 +11824,7 @@ msgstr ""
 
 #: purchasing/manage/suppliers.php:282
 msgid "Supplier has been deleted."
-msgstr ""
+msgstr "De leverancier is verwijderd."
 
 #: purchasing/manage/suppliers.php:292
 #: purchasing/inquiry/po_search_completed.php:95
@@ -12238,7 +12282,7 @@ msgstr "FACTUUR"
 
 #: reporting/rep107.php:196
 msgid "Prepayments invoiced to this order up to day:"
-msgstr ""
+msgstr "Gefactureerde vooruitbetalingen op deze bestelling tot dag:"
 
 #: reporting/rep107.php:203
 msgid "Invoice reference"
@@ -12569,11 +12613,11 @@ msgstr "Rapportage voorraadbewegingen"
 
 #: reporting/rep308.php:304
 msgid "Total Movement"
-msgstr ""
+msgstr "Totale beweging"
 
 #: reporting/rep308.php:310
 msgid "Total Out"
-msgstr ""
+msgstr "Totaal Out"
 
 #: reporting/rep309.php:99
 msgid "Item/Category"
@@ -12593,15 +12637,15 @@ msgstr "Promotie"
 
 #: reporting/rep310.php:154
 msgid "Note"
-msgstr ""
+msgstr "Aantekening"
 
 #: reporting/rep310.php:154
 msgid "The lines separate the transactions."
-msgstr ""
+msgstr "De regels scheiden de transacties."
 
 #: reporting/rep310.php:157
 msgid "Inventory Purchasing - Transaction Based"
-msgstr ""
+msgstr "Voorraadaankoop - en transactiebasis"
 
 #: reporting/rep401.php:71
 msgid "Wrk Ctr"
@@ -12626,7 +12670,7 @@ msgstr "WERK ORDER"
 
 #: reporting/rep451.php:80
 msgid "Initial"
-msgstr ""
+msgstr "Eerste"
 
 #: reporting/rep451.php:89
 msgid "Fixed Assets Valuation Report"
@@ -13033,7 +13077,7 @@ msgstr "Rapportage verkoop artikelen"
 
 #: reporting/reports_main.php:283
 msgid "Inventory Purchasing - &Transaction Based"
-msgstr ""
+msgstr "Voorraadaankoop - en &transactiebasis"
 
 #: reporting/reports_main.php:296
 msgid "&Bill of Material Listing"
@@ -13065,11 +13109,11 @@ msgstr "E-mail locaties"
 
 #: reporting/reports_main.php:320
 msgid "&Fixed Assets Valuation"
-msgstr ""
+msgstr "Vaste activa Waardering"
 
 #: reporting/reports_main.php:322
 msgid "Fixed Assets Class"
-msgstr ""
+msgstr "Vaste-activaklasse"
 
 #: reporting/reports_main.php:323
 msgid "Fixed Assets Location"
@@ -13315,7 +13359,7 @@ msgstr "U kunt betalen door"
 
 #: reporting/includes/doctext.inc:277
 msgid "* Subject to Realisation of the Cheque."
-msgstr ""
+msgstr "* Onder voorbehoud van de realisatie van de cheque."
 
 #: reporting/includes/excel_report.inc:69 reporting/includes/pdf_report.inc:81
 msgid ""
@@ -13549,18 +13593,25 @@ msgstr "&E-mailen periodieke facturen # %s - # %s"
 msgid ""
 "Recurrent invoice cannot be generated before last day of covered period."
 msgstr ""
+"Een periodieke factuur kan niet worden gegenereerd vóór de laatste dag van "
+"de gedekte periode."
 
 #: sales/create_recurrent_invoices.php:170
 msgid ""
 "Recurrent invoices cannot be generated because some items have no price "
 "defined in customer currency."
 msgstr ""
+"Terugkerende facturen kunnen niet worden gegenereerd omdat sommige artikelen"
+" niet zijn geprijsd in de valuta van de klant."
 
 #: sales/create_recurrent_invoices.php:172
 msgid ""
 "Recurrent invoices cannot be generated because selected sales order template"
 " uses prepayment sales terms. Change payment terms and try again."
 msgstr ""
+"Terugkerende facturen kunnen niet worden gegenereerd omdat de geselecteerde "
+"klantordersjabloon gebruik maakt van vooruitbetaalde verkoopvoorwaarden. "
+"Wijzig de betalingsvoorwaarden en probeer het opnieuw."
 
 #: sales/create_recurrent_invoices.php:180
 #: sales/manage/recurrent_invoices.php:193
@@ -13873,6 +13924,8 @@ msgid ""
 "You have to set Deferred Income Account in GL Setup to entry prepayment "
 "invoices."
 msgstr ""
+"U moet de uitgestelde inkomstenrekening in de instellingen voor het "
+"grootboek instellen op vooruitbetalingsfacturen voor invoer."
 
 #: sales/customer_delivery.php:97 sales/customer_delivery.php:102
 msgid "Select a different sales order to delivery"
@@ -13887,6 +13940,8 @@ msgid ""
 "This prepayment order is not yet ready for delivery due to insufficient "
 "amount received."
 msgstr ""
+"Deze vooruitbetalingsopdracht is nog niet gereed voor levering vanwege "
+"onvoldoende ontvangen bedrag."
 
 #: sales/customer_delivery.php:121
 msgid "Select a different delivery"
@@ -14096,6 +14151,8 @@ msgstr ""
 msgid ""
 "Please select correct Sales Order Prepayment to be invoiced and try again."
 msgstr ""
+"Selecteer de juiste vooruitbetaling voor de verkooporder om te factureren en"
+" probeer het opnieuw."
 
 #: sales/customer_invoice.php:178
 msgid ""
@@ -14134,6 +14191,9 @@ msgid ""
 "There is no non-invoiced payments for this order. If you want to issue final"
 " invoice, select delayed or cash payment terms."
 msgstr ""
+"Er zijn geen niet-gefactureerde betalingen voor deze bestelling. Als u de "
+"eindfactuur wilt uitgeven, selecteert u vertraagde of contante "
+"betalingstermijnen."
 
 #: sales/customer_invoice.php:436
 msgid "Payment terms:"
@@ -14321,6 +14381,8 @@ msgid ""
 "This order cannot be edited because there are invoices or payments related "
 "to it, and prepayment terms were used."
 msgstr ""
+"Deze bestelling kan niet worden bewerkt omdat er facturen of betalingen aan "
+"zijn gerelateerd en er gebruik is gemaakt van vooruitbetalingsvoorwaarden."
 
 #: sales/sales_order_entry.php:125
 #, php-format
@@ -14426,6 +14488,8 @@ msgstr "&Nieuwe factuur aanmaken"
 #: sales/sales_order_entry.php:395
 msgid "Pre-payment required have to be positive and less than total amount."
 msgstr ""
+"De vereiste vooruitbetaling vereist moet positief zijn en lager dan het "
+"totale bedrag."
 
 #: sales/sales_order_entry.php:400
 msgid ""
@@ -14616,8 +14680,8 @@ msgstr ""
 #: sales/sales_order_entry.php:755 sales/sales_order_entry.php:764
 msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr ""
-"U staat op het punt om dit document terug te draaien.\n"
-"Weet u zeker dat u wilt doorgaan?"
+"U staat op het punt om dit document terug te draaien.\\nWeet u zeker dat u "
+"wilt doorgaan?"
 
 #: sales/sales_order_entry.php:758
 msgid "Validate changes and update document"
@@ -14628,8 +14692,8 @@ msgid ""
 "You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
 msgstr ""
-"U staat op het punt om een gedeelte van deze order te annuleren.\n"
-"Weet u zeker dat u wilt doorgaan?"
+"U staat op het punt om een gedeelte van deze order te annuleren.\\nWeet u "
+"zeker dat u wilt doorgaan?"
 
 #: sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"
@@ -15013,12 +15077,16 @@ msgid ""
 "There is no template order in database.\n"
 "\tYou have to create at least one sales order marked as template to be able to define recurrent invoices."
 msgstr ""
+"Er is geen sjabloonvolgorde in de database.\n"
+"\tU moet ten minste één klantorder creëren die is gemarkeerd als sjabloon om terugkerende facturen te kunnen definiëren."
 
 #: sales/manage/recurrent_invoices.php:40
 msgid ""
 "This customer has no branches. Please define at least one branch for this "
 "customer first."
 msgstr ""
+"Deze klant heeft geen filialen. Geef alsjeblieft ten minste één filiaal voor"
+" deze klant op."
 
 #: sales/manage/recurrent_invoices.php:48
 msgid "The invoice description cannot be empty."
@@ -15183,7 +15251,7 @@ msgstr "Faxnummer:"
 
 #: sales/manage/sales_people.php:160
 msgid "Turnover Break Pt Level:"
-msgstr ""
+msgstr "Omzet breekpuntniveau:"
 
 #: sales/manage/sales_points.php:16
 msgid "POS settings"
@@ -15468,7 +15536,7 @@ msgstr "Levering van locatie"
 
 #: sales/view/view_sales_order.php:86
 msgid "Non-Invoiced Prepayments"
-msgstr ""
+msgstr "Niet gefactureerde vooruitbetalingen"
 
 #: sales/view/view_sales_order.php:87
 msgid "All Payments Allocated"
@@ -15647,7 +15715,7 @@ msgstr ""
 #: sales/includes/db/recurrent_invoices_db.inc:158
 #, php-format
 msgid "Unknown %s price for '%s' in pricelist '%s'"
-msgstr ""
+msgstr "Onbekende %s prijs voor '%s' in prijslijst '%s'"
 
 #: sales/includes/db/sales_credit_db.inc:185
 msgid "Return"
@@ -15655,7 +15723,7 @@ msgstr "terugkeer"
 
 #: sales/includes/db/sales_credit_db.inc:187
 msgid "Ex Inv:"
-msgstr ""
+msgstr "Ex factuur:"
 
 #: sales/includes/db/sales_order_db.inc:101
 msgid "Deleted."

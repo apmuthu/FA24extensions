@@ -2,7 +2,7 @@ Package: nl_NL
 Version: 2.4.1-3
 Description: Dutch translation Version merged from FA 2.3
 Author: Erwin de Bruin <erwin@mpe-solutions.nl>
-Maintenance: Erwin de Bruin <erwin@mpe-solutions.nl>
+Maintenance: Stefan <phpfan@xs4all.nl>
 Homepage: www.mpe-solutions.nl
 Language: nl_NL
 Encoding: iso-8859-1
