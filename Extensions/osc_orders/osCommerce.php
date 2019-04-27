@@ -201,6 +201,16 @@ function get_sales_point_by_name($name)
         return db_fetch($result);
 }
 
+function addImageToFA($stock_id, $oscwebsite, $name)
+{
+    if (!is_null($oscwebsite)) {
+        $filename = company_path().'/images';
+        $filename .= "/".item_img_name($stock_id).".jpg";
+
+        @copy($oscwebsite . "/catalog/images/" . $name, $filename);
+    }
+}
+
 function addItemToFA($osc_id, $products_name, $desc, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $barcode)
 {
         $inactive = ($products_status == 0 ? 1 : 0);
@@ -400,6 +410,7 @@ $defaultTaxGroup  = 0;
 $destCust         = 0;
 $invCust          = 0;
 $statusId         = 0;
+$oscwebsite       = "";
 
 $db_Host          = "";
 $db_User          = "";
@@ -499,6 +510,12 @@ if ($found) {
     $result     = db_query($sql, "could not get statusId");
     $row        = db_fetch_row($result);
     $statusId  = $row[1];
+
+    // Get osc website
+    $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'oscwebsite'";
+    $result     = db_query($sql, "could not get oscwebsite");
+    $row        = db_fetch_row($result);
+    $oscwebsite  = $row[1];
 }
 
 $num_price_errors = -1;
@@ -1159,7 +1176,12 @@ display_notification($sql);
             $action = 'pupdate';
         }
         if ($action == 'i_import') { // Item Import
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, CONCAT(pd.products_description, ' (wt:', p.products_weight, ')') AS description, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
+
+            $oscwebsite        = $_POST['oscwebsite'];
+            $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('oscwebsite', ".db_escape($oscwebsite).") ON DUPLICATE KEY UPDATE name='oscwebsite', value=".db_escape($oscwebsite);
+            db_query($sql, "Update 'oscwebsite'");
+
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, CONCAT(pd.products_description, ' (wt:', p.products_weight, ')') AS description, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode, p.products_image FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
@@ -1216,6 +1238,8 @@ display_notification($sql);
                 }
 
                 addItemToFA($osc_id, $products_name, $description, $cat, $tax_type_id, $mb_flag, $products_price, $products_status, $no_sale, $no_purchase, $pp['products_barcode']);
+                if (!is_null($pp['products_image']))
+                    addImageToFA($osc_id, $oscwebsite, $pp['products_image']);
 
                 // Check for product attributes
                 // FA item number like oscXXXX-AAAA
@@ -1712,6 +1736,7 @@ if ($action == 'iimport') {
 
     currencies_list_row("Customer Currency:", 'currency', get_company_pref("curr_default"));
     sales_types_list_row("Sales Type:", 'sales_type', null);
+    text_row("Oscommerce Website (optional, for images):", 'oscwebsite', $oscwebsite, 20, 40);
     echo "<tr><td colspan=2 align=center>Note: Only description, category and tax class id are updated on items that already exist in FA.<td><tr>";
 
     end_table(1);
@@ -1738,7 +1763,7 @@ if ($action == 'icheck') {
     end_table(1);
 
     hidden('action', 'i_check');
-    submit_center('pcheck', "Check osC Inventory");
+    submit_center('icheck', "Check osC Inventory");
     if ($num_qty_errors == 0) display_notification("No Inventory Errors Found");
 
     end_form();
@@ -1766,7 +1791,7 @@ if ($action == 'iupdate') {
     end_table(1);
 
     hidden('action', 'i_update');
-    submit_center('pupdate', "Update osC Inventory");
+    submit_center('iupdate', "Update osC Inventory");
     if ($num_qty_errors > 0) display_notification("There were $num_qty_errors items updated");
 
     end_form();
