@@ -273,6 +273,9 @@ if ((isset($_POST['type']))) {
 
                 if ($reference == '')
                     $reference = $Refs->get_next($type);
+                else if ($reference == '+')
+                    $reference = $prev_ref;
+
                 if (!$Refs->is_valid($reference, $type)) {
                         display_notification("Reference " . $reference . " must match valid pattern in Setup->Transaction References");
                         $error = true;
