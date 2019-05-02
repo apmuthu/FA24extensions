@@ -73,7 +73,12 @@ global $Ajax;
 $filename = (isset($_GET['filename']) ? $_GET['filename'] : '');
 if ($filename != "") {
     initialize_controls();
-    $_POST['type']             = ST_JOURNAL;
+    if (isset($_GET['type']))
+        $_POST['type']         = $_GET['type'];
+    else
+        $_POST['type']         = ST_JOURNAL;
+    if (isset($_GET['bank_account']))
+        $_POST['bank_account'] = $_GET['bank_account'];
     $_FILES['imp']['name']     = $filename;
     $_FILES['imp']['tmp_name'] = $filename;
     $_POST['sep']              = ",";
@@ -109,7 +114,7 @@ if ((isset($_POST['type']))) {
             display_error(_("Error opening file $filename"));
         } else {
             begin_transaction();
-			$supported_types = array(ST_JOURNAL, ST_BANKTRANSFER, ST_BANKDEPOSIT, ST_BANKPAYMENT, ST_SALESINVOICE, ST_SALESORDER);
+			$supported_types = array(ST_JOURNAL, ST_BANKDEPOSIT, ST_BANKPAYMENT, ST_SALESINVOICE, ST_SALESORDER);
 			if (in_array($type, $supported_types))
 				$curEntryId = get_next_trans_no($type);
             $line = 0;
@@ -266,10 +271,12 @@ if ((isset($_POST['type']))) {
                     }
                 }
 
-                if ($reference == '') {
-                    display_error(_("$line does not have a reference. (line $line in import file '{$_FILES['imp']['name']}')"));
-                    $error = true;
-                } else if (!$Refs->is_valid($reference, $type)) {
+                if ($reference == '')
+                    $reference = $Refs->get_next($type);
+                else if ($reference == '+')
+                    $reference = $prev_ref;
+
+                if (!$Refs->is_valid($reference, $type)) {
                         display_notification("Reference " . $reference . " must match valid pattern in Setup->Transaction References");
                         $error = true;
                     }
