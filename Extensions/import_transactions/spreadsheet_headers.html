@@ -91,7 +91,7 @@ Headers Prior to converting to Comma Separated Values file (csv)</B></FONT></FON
 			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><B>Journal</B></FONT></FONT></P>
 		</TD>
 		<TD WIDTH=64>
-			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference<br>(must match pattern in Setup->Transaction References)</FONT></FONT></P>
+			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference</FONT></FONT></P>
 		</TD>
 		<TD WIDTH=48>
 			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Date</FONT></FONT></P>
@@ -150,7 +150,7 @@ Headers Prior to converting to Comma Separated Values file (csv)</B></FONT></FON
 			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><B>Deposit</B></FONT></FONT></P>
 		</TD>
 		<TD WIDTH=64>
-			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference<br>(must match pattern in Setup->Transaction References)</FONT></FONT></P>
+			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference</FONT></FONT></P>
 		</TD>
 		<TD WIDTH=48>
 			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Date</FONT></FONT></P>
@@ -209,7 +209,7 @@ Headers Prior to converting to Comma Separated Values file (csv)</B></FONT></FON
 			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><B>Payment</B></FONT></FONT></P>
 		</TD>
 		<TD WIDTH=64>
-			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference<br>(must match pattern in Setup->Transaction References)</FONT></FONT></P>
+			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference</FONT></FONT></P>
 		</TD>
 		<TD WIDTH=48>
 			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Date</FONT></FONT></P>
@@ -269,7 +269,7 @@ Headers Prior to converting to Comma Separated Values file (csv)</B></FONT></FON
 			Statement Format</B></FONT></FONT></P>
 		</TD>
 		<TD WIDTH=64>
-			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference<br>(must match pattern in Setup->Transaction References)</FONT></FONT></P>
+			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Reference</FONT></FONT></P>
 		</TD>
 		<TD WIDTH=48>
 			<P CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=2>Date</FONT></FONT></P>
@@ -332,12 +332,21 @@ Headers Prior to converting to Comma Separated Values file (csv)</B></FONT></FON
 </TABLE>
 <P CLASS="western" STYLE="margin-bottom: 0cm"><BR>
 </P>
-<P CLASS="western" STYLE="margin-bottom: 0cm"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><B>Examples:
-Use the csv file templates available under the templates folder for
-each type of processing.</B></FONT></FONT></P>
-<P CLASS="western" STYLE="margin-bottom: 0cm"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><B>Account
-codes in the csv file templates come from the en_GB (United Kingdom)
-Chart of Accounts.</B></FONT></FONT></P>
+<P CLASS="western" STYLE="margin-bottom: 0cm"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><B>Notes:</B>
+<ol>
+<li>
+If Reference is blank, a new reference will be automatically assigned.
+For successive lines with the same reference, use '+' as Reference.
+If Reference is specified,
+it must match the pattern in Setup->Transaction References.
+You can mix automatic and manual references in the same file.
+</li>
+<li>
+Example csv templates are available under the templates folder for
+each type of processing.
+Account codes in the csv file templates come from the en_GB (United Kingdom) Chart of Accounts
+</li>
+</ol>
 <P CLASS="western" STYLE="margin-bottom: 0cm"><BR>
 </P>
 <P CLASS="western" STYLE="margin-bottom: 0cm"><FONT FACE="Arial, sans-serif"><FONT SIZE=2><B>Journal
