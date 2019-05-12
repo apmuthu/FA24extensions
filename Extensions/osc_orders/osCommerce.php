@@ -3,6 +3,23 @@
 Author: Tom Moulton
 Name: osCommerce order import to Sales Order
 Free software under GNU GPL
+***********************************************
+Version 2.4.0-4 10 May 2019 Tom Moulton
+***********************************************
+Version 2.4.0-3 => 2.4.0-4
+
+function name clean up, remove tabs, etc
+added function osc_get_order_status_pulldown to select order status to ignore by osc name (assumes english)
+added function get_tax_group_from_zone_name to fix order update/import
+
+created new table osc_customers to map between osc cID and FA debtors_no
+added functions get_debtor_from_customer and add_customer_id_for_debtor to manage that table
+added DB_VERSION to the oscommerce table to make db upgrade more precise
+added code to upgrade from no db_vserion to db_version 1
+Updated customer import code to use new table
+made changes to fix the import of unknown (walkin?) customers as a branch of a specific debtor_no
+
+Updated summery/show/update to detect when the debtor_no is deleted and cleanup osc_customers table
 ***********************************************/
 $page_security = 'SA_OSCORDERS';
 $path_to_root  = "../..";
@@ -47,7 +64,7 @@ function osc_dbQuery($sql, $multirow = false) {
 
     $sql = trim($sql);
     $sql_mod = in_array(substr(strtoupper($sql),0,6), array('INSERT', 'UPDATE', 'DELETE'));
-    $result = mysqli_query($osc, $sql);
+    $result = mysqli_query($osc, $sql) or trigger_error("Query Failed! SQL: $sql - Error: ".mysqli_error($osc), E_USER_ERROR);
     if (!$result)
         display_notification($sql);
     if ($multirow || $sql_mod)
@@ -59,7 +76,7 @@ function osc_dbQuery($sql, $multirow = false) {
 
 function osc_insert_id() {
     global $osc;
-	return mysqli_insert_id($osc);
+    return mysqli_insert_id($osc);
 }
 
 function osc_escape($value = "", $nullify = false) {
@@ -89,12 +106,12 @@ function osc_escape($value = "", $nullify = false) {
 }
 
 function not_null($str) {
+    if (!isset($str)) return 0;
     if ($str != '' && $str != NULL) return 1;
     return 0;
 }
 
 function osc_new_orders($date, $statusId) {
-    display_notification($date);
     $sql  = "SELECT COUNT(*) as count FROM orders WHERE date_purchased > ".osc_escape($date);
     $sql .= " AND orders_id NOT IN (SELECT orders_id FROM orders_status_history oh WHERE LOCATE('Imported into FA', comments) != 0)";
     if ($statusId != "")
@@ -132,9 +149,41 @@ function osc_get_country($country_id) {
     return $id;
 }
 
+function osc_get_order_status_name($order_status_id) {
+    $sql     = "SELECT orders_status_name FROM orders_status where language_id='1' and orders_status_id = ".osc_escape($order_status_id);
+    $ostatus = osc_dBQuery($sql);
+    $id      = $ostatus['orders_status_name'];
+    return $id;
+}
+
+function osc_get_order_status_pulldown($name, $default) {
+
+    $orders_statuses = array();
+    $sql     = "SELECT orders_status_id, orders_status_name FROM orders_status WHERE language_id = '1'";
+    $osc_res = osc_dBQuery($sql, true);
+    while ($orders_status = mysqli_fetch_assoc($osc_res)) {
+        $orders_statuses[] = array('id' => $orders_status['orders_status_id'],
+                               'text' => $orders_status['orders_status_name']);
+    }
+    mysqli_free_result($osc_res);
+
+    $field = '<td><select name="' . $name . '"><option value="0">None</option>';
+    for ($i=0, $n=sizeof($orders_statuses); $i<$n; $i++) {
+        $field .= '<option value="' . $orders_statuses[$i]['id'] . '"';
+        if ($default == $orders_statuses[$i]['id']) {
+            $field .= ' selected="selected"';
+        }
+
+        $field .= '>' . $orders_statuses[$i]['text'] . '</option>';
+    }
+    $field .= '</select></td>';
+    return $field;
+}
+
 function osc_address_format($data, $pre) {
     $company = $data[$pre . 'company'];
-    $name = $data[$pre . 'name'];
+    if ($pre == 'entry_') $name = $data[$pre . 'firstname'] . ' ' . $data[$pre . 'lastname'];
+    else $name = $data[$pre . 'name'];
     $street_address = $data[$pre . 'street_address'];
     $suburb         = $data[$pre . 'suburb'];
     $city           = $data[$pre . 'city'];
@@ -157,8 +206,7 @@ function osc_address_format($data, $pre) {
     return $ret;
 }
 
-function get_tax_group_from_zone_id($zone_id, $def_tax_group_id) {
-    $tax_group = osc_get_zone_name_from_id($zone_id);
+function get_tax_group_from_zone_name($tax_group, $def_tax_group_id) {
     $taxgid    = "";
     if ($tax_group != "") {
         $sql    = "SELECT id from ".TB_PREF."tax_groups WHERE name=".db_escape($tax_group);
@@ -168,6 +216,11 @@ function get_tax_group_from_zone_id($zone_id, $def_tax_group_id) {
     }
     if ($taxgid == "") $taxgid = $def_tax_group_id;
     return $taxgid;
+}
+
+function get_tax_group_from_zone_id($zone_id, $def_tax_group_id) {
+    $tax_group = osc_get_zone_name_from_id($zone_id);
+    return get_tax_group_from_zone_name($tax_group, $def_tax_group_id);
 }
 
 function check_stock_id($stock_id) {
@@ -258,6 +311,30 @@ function sales_service_items_list_row($label, $name, $selected_id=null, $all_opt
     echo "</td></tr>";
 }
 
+function get_debtor_from_customer($customers_id, $name) {
+    if ($customers_id != 0) {
+        $sql = "SELECT debtor_no FROM ".TB_PREF."osc_customers WHERE customers_id=".db_escape($customers_id);
+        $result = db_query($sql, "customer could not be retrieved");
+        if (db_num_rows($result) > 0) {
+            $row    = db_fetch_assoc($result);
+            return $row['debtor_no'];
+        }
+    }
+    if (not_null($name)) {
+        $sql    = "SELECT debtor_no,name FROM ".TB_PREF."debtors_master WHERE name=".db_escape($name);
+        $result = db_query($sql, "customer could not be retrieved");
+        if (db_num_rows($result) > 0) {
+            $row    = db_fetch_assoc($result);
+            return $row['debtor_no'];
+        }
+    }
+    return 0;
+}
+
+function add_customer_id_for_debtor($customers_id, $debtor_no) {
+    $sql    = "INSERT INTO ".TB_PREF."osc_customers (customers_id, debtor_no) VALUES ($customers_id, $debtor_no)";
+    db_query($sql, "Error inserting osc cID to debtor_no");
+}
 
 // error_reporting(E_ALL);
 // ini_set("display_errors", "on");
@@ -272,10 +349,10 @@ check_db_has_sales_areas("You must first define atleast one Sales Area");
 
 $sql          = "SHOW TABLES";
 $result       = db_query($sql, "could not show tables");
-$found        = 0;
+$db_found     = 0;
 $one_database = 0; // Use one DB, auto-detect below
 while (($row = db_fetch_row($result))) {
-    if ($row[0] == $cur_prefix."oscommerce") $found = 1;
+    if ($row[0] == $cur_prefix."oscommerce") $db_found = 1;
     if (stripos($row[0], 'orders_status_history') !== false) $one_database = 1;
 }
 
@@ -292,6 +369,8 @@ $destCust         = 0;
 $invCust          = 0;
 $statusId         = 0;
 
+$DB_VERSION       = 1;
+$db_Version       = 0;
 $db_Host          = "";
 $db_User          = "";
 $db_Password      = "";
@@ -310,7 +389,21 @@ $min_iid  = 0;
 $max_iid  = 0;
 $order_count = 0;
 
-if ($found) {
+$db_upgrade = 0;
+
+if ($db_found) {
+    // Get Version
+    $sql     = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'version'";
+    $result  = db_query($sql, "could not get DB version");
+    if (db_num_rows($result) > 0) {
+        $row        = db_fetch_row($result);
+        $db_Version = $row[1];
+    } else {
+        $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('version', '0')";
+        db_query($sql, "could not set DB version");
+    }
+    if ($db_Version < $DB_VERSION) $db_upgrade = 1;
+
     // Get Host Name
     $sql     = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'myhost'";
     $result  = db_query($sql, "could not get host name");
@@ -396,8 +489,9 @@ $num_price_errors = -1;
 $num_qty_errors = -1;
 
 $action = 'summary';
-if (isset($_GET['action']) && $found) $action = $_GET['action'];
-if (!$found) $action = 'show';
+if (isset($_GET['action'])) $action = $_GET['action']; // Default to requested action
+if ($db_upgrade && $action != 'show' && $action != 'create2') $action = 'upgrade'; // See if Upgrade is needed
+if (!$db_found) $action = 'show'; // If no DB then create one
 
 if ($action == 'c_import') {
     if (!check_num('credit_limit', 0)) {
@@ -416,7 +510,7 @@ if (isset($_POST['action'])) {
         $sql = "CREATE TABLE ".TB_PREF."oscommerce ( `name` char(15) NOT NULL default '', " .
                " `value` varchar(100) NOT NULL default '', PRIMARY KEY  (`name`)) ENGINE=MyISAM";
         db_query($sql, "Error creating table");
-        header("Location: osCommerce.php?action=show");
+        header("Location: osCommerce.php?action=create2");
     }
 
     if ($action == 'update') {
@@ -489,8 +583,20 @@ if (isset($_POST['action'])) {
             else if ($default_TaxGroup == '') $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('taxgroup', ".db_escape($defaultTaxGroup).")";
             else $sql = "UPDATE  ".TB_PREF."oscommerce SET value = ".db_escape($defaultTaxGroup)." WHERE name = 'taxgroup'";
             db_query($sql, "Update 'defaultTaxGroup'");
-            header("Location: osCommerce.php?action=summary");
         }
+        $sql = "SELECT o.customers_id, d.debtor_no FROM ".TB_PREF."osc_customers as o left join ".TB_PREF."debtors_master d on o.debtor_no = d.debtor_no where d.debtor_no IS NULL";
+        $results = db_query($sql, "could not search osc_customers");
+        $cnt = 0;
+        if (db_num_rows($results) > 0) {
+            while ($row = mysqli_fetch_assoc($results)) {
+                $sql = "DELETE from ".TB_PREF."osc_customers where customers_id = " . $row['customers_id'];
+                db_query($sql, "remove orphaned osc_customer entry");
+                $cnt = $cnt + 1;
+            }
+        }
+        display_notification("Removed $cnt orphaned osc_customer records");
+        mysqli_free_result($results);
+        header("Location: osCommerce.php?action=summary");
 
     } else {
         $dbHost          = $db_Host;
@@ -504,7 +610,60 @@ if (isset($_POST['action'])) {
         $defaultTaxGroup = $default_TaxGroup;
     }
 
-    if ( in_array($action, array('c_import', 'o_import', 'p_check', 'p_update', 'i_import', 'i_check', 'i_update')) && ($osc = osc_connect()) ) {
+    if ( in_array($action, array('upgrade', 'c_import', 'o_import', 'p_check', 'p_update', 'i_import', 'i_check', 'i_update')) && ($osc = osc_connect()) ) {
+
+        // Upgrade osc table(s)
+        // 1. Add osc_customers and add version number to oscommerce table
+        if ($action == 'upgrade') {
+            $sub_action = $_POST['sub_action'];
+            if ($sub_action == 'upgrade_to_1') {
+                //$osc = osc_connect();
+                $sql = "DROP TABLE IF EXISTS ".TB_PREF."osc_customers";
+                db_query($sql, "Error dropping table");
+                $sql = "CREATE TABLE ".TB_PREF."osc_customers ( `customers_id` int(11) NOT NULL, " .
+                    " `debtor_no` int(11) NOT NULL default 0, PRIMARY KEY  (`customers_id`)) ENGINE=MyISAM";
+                db_query($sql, "Error creating table");
+                $sql = "SELECT customers_id, customers_name, date_purchased from orders order by date_purchased desc";
+                $result = osc_dbQuery($sql, true);
+                $new_customers = 0;
+                while ($order = mysqli_fetch_assoc($result)) {
+                    $cID = $order['customers_id'];
+                    $name = $order['customers_name'];
+                    if (get_debtor_from_customer($cID, NULL) != 0) continue; // That name already taken
+                    $debtor_no = get_debtor_from_customer(0, $name);
+                    if ($debtor_no == 0) continue; // That name does not exist
+                    add_customer_id_for_debtor($cID, $debtor_no);
+                    $new_customers++;
+                }
+                mysqli_free_result($result);
+                display_notification("There were " . $new_customers . "matched");
+
+                $sql    = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastoid'";
+                $result = db_query($sql, "could not get lastoid");
+                $row    = db_fetch_row($result);
+                if ($row) {
+                    $oID = $row[1];
+
+                    $sql = "SELECT `date_purchased` FROM orders where `orders_id` <= ".db_escape($oID) . " ORDER BY `orders_id` desc LIMIT 0,1";
+                    $result = osc_dbQuery($sql, "Get osc order for lastoid");
+                    $row = db_fetch_row($result);
+                    $date = $row[0];
+                    $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('lastdate', " . db_escape($date) . ") ON DUPLICATE KEY UPDATE name='lastdate', value= " . db_escape($date);
+                    db_query($sql, "Update 'lastdate'");
+                }
+
+                $sql = "DELETE FROM  ".TB_PREF."oscommerce WHERE name = 'lastoid'";
+                db_query($sql, "Update 'DB version'");
+
+                $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('osc_id', 'products_model') ON DUPLICATE KEY UPDATE name='osc_id', value= 'products_model'";
+                db_query($sql, "Update 'osc_id'");
+
+                $sql = "UPDATE  ".TB_PREF."oscommerce SET value = '1' WHERE name = 'version'";
+                db_query($sql, "Update 'DB version'");
+                $db_Version = 1;
+                header("Location: osCommerce.php?action=upgrade");
+            }
+        }
 
         if ($action == 'c_import') {
             if (!check_num('credit_limit', 0)) {
@@ -535,13 +694,11 @@ if (isset($_POST['action'])) {
 
                 $taxgid = get_tax_group_from_zone_id($cust['entry_zone_id'], $_POST['tax_group_id']);
 
-                $sql    = "SELECT debtor_no,name FROM ".TB_PREF."debtors_master WHERE name=".db_escape($name);
-                $result = db_query($sql, "customer could not be retrieved");
-                $row    = db_fetch_assoc($result);
-
-                if (!$row) {
+                $debtor_no = get_debtor_from_customer($cust['customers_id'], $name);
+                if ($debtor_no == 0) {
                     add_customer($name, $name, $addr, $tax_id, $currency, $_POST['dimension_id'], $_POST['dimension2_id'], 1, $_POST['payment_terms'], 0, 0, input_num('credit_limit'), $_POST['sales_type'], NULL);
                     $id = db_insert_id();
+                    add_customer_id_for_debtor($cust['customers_id'], $id);
                     if ($debug_sql) display_notification("INSERT DM " . $sql);
                     db_query($sql, "The customer could not be added");
                     add_branch($id, $name, $name, $addr, $_POST['salesman'], $area_code, $taxgid, $_POST['sales_account'], $_POST['sales_discount_account'], $_POST['receivables_account'], $_POST['payment_discount_account'], $_POST['default_location'], $addr, 0, 0, 1, NULL);
@@ -550,7 +707,7 @@ if (isset($_POST['action'])) {
 
                     $i++;
                 } else {
-                    update_customer($row['debtor_no'], $name, $name, $addr, $tax_id, $currency, $_POST['dimension_id'], $_POST['dimension2_id'], 1, $_POST['payment_terms'], 0, 0, input_num('credit_limit'), $_POST['sales_type'], NULL);
+                    update_customer($debtor_no, $name, $name, $addr, $tax_id, $currency, $_POST['dimension_id'], $_POST['dimension2_id'], 1, $_POST['payment_terms'], 0, 0, input_num('credit_limit'), $_POST['sales_type'], NULL);
                     if ($debug_sql) display_notification("UPDATE DM " . $sql);
                     display_notification("Updated Customer $name");
                     $j++;
@@ -588,6 +745,7 @@ if (isset($_POST['action'])) {
             while ($order = mysqli_fetch_assoc($oid_result)) {
                 $oID            = $order['orders_id'];
                 $date_purchased = $order['date_purchased'];
+                $order_status   = $order['orders_status'];
 
                 $sql = "SELECT * FROM orders_total WHERE orders_id = ".osc_escape($oID) . " ORDER BY sort_order";
                 $total_shipping = 0;
@@ -595,6 +753,8 @@ if (isset($_POST['action'])) {
                 $total_discount = 0;
                 $total_subtotal = 0;
                 $found_subtotal = false;
+                $total_taxable  = 0;
+                $total_tax      = 0;
                 $total_result   = osc_dbQuery($sql, true);
                 while ($total = mysqli_fetch_assoc($total_result)) {
                     switch ($total['class']) {
@@ -609,6 +769,8 @@ if (isset($_POST['action'])) {
                             $found_subtotal = true;
                             break;
                         case 'ot_tax' :
+                            $total_tax = $total['value'];
+                            $total_taxable = $total_subtotal;
                             break;
                         case 'ot_discount' :
                         default:
@@ -633,16 +795,15 @@ if (isset($_POST['action'])) {
                     $customers_name = $order['customers_company'];
                 else
                     $customers_name = $order['customers_name'];
-                $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `name` = ".db_escape($customers_name);
+
+                $debtor_no = get_debtor_from_customer($order['customers_id'], $customers_name);
+
+                $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `debtor_no` = ".db_escape($debtor_no);
                 $result = db_query($sql, "Could not find customer by name");
-                if (db_num_rows($result) == 0) {
-                    if ($destCust == 0) {
-                        display_notification("Customer " . $customers_name . " not found");
-                        break;
-                    }
+                if (db_num_rows($result) != 0) {
                     $customer = db_fetch_assoc($result);
                     $addr     = osc_address_format($order, 'delivery_');
-                    $taxgid   = get_tax_group_from_zone_id($order['delivery_state'], $defaultTaxGroup);
+                    $taxgid   = get_tax_group_from_zone_name($order['delivery_state'], $defaultTaxGroup);
                     $sql      = "SELECT * FROM ".TB_PREF."cust_branch WHERE debtor_no = ".db_escape($customer['debtor_no'])." AND br_address = ".db_escape($addr);
                     if ($debug_sql) display_notification("Find BR " . $sql);
                     $result = db_query($sql, "could not find customer branch");
@@ -655,41 +816,45 @@ if (isset($_POST['action'])) {
                         $old_branch = db_fetch_assoc($result);
                         if ($debug_sql) print_r($old_branch);
                         add_branch($debtor_no, $old_branch['br_name'], $old_branch['branch_ref'], $addr, $old_branch['salesman'], $old_branch['area'], $taxgid, $old_branch['sales_account'], $old_branch['sales_discount_account'], $old_branch['receivables_account'], $old_branch['payment_discount_account'], $old_branch['default_location'], $addr, 0, 0, 1, $old_branch['notes']);
-                        $id  = db_insert_id();
-                        $sql = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE branch_code = ".db_escape($id);
-                        if ($debug_sql) display_notification("Get BR " . $sql);
-                        $result = db_query($sql, "Could not load new branch");
+                        $branch_code  = db_insert_id();
                     } else {
-                        $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
-                        $result = db_query($sql, "Could not find customer by name");
-                        if (db_num_rows($result) == 0) {
-                            display_error("Customer id " . $destCust  . " not found");
-                            display_error('Skipping order ' . $oID);
-                            break;
-                        }
-                        $customer = db_fetch_assoc($result);
-                        $debtor_no = $customer['debtor_no'];
-                        $found = false;
-
-                        foreach ( array ($order['delivery_city'], $order['delivery_state']) as $value ) {
-                            $sql    = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND description = " .db_escape($value);
-                            $result = db_query($sql, "Could not load branch");
-                            if (db_num_rows($result) != 0) {
-                                $found = true;
-                                break;
+                        $branch = db_fetch_assoc($result);
+                        $branch_code = $branch['branch_code'];
                     }
-                }
+                    $sql = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE branch_code = ".db_escape($branch_code);
+                    if ($debug_sql) display_notification("Get BR " . $sql);
+                    $result = db_query($sql, "Could not load new branch");
+                } else {
+// add order & branch for destCust
+                    $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
+                    $result = db_query($sql, "Could not find customer by name");
+                    if (db_num_rows($result) == 0) {
+                        display_error("Customer id " . $destCust  . " not found");
+                        display_error('Skipping order ' . $oID);
+                        break;
+                    }
+                    $customer = db_fetch_assoc($result);
+                    $debtor_no = $customer['debtor_no'];
+                    $found = false;
 
-                        if ($found == false) {
-                            $sql    = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND area_code = " .db_escape($_POST['area']);
-                            $result = db_query($sql, "Could not load branch");
-                            if (db_num_rows($result) != 0)
-                                break;
-
-                            display_error("Customer branch for area " . $_POST['area'] . " not found");
-                            display_error('Skipping order ' . $oID);
+                    foreach ( array ($order['delivery_city'], $order['delivery_state']) as $value ) {
+                        $sql    = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND description = " .db_escape($value);
+                        $result = db_query($sql, "Could not load branch");
+                        if (db_num_rows($result) != 0) {
+                            $found = true;
                             break;
                         }
+                    }
+
+                    if ($found == false) {
+                        $sql    = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND area_code = " .db_escape($_POST['area']);
+                        $result = db_query($sql, "Could not load branch");
+                        if (db_num_rows($result) != 0)
+                            break;
+
+                        display_error("Customer branch for area " . $_POST['area'] . " not found");
+                        display_error('Skipping order ' . $oID);
+                        break;
                     }
                 }
                 $branch                  = db_fetch_assoc($result);
@@ -732,7 +897,7 @@ if (isset($_POST['action'])) {
                     $branch["tax_group_id"],
                     $branch["tax_group_name"]);
 
-                $cart->cust_ref          = "osC Order # $oID";
+                $cart->cust_ref          = "osC # $oID";
                 $cart->Comments          = $comments;
                 $cart->document_date     = sql2date($date_purchased);
                 $cart->sales_type        = $customer['sales_type'];
@@ -783,9 +948,14 @@ if (isset($_POST['action'])) {
                     $item = db_query($sql, "could not get item");
                     $row  = db_fetch_row($item);
                     if (!$row) {
-
-                        display_error("osC order " . $oID . " item " . $osc_id . " not in FA.  Do an Item Import first.");
-                        break;  // total check below will fail
+                        $sql    = "SELECT stock_id FROM ".TB_PREF."item_codes WHERE item_code=".db_escape($osc_id);
+                        $item = db_query($sql, "could not get item");
+                        if (db_num_rows($item) == 0) {
+                            display_error("osC order " . $oID . " item " . $osc_id . " not in FA.  Do an Item Import first.");
+                            break;  // total check below will fail
+                        }
+                        $row  = db_fetch_assoc($item);
+                        $osc_od = $row['stock_id'];
                     }
 
             // Note: OSC attributes are handled in FA as two different
@@ -812,7 +982,7 @@ if (isset($_POST['action'])) {
                         $row  = db_fetch_row($item);
                         if (!$row) {
 
-                            display_error("osC order " . $oID . " item " . $pa_osc_id . " not in FA.  Do an Item Import first.");
+                            display_error("osC order " . $oID . " product attribute " . $pa_osc_id . " not in FA.  Do an Item Import first.");
                             break;  // total check below will fail
                         }
                         $total += round($prod['products_quantity'] * $prod['products_price'] * (1 -$disc_percent),2);
@@ -1190,7 +1360,7 @@ if (isset($_POST['action'])) {
     $defaultTaxGroup = $default_TaxGroup;
 }
 
-if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport', 'iupdate')) && ($osc = osc_connect()) ) {
+if ( in_array($action, array('summary', 'show', 'cimport', 'oimport', 'iimport', 'iupdate')) && ($osc = osc_connect()) ) {
 
     if ($action == 'cimport' || $action == 'summary' || $action == 'iupdate') { // Preview Customer Import page
 
@@ -1214,6 +1384,16 @@ if ( in_array($action, array('summary', 'cimport', 'oimport', 'iimport', 'iupdat
         $sql      = "SELECT `date_purchased` FROM `orders` ORDER BY `date_purchased` DESC LIMIT 0,1";
         $oid      = osc_dbQuery($sql);
         $max_date = $oid['date_purchased'];
+        $order_status_row = osc_get_order_status_pulldown('statusId', $statusId);
+    }
+
+    if ($action == 'show' || $action == 'summary') { // Configuration Show/Update page
+
+        // SELECT o.customers_id, d.debtor_no FROM `0_osc_customers` as o left join `0_debtors_master` d on o.debtor_no = d.debtor_no where d.debtor_no IS NULL
+        $sql = "SELECT o.customers_id, d.debtor_no FROM ".TB_PREF."osc_customers as o left join ".TB_PREF."debtors_master d on o.debtor_no = d.debtor_no where d.debtor_no IS NULL";
+        $results = db_query($sql, "could not search osc_customers");
+        $num_missing_debtors = db_num_rows($results);
+        mysqli_free_result($results);
     }
 
     if ($action == 'iimport' || $action == 'summary') { // Preview Item Import page
@@ -1238,6 +1418,10 @@ echo '&nbsp;|&nbsp;';
 if ($action == 'show') echo 'Configuration';
 else hyperlink_params($_SERVER['PHP_SELF'], _("Configuration"), "action=show", false);
 echo '&nbsp;|&nbsp;';
+if ($db_upgrade) {
+    hyperlink_params($_SERVER['PHP_SELF'], _("REQUIRED UPGRADE"), "action=upgrade", false);
+    echo '&nbsp;|&nbsp;';
+}
 if ($action == 'cimport') echo 'Customer Import';
 else hyperlink_params($_SERVER['PHP_SELF'], _("&Customer Import"), "action=cimport", false);
 echo '&nbsp;|&nbsp;';
@@ -1280,13 +1464,21 @@ if ($action == 'summary') {
         label_cell($max_cid - $min_cid + 1);
     }
     end_row();
+
     label_cell("Order Import");
     if ($order_count == 0)
         label_cell("None");
     else
         label_cell($order_count);
-
     end_row();
+
+    label_cell("Missing Debtors");
+    if ($num_missing_debtors == 0)
+        label_cell("None");
+    else
+        label_cell($num_missing_debtors);
+    end_row();
+
     end_form();
 
     end_page();
@@ -1299,17 +1491,34 @@ if ($action == 'show') {
     $th = array("Function", "Description");
     table_header($th);
 
-    $k = 0;
-
+    $k = 1;
     alt_table_row_color($k);
-
     label_cell("Table Status");
-    if ($found) $table_st = "Found";
+    if ($db_found) $table_st = "Found";
     else $table_st = "<font color=red>Not Found</font>";
     label_cell($table_st);
     end_row();
 
-    if ($found) {
+    alt_table_row_color($k);
+    label_cell("Version");
+    label_cell($DB_VERSION);
+    end_row();
+
+    alt_table_row_color($k);
+    label_cell("DB Version");
+    if ($db_upgrade) $table_st = "<font color=red>$db_Version - Upgrade needed!</font>";
+    else $table_st = "<font color=green>$db_Version - Current</font>";
+    label_cell($table_st);
+    end_row();
+
+    if ($db_found) {
+        label_cell("Missing Debtors");
+        if ($num_missing_debtors == 0)
+            label_cell("None");
+        else
+            label_cell($num_missing_debtors);
+        end_row();
+
         text_row("Mysql Host", 'dbHost', $dbHost, 20, 40);
         
         text_row("User", 'dbUser', $dbUser, 20, 40);
@@ -1317,21 +1526,53 @@ if ($action == 'show') {
         text_row("Password", 'dbPassword', $dbPassword, 20, 40);
         
         text_row("DB Name", 'dbName', $dbName, 20, 40);
-        text_row("Osc Id", 'oscId', $oscId, 20, 40);
-        text_row("Osc_Item Prefix", 'oscPrefix', $oscPrefix, 20, 40);
+        text_row("osC Id", 'oscId', $oscId, 20, 40);
+        text_row("osC_Item Prefix", 'oscPrefix', $oscPrefix, 20, 40);
 
         tax_groups_list_row(_("Default Tax Group:"), 'taxgroup', $default_TaxGroup);
     }
 
     end_table(1);
 
-    if (!$found) {
+    if (!$db_found) {
         hidden('action', 'create');
         submit_center('create', 'Create Table');
     } else {
         hidden('action', 'update');
         submit_center('update', 'Update Mysql');
     }
+
+    end_form();
+
+    end_page();
+}
+
+if ($action == 'upgrade' || $action == 'create2') {
+
+    if ($db_Version == $DB_VERSION) header("Location: osCommerce.php?action=show");
+
+    start_form(true);
+
+    start_table(TABLESTYLE2, "width=40%");
+
+    table_section_title("osCommerce Addon DB Upgrade");
+
+    $upgrade = 'none';
+
+    if ($db_Version == 0) { // Perform upgrade to ver 1
+        $upgrade = 'upgrade_to_1';
+        if ($action == 'upgrade') {
+            yesno_list_row(_("Link osC and FA Customers"), 'map_db', 1, "Yes", "Ignore", false);
+        } else {    
+            yesno_list_row(_("Link osC and FA Customers"), 'map_db', 0, "Yes", "Ignore", false);
+        }
+    }
+
+    end_table(1);
+
+    hidden('action', 'upgrade');
+    hidden('sub_action', $upgrade);
+    submit_center('upgrade', "Start DB Upgrade");
 
     end_form();
 
@@ -1415,7 +1656,11 @@ if ($action == 'oimport') {
         $_POST['last_date'] = sql2date($max_date);
     date_row("Starting Order Date:", 'first_date');
     date_row("Last Order Date:", 'last_date');
-    text_row("Skip Osc Status Id", 'statusId', $statusId, 20, 40);
+    $k = 0;
+    alt_table_row_color($k);
+    label_cell("Skip osC Order Status:");
+    echo $order_status_row;
+    end_row();
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, true);
     sales_areas_list_row("Sales Area:", 'area');
     $dim = get_company_pref('use_dimension');

@@ -1,3 +1,4 @@
+2019-05-12  Tom Moulton  osc_orders extension updates
 2019-05-02  BraathWaate  Import Transactions extension updates
 2019-04-21  Stefan       Dutch nl_NL core language files fully done
 2019-04-20  Ap.Muthu     Updated nl_NL language files
