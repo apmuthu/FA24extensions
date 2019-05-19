@@ -978,7 +978,7 @@ if (isset($_POST['action'])) {
             // (Partial payment: Move Balance To Order is not discounted)
 
                             $sales_discount = ($default_sales_act == $row[1]) ? $disc_percent : 0;
-                            $total += round($prod['products_quantity'] * $pa['options_values_price'] * (1 -$sales_discount),2);
+                            $total += round($prod['products_quantity'] * $price * (1 -$sales_discount),2);
                             add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, $sales_discount);
                             $price = 0;
                         }
@@ -1154,7 +1154,8 @@ display_notification($sql);
 
                 $pa_result = osc_dbQuery($sql, true);
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
-                    $pa_price = $price + $pa['options_values_price'];
+                    $pa_price = $pa['options_values_price'];
+                    $fa_price = $price + $pa_price;  // fa price is the osc parent + osc attribute
                     $pa_att_id = $pa['products_attributes_id']; 
                     $pa_name=$pa['products_options_values_name'];
                     $pa_osc_id = $osc_id . "-" . $pa_att_id;
@@ -1162,10 +1163,11 @@ display_notification($sql);
                         display_error("$pa_osc_id $products_name $pa_name not found in FA.  Do Item Import.");
                         continue;
                     }
-                    $pa_myprice = get_kit_price($pa_osc_id, $currency, $sales_type);
-                    if ($pa_price != $pa_myprice) {
+                    $fa_myprice = get_kit_price($pa_osc_id, $currency, $sales_type);
+                    if ($fa_price != $fa_myprice) {
+                        $pa_myprice = $fa_myprice - $myprice;   // subtract the parent price
                         display_notification("Updating $pa_osc_id from $pa_price to $pa_myprice");
-                        $sql = "UPDATE products_attributes SET options_values_price = ".osc_escape($pa_myprice - $myprice)." WHERE products_attributes_id = ".osc_escape($pa_att_id);
+                        $sql = "UPDATE products_attributes SET options_values_price = ".osc_escape($pa_myprice)." WHERE products_attributes_id = ".osc_escape($pa_att_id);
                         $result = mysqli_query($osc, $sql);
                         $num_price_errors++;
                     }
@@ -1248,7 +1250,7 @@ display_notification($sql);
 
                 $pa_result = osc_dbQuery($sql, true);
                 while ($pa = mysqli_fetch_assoc($pa_result)) {
-                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], '', $cat, $tax_type_id, $mb_flag, $pa['options_values_price'], $products_status, $no_sale, $no_purchase, $pa['options_barcode']);
+                    addItemToFA($osc_id . "-" . $pa['products_attributes_id'], $products_name . "-" . $pa['products_options_values_name'], '', $cat, $tax_type_id, $mb_flag, $products_price + $pa['options_values_price'], $products_status, $no_sale, $no_purchase, $pa['options_barcode']);
                 }
                 mysqli_free_result($pa_result);
             }
