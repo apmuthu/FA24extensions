@@ -118,6 +118,9 @@ function clientarray_string($stock_id, $tax_group_id)
             continue;
         }
 
+        // #suite numbers confuse openstreetmap/nominatim 
+        $address = preg_replace("/#[0-9]*/", "", $address);
+
         if ($cust["latlong"] == "" || $cust["latlong"] == ",") {
             $request_url = "https://nominatim.openstreetmap.org/search?q=" . urlencode($address) . "&format=xml";
 
