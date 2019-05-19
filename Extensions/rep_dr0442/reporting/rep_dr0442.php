@@ -148,6 +148,8 @@ function print_dr0442()
     $period = $_POST['PARAM_0'];
     $beg_inv = $_POST['PARAM_1'];
     $grape_tons = $_POST['PARAM_2'];
+    if ($grape_tons == '')
+        $grape_tons = 0;
 
     $from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
     $to_date = substr($from_date,0,3) . "31" . substr($from_date,5);
@@ -280,6 +282,7 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
   $state = '';
   $page = 1;
   $total = 0;
+  $i = 0;
   while ($row = db_fetch($exports)) {
     $rows ++;
     if ($state != $row['state']) {
