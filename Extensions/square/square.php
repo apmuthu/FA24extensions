@@ -178,23 +178,32 @@ curl_close($curl);
 unlink($output);
 }
 
-function square_body($stock_id, $trans)
+function square_variation($stock_id)
 {
     $myprice = get_kit_price($stock_id, $_POST['currency'], $_POST['sales_type']);
 
-  return array(
-    "id" => $stock_id,
-    "name" => str_replace("Whitewater Hill ","",$trans['description']),
-    "category_id" => $trans['category_id'],
-    "variations" => array(
-        array(
+    $result = get_all_item_codes($stock_id);
+    $row    = db_fetch($result);
+
+    return array(
         "name" => "Small",
         "pricing_type" => "FIXED_PRICING",
+        "sku" => $row['item_code'],
         "price_money" => array(
             "amount" => 100 * $myprice,
             "currency_code" => "USD"
         )
-    ))
+    );
+}
+
+
+function square_body($stock_id, $trans)
+{
+  return array(
+    "id" => $stock_id,
+    "name" => str_replace("Whitewater Hill ","",$trans['description']),
+    "category_id" => $trans['category_id'],
+    "variations" => array(square_variation($stock_id))
   );
 }
 
@@ -216,7 +225,7 @@ function not_null($str) {
     return 0;
 }
 
-function square_orders($accessToken, $date)
+function square_locs($accessToken, $date = null)
 {
 # setup authorization
 \SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken($accessToken);
@@ -245,6 +254,9 @@ try {
     $cursor = null;
     $loc_orders = array();
     foreach ($locs->locations as $location) {
+        if (empty($date))
+            $loc_orders[$location->name] = $location->id;
+        else
         do {
             $trans = $api->listPayments($location->id, null, gmdate("c", strtotime($date)), null, 200, $cursor);
             $loc_orders[$location->name] = count((array)$trans);
@@ -375,35 +387,6 @@ function sales_service_items_list_row($label, $name, $selected_id=null, $all_opt
         echo "</td></tr>";
 }
 
-// Create a blank OSC order to contain the inventory changes
-
-function create_osc_order($invCust)
-{
-        global $osc;
-        $sql              = "INSERT INTO orders set
-            customers_id='$invCust',
-            customers_name='FA Inventory Adjust',
-            orders_status='3',
-            date_purchased='" . date2sql(Today()) . "',
-            last_modified='" . date2sql(Today()) . "'";
-        mysqli_query($osc, $sql);
-        $insert_id=mysqli_insert_id($osc);
-
-        $sql              = "INSERT INTO orders_total set
-            orders_id='$insert_id',
-            class='ot_total',
-            title='Total:',
-            text='$0.00'";
-        mysqli_query($osc, $sql);
-
-        $comments="Imported into FA";
-        $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($insert_id) . "," .  '3' . "," . osc_escape(date('Y-m-d H:i:s')) . ", 0, " . osc_escape($comments) . ")";
-
-        $result = mysqli_query($osc, $sql);
-
-        return $insert_id;
-}
-
 function get_error_status()
 {
     global $messages;
@@ -437,13 +420,6 @@ function get_fa_qoh($osc_id)
     return $myqty;
 }
 
-// Blank quantity OSC items are defined as services in FA
-function get_osc_id($item_code, $qty)
-{
-    global $osc_Prefix;
-    return $osc_Prefix . $item_code . ($qty == "" ? "D" : "");
-}
-
 function show_items($stock)
 {
     $list="";
@@ -454,10 +430,10 @@ function show_items($stock)
     return $list;
 }
 
-// Match FA payment_terms from osc payment method.
+// Match FA payment_terms from Square payment method.
 // We need a matching POS Name to find the FA pos.
-// Then find the first FA payment terms that match the osc payment type
-// The idea is to generate payments for some osc payment types
+// Then find the first FA payment terms that match the Square payment type
+// The idea is to generate payments for some Square payment types
 // and no payment for credit payment types.
 
 function get_FA_payment_terms($cart)
@@ -485,8 +461,6 @@ $debug_sql = 0;
 global $db_connections;
 $cur_prefix = $db_connections[$_SESSION["wa_current_user"]->cur_con]['tbpref'];
 
-check_db_has_sales_areas("You must first define atleast one Sales Area");
-
 $sql          = "SHOW TABLES";
 $result       = db_query($sql, "could not show tables");
 $found        = 0;
@@ -497,23 +471,17 @@ while (($row = db_fetch_row($result))) {
 
 $accessToken           = "";
 $locationId           = "";
-$lastcid          = 0;
 $lastdate         = "";
 $destCust         = 0;
-$invCust          = 0;
 $oscwebsite       = "";
 
 $access_Token          = "";
 $location_id          = "";
-$osc_Id           = "products_model";
-$osc_Prefix       = "";
-$last_cid         = 0;
 $last_date        = "";
 
 $min_cid = 0;
 $max_cid = 0;
 $min_date = "";
-$max_date = "";
 $min_iid = 0;
 $max_iid = 0;
 $order_count = 0;
@@ -531,24 +499,14 @@ if ($found) {
     $row     = db_fetch_row($result);
     $location_id = $row[1];
 
-    // Get last cID imported
-    $sql    = "SELECT * FROM ".TB_PREF."square WHERE name = 'lastcid'";
-    $result = db_query($sql, "could not get DB name");
-    $row    = db_fetch_row($result);
-    if (!$row) {
-        $sql = "INSERT INTO ".TB_PREF."square (name, value) VALUES ('lastcid', 0)";
-        db_query($sql, "add lastcid");
-        $last_cid = 0;
-    } else $last_cid = $row[1];
-
-    // Get last oID imported
+    // Get last order imported
     $sql = "SELECT * FROM ".TB_PREF."square WHERE name = 'lastdate'";
     $result = db_query($sql, "could not get DB name");
     $row    = db_fetch_row($result);
     if (!$row) {
-        $sql = "INSERT INTO ".TB_PREF."square (name, value) VALUES ('lastdate', 0)";
+        $last_date = Today();
+        $sql = "INSERT INTO ".TB_PREF."square (name, value) VALUES ('lastdate', '" . $last_date ."')";
         db_query($sql, "add lastdate");
-        $last_date = "";
     } else $last_date = $row[1];
 
     // Get destination customer
@@ -556,12 +514,6 @@ if ($found) {
     $result     = db_query($sql, "could not get destCust");
     $row        = db_fetch_row($result);
     $destCust  = $row[1];
-
-    // Get inventory customer
-    $sql        = "SELECT * FROM ".TB_PREF."square WHERE name = 'invCust'";
-    $result     = db_query($sql, "could not get invtCust");
-    $row        = db_fetch_row($result);
-    $invCust  = $row[1];
 
     // Get osc website
     $sql        = "SELECT * FROM ".TB_PREF."square WHERE name = 'oscwebsite'";
@@ -606,24 +558,11 @@ if (isset($_POST['action'])) {
             db_query($sql, "Update 'location_id'");
         }
 
-        if ($lastcid != $last_cid) { // It changed
-            if ($lastcid == '') $sql = "DELETE FROM ".TB_PREF."square WHERE name = 'lastcid'";
-            else if ($last_cid == '') $sql = "INSERT INTO ".TB_PREF."square (name, value) VALUES ('lastcid', ".db_escape($lastcid).")";
-            else $sql = "UPDATE  ".TB_PREF."square SET value = ".db_escape($lastcid)." WHERE name = 'lastcid'";
-            db_query($sql, "Update 'lastcid'");
-        }
-
-        if ($lastdate != $last_date) { // It changed
-            if ($lastdate == '') $sql = "DELETE FROM ".TB_PREF."square WHERE name = 'lastdate'";
-            else if ($last_date == '') $sql = "INSERT INTO ".TB_PREF."square (name, value) VALUES ('lastdate', ".db_escape($lastdate).")";
-            else $sql = "UPDATE  ".TB_PREF."square SET value = ".db_escape($lastdate)." WHERE name = 'lastdate'";
-            db_query($sql, "Update 'lastdate'");
-        }
+        $action = 'show';
 
     } else {
         $accessToken          = $access_Token;
         $locationId          = $location_id;
-        $lastcid         = $last_cid;
         $lastdate        = $last_date;
     }
 
@@ -691,13 +630,11 @@ try {
     $total = 0;
     foreach ($locs->locations as $location) {
 
-            // Find the customer branch
-            // by matching the FA area description
-            // with the Square location;
-            // This is necessary to get the correct sales tax rate
-            // on the order.
+            // Find the customer branch using the Square location as the branch name
+            // This is necessary to get the correct sales tax rate on the order,
+            // because each square location can have a different tax rate.
 
-                $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND description = " .db_escape($location->name);
+                $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND br_name = " .db_escape($location->name);
                 $result = db_query($sql, "Could not load branch");
                 if (db_num_rows($result) == 0) {
 
@@ -708,14 +645,16 @@ try {
             // print_r($branch);
 
         do {
-            $trans = $api->listPayments($location->id, null, gmdate("c", strtotime($_POST['from_date'])), gmdate("c", strtotime($_POST['to_date'])), 200, $cursor);
+            $trans = $api->listPayments($location->id, null, gmdate("c", strtotime($_POST['from_date'])), gmdate("c", strtotime("+1 day", strtotime($_POST['to_date']))), 200, $cursor);
             if (!empty((array)$trans)) {
                 foreach ($trans as $t) {
 
                     if (paymentExistsInFA($t->getId())) {
                         display_notification("Skipping " . $t->getId());
                         continue;
-                    }
+                    } else
+                        display_notification("Processing " . $t->getId());
+
                     $cart                = new Cart(ST_SALESINVOICE);
 
                     $payment_method = $t->getTender()[0]->getType();
@@ -805,11 +744,6 @@ try {
                 if ($_POST['trial_run'] == 0) {
                     $order_no = $cart->write(1);
                     display_notification("Added Order Number $order_no for " . $customers_name);
-
-                    if ($date_purchased > $lastdate) {
-                        $sql = "UPDATE  ".TB_PREF."square SET value = ".db_escape($date_purchased)." WHERE name = 'lastdate'";
-                        db_query($sql, "Update 'lastdate'");
-                    }
                 }
 
                 } // foreach
@@ -827,8 +761,15 @@ try {
             } // dest customer found
 
 
-            // $last_date = $_POST['end_date'];
-            $order_count = square_orders($accessToken, $last_date);
+            if ($_POST['trial_run'] == 0) {
+                if ($_POST['to_date'] > $lastdate) {
+                    $sql = "UPDATE  ".TB_PREF."square SET value = ".db_escape($_POST['to_date'])." WHERE name = 'lastdate'";
+                    db_query($sql, "Update 'lastdate'");
+                    $last_date = $_POST['to_date'];
+                }
+            }
+
+            $order_count = square_locs($accessToken, $last_date);
             $error_status = get_error_status();
             $action = 'oimport';
         } // no error
@@ -848,6 +789,9 @@ $body=array(
     "id" => $_POST['category'],
     "name" => get_category_name($_POST['category'])
   );
+
+//print "$accessToken $locationId";
+//die();
 
 try {
   $items = $items_api->createCategory($locationId, $body);
@@ -885,13 +829,28 @@ try {
 
 // Update Item
 
-  $body = square_body($stock_id, $trans);
 
 try {
-    $result = $items_api->updateItem($locationId, $stock_id, $body);
-    // print_r($result);
+    $result = $items_api->updateItem(
+        $locationId,
+        $stock_id,
+        square_body($stock_id, $trans)
+    );
+    //  print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling V1ItemsApi->updateItem: ', $e->getMessage(), PHP_EOL;
+}
+
+try {
+    $result = $items_api->updateVariation(
+        $locationId,
+        $stock_id,
+        $item->getVariations()[0]->getId(),
+        square_variation($stock_id)
+    );
+    //  print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling V1ItemsApi->getVariations: ', $e->getMessage(), PHP_EOL;
 }
 
     $filename = company_path().'/images';
@@ -936,43 +895,13 @@ try {
 } else {
     $accessToken      = $access_Token;
     $locationId      = $location_id;
-    $lastcid         = $last_cid;
     $lastdate         = $last_date;
 }
 
 if ( in_array($action, array('summary', 'oimport'))  ) {
 
-    if ($action == 'summary') { // Preview Customer Import page
-/*
-
-        $sql     = "SELECT `customers_id` FROM `customers` order by `customers_id` asc LIMIT 0,1";
-        $cid     = osc_dbQuery($sql);
-        $min_cid = (int) $cid['customers_id'];
-        if ($min_cid <= $last_cid) $min_cid = $last_cid + 1;
-        $sql     = "SELECT `customers_id` FROM `customers` order by `customers_id` desc LIMIT 0,1";
-        $cid     = osc_dbQuery($sql);
-        $max_cid = (int) $cid['customers_id'];
-*/
-
-        $order_count = square_orders($accessToken, $last_date);
-    }
-
-    if ($action == 'oimport' || $action == 'summary') { // Preview Order Import page
-/*
-
-        $sql     = "SELECT `date_purchased` FROM `orders` order by `date_purchased` asc LIMIT 0,1";
-        $oid     = osc_dbQuery($sql);
-        $min_date = $oid['date_purchased'];
-        if ($min_date <= $last_date) $min_date = date('Y-m-d', strtotime($last_date .' +1 day'));
-        $sql     = "SELECT `date_purchased` FROM `orders` order by `date_purchased` desc LIMIT 0,1";
-        $oid     = osc_dbQuery($sql);
-        $max_date = $oid['date_purchased'];
-*/
-    }
-
-    if ($action == 'summary') { // Preview Item Import page
-
-        // TBD
+    if ($action == 'summary') {
+        $order_count = square_locs($accessToken, $last_date);
     }
 }
 
@@ -1045,9 +974,26 @@ if ($action == 'show') {
 
     if ($found) {
         text_row("Square Access Token", 'accessToken', $accessToken, 20, 40);
-        text_row("Square Location Id", 'locationId', $locationId, 20, 40);
+        if (!empty($accessToken)) {
+            end_table(1);
+            start_table(TABLESTYLE);
+            $th = array("Inventory Location", "Square Location Id");
+            table_header($th);
+            alt_table_row_color($k);
+            $locs = square_locs($accessToken);
+            if (count($locs) == 0)
+                display_error("Access Token is invalid or no square locations found");
+            else
+            foreach ($locs as $loc_name => $id) {
+                label_cell($loc_name);
+                if (count($locs) == 1 || $locationId == $id)
+                    label_cell(radio($id, 'locationId', $id, true));
+                else
+                    label_cell(radio($id, 'locationId', $id));
+                end_row();
+            }
+        }
     }
-
     end_table(1);
 
     if (!$found) {
@@ -1072,9 +1018,9 @@ if ($action == 'oimport') {
     table_section_title("Order Import Options");
 
     if (!isset($_POST['from_date']))
-        $_POST['from_date'] = sql2date($min_date);
+        $_POST['from_date'] = $lastdate;
     if (!isset($_POST['to_date']))
-        $_POST['to_date'] = sql2date($max_date);
+        $_POST['to_date'] = Today();
     date_row("From Order Date:", 'from_date');
     date_row("To Order Date:", 'to_date');
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, false);
