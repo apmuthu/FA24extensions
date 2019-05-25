@@ -329,7 +329,7 @@ var markers = [];
 function clickList(i) {
     markers[i].openPopup();
 }
-					
+
 
 function codeAddress(map, i) {
 	var htmlListing = "<P><H2 onclick=clickList(" + i + ") style=\'margin-bottom:2px;\'><a href=" + window.location.href +"#title>" + clientArray[i][0] + "</a></H2>"	//name
@@ -350,7 +350,6 @@ function codeAddress(map, i) {
         .openPopup();
 
     markers[i] = marker;    // store for list click
-
 }
 
 function stockFilter()
