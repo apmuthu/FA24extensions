@@ -240,10 +240,10 @@ function addItemToFA($osc_id, $products_name, $desc, $cat, $tax_type_id, $mb_fla
             // Note that Update Prices and Update Inventory
             // will overwrite these fields in osCommerce, so it
             // it pointless to change them in osCommerce.
-            // Conversely, product name, category, tax class are controlled
+            // Conversely, product name, category, tax class, inactive are controlled
             // by osCommerce so it is pointless to change them
             // in FA, as they will be overwritten.
-            $sql = "UPDATE ".TB_PREF."stock_master SET description=" . db_escape($products_name) .", long_description=" . db_escape($desc) . ", category_id='$cat', tax_type_id='$tax_type_id'
+            $sql = "UPDATE ".TB_PREF."stock_master SET description=" . db_escape($products_name) .", long_description=" . db_escape($desc) . ", category_id='$cat', tax_type_id='$tax_type_id', inactive='$inactive'
                 WHERE stock_id=" . db_escape($osc_id);
 
             db_query($sql, "The item could not be updated");
@@ -954,13 +954,14 @@ if (isset($_POST['action'])) {
                     $pa_result = osc_dbQuery($sql, true);
                     if (db_num_rows($pa_result) == 0) {
 
-            // Only items on the OSC order that are sales items are discounted
+            // Only items on the OSC order that are sales items are discounted and included in OSC subtotal
             // (Partial payment: Move Balance To Order is not discounted)
 
-                        $sales_discount = ($default_sales_act == $row[1]) ? $disc_percent : 0;
-
-                        add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $sales_discount);
-                        $total += round($prod['products_quantity'] * $prod['products_price'] * (1 - $sales_discount),2);
+                        if ($default_sales_act == $row[1]) {
+                            add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $disc_percent);
+                            $total += round($prod['products_quantity'] * $prod['products_price'] * (1 - $disc_percent),2);
+                        } else
+                                add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], 0);
                     } else {
                         $price = $prod['products_price'];
                         while ($pa = mysqli_fetch_assoc($pa_result)) {
@@ -974,12 +975,14 @@ if (isset($_POST['action'])) {
                                 break;  // total check below will fail
                             }
 
-            // Only items on the OSC order that are sales items are discounted
+            // Only items on the OSC order that are sales items are discounted and included in OSC subtotal
             // (Partial payment: Move Balance To Order is not discounted)
 
-                            $sales_discount = ($default_sales_act == $row[1]) ? $disc_percent : 0;
-                            $total += round($prod['products_quantity'] * $price * (1 -$sales_discount),2);
-                            add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, $sales_discount);
+                            if ($default_sales_act == $row[1]) {
+                                $total += round($prod['products_quantity'] * $price * (1 -$disc_percent),2);
+                                add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, $disc_percent);
+                            } else
+                                add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, 0);
                             $price = 0;
                         }
                         mysqli_free_result($pa_result);
@@ -991,10 +994,12 @@ if (isset($_POST['action'])) {
                     // uh oh, rounding broke the invoice total
                     // add the adjustment item to adjust it
                     if ($rows == 0
-                        && round($total,2) != $total_osc
-                        && abs($total-$total_osc) < .05) {
-                        add_to_order($cart, $_POST['adjustment'], 1, $total_osc- $total, 0);
-                        display_notification("osC order $oID OSC $total_osc not equal to FA total $total, added adjustment");
+                        && round($total,2) != $total_osc) {
+                        if (abs($total-$total_osc) < .05) {
+                            add_to_order($cart, $_POST['adjustment'], 1, $total_osc- $total, 0);
+                            display_notification("osC order $oID OSC $total_osc not equal to FA total $total, added adjustment");
+                        } else
+                            display_notification("osC order $oID OSC $total_osc not equal to FA total $total, no adjustment");
                     }
                 }
                 mysqli_free_result($result);
@@ -1196,7 +1201,6 @@ display_notification($sql);
                 $products_quantity = $pp['products_quantity'];
                 $products_status = $pp['products_status'];
                 $osc_id = get_osc_id($pp[$osc_Id], $products_quantity);
-
                 $mb_flag = 'B';
                 if ($products_quantity == "") {
                     $mb_flag = 'D';
@@ -1739,7 +1743,7 @@ if ($action == 'iimport') {
     currencies_list_row("Customer Currency:", 'currency', get_company_pref("curr_default"));
     sales_types_list_row("Sales Type:", 'sales_type', null);
     text_row("Oscommerce Website (optional, for images):", 'oscwebsite', $oscwebsite, 20, 40);
-    echo "<tr><td colspan=2 align=center>Note: Only description, category and tax class id are updated on items that already exist in FA.<td><tr>";
+    echo "<tr><td colspan=2 align=center>Note: Only description, category, tax class id and inactive are updated on items that already exist in FA.<td><tr>";
 
     end_table(1);
 
