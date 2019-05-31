@@ -196,7 +196,7 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
     $rep->NewLine(1,0,24);
     $rep->TextCol(0, 1, $name);
     $lines=0;
-    if ($myrow['type'] == ST_SUPPAYMENT) {
+    if ($myrow['person_type_id'] == PT_SUPPLIER) {
         $sup = get_supplier($myrow['person_id']);
         if ($sup['address'] != "") {
             $subject=$sup['address'];
