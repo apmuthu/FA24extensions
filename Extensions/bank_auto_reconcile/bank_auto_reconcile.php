@@ -411,7 +411,7 @@ if (isset($_POST['import'])) {
 
                         if (db_num_rows($result) == 1) {
                             $sim = db_fetch($result);
-                            display_notification("$date:$amount:$checkno:$comment will be created using account " . $sim['account'] . " " . $sim['account_name'] . " dimension " . $sim['dim1']); 
+                            display_notification("$date : $amount : $comment will be created using account " . $sim['account'] . " " . $sim['account_name'] . " dimension " . $sim['dim1']); 
                             $auto[] = array($sim['id'], $amount, $comment, $date);
                             $total_current += $amount;
                             $total += $amount;
@@ -419,7 +419,7 @@ if (isset($_POST['import'])) {
                         }
                     }
 
-                    display_notification("$date : $amount : $comment");
+                    display_warning("$date : $amount : $comment NOT FOUND - FIX THIS");
                     $total_miss += $amount;
                     $total += $amount;
                 } else if (db_num_rows($result) == 1 || $early) {
