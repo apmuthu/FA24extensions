@@ -206,8 +206,9 @@ function addImageToFA($stock_id, $oscwebsite, $name)
     if (!is_null($oscwebsite)) {
         $filename = company_path().'/images';
         $filename .= "/".item_img_name($stock_id).".jpg";
-
-        @copy($oscwebsite . "/catalog/images/" . $name, $filename);
+        $file_buf = @file_get_contents($oscwebsite . "/catalog/images/" . $name);
+        if ($file_buf !== false)
+            imagejpeg( imagecreatefromstring( $file_buf), $filename );
     }
 }
 
@@ -257,13 +258,14 @@ function addItemToFA($osc_id, $products_name, $desc, $cat, $tax_type_id, $mb_fla
         else update_item_code($row[0], $osc_id, $osc_id, $products_name, $cat, 1);
 
         // barcode
+        $sql    = "SELECT id from ".TB_PREF."item_codes WHERE is_foreign=1 AND stock_id = ".db_escape($osc_id);
+        $result = db_query($sql, "item code could not be retreived");
+        $row    = db_fetch_row($result);
         if ($barcode != "" && strlen($barcode) <= 20) {
-            $sql    = "SELECT id from ".TB_PREF."item_codes WHERE item_code=".db_escape($barcode)." AND stock_id = ".db_escape($osc_id);
-            $result = db_query($sql, "item code could not be retreived");
-            $row    = db_fetch_row($result);
             if (!$row) add_item_code($barcode, $osc_id, $products_name, $cat, 1, 1);
             else update_item_code($row[0], $barcode, $osc_id, $products_name, $cat, 1, 1);
-        }
+        } else if ($row)
+            delete_item_code($row[0]);
     }
 
 function sales_service_items_list_row($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false)
