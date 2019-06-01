@@ -1,7 +1,7 @@
 <?php
 /**********************************************
 Author: Braath Waate
-Name: Square Connector
+Name: Square POS Connector
 Free software under GNU GPL
 ***********************************************/
 $page_security = 'SA_SQUARE';
@@ -32,16 +32,18 @@ function getTransactions($category, $location, $item_like)
             item.stock_id, item.units,
             item.description, item.inactive,
             IF(move.stock_id IS NULL, '', move.loc_code) AS loc_code,
-            SUM(IF(move.stock_id IS NULL,0,move.qty)) AS QtyOnHand
+            SUM(IF(move.stock_id IS NULL,0,move.qty)) AS QtyOnHand,
+            tt.name as tax_name,
+            tt.exempt
         FROM ("
             .TB_PREF."stock_master item,"
             .TB_PREF."stock_category category)
             LEFT JOIN ".TB_PREF."stock_moves move ON item.stock_id=move.stock_id
+            LEFT JOIN ".TB_PREF."item_tax_types tt ON item.tax_type_id=tt.id
         WHERE item.category_id=category.category_id
         AND item.inactive = 0
-        AND item.no_sale = 0
         AND (item.mb_flag='B' OR item.mb_flag='M')";
-    if ($category != 0)
+    if ($category  != -1)
         $sql .= " AND item.category_id = ".db_escape($category);
     if ($location != 'all')
         $sql .= " AND IF(move.stock_id IS NULL, '1=1',move.loc_code = ".db_escape($location).")";
@@ -72,7 +74,9 @@ function square_thumbnail_with_proportion($src_file,$destination_file,$square_di
 {
     // Step one: Rezise with proportion the src_file *** I found this in many places.
 
-    $src_img=imagecreatefromjpeg($src_file);
+    $src_img = imagecreatefromjpeg($src_file);
+    if ($src_img === false)
+        return false;
 
     $old_x=imageSX($src_img);
     $old_y=imageSY($src_img);
@@ -142,15 +146,50 @@ function square_thumbnail_with_proportion($src_file,$destination_file,$square_di
     imagedestroy($src_img); 
     imagedestroy($smaller_image_with_proportions);
     imagedestroy($final_image);
+
+    return true;
 }
 
 
-function uploadItemImage($square_url, $access_token, $image_path_on_server)
+function uploadItemImage($sq_id, $image_path_on_server)
 {
-    $output = tempnam( sys_get_temp_dir(), "sq");
-    square_thumbnail_with_proportion($image_path_on_server, $output, 600);
+    global $accessToken;
+    $output = tempnam( sys_get_temp_dir(), "sq") . ".jpeg";
+    if (!square_thumbnail_with_proportion($image_path_on_server, $output, 600)) {
+        display_error("$image_path_on_server not a valid image file");
+        return;
+    }
     // scale_image($image_path_on_server, $output);
 
+
+$idem=uniqid();
+$command=<<<EOT
+#!/bin/bash
+curl -v -X POST \
+-H 'Accept: application/json' \
+-H 'Authorization: Bearer $accessToken' \
+-H 'Cache-Control: no-cache' \
+-H 'Square-Version:  2019-03-27' \
+-F 'file=@$output' \
+-F 'request=
+{
+    "idempotency_key":"$idem",
+    "object_id":"$sq_id",
+    "image":{
+        "id":"#TEMP_ID",
+        "type":"IMAGE",
+        "image_data":{
+            "caption":"Image"
+        }
+    }
+}' \
+'https://connect.squareup.com/v2/catalog/images'
+
+EOT;
+
+$res=exec($command);
+
+/*
 $cfile = new CURLFile($output, 'image/jpeg', 'image_data');
 $image_data = array('image_data' => $cfile);
 
@@ -169,44 +208,78 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
 curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
 $json = curl_exec($curl);
-/*
-    $return_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    print "POST to $square_url with status $return_status\n";
-    print "$json\n";
-*/
 curl_close($curl);
+*/
+
+
+
 unlink($output);
 }
 
-function square_variation($stock_id)
+function square_variation($stock_id, $sq_item, $locationId)
 {
     $myprice = get_kit_price($stock_id, $_POST['currency'], $_POST['sales_type']);
 
     $result = get_all_item_codes($stock_id);
     $row    = db_fetch($result);
 
-    return array(
-        "name" => "Small",
-        "pricing_type" => "FIXED_PRICING",
-        "sku" => $row['item_code'],
-        "price_money" => array(
-            "amount" => 100 * $myprice,
-            "currency_code" => "USD"
+    if (isset($sq_item)) {
+        $id = $sq_item->item_data->variations[0]->id;
+        $version = $sq_item->item_data->variations[0]->version;
+   } else {
+        $id = "#foovar";
+        $version = null;
+    }
+
+    $obj = array(
+        "type" => "ITEM_VARIATION", 
+        "id" => $id,
+        "version" => $version,
+        "present_at_all_locations" => ($locationId == '0' ? true : false),
+        "item_variation_data" => array(
+            "name" => "Short",
+            "pricing_type" => "FIXED_PRICING",
+            "sku" => $row['item_code'],
+            "price_money" => array(
+                "amount" => round(100 * $myprice),
+                "currency" => "USD"
+            )
         )
     );
+    if ($locationId != '0')
+        $obj = array_merge($obj, array("present_at_location_ids" => array($locationId)));
+
+  return $obj;
 }
 
-
-function square_body($stock_id, $trans)
+function square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locationName, $taxName)
 {
-  return array(
-    "id" => $stock_id,
-    "name" => str_replace("Whitewater Hill ","",$trans['description']),
-    "category_id" => $trans['category_id'],
-    "variations" => array(square_variation($stock_id))
-  );
-}
+    if (isset($sq_item)) { // existing object
+      $obj=(array)$sq_item;
+    } else {
+      $obj = array(
+        "type" => "ITEM",
+        "id" => "#foo",
+        "present_at_all_locations" => ($locationId == '0' ? true : false)
+      );
+    }
 
+    $obj = array_merge($obj, array(
+        "item_data" => array(
+            "name" => str_replace("Whitewater Hill ","",$trans['description']),
+            "category_id" => $sq_cat,
+            "variations" => array(square_variation($stock_id, $sq_item, $locationId))
+      )));
+
+    if ($locationId != '0') {
+        $obj = array_merge($obj, array("present_at_location_ids" => array($locationId)));
+
+        if (!$trans['exempt']) {
+            $obj = array_merge($obj, array("tax_ids" => array($taxName[$locationName[$locationId] . " " . $trans['tax_name']])));
+        }
+    }
+  return $obj;
+}
 
 function display_posts()
 {
@@ -225,8 +298,9 @@ function not_null($str) {
     return 0;
 }
 
-function square_locs($accessToken, $date = null)
+function square_locs($date = null)
 {
+    global $accessToken;
 # setup authorization
 \SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken($accessToken);
 
@@ -249,17 +323,16 @@ try {
 
 
     $api = new \SquareConnect\Api\V1TransactionsApi();
-    $items_api = new \SquareConnect\Api\V1ItemsApi();
     $cat_api = new \SquareConnect\Api\CatalogApi();
     $cursor = null;
     $loc_orders = array();
     foreach ($locs->locations as $location) {
         if (empty($date))
-            $loc_orders[$location->name] = $location->id;
+            $loc_orders[$location->id] = $location->name;
         else
         do {
             $trans = $api->listPayments($location->id, null, gmdate("c", strtotime($date)), null, 200, $cursor);
-            $loc_orders[$location->name] = count((array)$trans);
+            $loc_orders[$location->id] = array($location->name, count((array)$trans));
 
             if (!isset($trans->cursor))
                 break;
@@ -268,6 +341,33 @@ try {
     }
     return $loc_orders;
 }
+
+function locs_list($name, $selected_id=null, $name_yes="", $name_no="", $submit_on_change=false)
+{
+    $location_name = array_merge(array("All"), square_locs());
+    return array_selector($name, $selected_id, $location_name,
+        array(
+            'select_submit'=> $submit_on_change,
+            'async' => false ) ); // FIX?
+}
+
+function locs_list_cells($label, $name, $selected_id=null, $name_yes="", $name_no="", $submit_on_change=false)
+{
+    if ($label != null)
+        echo "<td>$label</td>\n";
+    echo "<td>";
+    echo locs_list($name, $selected_id, $name_yes, $name_no, $submit_on_change);
+    echo "</td>\n";
+}
+
+function locs_list_row($label, $name, $selected_id=null, $name_yes="", $name_no="", $submit_on_change=false)
+{
+    echo "<tr><td class='label'>$label</td>";
+    locs_list_cells(null, $name, $selected_id, $name_yes, $name_no, $submit_on_change);
+    echo "</tr>\n";
+}
+
+
 
 function check_stock_id($stock_id) {
     $sql    = "SELECT * FROM ".TB_PREF."stock_master where stock_id = " . db_escape($stock_id);
@@ -470,7 +570,6 @@ while (($row = db_fetch_row($result))) {
 
 
 $accessToken           = "";
-$locationId           = "";
 $lastdate         = "";
 $destCust         = 0;
 $oscwebsite       = "";
@@ -550,19 +649,11 @@ if (isset($_POST['action'])) {
             else $sql = "UPDATE  ".TB_PREF."square SET value = ".db_escape($accessToken)." WHERE name = 'access_token'";
             db_query($sql, "Update 'access_token'");
         }
-        if (isset($_POST['locationId']))     $locationId          = $_POST['locationId'];
-        if ($locationId != $location_id) { // It changed
-            if ($locationId == '') $sql = "DELETE FROM ".TB_PREF."square WHERE name = 'location_id'";
-            else if ($location_id == '') $sql = "INSERT INTO ".TB_PREF."square (name, value) VALUES ('location_id', ".db_escape($locationId).")";
-            else $sql = "UPDATE  ".TB_PREF."square SET value = ".db_escape($locationId)." WHERE name = 'location_id'";
-            db_query($sql, "Update 'location_id'");
-        }
 
         $action = 'show';
 
     } else {
         $accessToken          = $access_Token;
-        $locationId          = $location_id;
         $lastdate        = $last_date;
     }
 
@@ -718,9 +809,13 @@ try {
 
                        $total += $t->getTender()[0]->getTotalMoney()->getAmount();
                         $fees += $t->getProcessingFeeMoney()->getAmount();
-                        $items = $t->getItemizations();
+                    $items = $t->getItemizations();
+
 //print_r($items);
                         foreach ($items as $item) {
+                            $type = $item->getItemizationType();
+                            if ($type == 'CUSTOM_AMOUNT')
+                                continue;
                             $detail = $item->getItemDetail();
                             $item_id = $detail->getItemId();
                             $item2 = $items_api->retrieveItem($location->id, $item_id);
@@ -769,7 +864,7 @@ try {
                 }
             }
 
-            $order_count = square_locs($accessToken, $last_date);
+            $order_count = square_locs($last_date);
             $error_status = get_error_status();
             $action = 'oimport';
         } // no error
@@ -781,112 +876,171 @@ try {
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken($accessToken);
 
-$items_api = new \SquareConnect\Api\V1ItemsApi();
+$locationId=$_POST['location_id'];
+$locationName = array_merge(array("All"), square_locs());
+$categories=array();
 
-// Create category
-
-$body=array(
-    "id" => $_POST['category'],
-    "name" => get_category_name($_POST['category'])
-  );
-
-//print "$accessToken $locationId";
-//die();
+$api_instance = new SquareConnect\Api\CatalogApi();
 
 try {
-  $items = $items_api->createCategory($locationId, $body);
+    $result = $api_instance->listCatalog("", "TAX");
 } catch (Exception $e) {
-    echo 'Exception when calling V1ItemsApi->createCategory: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling CatalogApi->listCatalog: ', $e->getMessage(), PHP_EOL;
 }
+  $sq_tax = json_decode($result);
+    foreach ($sq_tax->objects as $obj)
+        $taxName[$obj->tax_data->name] = $obj->id;
 
-// Delete items no longer in FA
+// List all square items
 
-try {
-  $items = $items_api->listItems($locationId);
-} catch (Exception $e) {
-    echo 'Exception when calling V1ItemsApi->listItems: ', $e->getMessage(), PHP_EOL;
-}
+$cursor = null;
+do {
+    $api_instance = new SquareConnect\Api\CatalogApi();
+    $types = "types_example"; // string | An optional case-insensitive, comma-separated list of object types to retrieve, for example `ITEM,ITEM_VARIATION,CATEGORY,IMAGE`.  The legal values are taken from the [CatalogObjectType](#type-catalogobjecttype) enumeration, namely `ITEM`, `ITEM_VARIATION`, `CATEGORY`, `DISCOUNT`, `TAX`, `MODIFIER`, `MODIFIER_LIST`, or `IMAGE`.
 
-  foreach ($items as $item) {
-  $stock_id = $item->getId();
-  $square_items[$stock_id] = 1;
+    try {
+        $result = $api_instance->listCatalog($cursor, "ITEM");
+        $res = json_decode($result);
+    } catch (Exception $e) {
+        echo 'Exception when calling CatalogApi->listCatalog: ', $e->getMessage(), PHP_EOL;
+    }
 
-  $trans = get_item($stock_id);
-   if ($trans == null) {
-    display_notification("$stock_id not found");
-    continue;
-   }
+    foreach ($res->objects as $item)
+        $square_items[$item->item_data->name] = $item;
 
-  if ($trans['inactive'] == 1 || $trans['no_sale'] == 1) {
-try {
-    $result = $items_api->deleteItem($locationId, $stock_id);
-    // print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling V1ItemsApi->deleteItem: ', $e->getMessage(), PHP_EOL;
-}
-    continue;
-  }
-
-// Update Item
+    if (!isset($res->cursor))
+        break;
+    $cursor = $res->cursor;
+} while (1);
 
 
-try {
-    $result = $items_api->updateItem(
-        $locationId,
-        $stock_id,
-        square_body($stock_id, $trans)
-    );
-    //  print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling V1ItemsApi->updateItem: ', $e->getMessage(), PHP_EOL;
-}
+// Add Items from selected category
 
-try {
-    $result = $items_api->updateVariation(
-        $locationId,
-        $stock_id,
-        $item->getVariations()[0]->getId(),
-        square_variation($stock_id)
-    );
-    //  print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling V1ItemsApi->getVariations: ', $e->getMessage(), PHP_EOL;
-}
+$cat = $_POST['category'];
+$trans_res = getTransactions($cat, 'all', $_POST['stocklike']);
+
+while ($trans=db_fetch($trans_res)) {
+    $stock_id = $trans['stock_id'];
+
+
+// do not update item if the item is present at all locations
+// and we are exporting a specific location
+
+    if (isset($square_items[str_replace("Whitewater Hill ","",$trans['description'])])) {
+        $sq_item=$square_items[str_replace("Whitewater Hill ","",$trans['description'])];
+        if ($sq_item->present_at_all_locations
+            && $locationId != "0")
+            continue;
+    } else
+        unset($sq_item);
+
+    if (isset($categories[$trans['category_id']]))
+        $sq_cat=$categories[$trans['category_id']];
+    else {
+
+// Check if category already in Square catalog
+
+        $api_instance = new SquareConnect\Api\CatalogApi();
+        $body = new \SquareConnect\Model\SearchCatalogObjectsRequest();
+        $body->setObjectTypes(array("CATEGORY"));
+        $body->setQuery(array("exact_query" => array(
+            "attribute_name" => "name",
+            "attribute_value" => get_category_name($trans['category_id']))));
+
+
+        try {
+            $result = $api_instance->searchCatalogObjects($body);
+        } catch (Exception $e) {
+            echo 'Exception when calling CatalogApi->searchCatalogObjects: ', $e->getMessage(), PHP_EOL;
+        }
+
+        $res = json_decode($result);
+        if (isset($res->objects))
+            $sq_cat = $res->objects[0]->id;
+        else {
+
+        // Create category
+
+            $body = new \SquareConnect\Model\UpsertCatalogObjectRequest();
+                        $obj=array(
+                            "type" => "CATEGORY",
+                            "id" => '#foocat',
+                            "category_data" => array("name" => get_category_name($trans['category_id']))
+                          );
+
+            $body->setIdempotencyKey(uniqid());
+            $body->setObject($obj);
+
+            try {
+                $result = $api_instance->upsertCatalogObject($body);
+                $res = json_decode($result);
+                $sq_cat = $res->id_mappings[0]->object_id;
+                $categories[$trans['category_id']] = $sq_cat;
+            } catch (Exception $e) {
+                display_error('Exception when calling CatalogApi->upsertCatalogObject: '. $e->getMessage());
+                continue;
+            }
+        }
+
+    } // if !isset sq_cat
+
+// Add/Update Item
+
+    $body = new \SquareConnect\Model\UpsertCatalogObjectRequest();
+    $obj = square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locationName, $taxName);
+    $body->setIdempotencyKey(uniqid());
+    $body->setObject($obj);
+
+
+    try {
+        $result = $api_instance->upsertCatalogObject($body);
+        $res = json_decode($result);
+        $sq_id=$res->catalog_object->id;
+    } catch (Exception $e) {
+        display_error("$stock_id: Exception when calling CatalogApi->upsertCatalogObject: " .  $e->getMessage());
+        continue;
+    }
+
+    unset($square_items[str_replace("Whitewater Hill ","",$trans['description'])]);
+
+    // Update taxes (should not be necessary, but tax_ids field in item field not working)
+
+    if (!$trans['exempt'] && $locationId != '0') {
+        $body = new \SquareConnect\Model\UpdateItemTaxesRequest();
+        $body->setItemIds(array($sq_id));
+        $body->setTaxesToEnable(array($taxName[$locationName[$locationId] . " " . $trans['tax_name']]));
+
+        try {
+            $result = $api_instance->updateItemTaxes($body);
+        } catch (Exception $e) {
+            echo 'Exception when calling CatalogApi->updateItemTaxes: ', $e->getMessage(), PHP_EOL;
+        }
+    }
+
+    // Upload Images
 
     $filename = company_path().'/images';
     $filename .= "/".item_img_name($stock_id).".jpg";
     if ($_POST['upload'] == 1 && file_exists($filename)) {
-        $url = "https://connect.squareup.com/v1/$locationId/items/$stock_id/image";
-        uploadItemImage($url, $accessToken, $filename);
+        uploadItemImage($sq_id, $filename);
     }
-
-    } // foreach
-
-// Add Items from selected category
-
-    $res = getTransactions($_POST['category'], 'all', null);
-    $catt = '';
-    while ($trans=db_fetch($res))
-    {
-    $stock_id = $trans['stock_id'];
-    if (isset($square_items[$stock_id]))
-        continue;
-
-display_notification("Adding $stock_id");
-  $body = square_body($stock_id, $trans);
-
-try {
-    $result = $items_api->createItem($locationId, $body);
-    // print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling V1ItemsApi->createItem: ', $e->getMessage(), PHP_EOL;
-}
 
 } // while
 
 
+// Delete items in square that are not in FA
 
+foreach ($square_items as $sq_item)
+    if (isset($sq_item->id) && $sq_item->item_data->category_id == $sq_cat) {
+        $api_instance = new SquareConnect\Api\CatalogApi();
+        try {
+            $result = $api_instance->deleteCatalogObject($sq_item->id);
+        } catch (Exception $e) {
+            echo 'Exception when calling CatalogApi->deleteCatalogObject: ', $e->getMessage(), PHP_EOL;
+        }
+    }
 
+    $action = 'iexport';
 
 } // i_export
 
@@ -894,14 +1048,13 @@ try {
 
 } else {
     $accessToken      = $access_Token;
-    $locationId      = $location_id;
     $lastdate         = $last_date;
 }
 
 if ( in_array($action, array('summary', 'oimport'))  ) {
 
     if ($action == 'summary') {
-        $order_count = square_locs($accessToken, $last_date);
+        $order_count = square_locs($last_date);
     }
 }
 
@@ -945,8 +1098,8 @@ if ($action == 'summary') {
     end_row();
 
     foreach ($order_count as $loc => $count) {
-        label_cell("$loc");
-        label_cell($count);
+        label_cell($count[0]);
+        label_cell($count[1]);
         end_row();
     }
 
@@ -975,12 +1128,13 @@ if ($action == 'show') {
     if ($found) {
         text_row("Square Access Token", 'accessToken', $accessToken, 20, 40);
         if (!empty($accessToken)) {
+/*
             end_table(1);
             start_table(TABLESTYLE);
             $th = array("Inventory Location", "Square Location Id");
             table_header($th);
             alt_table_row_color($k);
-            $locs = square_locs($accessToken);
+            $locs = square_locs();
             if (count($locs) == 0)
                 display_error("Access Token is invalid or no square locations found");
             else
@@ -992,8 +1146,10 @@ if ($action == 'show') {
                     label_cell(radio($id, 'locationId', $id));
                 end_row();
             }
+*/
         }
     }
+
     end_table(1);
 
     if (!$found) {
@@ -1061,7 +1217,11 @@ if ($action == 'iexport') {
     sales_types_list_row("Sales Type:", 'sales_type', null);
 
     locations_list_row("Location:", 'default_location', null);
+
+    locs_list_row("Square Location:", 'location_id');
+
     stock_categories_list_row("Category:", 'category', null, _("All Categories"));
+    text_row("Stock ID Pattern:", 'stocklike', null, 10, 20);
     yesno_list_row("Upload Images:", 'upload', null);
 
     end_table(1);

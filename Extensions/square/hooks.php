@@ -15,16 +15,16 @@ class hooks_square extends hooks {
 
 		switch($app->id) {
 			case 'orders':
-				$app->add_rapp_function(2, _('Square Sync'), 
+				$app->add_rapp_function(2, _('Square POS Connector'), 
 					$path_to_root.'/modules/'.$this->module_name.'/square.php', 'SA_SQUARE');
 		}
 	}
 
 	function install_access()
 	{
-		$security_sections[SS_SQUARE] =	_("Square Sync");
+		$security_sections[SS_SQUARE] =	_("Square POS Connector");
 
-		$security_areas['SA_SQUARE'] = array(SS_SQUARE|108, _("Square Sync"));
+		$security_areas['SA_SQUARE'] = array(SS_SQUARE|108, _("Square POS Connector"));
 
 		return array($security_areas, $security_sections);
 	}
