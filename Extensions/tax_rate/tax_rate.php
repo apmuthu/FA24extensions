@@ -16,12 +16,10 @@ page(_($help_context), false, false, "", $js);
 
 set_posts(array('address'));
 
-$rate="";
+$rates=array();
 if (isset($_POST['address'])
-    && isset($_POST['tax_group_id'])) {
-    $tax_group = get_tax_group($_POST['tax_group_id']);
-    $rate = get_tax_rate($tax_group['name'], $_POST['address']);
-}
+    && isset($_POST['tax_group_id']))
+    $rates = get_tax_group_items_as_array($_POST['tax_group_id'], $_POST['address']);
 
     start_form(true);
     start_table(TABLESTYLE2, "width=60%");
@@ -29,7 +27,9 @@ if (isset($_POST['address'])
     table_section_title("Tax Rate Lookup");
     textarea_row(_("Address:"), 'address', @$_POST['address'], 35, 5);
     tax_groups_list_row(_("Tax Group:"), 'tax_group_id');
-    label_row("Tax Rate:", $rate);
+    foreach ($rates as $rate)
+        if ($rate['rate'] != '')
+            label_row($rate[1] . ":", $rate['rate']);
 
     end_table(1);
 

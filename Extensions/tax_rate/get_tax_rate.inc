@@ -33,7 +33,7 @@ $csv[0] = array_slice($csv[0], 0, 7);
     function get_tax_rates($tax_group_name, $address)
     {
         global $tax_rates;
-        if ($tax_group_name == "Local Sales Tax") {
+        if ($tax_group_name == "Colorado Sales Tax") {
             if ($tax_rates == array())
                 do_init_rate();
 //display_notification(print_r($tax_rates, true));
@@ -43,7 +43,6 @@ $csv[0] = array_slice($csv[0], 0, 7);
             $city = trim($k);
             $city = strtoupper(str_replace(',','', $city));
 
-//display_notification($rate);
             if (isset($tax_rates[$city]))
                 return $tax_rates[$city];
         }
