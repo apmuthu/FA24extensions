@@ -1,6 +1,6 @@
 Package: Square
-Name: Square Connector
-Description: This module works with Square and is used to import square sales orders into the FA database and export items and prices to Square.
+Name: Square POS Connector
+Description: This module works with Square POS and is used to import square sales orders into the FA database and export items and prices to Square.
 Author: Braath Waate <braathwaate@whitewaterhill.com>
 Maintenance:: Braath Waate <braathwaate@whitewaterhill.com>
 Homepage: <none>
