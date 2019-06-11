@@ -22,12 +22,24 @@ include_once($path_to_root . "/includes/db/crm_contacts_db.inc");
 
 // ---------------------------------------------------------------------
 
-set_posts(array('stock_id', 'debtor_no', 'noheader', 'action'));
+set_posts(array('stock_id', 'debtor_no', 'noheader', 'action', 'branch'));
 
 
 add_css_file('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css');
 // does not work
 // add_css_file('https://github.com/apmuthu/FA24extensions/files/2130882/leaflet.css.txt');
+
+function getBranchInfo($branch)
+{
+    $sql = "SELECT d.debtor_no, d.name AS cust_name, sm.latlong, b.br_address, b.br_post_address, b.branch_code
+        FROM ".TB_PREF."cust_branch b
+        LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no=b.debtor_no
+        LEFT JOIN ".TB_PREF."sales_map sm ON b.branch_code=sm.branch_code
+        WHERE b.branch_code=".db_escape($branch);
+    return db_query($sql,"No transactions were returned");
+}
+
+
 
 function getTransactions($from, $to, $tax_group_id, $stock_id)
 {
@@ -94,13 +106,17 @@ function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
     return db_query($sql,"No transactions were returned");
 }
 
-function clientarray_string($stock_id, $tax_group_id)
+function clientarray_string($branch, $stock_id, $tax_group_id)
 {
 	$clientArray="var clientArray = new Array();\n";
 
 	$count=0;
 
-    $res = getTransactions(null, null, $tax_group_id, get_post('stock_id'));
+    if ($branch != "")
+        $res = getBranchInfo($branch);
+    else
+        $res = getTransactions(null, null, $tax_group_id, get_post('stock_id'));
+
     while ($cust=db_fetch($res)) {
 
         $old_address = trim($cust["br_address"]);
@@ -326,7 +342,7 @@ if (get_post('debtor_no')) {
 $js = "";
 
 define ('SCRIPT', '
-' . clientarray_string(get_post('stock_id'), $tax_group_id) . '
+' . clientarray_string(get_post('branch'), get_post('stock_id'), $tax_group_id) . '
   var side_bar_html = "<DIV id=\'title\'></DIV>";
 
 function map_init()
@@ -502,7 +518,8 @@ start_table(TABLESTYLE);
 
 // Ajax does not work with map_canvas, so use direct javascript
 
-$sel = "<select id=\"stock_id\" name=\"stock_id\" onchange=\"stockFilter()\">";
+$sel = "<label for=\"stock_id\"> Item Options </label>
+<select id=\"stock_id\" name=\"stock_id\" onchange=\"stockFilter()\">";
     $sel .= "<option value=\"\">All Items\n";
 $res = getSalesItems($cat);
 while ($item=db_fetch($res)) {
