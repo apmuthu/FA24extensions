@@ -246,6 +246,8 @@ function square_variation($stock_id, $sq_item, $locationId)
             )
         )
     );
+    if ($_POST['online'] == 1)
+        $obj = array_merge($obj, array("available online" => true));
     if ($locationId != '0')
         $obj = array_merge($obj, array("present_at_location_ids" => array($locationId)));
 
@@ -1223,6 +1225,7 @@ if ($action == 'iexport') {
     stock_categories_list_row("Category:", 'category', null, _("All Categories"));
     text_row("Stock ID Pattern:", 'stocklike', null, 10, 20);
     yesno_list_row("Upload Images:", 'upload', null);
+    yesno_list_row("Available Online:", 'online', null);
 
     end_table(1);
 
