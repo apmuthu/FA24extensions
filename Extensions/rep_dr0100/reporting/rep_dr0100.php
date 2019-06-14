@@ -101,7 +101,7 @@ function GetNonPhysicalSales($period, $from, $to)
     $todate = date2sql($to);
 
     $sql= "SELECT
-            substring_index(substring_index(IF(delivery_address,delivery_address,br_address), ',', 1), '\n', -1) AS location,
+            substring_index(substring_index(IF(delivery_address!='',delivery_address,br_address), ',', 1), '\n', -1) AS location,
 
             SUM(CASE WHEN dt.type=".ST_CUSTCREDIT."
                 THEN (ttd.net_amount)*-1
@@ -175,9 +175,10 @@ while (1) {
         if (!($sales = db_fetch($nonphys)))
             break;
         $address="\n" . trim($sales['location']) .  ", CO";
+display_notification($address);
     }
 
-$tax_rates=get_tax_rates("Local Sales Tax", $address);
+$tax_rates=get_tax_rates("Colorado Sales Tax", $address);
 //display_notification(print_r($tax_rates,true));
 
 // optional taxes
