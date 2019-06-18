@@ -9,7 +9,7 @@ function document_types_list($name, $selected_id=null, $submit_on_change=false, 
 	return combo_input($name, $selected_id, $sql, 'doc_type_code', 'description',
 	array(
 		'spec_option' => $special_option===true ? _("All Document Types") : $special_option,
-		'spec_id' => 0,
+		'spec_id' => null,
 		'select_submit'=> $submit_on_change,
 	) );
 }
@@ -39,7 +39,7 @@ function customer_class_list($name, $selected_id=null, $submit_on_change=false, 
 	return combo_input($name, $selected_id, $sql, 'cust_class_code', 'description',
 	array(
 		'spec_option' => $special_option===true ? _("All Customer Classes") : $special_option,
-		'spec_id' => 0,
+		'spec_id' => null,
 		'select_submit'=> $submit_on_change,
 	) );
 }
@@ -69,7 +69,7 @@ function country_list($name, $selected_id=null, $submit_on_change=false, $specia
 	return combo_input($name, $selected_id, $sql, 'country_code', 'description',
 	array(
 		'spec_option' => $special_option===true ? _("All Document Types") : $special_option,
-		'spec_id' => 0,
+		'spec_id' => null,
 		'select_submit'=> $submit_on_change,
 	) );
 }
@@ -100,7 +100,7 @@ function departments_list($name, $selected_id=null, $submit_on_change=false, $sp
 	return combo_input($name, $selected_id, $sql, 'departments_code', 'description',
 	array(
 		'spec_option' => $special_option===true ? _("All Departments") : $special_option,
-		'spec_id' => 0,
+		'spec_id' => null,
 		'select_submit'=> $submit_on_change,
 	) );
 }
@@ -130,7 +130,7 @@ function city_list($name, $selected_id=null, $submit_on_change=false, $special_o
 	return combo_input($name, $selected_id, $sql, 'city_code', 'description',
 	array(
 		'spec_option' => $special_option===true ? _("All Municipios") : $special_option,
-		'spec_id' => 0,
+		'spec_id' => null,
 		'select_submit'=> $submit_on_change,
 	) );
 }
@@ -160,7 +160,7 @@ function sectors_list($name, $selected_id=null, $submit_on_change=false, $specia
 	return combo_input($name, $selected_id, $sql, 'sectors_code', 'description',
 	array(
 		'spec_option' => $special_option===true ? _("All Sectors") : $special_option,
-		'spec_id' => 0,
+		'spec_id' => null,
 		'select_submit'=> $submit_on_change,
 	) );
 }

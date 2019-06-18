@@ -92,8 +92,8 @@ function supplier_settings_add_info(&$supplier_id)
 	label_row(_("Supplier Short Name:"),$_POST['supp_ref']);
 	label_row(_("GSTNo:"),$_POST['gst_no']);
 	text_row(_("Validation Digit:"), 'supp_valid_digit', null, 40, 1);
-	document_types_list_row(_("Type of Document:"), 'supp_doc_type', $_POST['supp_doc_type']);
-	customer_class_list_row(_("Supplier Class:"), 'supp_class', $_POST['supp_class']);
+	document_types_list_row(_("Type of Document:"), 'supp_doc_type', $_POST['supp_doc_type'], false, _("Select Document Type"));
+	customer_class_list_row(_("Supplier Class:"), 'supp_class', $_POST['supp_class'], false, _("Select Class"));
 	label_row(_("Website:"),$_POST['website']);
 	$currency_name = get_currency($myrow["curr_code"]);
 	label_row(_("New Supplier's Currency:"), $currency_name['currency']);
@@ -124,14 +124,14 @@ function supplier_settings_add_info(&$supplier_id)
 	text_row(get_supp_custom_labels_name(2).':', 'supp_custom_two', null, 40, 255);
 	text_row(get_supp_custom_labels_name(3).':', 'supp_custom_three', null, 40, 255);
 	text_row(get_supp_custom_labels_name(4).':', 'supp_custom_four', null, 40, 255);
-	sectors_list_row(_("Sector:"), 'supp_sector');
+	sectors_list_row(_("Sector:"), 'supp_sector', null, false, _("Select Sector"));
 
 	table_section_title(_("Addresses"));
 	readonly_textarea_row(_("Mailing Address:<br>\n(Read Only)"), 'address', null, 35, 5);
 	readonly_textarea_row(_("Physical Address:<br>\n(Read Only)"), 'supp_address', null, 35, 5);
-	city_list_row(_("City:"), 'supp_city');
-	departments_list_row(_("State/Department:"), 'supp_department');
-	country_list_row(_("Country:"), 'supp_country');
+	city_list_row(_("City:"), 'supp_city', null, false, _("Select City"));
+	departments_list_row(_("State/Department:"), 'supp_department', null, false, _("Select Department"));
+	country_list_row(_("Country:"), 'supp_country', null, false, _("Select Country"));
 	text_row(_("Postcode:"), 'supp_postcode', null, 30, 30);
 
 	table_section_title(_("General"));

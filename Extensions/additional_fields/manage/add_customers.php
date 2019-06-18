@@ -86,14 +86,14 @@ function customer_settings($selected_id)
 	label_row(_("Customer Name:"),$_POST['CustName']);
 	label_row(_("Customer Short Name:"),$_POST['cust_ref']);
 	readonly_textarea_row(_("Address:<br>\n(Read Only)"), 'address', $_POST['address'], 35, 5);
-	city_list_row(_("City:"), 'cust_city');
-	departments_list_row(_("State/Department:"), 'cust_department');
-	country_list_row(_("Country:"), 'cust_country');
+	city_list_row(_("City:"), 'cust_city', null, false, _("Select City"));
+	departments_list_row(_("State/Department:"), 'cust_department', null, false, _("Select Department"));
+	country_list_row(_("Country:"), 'cust_country', null, false, _("Select Country"));
 	text_row(_("Postcode:"), 'cust_postcode', null, 10, 10);
 	label_row(_("GSTNo:"),$_POST['tax_id']);
 	text_row(_("Validation Digit:"), 'cust_valid_digit', null, 1, 1);
-	document_types_list_row(_("Type of Document:"), 'cust_doc_type');
-	customer_class_list_row(_("Customer Class:"), 'cust_class');
+	document_types_list_row(_("Type of Document:"), 'cust_doc_type', null, false, _("Select Document Type"));
+	customer_class_list_row(_("Customer Class:"), 'cust_class', null, false, _("Select Class"));
 	$currency_name = get_currency($myrow["curr_code"]);
 	label_row(_("New Customer's Currency:"), $currency_name['currency']);
 	$sales_type_name = get_sales_type_name($myrow["sales_type"]);
@@ -119,7 +119,7 @@ function customer_settings($selected_id)
 	text_row(get_cust_custom_labels_name(2).':', 'cust_custom_two', null, 40, 255);
 	text_row(get_cust_custom_labels_name(3).':', 'cust_custom_three', null, 40, 255);
 	text_row(get_cust_custom_labels_name(4).':', 'cust_custom_four', null, 40, 255);
-	sectors_list_row(_("Sector:"), 'cust_sector');
+	sectors_list_row(_("Sector:"), 'cust_sector', null, false, _("Select Sector"));
 	
 	end_outer_table(1);
 

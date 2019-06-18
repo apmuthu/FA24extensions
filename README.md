@@ -26,6 +26,8 @@ These FA extensions comprise:
 * [Online SHA1 Hash Generator](http://hash.online-convert.com/sha1-generator)
 * [Online SHA1 checksum](https://emn178.github.io/online-tools/sha1_checksum.html)
 * Get all sha1sum values in the extension folder with `find . -type f -exec sha1sum \{\} \; > abc.txt`
+* Generate `_init/files` having the SHA1sum values for all files from within an extension folder with:
+`find . -type f -not -path "./_init/files" | xargs sha1sum | sed -e 's# \*\.\/# \/#' | awk '{print $2 ": " $1}' > ./_init/files`
 
 ## Caveats
 * This repo will be updated only when I have the time.

@@ -10,13 +10,13 @@
 /includes/db/item_custom_labels_db.inc: 73ada7a89aeec0a21e40a178f8d94b81ea5ee729
 /includes/db/supp_custom_labels_db.inc: 770beda87267b8f7059a28171df371f4244fd106
 /includes/index.php: 435866102943ef00e38d96927cb5ee20bff20688
-/includes/ui/additional_cust_info_ui.inc: 94159121b06f236b73fa58b5d032a738df4bd593
+/includes/ui/additional_cust_info_ui.inc: 1e168bf1d87f6a5a83aaeee159502b23017c1c5d
 /includes/ui/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /LICENSE: 12d81f50767d4e09aa7877da077ad9d1b915d75b
-/manage/add_customers.php: 12a3a057ee8bf414506d80ae415a17d4cb406691
+/manage/add_customers.php: 1577cd82199bf9e11022f0a57500a537ce1a6748
 /manage/add_items.php: 1d0a2d9023a3ec6a01e1e81d30c8cc3df8ec0cc0
-/manage/add_suppliers.php: b1da8c8bc7258c33cd9fc58fbcab5a63c1e43d8d
+/manage/add_suppliers.php: cf2c566c3c0cb6c811667a6a73bc0ed9c7ee6cb7
 /manage/city_add_info.php: a7b22dff4d18c7714a4299a4debb743836d61a3a
 /manage/country.php: d7a781f51ff4535850787f5516e438ea58f5224f
 /manage/customer_class.php: 2d17e54d71f503db71197c1626c09028bbcc1152
@@ -36,5 +36,5 @@
 /reporting/rep_supplier_details_complete_excel.php: 6a14c715da2eb553586cf480733b6ea45c7a626b
 /sql/index.php: adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
 /sql/remove.sql: 442a780b58245343e4fa0a79ec57f38c8a810b42
-/sql/update.sql: c70c626987ec4f7447292bb880e7a212a8d3ff57
+/sql/update.sql: d6cec3a300b30bed48331da59f9e44ac456a06a0
 /_init/config: 95e902d436bbf8f9acd8fda2793438552239d804
