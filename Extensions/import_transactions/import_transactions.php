@@ -51,6 +51,20 @@ include_once ($path_to_root . "/modules/import_transactions/includes/import_sale
 //include_once($path_to_root . "/gl/includes/ui/gl_journal_ui.inc"); display_import_items adapted from display_ gl_items
 
 add_access_extensions();
+global $Refs;
+
+// Generate references if reference field is blank
+// use previous reference is reference field is +
+function autoref($type, &$reference, $prev_ref)
+{
+global $Refs;
+
+    if ($reference == '')
+        $reference = $Refs->get_next($type);
+    else if ($reference == '+')
+        $reference = $prev_ref;
+}
+
 
 //Turn these next two lines on for debugging
 error_reporting(E_ALL);
@@ -67,7 +81,6 @@ if ($SysPrefs->use_popup_windows)
 $help_context = "Import General Journals  / Deposits / Payments / Bank Statements / Sales Orders / Sales Invoices  <a href='spreadsheet_headers.html' target='_blank'>Help: Formats</a>";
 page(_($help_context), false, false, "", $js);
 
-global $Refs;
 global $Ajax;
 
 $filename = (isset($_GET['filename']) ? $_GET['filename'] : '');
@@ -143,10 +156,25 @@ if ((isset($_POST['type']))) {
                     $skippedheader = true;
                     continue;
                 }
+
                 // display_notification_centered(" --------------------------------------------------------------------------------------------Line $line ------------------------------------------------------------------------------------------");
                 if ($type == ST_JOURNAL) {
                     list($reference, $date, $memo, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $comments) = array_merge($data, array(""));
+                        
+                    if ($amt > 0)
+                        $total_debit_positive += $amt;
+
                     list($next_ref,,,, $next_code,,,,,) = $nextdata;
+                    if ($next_ref != $reference && $next_ref != '+') {
+                        // Note: imported journal GL entries also require a journal entry.
+                        // If the journal entry is not created, then
+                        // a journal transaction entered through FA would have a trans_no
+                        // starting from 1, and thus VOID would void the wrong G/L entries.
+                        add_journal(ST_JOURNAL, $curEntryId, $total_debit_positive, $date, get_company_pref('curr_default'), $reference, '', 1, $date, $date);
+                        $total_debit_positive = 0;
+                    }
+
+                    autoref($type, $reference, $prev_ref);
                     str_replace('"', "", $memo);
                     str_replace('"', "", $person_id);
                     $memo = $memo . " (";
@@ -157,21 +185,11 @@ if ((isset($_POST['type']))) {
                     $bank_account_gl_code = $code_id;
                     $bank_account = is_bank_account($code_id);
                     $BranchNo = null;
-                    if ($amt > 0)
-                        $total_debit_positive += $amt;
-
-                    if ($reference != $next_ref) {
-                        // Note: imported journal GL entries also require a journal entry.
-                        // If the journal entry is not created, then
-                        // a journal transaction entered through FA would have a trans_no
-                        // starting from 1, and thus VOID would void the wrong G/L entries.
-                        add_journal(ST_JOURNAL, $curEntryId, $total_debit_positive, $date, get_company_pref('curr_default'), $reference, '', 1, $date, $date);
-                        $total_debit_positive = 0;
-                    }
                 } else if (($type == ST_BANKPAYMENT) && ($stateformat != null))
                 //All amounts to the right of amt are ignored since only considering payments which are to the left of deposits on a bank statement.
                 {
                     list($reference, $date, $memo, $amt, $ignore, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $BranchNo) = $data;
+                    autoref($type, $reference, $prev_ref);
                     str_replace('"', "", $memo);
                     str_replace('"', "", $person_id);
                     display_notification_centered("You are here payment");
@@ -185,6 +203,7 @@ if ((isset($_POST['type']))) {
                 } else if (($type == ST_BANKDEPOSIT) && ($stateformat != null)) {
                     //All amounts to the left of amt are ignored since only considering deposits which are to the left of payments on a bank statement.
                     list($reference, $date, $memo, $ignore, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $BranchNo) = $data;
+                    autoref($type, $reference, $prev_ref);
                     str_replace('"', "", $memo);
                     str_replace('"', "", $person_id);
                     if ((($ignore == "") || ($ignore == null) || empty($ignore)) && ($amt > 0.01)) {
@@ -196,55 +215,53 @@ if ((isset($_POST['type']))) {
                     }
                 } else if ((($type == ST_BANKDEPOSIT) || ($type == ST_BANKPAYMENT)) && ($stateformat == null)) {
                     list($reference, $date, $memo, $amt, $code_id, $taxtype, $dim1_ref, $dim2_ref, $person_type_id, $person_id, $BranchNo) = $data;
+                    autoref($type, $reference, $prev_ref);
 					str_replace('"', "", $memo);
 					str_replace('"', "", $person_id);
 				} else if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
                     list($customer_id, $branchNo, $reference, $date, $payment_id, $sales_type_name, $dimension_id, $dimension2_id, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage, $freightcost, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) = $data;
+                    list(,,$next_ref,,,,,,,,,,,,,,,,,,,,,,) = $nextdata;
                     display_notification_centered(_("Processing line $line ($customer_id, $branchNo, $reference, $date, $payment_id, $sales_type_name, $dimension_id, $dimension2_id, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage, $freightcost, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) in import file '{$_FILES['imp']['name']}')"));
                     if (!customer_exist($customer_id)) {
                         display_notification("Customer does not exist in the database");
                         $error = true;
                     }
-                    if (($prev_ref <> $reference)) // reference has changed so new invoice with new lineitem(s)
-                    {
-                        if ($firstlinecopied == true) // if the reference has changed for line items write the preference reference based document to the cart
-                        {
-                            $_SESSION['Items']->write(0); //reset the cart for the next set of line items for each reference document.
-                            $_SESSION['Items']->clear_items();
-                            unset($_SESSION['Items']->line_items);
-                            unset($_SESSION['Items']);
-                            $firstlinecopied = false;
-                        }
-                        $docline = 1; //the reference has changed so this will be the first line item.
-                        $doc_num++;
+
+                    if ($firstlinecopied == false) {
+                        $docline = 1; //the reference has changed so this will be the first line item. 
                         $_SESSION['Items'] = new import_sales_cart($type, 0, false);
                         $_SESSION['Items']->document_date = $date;
                         $_SESSION['Items']->order_no = $reference; //order_no is the source document's original
-                        $com = get_customer_details_to_order($_SESSION['Items'], $customer_id, $branchNo);
-                        display_notification_centered($com);
-                        if ($com <> "") {
-                            display_notification_centered("Error");
-                            $error = true;
-                        }
-                        copy_to_cart($customer_id, $branchNo, $sales_type_name, $reference, $date, $payment_id, $dimension_id, $dimension2_id, $freightcost = 0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate = null);
                         $firstlinecopied = true;
-                    }
-                    if ($prev_ref == $reference) {
+                    } else
                         $docline = $docline + 1;
-                        $com = get_customer_details_to_order($_SESSION['Items'], $customer_id, $branchNo);
-                        display_notification_centered($com);
-                        if ($com <> "") {
-                            display_notification_centered("Error");
-                            $error = true;
-                        }
-                        copy_to_cart($customer_id, $branchNo, $sales_type_name, $reference, $date, $payment_id, $dimension_id, $dimension2_id, $freightcost = 0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate = null);
+
+                    autoref($type, $reference, $prev_ref);
+
+                    $com = get_customer_details_to_order($_SESSION['Items'], $customer_id, $branchNo);
+                    display_notification_centered($com);
+                    if ($com <> "") {
+                        display_notification_centered("Error");
+                        $error = true;
                     }
+                    copy_to_cart($customer_id, $branchNo, $sales_type_name, $reference, $date, $payment_id, $dimension_id, $dimension2_id, $freightcost = 0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate = null);
+display_notification("add $customer_id $item_code");
                     import_add_to_order($_SESSION['Items'], $item_code, $quantity, $price, $discountpercentage, $item_description);
                     $_SESSION['Items']->cust_ref = $reference;
                     if ((!check_import_item_data($line_no = $docline, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage)) ||
                         (!can_process($line, $customer_id, $branchNo, $reference, $date, $dimension_id, $dimension2_id, $freightcost = 0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate))) {
                         display_notification_centered("Error");
                         $error = true;
+                    }
+
+                    if (($next_ref <> $reference && $next_ref != '+')) // reference has changed so new invoice with new lineitem(s)
+                    {
+                        $_SESSION['Items']->write(0); //reset the cart for the next set of line items for each reference document.
+                        $_SESSION['Items']->clear_items();
+                        unset($_SESSION['Items']->line_items);
+                        unset($_SESSION['Items']);
+                        $doc_num++;
+                        $firstlinecopied = false;
                     }
                 } else {
                     continue;
@@ -270,11 +287,6 @@ if ((isset($_POST['type']))) {
                         $error = true;
                     }
                 }
-
-                if ($reference == '')
-                    $reference = $Refs->get_next($type);
-                else if ($reference == '+')
-                    $reference = $prev_ref;
 
                 if (!$Refs->is_valid($reference, $type)) {
                         display_notification("Reference " . $reference . " must match valid pattern in Setup->Transaction References");
@@ -353,16 +365,6 @@ if ((isset($_POST['type']))) {
                 }
             }
 
-            if (($type == ST_SALESORDER) || ($type == ST_SALESINVOICE)) {
-                if (($firstlinecopied == true) && ($prev_ref == $reference)) //for the last line item in a csv
-                {
-                    $_SESSION['Items']->write(0);
-                    $_SESSION['Items']->clear_items();
-                    unset($_SESSION['Items']->line_items);
-                    unset($_SESSION['Items']);
-                    $firstlinecopied = false;
-                }
-            }
             // Commit import to database
 
             if ($type == ST_JOURNAL) {
