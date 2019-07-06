@@ -2,7 +2,7 @@
 /*=======================================================\
 |                        FrontHrm                        |
 |--------------------------------------------------------|
-|   Creator: Phương                                      |
+|   Creator: Phương <trananhphuong83@gmail.com>          |
 |   Date :   09-Jul-2017                                 |
 |   Description: Frontaccounting Payroll & Hrm Module    |
 |   Free software under GNU GPL                          |
@@ -29,29 +29,31 @@ if (user_use_date_picker())
 
 //--------------------------------------------------------------------------
 
-page(_($help_context = "Employee Transaction"), isset($_GET['EmpId']), false, '', $js);
+page(_($help_context = 'Employee Transaction'), isset($_GET['EmpId']), false, '', $js);
 
 if (isset($_GET['EmpId']))
 	$_POST['EmpId'] = $_GET['EmpId'];
+
+$days_no = date_diff2(begin_fiscalyear(), Today(), 'd');
 
 start_form();
 
 start_table(TABLESTYLE_NOBORDER);
 start_row();
 
-ref_cells(_('Reference:'), 'Ref', '',null, _('Enter reference fragment or leave empty'));
-ref_cells(_('Memo:'), 'Memo', '',null, _('Enter memo fragment or leave empty'));
-date_cells(_('From:'), 'FromDate', '', null, 0, -1, 0, null, true);
-date_cells(_('To:'), 'ToDate', '', null, 0, 0, 0, null, true);
+ref_cells(_('Reference').':', 'Ref', _('Enter reference fragment or leave empty'), null, null, true);
+ref_cells(_('Memo').':', 'Memo', _('Enter memo fragment or leave empty'), null, null, true);
+date_cells(_('From').':', 'FromDate', '', null, $days_no, 0, 0, null, true);
+date_cells(_('To').':', 'ToDate', '', null, 0, 0, 0, null, true);
 
 end_row();
-end_table();
+// end_table();
 
-start_table(TABLESTYLE_NOBORDER);
+// start_table(TABLESTYLE_NOBORDER);
 start_row();
 
-department_list_cells(_('Department:'), 'DeptId', null, _('All departments'), true);
-employee_list_cells(_('Employee:'), "EmpId", null, _('All employees'), true, false, get_post('DeptId'));
+department_list_cells(null, 'DeptId', null, _('All departments'), true);
+employee_list_cells(null, "EmpId", null, _('All employees'), true, false, get_post('DeptId'));
 check_cells(_('Only unpaid:'), 'OnlyUnpaid', null, true);
 submit_cells('Search', _('Search'), '', '', 'default');
 
@@ -64,14 +66,24 @@ function check_overdue($row) {
 
 }
 function trans_type($row) {
-	return $row['Type'] == 0 ? 'Payslip' : 'Payment advice';
+
+	if($row['Type'] == 0)
+		return _('Payslip');
+	elseif ($row['payslip_no'] == 0)
+		return _('Employee advance');
+	else
+		return _('Payment advice');
 }
 function view_link($row) {
-	return get_trans_view_str(ST_JOURNAL, $row["trans_no"]);
+	if($row['trans_no'] != 0)
+	    return get_trans_view_str($row['Type'], $row['trans_no']);
 }
 function prt_link($row) {
-	if($row['Type'] == 1)
+	if($row['Type'] == 1 && $row['payslip_no'] != 0)
 	    return hrm_print_link($row['payslip_no'], _('Print this Payslip'), true, ST_PAYSLIP, ICON_PRINT, '', '', 0);
+}
+function payslip_no($row) {
+	return $row['payslip_no'] == 0 ? null : $row['payslip_no'];
 }
 
 $sql = get_sql_for_payslips(get_post('Ref'), get_post('Memo'), get_post('FromDate'), get_post('ToDate'), get_post('DeptId'), get_post('EmpId'), check_value('OnlyUnpaid'));
@@ -82,7 +94,7 @@ $cols = array (
 	_('Type') => array('fun'=>'trans_type'),
 	_('Employee ID'),
 	_('Employee Name'),
-	_('Payslip No') => '',
+	_('Payslip No') => array('fun'=>'payslip_no'),
 	_('Pay from') => array('type'=>'date'),
 	_('Pay to') => array('type'=>'date'),
 	_('Amount') => array('type'=>'amount'),
@@ -92,7 +104,7 @@ $cols = array (
 $table =& new_db_pager('trans_tbl', $sql, $cols, null, null, 15);
 $table->set_marker('check_overdue', _('Marked items are overdue.'));
 
-$table->width = "80%";
+$table->width = '80%';
 
 display_db_pager($table);
 

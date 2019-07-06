@@ -2,7 +2,7 @@
 /*=======================================================\
 |                        FrontHrm                        |
 |--------------------------------------------------------|
-|   Creator: Phương                                      |
+|   Creator: Phương <trananhphuong83@gmail.com>          |
 |   Date :   09-Jul-2017                                 |
 |   Description: Frontaccounting Payroll & Hrm Module    |
 |   Free software under GNU GPL                          |
@@ -44,46 +44,45 @@ function display_payslip_header(&$Order) {
 	start_outer_table(TABLESTYLE2, "cellpadding='10'");
 
 	table_section(1);
-   		date_row(_('Date').':&nbsp;', 'date_', '', $new);
-		ref_row(_('Reference').':', 'ref', '');
-
-	table_section(3);
-		date_row(_('From Date').':', 'from_date', '', $new, 0, 0, 0, null, true);
-		date_row(_('To Date').':', 'to_date', '', $new, 0, 0, 0, null, true);
+   	date_row(_('Date:'), 'date_', '', $new);
+	ref_row(_('Reference:'), 'ref', '');
+	date_row(_('From:'), 'from_date', _('Pay From'), null, -30, 0, 0, null, true);
+	date_row(_('To:'), 'to_date', _('Pay To'), null, 0, 0, 0, null, true);
 
 	table_section(2);
-		hidden('PayType', PT_EMPLOYEE);
-		employee_list_row(_('Pay To').':&nbsp;', 'person_id', null, _("Select employee"), true, false);
+	hidden('PayType', PT_EMPLOYEE);
+	employee_list_row(_('Pay To:'), 'person_id', null, _("Select employee"), true, false);
 		
-		if(!isset($_POST['PaySlipNo']))
-			$_POST['PaySlipNo'] = get_next_payslip_no();
+	if(!isset($_POST['PaySlipNo']))
+		$_POST['PaySlipNo'] = get_next_payslip_no();
 		
-		hidden('PaySlipNo', $_POST['PaySlipNo']);
-		if(isset($_POST['person_id']) && $_POST['person_id'] != 0)
-		    label_row(_('Pay Basis').':', $Order->pay_basis == 0 ? _('Monthly salary') : _('Daily wages'));
-		label_row(_('Payslip No').':', $_POST['PaySlipNo']);
+	hidden('PaySlipNo', $_POST['PaySlipNo']);
+	if(isset($_POST['person_id']) && $_POST['person_id'] != 0)
+		label_row(_('Pay Basis:'), $Order->pay_basis == 0 ? _('Monthly salary') : _('Daily wages'));
+	label_row(_('Payslip No:'), $_POST['PaySlipNo']);
 	
-	table_section(4);
-    
-    $from = $_POST['from_date'];
+	table_section(3);
+	$from = $_POST['from_date'];
     $to = $_POST['to_date'];
     $ot = db_query(get_overtime());
 
-    if($_POST['person_id'] != '') {
+    if(!empty($_POST['person_id'])) {
         $emp_id = $_POST['person_id'];
         $workdays = get_workdays_no($from, $to, $emp_id);
         $leave_hours = get_leave_hours($from, $to, $emp_id);
-        label_row(_('Work days').':', $workdays.'&nbsp;'._('days'));
-        label_row(_('Leave hours').':', $leave_hours.'&nbsp;'._('hours'));
+        $day_txt = $workdays > 1 ? _('days') : _('day');
+        $hour_txt = $leave_hours > 1 ? _('hours') : _('hour');
+        label_row(_('Work days:'), $workdays.'&nbsp;'.$day_txt);
+        label_row(_('Leave hours:'), $leave_hours.'&nbsp;'.$hour_txt);
         
         while($row = db_fetch($ot)) {
             $hours_no = 0;
             
             foreach(get_ot_from_date_range($from, $to, $emp_id, $row['overtime_id']) as $hours) {
                 $hours_no += $hours['hours_no'];
-                //$total_ot += $hours['hours_no'];
             }
-            label_row($row['overtime_name'].':', $hours_no.' '._('hours'));
+            $ot_txt = $hours_no > 1 ? _('hours') : _('hour');
+            label_row($row['overtime_name'].':', $hours_no.'&nbsp;'.$ot_txt);
         }
         hidden('leaves', $leave_hours);
         hidden('deductableleaves', $Work_days - $workdays);
@@ -91,14 +90,30 @@ function display_payslip_header(&$Order) {
     }
     else {
         $emp_id = '';
-        label_row(_('Work days').':', '');
-        label_row(_('Leave hours').':', '');
+        label_row(_('Work days:'), '');
+        label_row(_('Leave hours:'), '');
         while($row = db_fetch($ot)) {
             label_row($row['overtime_name'], '');
         }
     }
+	
+	table_section(4);
+	$leave_types = db_query(get_leave_type());
 
-	if (list_updated('person_id'))
+	if(!empty($_POST['person_id'])) {
+		foreach($leave_types as $row) {
+			$leave_days = get_employee_leave($_POST['person_id'], $row['leave_id'], $from, $to);
+			$txt = $leave_days > 1 ? _('days') : _('day');
+			label_row($row['leave_name'].':', $leave_days.'&nbsp;'.$txt);
+		}
+	}
+	else {
+		foreach($leave_types as $row) {
+    		label_row($row['leave_name'].':', '');
+    	}
+	}
+
+	if(list_updated('person_id'))
 		$Order->clear_items();
 	
 	end_outer_table();
@@ -108,48 +123,114 @@ function display_payslip_header(&$Order) {
 
 function generate_gl_items($Order) {
 
-	global $Ajax, $Payable_act, $Deduct_act, $Overtime_act, $Work_hours, $Work_days;
+	global $Ajax, $Payable_act, $Deduct_act, $Overtime_act, $Work_hours, $Work_days, $USE_DEPT_ACC;
 
 	$emp_id 	= $_POST['person_id'];
-	$salary_scale = get_employee($emp_id)['salary_scale_id'];
+	$position = get_employees($emp_id)['position_id'];
 	$from_date 	= $_POST['from_date'];
 	$to_date 	= $_POST['to_date'];
     $workdays = get_workdays_no($from_date, $to_date, $emp_id);
     $total_ot = 0;
 
 	$Order->clear_items();
-	$totalCredit = $totalDebit = 0;
+	$totalCredit = 0;
+	$totalDebit = 0;
 	$payable_amount = 0;
 	$Order->empty_payment = false;
-	$Order->pay_basis = get_salary_scale($salary_scale)['pay_basis'];
+	$Order->pay_basis = get_position($position)['pay_basis'];
 	$allowance = array();
 	$salary_rules = get_emp_salary_structure($emp_id);
-	$salary_amount = get_emp_basic_salary($emp_id)['pay_amount'];
+	$emp_salary = get_emp_basic_salary($emp_id);
+	$salary_amount = $emp_salary['pay_amount'];
+	$salary_basic_acc = $emp_salary['pay_rule_id'];
+
+	$emp_row = get_employees($emp_id);
+	$emp_dept = $emp_row['department_id'];
+	$dept_name = !empty($emp_dept) ? get_departments($emp_dept)['dept_name'] : '';
+	$dept_basic_acc = !empty($emp_dept) ? get_departments($emp_dept)['basic_account'] : '';
 
 	if($Order->pay_basis == DAILY_WAGE)
         $Work_days = 1;
 
+    $deductableleaves = ($Order->pay_basis == MONTHLY_SALARY) ? ($Work_days - $workdays) : 0;
+    $leave_hours = get_leave_hours($from_date, $to_date, $emp_id);
+    $leave_hours_amount = ($salary_amount/$Work_days)/$Work_hours * $leave_hours;
+	$leave_deduct_amount = (($salary_amount/$Work_days)*$deductableleaves) + $leave_hours_amount;
+
+	$paid_leaves = get_leave($emp_id, false, $from_date, $to_date);
+
+	foreach($paid_leaves as $row) {
+		$row_leave_amt = ($salary_amount/$Work_days)*($row['pay_rate']/100);
+		$leave_deduct_amount -= $row_leave_amt;
+	}
+
     if(db_num_rows($salary_rules) > 0) {
+        
+        if(!empty($USE_DEPT_ACC) && empty($emp_dept)) {
+        	display_error(_('This employee does not belong to any department'));
+        	display_footer_exit();
+        }
+        if(!empty($USE_DEPT_ACC) && empty($dept_basic_acc)) {
+        	display_error(_('Basic account has not been set for department').':&nbsp'.'<b>'.$dept_name.'</b>');
+        	display_footer_exit();
+        }
+        if(!empty($USE_DEPT_ACC) && !empty($dept_basic_acc))
+			$Order->add_gl_item($dept_basic_acc, 0, 0, $salary_amount, '');
 
 		while($myrow = db_fetch($salary_rules) ) {
 
-			if($Order->pay_basis == MONTHLY_SALARY)
-			    $Order->add_gl_item($myrow['pay_rule_id'], 0, 0, ($myrow['type'] == CREDIT) ? -$myrow['pay_amount']:$myrow['pay_amount'], '');
+			if($Order->pay_basis == MONTHLY_SALARY) {
+              
+			    if((!empty($USE_DEPT_ACC) && $myrow['is_basic'] != 1) || empty($USE_DEPT_ACC)) 
+			        $Order->add_gl_item($myrow['pay_rule_id'], 0, 0, ($myrow['type'] == CREDIT) ? -$myrow['pay_amount']:$myrow['pay_amount'], '');
+			}
 			else {
-			    if($workdays != 0)
-			        $Order->add_gl_item($myrow['pay_rule_id'], 0, 0, ($myrow['type'] == CREDIT) ? -$myrow['pay_amount']*$workdays:$myrow['pay_amount']*$workdays, '');
+			    if($workdays != 0) {
+			    	if((!empty($USE_DEPT_ACC) && $myrow['is_basic'] != 1) || empty($USE_DEPT_ACC))
+			            $Order->add_gl_item($myrow['pay_rule_id'], 0, 0, ($myrow['type'] == CREDIT) ? -$myrow['pay_amount']*$workdays : $myrow['pay_amount']*$workdays, '');
+			    }
 			}
                 
             if($workdays != 0) {
                 if($myrow['type'] == CREDIT) 
 				    $totalCredit += $myrow['pay_amount'];
-                else 
-				    $totalDebit += $myrow['pay_amount'];
+                else {
+                    if($Order->pay_basis == MONTHLY_SALARY)
+				        $totalDebit += $myrow['pay_amount'];
+				    else
+				        $totalDebit += $myrow['pay_amount']*$workdays;
+                }
             }
 			    
-			if($myrow['is_basic'] != 1)
-			    $allowance[$myrow['pay_rule_id']] = $myrow['pay_amount'];
+			if($myrow['is_basic'] != 1) {
 
+			    if($myrow['type'] == DEBIT) {
+			        $alw_leave_hours_amt = ($myrow['pay_amount']/$Work_days/$Work_hours)*$leave_hours;
+
+			        if($Order->pay_basis == MONTHLY_SALARY) {
+			            $alw_days_amt = ($myrow['pay_amount']/$Work_days)*$workdays;
+                        $alw_amt = $alw_days_amt - $alw_leave_hours_amt;
+			        }
+                    else
+                        $alw_amt = $myrow['pay_amount'] - $alw_leave_hours_amt;
+			    
+			        $leave_deduct_amount += ($myrow['pay_amount'] - $alw_amt);
+			    }
+			    else {
+			        $alw_leave_hours_amt = -($myrow['pay_amount']/$Work_days/$Work_hours)*$leave_hours;
+
+			        if($Order->pay_basis == MONTHLY_SALARY) {
+			            $alw_days_amt = -($myrow['pay_amount']/$Work_days)*$workdays;
+                        $alw_amt = -($alw_days_amt - $alw_leave_hours_amt);
+			        }
+                    else
+                        $alw_amt = -($myrow['pay_amount'] - $alw_leave_hours_amt);
+			    
+			        $leave_deduct_amount -= ($myrow['pay_amount'] - $alw_amt);
+			    }
+
+			    $allowance[$myrow['pay_rule_id']] = $alw_amt;
+			}
 		}
 		$Order->allowance = $allowance;
 	}
@@ -167,23 +248,29 @@ function generate_gl_items($Order) {
             $overtime_amount += ($salary_amount/$Work_days)/$Work_hours * $ot_rate * $ot_hours;
             $total_ot += $ot_row['hours_no'];
         }
-            //$ot_rate = get_ot_from_date_range($from_date, $to_date, $emp_id, $overtime_row['overtime_id'])['rate'];
-            //$ot_hours = get_ot_from_date_range($from_date, $to_date, $emp_id, $overtime_row['overtime_id'])['hours_no'];
-            //$overtime_amount += ($salary_amount/$Work_days)/$Work_hours * $ot_rate * $ot_hours;
     }
-    if($overtime_amount != 0) 
-        $Order->add_gl_item($Overtime_act, 0, 0, $overtime_amount, '');
+    if($overtime_amount != 0) {
+    	
+    	if(!empty($Overtime_act) && empty($USE_DEPT_ACC))
+    		$Order->add_gl_item($Overtime_act, 0, 0, $overtime_amount, '');
+    	elseif(!empty($USE_DEPT_ACC))
+    		$Order->update_gl_item(0, $dept_basic_acc, 0, 0, $salary_amount + $overtime_amount, '');
+    	else
+    		$Order->update_gl_item(0, $salary_basic_acc, 0, 0, $salary_amount + $overtime_amount, '');
+    }
 
     $totalDebit += $overtime_amount;
 	
     //leave calculation
-    $deductableleaves = ($Order->pay_basis == MONTHLY_SALARY) ? ($Work_days - $workdays) : 0;
-    $leave_hours = get_leave_hours($from_date, $to_date, $emp_id);
-    $leave_hours_amount = ($salary_amount/$Work_days)/$Work_hours * $leave_hours;
-	$leave_deduct_amount = ($salary_amount/$Work_days*$deductableleaves) + $leave_hours_amount;
-    
-	if($leave_deduct_amount != 0){
-		$Order->add_gl_item($Deduct_act, 0, 0, -$leave_deduct_amount, '');
+	if($leave_deduct_amount != 0) {
+
+		if(!empty($Deduct_act) && empty($USE_DEPT_ACC))
+		    $Order->add_gl_item($Deduct_act, 0, 0, -$leave_deduct_amount, '');
+		elseif(!empty($USE_DEPT_ACC))
+			$Order->add_gl_item($dept_basic_acc, 0, 0, -$leave_deduct_amount, '');
+		else
+			$Order->add_gl_item($salary_basic_acc, 0, 0, -$leave_deduct_amount, '');
+
 		$totalCredit += $leave_deduct_amount;
 	}
     
@@ -212,8 +299,8 @@ function generate_gl_items($Order) {
 	$Order->payable_amt = abs($payable_amount);
 	$Order->overtime_amt = abs($overtime_amount);
 
-	if($workdays == 0 && $total_ot == 0) {
-        display_warning(_('non-working period'));
+	if(($workdays == 0 && $total_ot == 0) || $payable_amount == 0) {
+        display_warning(sprintf(_('non-working period of staff #%d'), $emp_id));
         $Order->clear_items();
         set_focus('from_date');
     }
@@ -221,108 +308,6 @@ function generate_gl_items($Order) {
 	//------------------------------------------------==================
 	unset($_POST['totamount']); // enable default
 	$Ajax->activate('totamount');
-}
-
-//--------------------------------------------------------------------------
-
-function display_advice_header(&$Order) {
-	global $Ajax, $Payable_act;
-
-	$qes = has_quick_entries(QE_JOURNAL);
-	$new = $Order->order_id==0;
-
-	hidden('ref_original');
-	start_outer_table(TABLESTYLE2, "width='90%'");
-
-	table_section(1);
-
-   		date_row(_("Date:"), 'date_', '', $new);
-		ref_row(_("Reference:"), 'ref', '');
-
-	table_section(2, "35%");
-		
-		hidden('PayType', PT_EMPLOYEE);
-
-		$employee = get_employee($Order->person_id);
-
-		$_POST['to_the_order_of'] = $Order->to_the_order_of;
-
-		if(isset($_GET['PaymentAdvice']) || isset($_POST['PaymentAdvice'])) {
-			label_row(_("Pay To: "), $employee['emp_first_name']." ".$employee['emp_last_name']);
-			hidden('emp_id', $Order->person_id);
-			label_row(_("To the Order of:"),$Order->to_the_order_of);
-
-			hidden('to_the_order_of');
-
-			if(!isset($_POST['PaymentAdvice']))
-				$_POST['PaymentAdvice'] = $_GET['PaymentAdvice'];
-			hidden('PaymentAdvice');
-		}
-        else {
-			employee_list_row(_("Pay To: "), 'emp_id', null, _("Select Employee"), true, false, false);
-			text_row(_("To the Order of:"), 'to_the_order_of', $_POST['to_the_order_of'], 20, 50);
-		}
-		table_section(3, "35%");
-
-		if(!isset($_POST['PaySlipNo']))
-			$_POST['PaySlipNo'] = $Order->payslip_no = 0;
-
-		bank_accounts_list_row(_("From:"), 'bank_account', null, true);
-		bank_balance_row(get_post('bank_account'));
-	
-        if(!isset($_GET['PaymentAdvice']) && !isset($_POST['PaymentAdvice']))
-            employee_payslip_list_row(_("Pay Slip:"), 'for_payslip', null, get_post('emp_id'), _("Select payslip"), true);
-		
-		if (list_updated('emp_id')) {
-
-			$Order->clear_items();
-			unset($_POST['totamount']);
-			$Ajax->activate('totamount');
-			$Ajax->activate('for_payslip');
-			$Order->payslip_no = 0;	
-		}
-		
-		if (list_updated('for_payslip') || list_updated('bank_account')) {
-
-			$Order->clear_items();
-			$_POST['memo_'] = "";
-
-			if(list_updated('for_payslip')) {
-				unset($_POST['PaySlipNo']);
-				$Order->payslip_no = 0;	
-				$Order->payslip_trans_no = get_post('for_payslip');
-			}
-            
-            if(!isset($Order->payslip_trans_no))
-                $payslip = null;
-            else    
-                $payslip = get_payslip(false, $Order->payslip_trans_no);
-                
-		
-			if($payslip) {
-				$_POST['memo_'] = "Payment advice gl entry For Payslip #".$payslip['payslip_no'];
-
-				if(list_updated('for_payslip')) {
-
-					$Order->payslip_trans_no = $payslip['trans_no'];
-					$Order->person_id = $payslip['emp_id'];
-					//$Order->to_the_order_of = $payslip['to_the_order_of'];
-					$Order->payslip_no = $_POST['PaySlipNo'] = $payslip['payslip_no'];
-				}
-                
-				$pay_amt = $payslip['payable_amount'];
-
-				$bank_ac_code = get_bank_gl_account(get_post('bank_account'));
-	
-				$Order->add_gl_item($Payable_act, 0, 0, $pay_amt, '');
-				$Order->add_gl_item($bank_ac_code, 0, 0, -$pay_amt, '');
-			}
-			$Ajax->activate('items_table');
-		}
-
-		hidden('PaySlipNo', $Order->payslip_no);
-	
-	end_outer_table(1);
 }
 
 //--------------------------------------------------------------------------
@@ -336,34 +321,31 @@ function display_gl_items($title, &$order) {
 
     div_start('items_table');
 	start_table(TABLESTYLE, "width='80%'");
-	if ($dim == 2)
-		$th = array(_("Account Code"), _("Account Description"), _("Dimension")." 1",
-			_("Dimension")." 2", _("Debit"), _("Credit"), _("Memo"), "");
-	else if ($dim == 1)
-		$th = array(_("Account Code"), _("Account Description"), _("Dimension"),
-			_("Debit"), _("Credit"), _("Memo"), "");
+	if($dim == 2)
+		$th = array(_("Account Code"), _("Account Description"), _("Dimension")." 1", _("Dimension")." 2", _("Debit"), _("Credit"), _("Memo"), "");
+	elseif($dim == 1)
+		$th = array(_("Account Code"), _("Account Description"), _("Dimension"), _("Debit"), _("Credit"), _("Memo"), "");
 	else
-		$th = array(_("Account Code"), _("Account Description"),
-			_("Debit"), _("Credit"), _("Memo"), "");
+		$th = array(_("Account Code"), _("Account Description"), _("Debit"), _("Credit"), _("Memo"), "");
 
-	if (count($order->gl_items)) $th[] = '';
+	if(count($order->gl_items)) $th[] = '';
 
 	table_header($th);	
 
 	$k = 0;
 
 	$id = find_submit('Edit');
-	foreach ($order->gl_items as $line => $item) {
+	foreach($order->gl_items as $line => $item) {
     
-        if ($id != $line) {
+        if($id != $line) {
             alt_table_row_color($k);
 
             label_cells($item->code_id, $item->description);
-	        if ($dim >= 1)
+	        if($dim >= 1)
 	            label_cell(get_dimension_string($item->dimension_id, true));
-	        if ($dim > 1)
+	        if($dim > 1)
 	            label_cell(get_dimension_string($item->dimension2_id, true));
-	        if ($item->amount > 0) {
+	        if($item->amount > 0) {
 	            amount_cell(abs($item->amount));
 	            label_cell("");
 	        }	
@@ -377,14 +359,11 @@ function display_gl_items($title, &$order) {
             delete_button_cell("Delete$line", _("Delete"), _('Remove line from journal'));
 	        end_row();
 		} 
-		else {
+		else
 			gl_edit_item_controls($order, $dim, $line);
-		}
 	}
-	//if ($id == -1)
-		//gl_edit_item_controls($order, $dim);
 
-	if ($order->count_gl_items()!=null) {
+	if($order->count_gl_items()!=null) {
 		$colspan = ($dim == 2 ? "4" : ($dim == 1 ? "3" : "2"));
 		start_row();
 		label_cell(_("Total Salary"), "align=right colspan=" . $colspan);
@@ -401,16 +380,18 @@ function display_gl_items($title, &$order) {
 
 function gl_edit_item_controls(&$order, $dim, $Index=null) {
 	global $Ajax;
+
 	start_row();
 
 	$id = find_submit('Edit');
-	if ($Index != -1 && $Index == $id) {
+	if($Index != -1 && $Index == $id) {
 	    // Modifying an existing row
 		$item = $order->gl_items[$Index];
 		$_POST['code_id'] = $item->code_id;
 		$_POST['dimension_id'] = $item->dimension_id;
 		$_POST['dimension2_id'] = $item->dimension2_id;
-		if ($item->amount > 0) {
+
+		if($item->amount > 0) {
 			$_POST['AmountDebit'] = price_format($item->amount);
 			$_POST['AmountCredit'] = "";
 		}
@@ -424,9 +405,9 @@ function gl_edit_item_controls(&$order, $dim, $Index=null) {
 		hidden('Index', $id);
 		$skip_bank = !$_SESSION["wa_current_user"]->can_access('SA_BANKJOURNAL');
 		echo gl_all_accounts_list('code_id', null, $skip_bank, true);
-		if ($dim >= 1) 
+		if($dim >= 1) 
 			dimensions_list_cells(null, 'dimension_id', null, true, " ", false, 1);
-		if ($dim > 1) 
+		if($dim > 1) 
 			dimensions_list_cells(null, 'dimension2_id', null, true, " ", false, 2);
 	    $Ajax->activate('items_table');
 	}
@@ -436,18 +417,17 @@ function gl_edit_item_controls(&$order, $dim, $Index=null) {
 		$_POST['AmountCredit'] = ''; //price_format(0);
 		$_POST['dimension_id'] = 0;
 		$_POST['dimension2_id'] = 0;
-		//$_POST['LineMemo'] = ""; // let memo go to next line Joe Hunt 2010-05-30
 		$_POST['_code_id_edit'] = "";
 		$_POST['code_id'] = "";
-		if(isset($_POST['_code_id_update'])) {
+
+		if(isset($_POST['_code_id_update']))
 			    $Ajax->activate('code_id');
-		}
 		
 		$skip_bank = !$_SESSION["wa_current_user"]->can_access('SA_BANKJOURNAL');
 		echo gl_all_accounts_list('code_id', null, $skip_bank, true);
-		if ($dim >= 1)
+		if($dim >= 1)
 			dimensions_list_cells(null, 'dimension_id', null, true, " ", false, 1);
-		if ($dim > 1)
+		if($dim > 1)
 			dimensions_list_cells(null, 'dimension2_id', null, true, " ", false, 2);
 	}
 
@@ -460,11 +440,9 @@ function gl_edit_item_controls(&$order, $dim, $Index=null) {
 	small_amount_cells(null, 'AmountCredit');
 	text_cells_ex(null, 'LineMemo', 35, 255);
 
-	if ($id != -1) {
-		button_cell('UpdateItem', _("Update"),
-				_('Confirm changes'), ICON_UPDATE);
-		button_cell('CancelItemChanges', _("Cancel"),
-				_('Cancel changes'), ICON_CANCEL);
+	if($id != -1) {
+		button_cell('UpdateItem', _("Update"), _('Confirm changes'), ICON_UPDATE);
+		button_cell('CancelItemChanges', _("Cancel"), _('Cancel changes'), ICON_CANCEL);
  		set_focus('amount');
 	} 
 	else 
@@ -476,10 +454,9 @@ function gl_edit_item_controls(&$order, $dim, $Index=null) {
 //--------------------------------------------------------------------------
 
 function gl_options_controls() {
+
 	  echo "<br><table align='center'>";
-
 	  textarea_row(_("Memo"), 'memo_', null, 50, 3);
-
 	  echo "</table>";
 }
 
@@ -489,7 +466,7 @@ function gl_options_controls() {
 
 function _format_emp_payslip($row) {
 
-	return "Trans# ".$row['type_no'] ." - ". $row['scale_name'];
+	return "Trans# ".$row['type_no'] ." - ". $row['position_name'];
 }
 
 //--------------------------------------------------------------------------
@@ -520,11 +497,10 @@ function _format_payslip_date($row) {
 
 function employee_payslip_list_cells($label, $name, $selected_id = null, $employee_id, $all_option = false, $submit_on_change = false, $show_inactive = false) {
 
-	if ($label != null)
+	if($label != null)
 		echo "<td>$label</td>\n";
 	echo "<td nowrap>";
-	echo employee_payslip_list($name, $selected_id, $employee_id, $all_option, $submit_on_change,
-		$show_inactive);
+	echo employee_payslip_list($name, $selected_id, $employee_id, $all_option, $submit_on_change, $show_inactive);
 	echo "</td>\n";
 }
 
@@ -543,7 +519,7 @@ function hrm_print_link($doc_no, $link_text, $link=true, $type_no, $icon=false, 
     global $path_to_root;
 
 	$def_orientation = (user_def_print_orientation() == 1 ? 1 : 0);
-	$dir = $path_to_root . "/modules/FrontHrm/reporting/redirect.php?";
+	$dir = $path_to_root.'/modules/FrontHrm/reporting/redirect.php?';
 
 	switch ($type_no) {
 

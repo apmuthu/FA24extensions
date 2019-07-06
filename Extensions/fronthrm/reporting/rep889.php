@@ -2,7 +2,7 @@
 /*=======================================================\
 |                        FrontHrm                        |
 |--------------------------------------------------------|
-|   Creator: Phương                                      |
+|   Creator: Phương <trananhphuong83@gmail.com>          |
 |   Date :   09-Jul-2017                                 |
 |   Description: Frontaccounting Payroll & Hrm Module    |
 |   Free software under GNU GPL                          |
@@ -35,7 +35,7 @@ $y = $pdf->getPageHeight();
 $img_width = 80;
 
 $payslip = get_payslip(false, $_POST['PARAM_0']);
-$emp = get_employee($payslip['emp_id']);
+$emp = get_employees($payslip['emp_id']);
 $emp_name = $emp['emp_first_name'].' '.$emp['emp_last_name'];
 $emp_id = $emp['emp_id'];
 if($emp['department_id'] != 0)
@@ -90,18 +90,18 @@ while($row = db_fetch($emp_payslip)){
 	
 	if($row['overtime_id'] == 0) {
 		$work_days += 1;
-		if($row['hours_no'] != 8)
-			$leave_hours += (8 - $row['hours_no']);
+		if($row['hours_no'] != $Work_hours)
+			$leave_hours += ($Work_hours - $row['hours_no']);
 	}
 }
 
 $day_amount = get_day_amount($payslip_no);
-$basic_amount = round($day_amount* $work_days - (($day_amount/8)*$leave_hours), user_price_dec());
+$basic_amount = ($day_amount* $work_days) - (($day_amount/$Work_hours)*$leave_hours);
 $total_earn = $basic_amount;
 
-$contents .= "<td>$work_days days</td>
-			 <td>$leave_hours hours</td>
-			 <td style='text-align:right'>$basic_amount</td>
+$contents .= "<td>$work_days".'&nbsp;'._('days')."</td>
+			 <td>$leave_hours".'&nbsp;'._('hours')."</td>
+			 <td style='text-align:right'>".price_format($basic_amount)."</td>
 			 </tr>";
 
 foreach(db_query($overtimes) as $overtime) {
@@ -115,7 +115,7 @@ foreach(db_query($overtimes) as $overtime) {
 		
 		if($row['overtime_id'] == $overtime['overtime_id']) {
 			$overtime_hours += $row['hours_no'];
-			$overtime_amount += (($day_amount/8)*$row['rate'])*$row['hours_no'];
+			$overtime_amount += (($day_amount/$Work_hours)*$row['rate'])*$row['hours_no'];
 		}
 	}
 	
@@ -125,21 +125,26 @@ foreach(db_query($overtimes) as $overtime) {
 				 <td>$overtime_hours hours</td>
 				 <td></td>";
 	if($overtime_hours > 0)
-		$contents .= "<td style='text-align:right'>$overtime_amount</td>";
+		$contents .= "<td style='text-align:right'>".price_format($overtime_amount)."</td>";
 	else
 		$contents .= "<td></td>";
 	
 	$contents .= "</tr>";
 }
 foreach (get_payslip_allowance($payslip_no) as $row) {
-	$account_name = get_gl_account($row['detail'])['account_name'];
+	$element = get_payroll_elements(false, $row['detail']);
+	$element_name = $element['element_name'];
 	$allowance_amount = $row['amount'];
 	$total_earn += $allowance_amount;
-	$contents .= "<tr><td colspan='3'>$account_name</td><td style='text-align:right'>$allowance_amount</td></tr>";
+	$contents .= "<tr><td colspan='3'>$element_name</td><td style='text-align:right'>".price_format($allowance_amount)."</td></tr>";
 }
 
+$allocated = get_payslip_allocated_advances($payslip_no);
+$total_earn -= $allocated;
+$contents .= "<tr><td colspan='3'>"._('Advance Deduction')."</td><td style='text-align:right'>".price_format(0-$allocated)."</td></tr>";
+
 $contents .= "<tr>
-				<td colspan='3' align='right'><b>Total salary</b></td><td style='text-align:right'>$total_earn</td>
+				<td colspan='3' align='right'><b>Total salary</b></td><td style='text-align:right'>".price_format($total_earn)."</td>
 			 </tr>
 		 </table>";
 
@@ -171,9 +176,16 @@ function get_day_amount($payslip_no) {
 	$result = db_query($sql, "could not get payslip details.");
 	$row = db_fetch($result);
 
-    $amount = round($row['salary_amount'] / ($work_days + $row['deductable_leaves']), user_price_dec());
+    $amount = ($row['salary_amount'] / ($work_days + $row['deductable_leaves']));
 
     return $amount;
+}
+function get_payslip_allocated_advances($payslip_no) {
+	$sql = "SELECT SUM(a.amount) FROM ".TB_PREF."employee_advance_allocation a, ".TB_PREF."employee_trans t WHERE t.id = a.trans_no_from AND t.payslip_no = ".db_escape($payslip_no);
+	$result = db_query($sql, _('could not get employee allocations amount'));
+	$row = db_fetch($result);
+
+	return $row[0];
 }
 
 //--------------------------------------------------------------------------
@@ -192,16 +204,16 @@ $pdf->writeHTMLCell($x/3-30, 0, 2*$x/3+20, 45, _('Date:').'&nbsp;'.Today(), 0, 0
 $pdf->writeHTMLCell($x, 0, 15, 45, _('Address:').'&nbsp;'.$comp_adrs, 0, 0, 0, true);
 $pdf->writeHTMLCell($x, 0, 15, 50, _('Phone:').'&nbsp;'.$comp_phone, 0, 0, 0, true);
 
-$pdf->SetFont('dejavu', 'BI', 25);
+$pdf->SetFont('', 'BI', 25);
 $pdf->Write(0, _('Payslip'), '', 0, 'C', true, 0, false, false, 0);
 
-$pdf->SetFont('dejavu', '', 10);
+$pdf->SetFont('', '', 10);
 $pdf->writeHTMLCell($x-30, 0, 15, 85, $head, 0, 0, 0, true);
 $pdf->writeHTML("");
 
-$pdf->SetFont('helvetica', 'B', 10);
+$pdf->SetFont('', 'B', 10);
 $pdf->writeHTMLCell($x-30, 0, 15, 123.5, $title, 0, 0, 0, true, 'C');
-$pdf->setFont('dejavu', '', 10);
+$pdf->setFont('', '', 10);
 $pdf->writeHTMLCell($x-30, 0, 15, 130, $contents, 0, 0, 0, true);
 
 //--------------------------------------------------------------------------

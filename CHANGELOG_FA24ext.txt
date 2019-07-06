@@ -1,6 +1,7 @@
+2019-07-06  Phuong       Updated FrontHRM to v2.4.0-3
 2019-05-12  Tom Moulton  osc_orders extension updates
 2019-05-02  BraathWaate  Import Transactions extension updates
-2019-04-21  Stefan       Dutch nl_NL core language files fully done
+2019-04-21  StefanDutch  nl_NL core language files fully done
 2019-04-20  Ap.Muthu     Updated nl_NL language files
 2019-03-14  BraathWaate  Added Enhanced Aged Customer Analysis
 2019-03-10  BraathWaate  Enhanced Customer Statement - remove show also allocated

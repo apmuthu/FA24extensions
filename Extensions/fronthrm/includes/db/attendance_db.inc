@@ -2,7 +2,7 @@
 /*=======================================================\
 |                        FrontHrm                        |
 |--------------------------------------------------------|
-|   Creator: Phương                                      |
+|   Creator: Phương <trananhphuong83@gmail.com>          |
 |   Date :   09-Jul-2017                                 |
 |   Description: Frontaccounting Payroll & Hrm Module    |
 |   Free software under GNU GPL                          |
@@ -16,12 +16,8 @@ function time_to_float($time) {
     }
     else
         $time_in_float = $time;
-
+	
 	return $time_in_float;
-}
-
-function float_to_time($hours) {
-	return $hours ? sprintf( "%2d:%02d", floor($hours), round(($hours-floor($hours))*60)) : '';
 }
 
 //--------------------------------------------------------------------------
@@ -34,21 +30,38 @@ function check_attended($emp_id, $overtime_id, $att_date) {
 
 //--------------------------------------------------------------------------
 
-function write_attendance($emp_id, $overtime_id, $hours_no=null, $att_date) {
+function check_leave($emp_id, $date) {
+    $sql = "SELECT * FROM ".TB_PREF."leave WHERE emp_id = ".db_escape($emp_id)." AND date = '".date2sql($date)."'";
+    
+    return check_empty_result($sql);
+}
 
-    if (isset($hours_no) && $hours_no != 0) {
+//--------------------------------------------------------------------------
 
-		$rate = $overtime_id ? get_overtime($overtime_id)['overtime_rate'] : 1;
-		$sql = "REPLACE INTO ".TB_PREF."attendance (emp_id, overtime_id, att_date, hours_no, rate)"
-		. " SELECT ".db_escape($emp_id).",".db_escape($overtime_id).",'".date2sql($att_date)."',".db_escape($hours_no).",".($overtime_id ? "'rate'": 1);
+function write_attendance($emp_id, $overtime_id, $hours_no=null, $rate=1, $att_date, $leave_id = false) {
 
-		if ($overtime_id)
-			$sql .= " FROM ".TB_PREF."overtime WHERE overtime_id=".db_escape($overtime_id);
-    } else
-    	$sql = "DELETE FROM ".TB_PREF."attendance WHERE att_date = '".date2sql($att_date)."'"
-    		." AND emp_id = ".db_escape($emp_id)." AND overtime_id = ".db_escape($overtime_id);
+    if(!empty($leave_id)) {
+        if(check_leave($emp_id, $att_date))
+            $sql = "UPDATE ".TB_PREF."leave SET leave_id = ".db_escape($leave_id).", pay_rate = ".db_escape($rate)." WHERE date = '".date2sql($att_date)."' AND emp_id = ".db_escape($emp_id);
+        else
+            $sql = "INSERT INTO ".TB_PREF."leave(emp_id, leave_id, pay_rate, date) VALUES(".db_escape($emp_id).",".db_escape($leave_id).",".db_escape($rate).",'".date2sql($att_date)."')";
 
-    return db_query($sql, _('Could not add time clock'));
+        $sql2 = "DELETE FROM ".TB_PREF."attendance WHERE emp_id = ".db_escape($emp_id)." AND att_date = '".date2sql($att_date)."'";
+    }
+    elseif(isset($hours_no) && $hours_no != '') {
+
+    	if(check_attended($emp_id, $overtime_id, $att_date))
+    		$sql = "UPDATE ".TB_PREF."attendance SET hours_no = ".db_escape($hours_no).", rate = ".db_escape($rate)." WHERE att_date = '".date2sql($att_date)."' AND emp_id = ".db_escape($emp_id)." AND overtime_id = ".db_escape($overtime_id);
+    	else
+    		$sql = "INSERT INTO ".TB_PREF."attendance(emp_id, overtime_id, hours_no, rate, att_date) VALUES(".db_escape($emp_id).",".db_escape($overtime_id).",".db_escape($hours_no).",".db_escape($rate).",'".date2sql($att_date)."')";
+
+        $sql2 = "DELETE FROM ".TB_PREF."leave WHERE emp_id = ".db_escape($emp_id)." AND date = '".date2sql($att_date)."'";
+    }
+
+    if(!empty($sql))
+        db_query($sql, _('Could not write attendance data'));
+    if(!empty($sql2))
+        db_query($sql2, _('Could not write attendance data'));
 }
 
 //--------------------------------------------------------------------------
@@ -68,44 +81,25 @@ function get_attendance($from, $to, $emp_id = 0, $department = 0, $ot_id = 0) {
 
 	if($emp_id == 0 && $department == 0) {
 	    while(sql_date_comp($from->format('Y-m-d'),$to->format('Y-m-d')) <= 0) {
-	        $sql .= ",MAX(CASE WHEN att.att_date = '".$from->format('Y-m-d')."' AND emp.emp_id = att.emp_id AND att.overtime_id = ".$ot_id." THEN CASE hours_no WHEN '0' THEN '<span style=color:red>x</span>' ELSE hours_no END END)";
+	        $sql .= ",MAX(CASE WHEN att.att_date = '".$from->format('Y-m-d')."' AND emp.emp_id = att.emp_id AND att.overtime_id = ".$ot_id." THEN CASE hours_no WHEN '0' THEN '<span style=color:red>X</span>' ELSE hours_no END WHEN emp.emp_id = l.emp_id AND l.date = '".$from->format('Y-m-d')."' THEN CASE WHEN lt.pay_rate >= '100' THEN CONCAT('<b style=color:green>',lt.leave_code,'</b>') WHEN lt.pay_rate < '100' AND lt.pay_rate > '0' THEN CONCAT('<b style=color:orange>',lt.leave_code,'</b>') WHEN lt.pay_rate <= '0' THEN CONCAT('<b style=color:red>',lt.leave_code,'</b>') END END)";
 	        $from->modify('+1 day');
 	    }
-	    $sql .= " FROM ".TB_PREF."employee emp, ".TB_PREF."attendance att WHERE !emp.inactive GROUP BY emp.emp_id";
+	    $sql .= " FROM ".TB_PREF."employee emp, ".TB_PREF."attendance att, ".TB_PREF."leave l, ".TB_PREF."leave_type lt WHERE !emp.inactive AND l.leave_id = lt.leave_id GROUP BY emp.emp_id";
 	}
-	else if($emp_id != 0) {
+	elseif($emp_id != 0) {
 	    while(sql_date_comp($from->format('Y-m-d'),$to->format('Y-m-d')) <= 0) {
-	        $sql .= ",MAX(CASE WHEN emp.emp_id = ".$emp_id." AND att.att_date = '".$from->format('Y-m-d')."' AND emp.emp_id = att.emp_id AND att.overtime_id = ".$ot_id." THEN hours_no END)";
+	        $sql .= ",MAX(CASE WHEN emp.emp_id = ".$emp_id." AND att.att_date = '".$from->format('Y-m-d')."' AND emp.emp_id = att.emp_id AND att.overtime_id = ".$ot_id." THEN hours_no WHEN emp.emp_id = l.emp_id AND l.date = '".$from->format('Y-m-d')."' THEN CASE WHEN lt.pay_rate >= '100' THEN CONCAT('<b style=color:green>',lt.leave_code,'</b>') WHEN lt.pay_rate < '100' AND lt.pay_rate > '0' THEN CONCAT('<b style=color:orange>',lt.leave_code,'</b>') WHEN lt.pay_rate <= '0' THEN CONCAT('<b style=color:red>',lt.leave_code,'</b>') END END)";
 	        $from->modify('+1 day');
 	    }
-	    $sql .= " FROM ".TB_PREF."employee emp, ".TB_PREF."attendance att WHERE emp.emp_id = '".$emp_id."' GROUP BY emp.emp_id";
+	    $sql .= " FROM ".TB_PREF."employee emp, ".TB_PREF."attendance att, ".TB_PREF."leave l, ".TB_PREF."leave_type lt WHERE l.leave_id = lt.leave_id AND emp.emp_id = '".$emp_id."' GROUP BY emp.emp_id";
 	}
 	else {
         while(sql_date_comp($from->format('Y-m-d'),$to->format('Y-m-d')) <= 0) {
-            $sql .= ",MAX(CASE WHEN att.att_date = '".$from->format('Y-m-d')."' AND emp.emp_id = att.emp_id AND att.overtime_id = ".$ot_id." THEN hours_no END)";
+            $sql .= ",MAX(CASE WHEN att.att_date = '".$from->format('Y-m-d')."' AND emp.emp_id = att.emp_id AND att.overtime_id = ".$ot_id." THEN hours_no WHEN emp.emp_id = l.emp_id AND l.date = '".$from->format('Y-m-d')."' THEN CASE WHEN lt.pay_rate >= '100' THEN CONCAT('<b style=color:green>',lt.leave_code,'</b>') WHEN lt.pay_rate < '100' AND lt.pay_rate > '0' THEN CONCAT('<b style=color:orange>',lt.leave_code,'</b>') WHEN lt.pay_rate <= '0' THEN CONCAT('<b style=color:red>',lt.leave_code,'</b>') END END)";
             $from->modify('+1 day');
         }
-        $sql .= " FROM ".TB_PREF."employee emp, ".TB_PREF."attendance att WHERE emp.department_id = ".$department." AND !emp.inactive GROUP BY emp.emp_id";
+        $sql .= " FROM ".TB_PREF."employee emp, ".TB_PREF."attendance att, ".TB_PREF."leave l, ".TB_PREF."leave_type lt WHERE l.leave_id = lt.leave_id AND emp.department_id = ".$department." AND !emp.inactive GROUP BY emp.emp_id";
 	}
+
 	return $sql;
-}
-
-/*
-	Returns attendance data for employees selected by department on date $date
-*/
-function get_attendance_data($date, $department=0) {
-
-	$sql = "SELECT t.emp_id, t.name, t.overtime_id, hours_no, rate
-	FROM ( # attendance form
-		SELECT o.id overtime_id, emp_id, CONCAT(e.emp_first_name,' ', e.emp_last_name) name, department_id FROM 
-			(SELECT 0 id UNION (SELECT overtime_id id FROM 0_overtime) ) o,
-			0_employee e) t
-	LEFT JOIN 0_attendance a ON t.emp_id=a.emp_id and t.overtime_id=a.overtime_id AND a.att_date='".date2sql($date)."'";
-
-	if ($department)
-		$sql .= " WHERE t.department_id=".db_escape($department);
-
-	$sql .= " ORDER BY t.emp_id, t.overtime_id";
-
-	return db_query($sql, "cannot retrieve attendance data");
 }
