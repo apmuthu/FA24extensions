@@ -1,10 +1,10 @@
 /FrontHRM_v2.4.0-3_ERD.png: 0c250f698843f581137ba7c1900cdb4b5d1a6f72
-/hooks.php: e04f6ab358bf48d5447c383c953a18e7778562a6
+/hooks.php: 455a13a60962539182fe2e71ff1ea89b9c27109d
 /images/avatar/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /images/avatar/no_image.svg: 27ddef798344583005592fee93bdf6fa9350add8
 /images/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /includes/db/account_db.inc: c6a49cf609dfcd6ac8924928b03eae69e0006e6c
-/includes/db/attendance_db.inc: 40a3c47f26abdaf4492d698af9e3601120a04bdc
+/includes/db/attendance_db.inc: 603208bbe8fc0c7539b7ce86b76b1ecacbde0ece
 /includes/db/department_db.inc: 6579194178fe328dc5cf78dff4434f4753287208
 /includes/db/doc_db.inc: a54856870b3c435275d2a43154c9e450f332783e
 /includes/db/employee_db.inc: 8913898e78bb1816452f7441441ae7cc31d092f7
@@ -15,7 +15,6 @@
 /includes/db/leave_db.inc: ae06c7f64b9bfc2574e243853a99e4311c5e8304
 /includes/db/overtime_db.inc: bf89f10282d7cc74148ca8879af8e90d10231d99
 /includes/db/payslip_db.inc: 9b3653d252ab364f870fa7779d9ea0b0b3ad4035
-/includes/db/salary_scale_db.inc: 0aa7175f2260a33bc57b1d7600b0b5887008bcbc
 /includes/db/salary_structure_db.inc: 8325dd891508a6d9e56be0af493669ce8680650c
 /includes/frontHrm_db.inc: 731dd8d8b606de6efc345ea91851dbf3a90c1ba9
 /includes/frontHrm_ui.inc: 2c9f7e3f42bb9a3d38363140a7d7852a3cd4e7d7
@@ -30,7 +29,6 @@
 /includes/ui/leave_ui.inc: 3d846aef3effa52ec186054ba39b7f86160430b1
 /includes/ui/overtime_ui.inc: e777b38b1684299b00b3a4dc39ea6227b4767696
 /includes/ui/payslip_ui.inc: 67d8c1fe0552dec42de05d37975059168d58ad2d
-/includes/ui/salary_scale_ui.inc: 19bee01cf18a816de8de90db2e7eae6630d536fd
 /index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /inquiry/emp_inquiry.php: f1e65c4bc7688a7b06223d84434f773fb5b5fe9c
 /inquiry/index.php: 435866102943ef00e38d96927cb5ee20bff20688
@@ -39,7 +37,7 @@
 /js/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /LICENSE: 12d81f50767d4e09aa7877da077ad9d1b915d75b
 /manage/accounts.php: 808fa701e0e40a8a5834ea70f74237999b9419bd
-/manage/attendance.php: d052ee5b12295cc71b499619b613bf3ea2f1f03e
+/manage/attendance.php: e2bc94065bcd15f631153ef4010f842b8c616295
 /manage/default_setup.php: 713a1ea729502e57fc311916634c7a70a26048c0
 /manage/department.php: cde90edf8a1b4b3b6fe11a4c30fc02cc31b2a092
 /manage/doc_type.php: 4155b15c80f82742be1992f55966fb04e6c8f083
@@ -53,7 +51,6 @@
 /manage/payroll_rules.php: 6d7326bf91a1b2de5f09b1dd188da240ead8e1f1
 /manage/payslip.php: eff676513c183dcd879266f2b0b7a3e1d2e936c0
 /manage/position.php: f0a2d87b733e6a15bab7c37a6fcca19b169b5b8f
-/manage/salaryscale.php: b43a65b11fd9e9e32b0cc1d2f39e02bcdfeb4b08
 /manage/salary_structure.php: 7c7345f073e5c6ea0b427d860205ce317362ca71
 /README.md: dd3c4fbd09c1d9df3d77bd8924081519b7711b58
 /reporting/index.php: 435866102943ef00e38d96927cb5ee20bff20688

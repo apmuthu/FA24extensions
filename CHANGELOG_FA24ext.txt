@@ -1,3 +1,4 @@
+2019-07-06  Phuong       Updated FrontHRM with shortcuts
 2019-07-06  Phuong       Updated FrontHRM to v2.4.0-3
 2019-05-12  Tom Moulton  osc_orders extension updates
 2019-05-02  BraathWaate  Import Transactions extension updates
