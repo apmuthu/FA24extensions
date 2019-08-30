@@ -130,9 +130,9 @@ function osc_get_country($country_id) {
     return $id;
 }
 
+// Note: FA address does not contain customer name
 function osc_address_format($data, $pre) {
     $company = $data[$pre . 'company'];
-    $name = $data[$pre . 'name'];
     $street_address = $data[$pre . 'street_address'];
     $suburb         = $data[$pre . 'suburb'];
     $city           = $data[$pre . 'city'];
@@ -145,7 +145,7 @@ function osc_address_format($data, $pre) {
 
     $ret = '';
     if (not_null($company)) $ret .= $company . "\n";
-    $ret .= $name . "\n" . $street_address . "\n";
+    $ret .= $street_address . "\n";
     if (not_null($suburb))   $ret .= $suburb . "\n";
     if (not_null($city))     $ret .= $city;
     if (not_null($state))    $ret .= ", " . osc_get_zone_code($state);

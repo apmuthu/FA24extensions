@@ -31,7 +31,7 @@ function can_process($line, $customer_id, $branchNo, $reference, $date, $dimensi
         }    
         
         if (!$Refs->is_valid($reference, $_SESSION['Items']->trans_type)) {
-        display_error(_("On line $line you must enter a reference."));
+        display_error(_("On line $line, $reference is invalid."));
         return false;
     }
     if (empty($date)) {

@@ -22,9 +22,12 @@ $csv[0] = array_slice($csv[0], 0, 7);
             $value['Location'] = $location = strtoupper(trim($value['County']) . " COUNTY");
         else if ($location == "UNINCORPORATED")
             $value['Location'] = $location = strtoupper("UNINCORPORATED " . trim($value['County']) . " COUNTY");
-        for ($i=0; $value[$i] != null; $i +=3)
-            $value['total'] += $value[$i+1];
-        $tax_rates[$location] = $value;
+        for ($i=0; $value[$i] != null; $i +=3) {
+            if (strpos($value[$i], 'food') === false)
+                $value['total'] += $value[$i+1];
+        }
+        if (!isset($tax_rates[$location]))  // Denver is duplicate (depending on county)
+            $tax_rates[$location] = $value;
     }
     $tax_rates['GRAND JUNCTION'] = $tax_rates['UNINCORPORATED MESA COUNTY'];
     $tax_rates['ENGLEWOOD'] = $tax_rates['UNINCORPORATED DOUGLAS COUNTY'];
@@ -45,6 +48,18 @@ $csv[0] = array_slice($csv[0], 0, 7);
 
             if (isset($tax_rates[$city]))
                 return $tax_rates[$city];
+            else {
+                $best_city = 0;
+                $best_sim = -1;
+                foreach ($tax_rates as $maybe_city => $rate) {
+                    $sim = levenshtein($maybe_city, $city);
+                    if ($sim < $best_sim || $best_sim == -1) {
+                        $best_city = $maybe_city;
+                        $best_sim = $sim;
+                    }
+                }
+                return $tax_rates[$best_city];
+            }
         }
     }
 

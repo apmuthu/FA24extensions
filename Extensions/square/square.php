@@ -41,8 +41,7 @@ function getTransactions($category, $location, $item_like)
             LEFT JOIN ".TB_PREF."stock_moves move ON item.stock_id=move.stock_id
             LEFT JOIN ".TB_PREF."item_tax_types tt ON item.tax_type_id=tt.id
         WHERE item.category_id=category.category_id
-        AND item.inactive = 0
-        AND (item.mb_flag='B' OR item.mb_flag='M')";
+        AND item.inactive = 0";
     if ($category  != -1)
         $sql .= " AND item.category_id = ".db_escape($category);
     if ($location != 'all')
@@ -239,6 +238,11 @@ function square_variation($stock_id, $sq_item, $locationId)
         "item_variation_data" => array(
             "name" => "Short",
             "pricing_type" => "FIXED_PRICING",
+
+// square searches for barcodes using the sku,
+// so we put the sku into the upc field
+
+            "upc" => $stock_id,
             "sku" => $row['item_code'],
             "price_money" => array(
                 "amount" => round(100 * $myprice),
@@ -326,12 +330,12 @@ try {
 
     $api = new \SquareConnect\Api\V1TransactionsApi();
     $cat_api = new \SquareConnect\Api\CatalogApi();
-    $cursor = null;
     $loc_orders = array();
     foreach ($locs->locations as $location) {
         if (empty($date))
             $loc_orders[$location->id] = $location->name;
         else
+        $cursor = null;
         do {
             $trans = $api->listPayments($location->id, null, gmdate("c", strtotime($date)), null, 200, $cursor);
             $loc_orders[$location->id] = array($location->name, count((array)$trans));
@@ -552,6 +556,40 @@ function get_FA_payment_terms($cart)
     return null;
 }
 
+function list_square_items()
+{
+$api_instance = new SquareConnect\Api\CatalogApi();
+$square_items=array();
+
+
+// List all square items
+
+$cursor = null;
+do {
+    $api_instance = new SquareConnect\Api\CatalogApi();
+    $types = "types_example"; // string | An optional case-insensitive, comma-separated list of object types to retrieve, for example `ITEM,ITEM_VARIATION,CATEGORY,IMAGE`.  The legal values are taken from the [CatalogObjectType](#type-catalogobjecttype) enumeration, namely `ITEM`, `ITEM_VARIATION`, `CATEGORY`, `DISCOUNT`, `TAX`, `MODIFIER`, `MODIFIER_LIST`, or `IMAGE`.
+
+    try {
+        $result = $api_instance->listCatalog($cursor, "ITEM");
+        $res = json_decode($result);
+    } catch (Exception $e) {
+        echo 'Exception when calling CatalogApi->listCatalog: ', $e->getMessage(), PHP_EOL;
+    }
+
+    foreach ($res->objects as $item)
+        $square_items[$item->item_data->name] = $item;
+
+    if (!isset($res->cursor))
+        break;
+    $cursor = $res->cursor;
+} while (1);
+
+    return $square_items;
+}
+
+
+
+// Add Items from selected category
 
 // error_reporting(E_ALL);
 // ini_set("display_errors", "on");
@@ -718,9 +756,6 @@ try {
     $api = new \SquareConnect\Api\V1TransactionsApi();
     $items_api = new \SquareConnect\Api\V1ItemsApi();
     $cat_api = new \SquareConnect\Api\CatalogApi();
-    $cursor = null;
-    $fees = 0;
-    $total = 0;
     foreach ($locs->locations as $location) {
 
             // Find the customer branch using the Square location as the branch name
@@ -737,24 +772,38 @@ try {
             $branch                  = db_fetch_assoc($result);
             // print_r($branch);
 
+        $cursor = null;
         do {
             $trans = $api->listPayments($location->id, null, gmdate("c", strtotime($_POST['from_date'])), gmdate("c", strtotime("+1 day", strtotime($_POST['to_date']))), 200, $cursor);
             if (!empty((array)$trans)) {
                 foreach ($trans as $t) {
-
+                    $payment_method = str_replace("CREDIT_CARD", "CARD", $t->getTender()[0]->getType());
+                    if ($payment_method == "NO_SALE") {
+                        display_notification("NO_SALE " . $t->getId());
+                        continue;
+                    }
+                        
                     if (paymentExistsInFA($t->getId())) {
                         display_notification("Skipping " . $t->getId());
                         continue;
-                    } else
-                        display_notification("Processing " . $t->getId());
+                    }
 
                     $cart                = new Cart(ST_SALESINVOICE);
+                    $cart->payment_info = $t->getTender()[0]->getCardBrand()  . " " . $t->getTender()[0]->getPanSuffix();
 
-                    $payment_method = $t->getTender()[0]->getType();
-                    $pos = get_sales_point_by_name($payment_method);
+                    // Allow square locations to map to separate POS accounts
+                    // This is because square can assign different banks
+                    // and makes separate deposits to each location,
+                    // so the payment method alone is not sufficient to map to a FA bank account
+
+                    $pos = get_sales_point_by_name($location->name . " " . $payment_method);
+
                     if (!$pos) {
-                        display_error("Payment method $payment_method does not exist as a Point of Sale in FA.  Do Setup->Points of Sale first.");
-                        continue;
+                        $pos = get_sales_point_by_name($payment_method);
+                        if (!$pos) {
+                            display_error("Payment method $payment_method does not exist as a Point of Sale in FA.  Do Setup->Points of Sale first.");
+                            continue;
+                        }
                     }
 
                     $cart->pos=$pos;
@@ -779,71 +828,110 @@ try {
                 $cart->customer_id       = $customer['debtor_no'];
                 $cart->customer_currency = $customer['curr_code'];
 
-                $addr = "";
                 $total_shipping = 0;
-                $total_tax = 0;
                 $customers_name = "Square";
-                $comments = "";
+
                 $date_purchased = $t->getCreatedAt();
+                $timezone=date_default_timezone_get();
+                $dt = DateTime::createFromFormat(DateTime::ISO8601, $t->getCreatedAt(), new DateTimeZone('UTC'));
+                $dt->setTimezone( new \DateTimeZone( $timezone ) ); 
+                $date_purchased = $dt->format('Y-m-d');
 
                 $cart->set_branch(
                     $branch["branch_code"],
                     $branch["tax_group_id"],
-                    $addr);
-                $cart->set_delivery($branch['default_ship_via'], $customers_name, $addr, $total_shipping);
+                    $branch["br_address"]);
+                $cart->set_delivery($branch['default_ship_via'], $customers_name, $branch["br_address"], $total_shipping);
 
                 $cart->cust_ref          = $t->getId();
-                $cart->Comments          = $comments;
                 $cart->document_date     = sql2date($date_purchased);
 
-                // If the osc order did not have tax, assume tax was included
-                // (if items are tax exempt, like food, this has no effect)
-                if ($total_tax == 0
+
+                $cart->due_date          = sql2date($date_purchased);
+                $cart->dimension_id      = $customer['dimension_id'];
+                $cart->dimension2_id     = $customer['dimension2_id'];
+
+                if ($t->getInclusiveTaxMoney()->getAmount() != 0
                     && isset($tax_included_sales_type_id))
                     $cart->sales_type    = $tax_included_sales_type_id;
                 else
                     $cart->sales_type    = $customer['sales_type'];
 
-                $cart->due_date          = sql2date($date_purchased);
-                $cart->dimension_id      = $customer['dimension_id'];
-                $cart->dimension2_id     = $customer['dimension2_id'];
-                // $cart->payment_info      = $order['cc_owner'] . ' ' . $order['cc_number'];
+/*
+        // try to get the customer name into the comments (not available in V1)
 
-                       $total += $t->getTender()[0]->getTotalMoney()->getAmount();
-                        $fees += $t->getProcessingFeeMoney()->getAmount();
+                $customer_id = $t->getTender()[0]->getCustomerId();
+
+                if ($customer_id != '') {
+
+                    try {
+                       $api_instance = new SquareConnect\Api\CustomersApi();
+                        $c_result = $api_instance->retrieveCustomer($customer_id);
+                    } catch (Exception $e) {
+                        echo 'Exception when calling CustomersApi->retrieveCustomer: ', $e->getMessage(), PHP_EOL;
+                    }
+                    $r = json_decode($c_result);
+                    $cc_owner = $r->customer->given_name . " " . $r->customer->family_name;
+                } else
+                    $cc_owner="Unknown";
+*/
+
                     $items = $t->getItemizations();
-
-//print_r($items);
                         foreach ($items as $item) {
                             $type = $item->getItemizationType();
                             if ($type == 'CUSTOM_AMOUNT')
                                 continue;
                             $detail = $item->getItemDetail();
                             $item_id = $detail->getItemId();
-                            $item2 = $items_api->retrieveItem($location->id, $item_id);
+                            try {
+                                $item2 = $items_api->retrieveItem($location->id, $item_id);
+                            } catch (Exception $e) {
+    // if the item is not found, perhaps the item was updated?
+    // if so, grab the sku from the item with the same name
+                                global $square_items;
+                                if (!isset($square_items))
+                                    $square_items = list_square_items();
+                                $item_id = $square_items[$item->getName()]->id;
+                                $item2 = $items_api->retrieveItem($location->id, $item_id);
+                            }
                             $item3 = $cat_api->retrieveCatalogObject($item2->getV2Id(), false);
                             $catobj = $item3->getObject();
-                            $item4 = $catobj->getCatalogV1Ids();
-                            $stock_id = $item4[0]->getCatalogV1Id();
-                            add_to_order($cart, $stock_id, $item->getQuantity(),
+                            $item_data = $catobj->getItemData();
+                            $var = $item_data->getVariations();
+                            $vardata = $var[0]->getItemVariationData();
+
+                            $sku = $vardata->getUpc();
+
+                // discounts are applied differently to items including or excluding tax
+
+                if ($t->getInclusiveTaxMoney()->getAmount() != 0)
+                    $discount = -$item->getDiscountMoney()->getAmount()/($item->getTotalMoney()->getAmount() - $item->getDiscountMoney()->getAmount());
+                else
+                    $discount = -$item->getDiscountMoney()->getAmount()/$item->getGrossSalesMoney()->getAmount();
+
+                            add_to_order($cart, $sku, $item->getQuantity(),
                                 $item->getSingleQuantityMoney()->getAmount()/100,
-                                -$item->getDiscountMoney()->getAmount()/$item->getGrossSalesMoney()->getAmount());
-                        }
+                                $discount);
+                        } // foreach item
+
+
+// need to handle refunds, this does not work yet
 
                         if (!empty($t->refunds)) {
                             foreach ($t->refunds as $ref) {
                                 print "REF " . $ref->amount_money->amount . "," . $ref->processing_fee_money->amount . "\n";
-                                $total -= $ref->amount_money->amount;
-                                $fees -= $ref->processing_fee_money->amount;
                             }
                        }
 
                 if ($_POST['trial_run'] == 0) {
                     $order_no = $cart->write(1);
                     display_notification("Added Order Number $order_no for " . $customers_name);
+                } else {
+                       $total_order = $t->getTender()[0]->getTotalMoney()->getAmount();
+                       display_notification("To Be Added:" . $total_order . " " . $cart->payment_info);
                 }
 
-                } // foreach
+                } // foreach trans
 
             } // !empty
 
@@ -883,7 +971,6 @@ $locationName = array_merge(array("All"), square_locs());
 $categories=array();
 
 $api_instance = new SquareConnect\Api\CatalogApi();
-
 try {
     $result = $api_instance->listCatalog("", "TAX");
 } catch (Exception $e) {
@@ -893,37 +980,13 @@ try {
     foreach ($sq_tax->objects as $obj)
         $taxName[$obj->tax_data->name] = $obj->id;
 
-// List all square items
-
-$cursor = null;
-do {
-    $api_instance = new SquareConnect\Api\CatalogApi();
-    $types = "types_example"; // string | An optional case-insensitive, comma-separated list of object types to retrieve, for example `ITEM,ITEM_VARIATION,CATEGORY,IMAGE`.  The legal values are taken from the [CatalogObjectType](#type-catalogobjecttype) enumeration, namely `ITEM`, `ITEM_VARIATION`, `CATEGORY`, `DISCOUNT`, `TAX`, `MODIFIER`, `MODIFIER_LIST`, or `IMAGE`.
-
-    try {
-        $result = $api_instance->listCatalog($cursor, "ITEM");
-        $res = json_decode($result);
-    } catch (Exception $e) {
-        echo 'Exception when calling CatalogApi->listCatalog: ', $e->getMessage(), PHP_EOL;
-    }
-
-    foreach ($res->objects as $item)
-        $square_items[$item->item_data->name] = $item;
-
-    if (!isset($res->cursor))
-        break;
-    $cursor = $res->cursor;
-} while (1);
-
-
-// Add Items from selected category
+$square_items = list_square_items();
 
 $cat = $_POST['category'];
 $trans_res = getTransactions($cat, 'all', $_POST['stocklike']);
 
 while ($trans=db_fetch($trans_res)) {
     $stock_id = $trans['stock_id'];
-
 
 // do not update item if the item is present at all locations
 // and we are exporting a specific location
@@ -962,6 +1025,7 @@ while ($trans=db_fetch($trans_res)) {
         else {
 
         // Create category
+echo "create";
 
             $body = new \SquareConnect\Model\UpsertCatalogObjectRequest();
                         $obj=array(
@@ -980,7 +1044,7 @@ while ($trans=db_fetch($trans_res)) {
                 $categories[$trans['category_id']] = $sq_cat;
             } catch (Exception $e) {
                 display_error('Exception when calling CatalogApi->upsertCatalogObject: '. $e->getMessage());
-                continue;
+                break;
             }
         }
 
@@ -989,7 +1053,7 @@ while ($trans=db_fetch($trans_res)) {
 // Add/Update Item
 
     $body = new \SquareConnect\Model\UpsertCatalogObjectRequest();
-    $obj = square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locationName, $taxName);
+    $obj = square_v2body($stock_id, $sq_cat, @$sq_item, $trans, $locationId, $locationName, $taxName);
     $body->setIdempotencyKey(uniqid());
     $body->setObject($obj);
 
@@ -1000,22 +1064,29 @@ while ($trans=db_fetch($trans_res)) {
         $sq_id=$res->catalog_object->id;
     } catch (Exception $e) {
         display_error("$stock_id: Exception when calling CatalogApi->upsertCatalogObject: " .  $e->getMessage());
-        continue;
+        break;
     }
 
     unset($square_items[str_replace("Whitewater Hill ","",$trans['description'])]);
 
     // Update taxes (should not be necessary, but tax_ids field in item field not working)
 
-    if (!$trans['exempt'] && $locationId != '0') {
+    if (!$trans['exempt']) {
         $body = new \SquareConnect\Model\UpdateItemTaxesRequest();
         $body->setItemIds(array($sq_id));
-        $body->setTaxesToEnable(array($taxName[$locationName[$locationId] . " " . $trans['tax_name']]));
+        $tax_array = array();
+        foreach ($locationName as $loc_key => $loc_name)
+            if ($locationId == '0' || $loc_key == $locationId) {
+                if (isset($taxName[$loc_name . " " . $trans['tax_name']]))
+                    $tax_array = array_merge($tax_array, array($taxName[$loc_name . " " . $trans['tax_name']]));
+            }
+        $body->setTaxesToEnable($tax_array);
 
         try {
             $result = $api_instance->updateItemTaxes($body);
         } catch (Exception $e) {
             echo 'Exception when calling CatalogApi->updateItemTaxes: ', $e->getMessage(), PHP_EOL;
+            break;
         }
     }
 

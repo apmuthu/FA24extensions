@@ -116,9 +116,9 @@ function getExportSales($from, $to)
     $sql = "SELECT
         sm.tran_date,
         cb.*,
-        tg.name as state,
-        t.order_,
-        so.deliver_to,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(so.delivery_address,', ',-1),' ', 1) as state,
+        so.customer_ref as invoice_number,
+        SUBSTRING_INDEX(so.delivery_address,'\n', 1) as deliver_to,
         SUM(sm.qty*IF(LOCATE('wt:2.0', item.long_description) != 0,.375,.75)) AS liters
         FROM ".TB_PREF."stock_moves sm
             LEFT JOIN ".TB_PREF."stock_master item ON sm.stock_id=item.stock_id
@@ -130,7 +130,7 @@ function getExportSales($from, $to)
                 AND item.category_id=36
                 AND cb.tax_group_id IN ('8','3')
             GROUP BY t.order_
-            ORDER BY cb.tax_group_id, tg.name";
+            ORDER BY cb.tax_group_id, state";
 
 //display_notification($sql);
     return db_query($sql,"No transactions were returned");
@@ -240,7 +240,7 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
 	array('x' => 4, 'y' => 7.7, 'text' => 'GRAND JUNCTION'),
 	array('x' => 6.8, 'y' => 7.7, 'text' => 'CO 81503-9642'),
 	array('x' => 1, 'y' => 7.35, 'text' => ACCOUNT_NUMBER),
-	array('x' => 4.7, 'y' => 7.35, 'text' => $period),
+	array('x' => 4.7, 'y' => 7.35, 'text' => substr($period, 5, 2) . "/" . substr($period, 0, 4)),
 	array('x' => 7, 'y' => 7.35, 'text' => $duedate),
 	array('x' => 4, 'y' => 7.0, 'text' => FEIN),
 	array('x' => 3.4, 'y' => 5.9, 'text' => $beg_inv), // beginning inventory
@@ -296,14 +296,14 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
         $annote_export[$page][$i++] = array('x' => 4.3, 'y' => 8.8, 'text' => $state);
         $annote_export[$page][$i++] = array('x' => .7, 'y' => 8.3, 'text' => 'X');
     }
-    $line = 7.9 - $rows * .23;
+    $line = 7.9 - $rows * .24;
     $annote_export[$page][$i++] = array('x' => .5, 'y' => $line, 'text' => $row['tran_date']);
     $annote_export[$page][$i++] = array('x' => 1.5, 'y' => $line, 'text' => $row['deliver_to']);
-    $annote_export[$page][$i++] = array('x' => 4.3, 'y' => $line, 'text' => $row['order_']);
+    $annote_export[$page][$i++] = array('x' => 4.3, 'y' => $line, 'text' => $row['invoice_number']);
     $annote_export[$page][$i++] = array('x' => 6.5, 'y' => $line, 'text' => -$row['liters']);
     $total -= $row['liters'];
   }
-  $annote_export[$page][$i++] = array('x' => 6.5, 'y' => 1.1, 'text' => $total);
+  $annote_export[$page][$i++] = array('x' => 6.5, 'y' => .9, 'text' => $total);
 
 fputs($handle, '
 %!PS

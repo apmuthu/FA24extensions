@@ -283,20 +283,24 @@ function auto_create($current)
                     continue;
                 }
                 $acct = db_fetch($result);
+                $from_reconciled = $to_reconciled = null;
                 if ($amt < 0) {
                     $amt = -$amt;
                     $from_account = $_POST['bank_account'];
                     $to_account=$acct['bank_act'];
+                    $from_reconciled=date2sql($_POST['reconcile_date']);
                 } else {
                     $to_account = $_POST['bank_account'];
                     $from_account=$acct['bank_act'];
+                    $to_reconciled=date2sql($_POST['reconcile_date']);
                 }
                 // display_notification($from_account ." " .  $to_account . " " .  $newdate ." " .  $amt ." " . $reference);
-                $id = add_bank_transfer($from_account, $to_account, $newdate, $amt, $reference, "", 0, 0);
-            } else
+                add_bank_transfer($from_account, $to_account, $newdate, $amt, $reference, "", 0, 0, $from_reconciled, $to_reconciled);
+            } else {
                 $id = bank_inclusive_tax($sim['type'], $reference, $newdate, $_POST['bank_account'], $bank_account_gl_code, $trans_no, $sim['account'], $sim['dim1'], $sim['dim2'], "", $amt, $sim['person_type_id'], $sim['person_id'], $BranchNo);
 
-            update_reconciled_values($id, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
+                update_reconciled_values($id, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
+            }
 
             add_comments($sim['type'], $trans_no, $newdate, $comment);
 
@@ -419,7 +423,7 @@ if (isset($_POST['import'])) {
                         }
                     }
 
-                    display_warning("$date : $amount : $comment NOT FOUND - FIX THIS");
+                    display_notification("$date : $amount : $comment NOT FOUND - FIX THIS");
                     $total_miss += $amount;
                     $total += $amount;
                 } else if (db_num_rows($result) == 1 || $early) {

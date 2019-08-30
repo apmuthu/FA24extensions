@@ -27,7 +27,6 @@ include_once($path_to_root . "/modules/tax_rate/get_tax_rate.inc");
 define("ACCOUNT_NUMBER", '01514419-0001');
 define("FEIN", '84-1457020');
 define("CUSTOMER_GROUP_CHARITY", 'Government, Religious Or Charity');
-define("PRECISION",2); // force totals to round to whole numbers
 define("TAX_GROUP_PHYSICAL",'1'); // physical location
 define("TAX_GROUP_EXEMPT_WHOLESALE",'2');
 define("TAX_GROUP_THORNTON",'4');
@@ -48,6 +47,8 @@ function GetPhysicalSales($from, $to)
     $todate = date2sql($to);
 
     $sql= "SELECT
+            'Physical' as description,
+
             SUM(CASE WHEN dt.type=".ST_CUSTCREDIT."
                 THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) AS net,
@@ -102,6 +103,7 @@ function GetNonPhysicalSales($period, $from, $to)
 
     $sql= "SELECT
             substring_index(substring_index(IF(delivery_address!='',delivery_address,br_address), ',', 1), '\n', -1) AS location,
+            a.description,
 
             SUM(CASE WHEN dt.type=".ST_CUSTCREDIT."
                 THEN (ttd.net_amount)*-1
@@ -114,16 +116,20 @@ function GetNonPhysicalSales($period, $from, $to)
 
         FROM ".TB_PREF."debtor_trans dt
         LEFT JOIN ".TB_PREF."cust_branch cb ON cb.branch_code = dt.branch_code
+        LEFT JOIN ".TB_PREF."areas a ON cb.area = a.area_code
         LEFT JOIN ".TB_PREF."sales_orders so ON so.order_no = dt.order_
         LEFT JOIN ".TB_PREF."trans_tax_details ttd ON ttd.trans_type=dt.type AND ttd.trans_no=dt.trans_no
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.")
             AND dt.tran_date >='$fromdate'
             AND dt.tran_date <='$todate'
-            AND tax_group_id IN
-                (".($period >= "2019-06" ? TAX_GROUP_COLORADO."," : "")
-                .TAX_GROUP_THORNTON.","
-                .TAX_GROUP_DOUGLAS_COUNTY.")
-        GROUP BY location";
+            AND a.description NOT IN (
+                ".($period >= "2019-06" ? '' : 'Colorado'). "
+                'Grand Junction',
+                'California',
+                'Out-of-state')
+            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WHOLESALE."'
+            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_USE."'
+        GROUP BY location, a.description";
 
 //display_notification($sql);
     return db_query($sql, "Error getting order details");
@@ -148,10 +154,10 @@ function print_dr0100()
     $params =   array(0 => '', 
                       1 => array('text' => _('Period'), 'from' => $from_date, 'to' => $to_date));
 
-    $cols = array(0, 200, 230, 330, 430);
+    $cols = array(0, 100, 300, 330, 430, 530);
 
-    $headers = array(_('Location'), _('Jurisdiction'), _('Self-Collected'), _('State-Collected'));
-    $aligns = array('left', 'left', 'right', 'right');
+    $headers = array(_('Area'), _('Location'), _('Jurisdiction'), _('Self-Collected'), _('State-Collected'));
+    $aligns = array('left', 'left', 'left', 'right', 'right');
 
     $rep->Font();
     $rep->Info($params, $cols, $headers, $aligns);
@@ -175,11 +181,13 @@ while (1) {
         if (!($sales = db_fetch($nonphys)))
             break;
         $address="\n" . trim($sales['location']) .  ", CO";
-display_notification($address);
+// display_notification($address);
     }
 
+display_notification(print_r($sales, true));
+
 $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
-//display_notification(print_r($tax_rates,true));
+// display_notification("tax rates" . print_r($tax_rates,true));
 
 // optional taxes
 
@@ -212,25 +220,32 @@ if ($period >= "2019-06")
 if ($sales['food'] <= 1)
     $sales['food'] = 0;
 
-$sales_taxed_state=$sales['net'] - $sales['tax_exempt'] - $sales['ootac'] -  $sales['food'];
-$sales_taxed_county=$sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'];
-$sales_taxed_rtdcd=($tax_rate['RTD']? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0);
-$sales_taxed_sd=($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0);
-$sales_taxed_city=($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0);
+    if ($sales['description'] == 'Special Event')
+        $PRECISION = 0;
+    else
+        $PRECISION = 2;
+
+$sales['net'] = round($sales['net'], $PRECISION);
+
+$sales_taxed_state=round($sales['net'] - $sales['tax_exempt'] - $sales['ootac'] -  $sales['food'], $PRECISION);
+$sales_taxed_county=round($sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'], $PRECISION);
+$sales_taxed_rtdcd=round(($tax_rate['RTD']? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0), $PRECISION);
+$sales_taxed_sd=round(($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0), $PRECISION);
+$sales_taxed_city=round(($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0), $PRECISION);
 
 $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 
-    $tax_sd = round($sales_taxed_county * $tax_rate['SD'], PRECISION);
-    $tax_rtdcd = round($sales_taxed_county * $tax_rate['RTD'], PRECISION);
-    $tax_city = round($sales_taxed_county * $tax_rate['City'], PRECISION);
-    $tax_county = round($sales_taxed_county * $tax_rate['County'], PRECISION);
-    $tax_state = round($sales_taxed_state * $tax_rate['State'], PRECISION);
+    $tax_sd = round($sales_taxed_county * $tax_rate['SD'], $PRECISION);
+    $tax_rtdcd = round($sales_taxed_county * $tax_rate['RTD'], $PRECISION);
+    $tax_city = round($sales_taxed_county * $tax_rate['City'], $PRECISION);
+    $tax_county = round($sales_taxed_county * $tax_rate['County'], $PRECISION);
+    $tax_state = round($sales_taxed_state * $tax_rate['State'], $PRECISION);
 
-    $service_fee_sd = round($tax_sd * $service_fee['SD'], PRECISION);
-    $service_fee_rtdcd = round($tax_rtdcd * $service_fee['RTD'], PRECISION);
-    $service_fee_city = round($tax_city * $service_fee['City'], PRECISION);
-    $service_fee_county = round($tax_county * $service_fee['County'], PRECISION);
-    $service_fee_state = round($tax_state * $service_fee['State'], PRECISION);
+    $service_fee_sd = round($tax_sd * $service_fee['SD'], $PRECISION);
+    $service_fee_rtdcd = round($tax_rtdcd * $service_fee['RTD'], $PRECISION);
+    $service_fee_city = round($tax_city * $service_fee['City'], $PRECISION);
+    $service_fee_county = round($tax_county * $service_fee['County'], $PRECISION);
+    $service_fee_state = round($tax_state * $service_fee['State'], $PRECISION);
 
     $tax_due_sd = $tax_sd - $service_fee_sd;
     $tax_due_rtdcd = $tax_rtdcd - $service_fee_rtdcd;
@@ -238,20 +253,151 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
     $tax_due_county = $tax_county - $service_fee_county;
     $tax_due_state = $tax_state - $service_fee_state;
 
-    $rep->TextCol(0, 1, $tax_rates['Location']);
-    $rep->TextCol(1, 2, $tax_rates['JurisdictionCode']);
+    $rep->TextCol(0, 1, $sales['description']);
+    $rep->TextCol(1, 2, $tax_rates['Location']);
+    $rep->TextCol(2, 3, $tax_rates['JurisdictionCode']);
 
     if ($tax_rates['HomeRule'] == 'Self-collected') {
-        $rep->AmountCol(2, 3, $tax_due_city, $dec);
+        $rep->AmountCol(3, 4, $tax_due_city, $dec);
         $tax_city = $service_fee_city = $tax_due_city = $sales_taxed_city = 00;
         $tax_rate['City'] = 0;
     }
 
     $tax_due = $tax_due_sd + $tax_due_rtdcd + $tax_due_county + $tax_due_state + $tax_due_city; 
-    $total += $tax_due;
 
-    $rep->AmountCol(3, 4, $tax_due, $dec);
+    $rep->AmountCol(4, 5, $tax_due, $dec);
     $rep->NewLine();
+
+    if ($sales['description'] == 'Special Event') {
+
+
+    $special = array(
+	array('x' => 6.5, 'y' => 9.2, 'text' => FEIN),
+
+	array('x' => 1, 'y' => 8.7, 'text' => strtoupper(get_company_pref('coy_name'))),
+	array('x' => 6.7, 'y' => 8.7, 'text' => '970 434-6868'),
+
+	array('x' => 4.6, 'y' => 8.2, 'text' => $tax_rates['JurisdictionCode']),
+
+
+	array('x' => 8.0, 'y' => 8.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
+
+	array('x' => 1, 'y' => 8.2, 'text' => ACCOUNT_NUMBER),
+
+	array('x' => 1, 'y' => 7.8, 'text' => $tax_rates['Location']),
+	array('x' => 2.5, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
+
+	array('x' => 2.5, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
+	array('x' => 3.7, 'y' => 5.5, 'text' => ($tax_rate['RTD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
+	array('x' => 5, 'y' => 5.5, 'text' => ($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
+	array('x' => 6, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
+	array('x' => 7.2, 'y' => 5.5, 'text' => ($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
+
+
+	array('x' => 2.5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_state)),
+	array('x' => 3.7, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_rtdcd)),
+	array('x' => 5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_sd)),
+	array('x' => 6, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_county)),
+	array('x' => 7.2, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_city)),
+
+	array('x' => 2.5, 'y' => 4.4, 'text' => number_format($tax_rate['State'],4)),
+	array('x' => 3.7, 'y' => 4.4, 'text' => number_format($tax_rate['RTD'],4)),
+	array('x' => 5, 'y' => 4.4, 'text' => number_format($tax_rate['SD'],4)),
+	array('x' => 6, 'y' => 4.4, 'text' => number_format($tax_rate['County'],4)),
+	array('x' => 7.2, 'y' => 4.4, 'text' => number_format($tax_rate['City'],4)),
+
+	array('x' => 2.5, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_state)),
+	array('x' => 3.7, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_rtdcd)),
+	array('x' => 5, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_sd)),
+	array('x' => 6, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_county)),
+	array('x' => 7.2, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_city)),
+
+	array('x' => 2.5, 'y' => 3.9, 'text' => number_format($service_fee['State'],4)),
+	array('x' => 3.7, 'y' => 3.9, 'text' => number_format($service_fee['RTD'],4)),
+	array('x' => 5, 'y' => 3.9, 'text' => number_format($service_fee['SD'],4)),
+	array('x' => 6, 'y' => 3.9, 'text' => number_format($service_fee['County'],4)),
+	array('x' => 7.2, 'y' => 3.9, 'text' => number_format($service_fee['City'],4)),
+
+	array('x' => 2.5, 'y' => 3.4, 'text' => $service_fee_state),
+	array('x' => 3.7, 'y' => 3.4, 'text' => $service_fee_rtdcd),
+	array('x' => 5, 'y' => 3.4, 'text' => $service_fee_sd),
+	array('x' => 6, 'y' => 3.4, 'text' => $service_fee_county),
+	array('x' => 7.2, 'y' => 3.4, 'text' => $service_fee_city),
+
+	array('x' => 2.5, 'y' => 3, 'text' => $tax_due_state),
+	array('x' => 3.7, 'y' => 3, 'text' => $tax_due_rtdcd),
+	array('x' => 5, 'y' => 3, 'text' => $tax_due_sd),
+	array('x' => 6, 'y' => 3, 'text' => $tax_due_county),
+	array('x' => 7.2, 'y' => 3, 'text' => $tax_due_city),
+
+	array('x' => 2.5, 'y' => 1.5, 'text' => $tax_due_state),
+	array('x' => 3.7, 'y' => 1.5, 'text' => $tax_due_rtdcd),
+	array('x' => 5, 'y' => 1.5, 'text' => $tax_due_sd),
+	array('x' => 6, 'y' => 1.5, 'text' => $tax_due_county),
+	array('x' => 7.2, 'y' => 1.5, 'text' => $tax_due_city),
+
+	array('x' => 7.2, 'y' => 1.0, 'text' => $tax_due));
+
+fputs($handle, '
+%!PS
+% Written by Helge Blischke, see
+% http://groups.google.com/groups?ic=1&selm=3964A684.49D%40srz-berlin.de
+%
+% The following 2 procs encapsulate the jobs to be processed
+% much as is done with EPS images:
+/_begin_job_
+{
+        /tweak_save save def
+        /tweak_dc countdictstack def
+        /tweak_oc count 1 sub def
+        userdict begin
+}bind def
+
+/_end_job_
+{
+        count tweak_oc sub{pop}repeat
+        countdictstack tweak_dc sub{end}repeat
+        tweak_save restore
+}bind def
+
+% Now, add your jobs like this:
+_begin_job_
+');
+
+	   // copy excise tax form
+	   $handleform = fopen('../modules/rep_dr0100/reporting/forms/DR0098.ps', 'r');
+	   if ($handleform) {
+	     while (!feof($handleform)) {
+	       $buffer = fgets($handleform, 4096);
+		$i = strpos($buffer, 'startpage');
+		if ($i === false)
+			$i = strpos($buffer, '%%BeginProlog');
+		if ($i !== false) {
+			// annotate
+			fwrite($handle, $buffer, $i-1);
+			foreach ($special as $value) {
+			   fputs($handle, "gsave %matrix defaultmatrix setmatrix\n 0 rotate " . $value['x']*72 . " " . $value['y']*72 . " moveto /Times-Roman findfont 12 scalefont setfont 0.400000 setgray (" . $value['text'] . ") show grestore\n");
+			}
+			fwrite($handle, substr($buffer, $i));
+		}
+		else {
+			fwrite($handle, $buffer, 4096);
+		}
+	     } // while
+	     fclose($handleform);
+	   } // end of handleform
+
+	   fputs($handle, '_end_job_
+');
+
+
+
+
+
+
+
+    } else {
+        $total += $tax_due;
 
     $annote = array(
 	array('x' => 6.5, 'y' => 9.3, 'text' => date('m/d/y')),
@@ -269,10 +415,10 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 
 	array('x' => 4.6, 'y' => 7.2, 'text' => $tax_rates['JurisdictionCode']),
 	array('x' => 3.6, 'y' => 7.05, 'text' => $tax_rates['Location']),
-	array('x' => 2.5, 'y' => 6.8, 'text' => sprintf("%6.2f", $sales['net'])),
-	array('x' => 2.2, 'y' => 6.1, 'text' => sprintf("%6.2f", $sales['tax_exempt'])),
+	array('x' => 2.5, 'y' => 6.8, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
+	array('x' => 2.2, 'y' => 6.1, 'text' => sprintf("%6.".$PRECISION."f", $sales['tax_exempt'])),
 	array('x' => 4.6, 'y' => 6.1, 'text' => $sales_customer[CUSTOMER_GROUP_CHARITY]),
-	array('x' => 7.2, 'y' => 6.1, 'text' => sprintf("%6.2f", $sales['tax_exempt'])),
+	array('x' => 7.2, 'y' => 6.1, 'text' => sprintf("%6.".$PRECISION."f", $sales['tax_exempt'])),
 
 	array('x' => 1.0, 'y' => 5.6, 'text' => $sales['net'] - $sales['tax_exempt']),
 	array('x' => 2.5, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
@@ -295,11 +441,11 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 	array('x' => 6, 'y' => 4.5, 'text' => $sales['food']+$sales['candy']),
 	array('x' => 7.2, 'y' => 4.5, 'text' => ($tax_rate['City'] ? $sales['food']+$sales['candy'] : "N/A")),
 
-	array('x' => 2.5, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_state)),
-	array('x' => 3.7, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_rtdcd)),
-	array('x' => 5, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_sd)),
-	array('x' => 6, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_county)),
-	array('x' => 7.2, 'y' => 3.6, 'text' => sprintf("%6.2f", $sales_taxed_city)),
+	array('x' => 2.5, 'y' => 3.6, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_state)),
+	array('x' => 3.7, 'y' => 3.6, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_rtdcd)),
+	array('x' => 5, 'y' => 3.6, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_sd)),
+	array('x' => 6, 'y' => 3.6, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_county)),
+	array('x' => 7.2, 'y' => 3.6, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_city)),
 
 	array('x' => 2.5, 'y' => 3.4, 'text' => number_format($tax_rate['State'],4)),
 	array('x' => 3.7, 'y' => 3.4, 'text' => number_format($tax_rate['RTD'],4)),
@@ -307,17 +453,17 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 	array('x' => 6, 'y' => 3.4, 'text' => number_format($tax_rate['County'],4)),
 	array('x' => 7.2, 'y' => 3.4, 'text' => number_format($tax_rate['City'],4)),
 
-	array('x' => 2.5, 'y' => 3.1, 'text' => sprintf("%6.2f", $tax_state)),
-	array('x' => 3.7, 'y' => 3.1, 'text' => sprintf("%6.2f", $tax_rtdcd)),
-	array('x' => 5, 'y' => 3.1, 'text' => sprintf("%6.2f", $tax_sd)),
-	array('x' => 6, 'y' => 3.1, 'text' => sprintf("%6.2f", $tax_county)),
-	array('x' => 7.2, 'y' => 3.1, 'text' => sprintf("%6.2f", $tax_city)),
+	array('x' => 2.5, 'y' => 3.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_state)),
+	array('x' => 3.7, 'y' => 3.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_rtdcd)),
+	array('x' => 5, 'y' => 3.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_sd)),
+	array('x' => 6, 'y' => 3.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_county)),
+	array('x' => 7.2, 'y' => 3.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_city)),
 
-	array('x' => 2.5, 'y' => 2.2, 'text' => sprintf("%6.2f", $tax_state)),
-	array('x' => 3.7, 'y' => 2.2, 'text' => sprintf("%6.2f", $tax_rtdcd)),
-	array('x' => 5, 'y' => 2.2, 'text' => sprintf("%6.2f", $tax_sd)),
-	array('x' => 6, 'y' => 2.2, 'text' => sprintf("%6.2f", $tax_county)),
-	array('x' => 7.2, 'y' => 2.2, 'text' => sprintf("%6.2f", $tax_city)),
+	array('x' => 2.5, 'y' => 2.2, 'text' => sprintf("%6.".$PRECISION."f", $tax_state)),
+	array('x' => 3.7, 'y' => 2.2, 'text' => sprintf("%6.".$PRECISION."f", $tax_rtdcd)),
+	array('x' => 5, 'y' => 2.2, 'text' => sprintf("%6.".$PRECISION."f", $tax_sd)),
+	array('x' => 6, 'y' => 2.2, 'text' => sprintf("%6.".$PRECISION."f", $tax_county)),
+	array('x' => 7.2, 'y' => 2.2, 'text' => sprintf("%6.".$PRECISION."f", $tax_city)),
 
 	array('x' => 2.5, 'y' => 1.9, 'text' => number_format($service_fee['State'],4)),
 	array('x' => 3.7, 'y' => 1.9, 'text' => number_format($service_fee['RTD'],4)),
@@ -350,11 +496,11 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 	array('x' => 5, 'y' => 9.6, 'text' => strtoupper(get_company_pref('coy_name'))),
 	array('x' => 3.3, 'y' => 9.6, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
-	array('x' => 2.5, 'y' => 6.9, 'text' => sprintf("%6.2f", $tax_due_state)),
-	array('x' => 3.7, 'y' => 6.9, 'text' => sprintf("%6.2f", $tax_due_rtdcd)),
-	array('x' => 5, 'y' => 6.9, 'text' => sprintf("%6.2f", $tax_due_sd)),
-	array('x' => 6, 'y' => 6.9, 'text' => sprintf("%6.2f", $tax_due_county)),
-	array('x' => 7.2, 'y' => 6.9, 'text' => sprintf("%6.2f", $tax_due_city)),
+	array('x' => 2.5, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $tax_due_state)),
+	array('x' => 3.7, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $tax_due_rtdcd)),
+	array('x' => 5, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $tax_due_sd)),
+	array('x' => 6, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $tax_due_county)),
+	array('x' => 7.2, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $tax_due_city)),
 
 	array('x' => 7.2, 'y' => 6.6, 'text' => $tax_due_sd+$tax_due_county+$tax_due_state+$tax_due_city+$tax_due_rtdcd),
 	array('x' => 7.2, 'y' => 5.7, 'text' => $sales_customer[CUSTOMER_GROUP_CHARITY]),
@@ -488,6 +634,8 @@ _begin_job_
 	   fputs($handle, '_end_job_
 ');
 
+} // dr0100 stuff
+
 } // while
 
 	     fclose($handle);
@@ -497,8 +645,8 @@ _begin_job_
      }
 
     $rep->NewLine();
-    $rep->TextCol(0, 1, 'TOTAL DUE STATE');
-    $rep->AmountCol(3, 4, $total, $dec);
+    $rep->TextCol(0, 1, 'TOTAL DUE STATE ON DR0100');
+    $rep->AmountCol(4, 5, $total, $dec);
 
    $rep->end();
 
