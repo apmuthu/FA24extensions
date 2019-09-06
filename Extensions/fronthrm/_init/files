@@ -14,7 +14,7 @@
 /includes/db/job_position_db.inc: 9d59649a798311fdbabb43b6be77a9f04a7de65c
 /includes/db/leave_db.inc: ae06c7f64b9bfc2574e243853a99e4311c5e8304
 /includes/db/overtime_db.inc: bf89f10282d7cc74148ca8879af8e90d10231d99
-/includes/db/payslip_db.inc: 9b3653d252ab364f870fa7779d9ea0b0b3ad4035
+/includes/db/payslip_db.inc: ca44649b9bb5bed6340b92027ac2ced07ee3866c
 /includes/db/salary_structure_db.inc: 8325dd891508a6d9e56be0af493669ce8680650c
 /includes/frontHrm_db.inc: 731dd8d8b606de6efc345ea91851dbf3a90c1ba9
 /includes/frontHrm_ui.inc: 2c9f7e3f42bb9a3d38363140a7d7852a3cd4e7d7
@@ -22,7 +22,7 @@
 /includes/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /includes/ui/department_ui.inc: 57041b616101197691b91e6bb067079f6a5d9368
 /includes/ui/doc_ui.inc: 79444834aadb3edd44c6b2889a7c40c83b50ee8f
-/includes/ui/employee_bank_ui.inc: fe56e56db245d751a93fe73d5df6d8417d592190
+/includes/ui/employee_bank_ui.inc: 267199b0cee3cbf2de8111221d47d9147985d3b9
 /includes/ui/employee_ui.inc: 2ad8fe8b4c3b15ebdda38e78c97b7d64493ec180
 /includes/ui/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /includes/ui/job_position_ui.inc: 1b247a70132f6090a946dc0901a41918877f3c10
@@ -33,7 +33,7 @@
 /inquiry/emp_inquiry.php: f1e65c4bc7688a7b06223d84434f773fb5b5fe9c
 /inquiry/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /inquiry/time_sheet.php: 6c034dd560d0f502b0e25da1100e42dc341abbca
-/js/emp_payalloc.js: 97bc4c9d8fc7a118d63ea7d8b9c47d801774fed2
+/js/emp_payalloc.js: 86ce96579f3f96cd7846cabbc584d36f0d633341
 /js/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /LICENSE: 12d81f50767d4e09aa7877da077ad9d1b915d75b
 /manage/accounts.php: 808fa701e0e40a8a5834ea70f74237999b9419bd
@@ -41,10 +41,10 @@
 /manage/default_setup.php: 713a1ea729502e57fc311916634c7a70a26048c0
 /manage/department.php: cde90edf8a1b4b3b6fe11a4c30fc02cc31b2a092
 /manage/doc_type.php: 4155b15c80f82742be1992f55966fb04e6c8f083
-/manage/employee.php: 3f006c62cebe97457f9bc27c966fb8d5c7ed8430
-/manage/employee_bank_entry.php: bf21037b5748629cf9117515e2a4f7b9c88d8637
+/manage/employee.php: 72ab7053e4d11d887c563602c8ac86ae35a504e8
+/manage/employee_bank_entry.php: b6e1863a6a4c81f3281e5d8c06b7a02373505d42
 /manage/employee_docs.php: ee6b0a64d21ade1d98685a06978ddc73e743925a
-/manage/grade.php: 291150bb4f5f43354cf2f04974f12acf1ff8e3dc
+/manage/grade.php: 3b7f5c26d97ebbdf267ae79f6161ec7da29fe46c
 /manage/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /manage/leave_types.php: d21f64c3cedb5010978d9cb8497a67b8a9a196d6
 /manage/overtime.php: 2eab650aa684546743ef64f0858f14b0116efd31
@@ -52,7 +52,7 @@
 /manage/payslip.php: eff676513c183dcd879266f2b0b7a3e1d2e936c0
 /manage/position.php: f0a2d87b733e6a15bab7c37a6fcca19b169b5b8f
 /manage/salary_structure.php: 7c7345f073e5c6ea0b427d860205ce317362ca71
-/README.md: dd3c4fbd09c1d9df3d77bd8924081519b7711b58
+/README.md: 2e5d05dd5492f2729affa237850392d290b68f0c
 /reporting/index.php: 435866102943ef00e38d96927cb5ee20bff20688
 /reporting/redirect.php: 12bd98144d23ce5418a88728ef8b90fad1d8f902
 /reporting/rep889.php: 33e5c960f11741c6414ef3fc793db5068c21d1cc

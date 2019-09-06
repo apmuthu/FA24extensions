@@ -303,7 +303,7 @@ function check_trans() {
 		set_focus('person_id');
 		$input_error = 1;
 	}
-	if(isset($_POST['amount']) && $_POST['amount'] > $_SESSION['pay_items']->gl_items_total()) {
+	if(isset($_POST['amount']) && input_num('amount') > $_SESSION['pay_items']->gl_items_total()) {
 		display_error(_('Payment cannot be processed because the amount allocated is more than the total payslip amount'));
 		set_focus('amount');
 		$input_error = 1;
@@ -338,10 +338,10 @@ if (isset($_POST['Process']) && !check_trans()) {
 	$allocs = array();
 	foreach ($_POST as $k => $v) {
 		if(strlen($k) > 6 && substr($k, 0, 6) == 'amount' && $v > 0)
-			$allocs[substr($k,6)] = $v;
+			$allocs[substr($k,6)] = input_num($k);
 	}
 
-	if(@$_POST['amount'] >= $_SESSION['pay_items']->gl_items_total()) {
+	if(input_num('amount') >= $_SESSION['pay_items']->gl_items_total()) {
 		add_employee_trans(0, ST_BANKPAYMENT, $_POST['for_payslip'], $_POST['date_'], $_POST['person_id'], 0);
 		$id_counter = db_insert_id();
 		add_employee_allocations($id_counter, $allocs);
