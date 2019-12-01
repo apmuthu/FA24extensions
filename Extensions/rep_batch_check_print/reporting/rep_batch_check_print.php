@@ -32,9 +32,11 @@ print_bank_check();
 
 function get_bank_transactions_to_print($account, $start)
 {
-        $sql = "SELECT b.* FROM ".TB_PREF."bank_trans b
+        $sql = "SELECT b.*, ba.bank_account_name FROM ".TB_PREF."bank_trans b
                 LEFT JOIN ".TB_PREF."comments c
                 ON b.type=c.type and c.id = b.trans_no
+                LEFT JOIN ".TB_PREF."bank_accounts ba
+                ON b.bank_act=ba.id
                 WHERE b.bank_act = '$account'
                 AND (b.type = " . ST_BANKPAYMENT . "
                 OR b.type = " . ST_SUPPAYMENT . ")
@@ -168,13 +170,13 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
 
     
     $date = sql2date($myrow['trans_date']);
-    $memo = get_comments_string($myrow['type'], $myrow['trans_no']) . " [" . $check_no . "]";
+    $memo = get_comments_string($myrow['type'], $myrow['trans_no']);
     
     //////////////////
     // Check portion
     
     $rep->NewLine(1,0,30);
-    $rep->cols = array(80, 340, 470, 580);
+    $rep->cols = array(80, 340, 480, 590);
     $rep->aligns = array('left', 'left', 'right', 'right');
     
     // Date
@@ -242,20 +244,26 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
     $from_trans = get_remittance($myrow['type'], $myrow['trans_no']);
     
     $date = sql2date($myrow['trans_date']);
-    $memo = get_comments_string($myrow['type'], $myrow['trans_no']) . " [" . $check_no . "]";
+    $memo = get_comments_string($myrow['type'], $myrow['trans_no']);
     
     //////////////////
     // Check portion
     
-    $rep->NewLine(1,0,76);
     $rep->cols = array(63, 340, 470, 565);
     $rep->aligns = array('left', 'left', 'right', 'right');
-    
-    // Pay to    
-    $rep->TextCol(0, 1, payment_person_name($myrow["person_type_id"],$myrow["person_id"], false));
+
+    $rep->NewLine(1,0,20);
 
     // Date
-    $rep->DateCol(1, 2, $rep->DatePrettyPrint($date, 0, 0));
+    $rep->DateCol(2, 3, $rep->DatePrettyPrint($date, 0, 0));
+
+    $rep->NewLine();
+    $rep->NewLine();
+    $rep->NewLine();
+    
+    // Pay to    
+    $rep->TextCol(0, 1, preg_replace("/\[[0-9]*./","", payment_person_name($myrow["person_type_id"],$myrow["person_id"], false)));
+
     
     // Amount (numeric)
     $rep->TextCol(2, 3, '***'.number_format2(-$total_amt, $dec));
@@ -306,8 +314,8 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
             $tno = $myrow['ref'];
         else
             $tno = $myrow['trans_no'];
-        $rep->TextCol(0, 3, sprintf( _("Payment # %s - from Customer: %s - %s"), $tno,
-            $myrow['bank_act'], $rep->company['coy_name']));
+        $rep->TextCol(0, 3, sprintf( _("Payment # %s - from %s - %s"), $tno,
+            $myrow['bank_account_name'], $rep->company['coy_name']));
     }
         
     // Add memo
@@ -358,6 +366,26 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
            $rep->TextCol(4, 5, _("Left to Allocate"));
            $rep->AmountCol(5, 6, -$from_trans['Total'] - $total_allocated, $dec);
     }
+    else if ($myrow['person_type_id'] == PT_SUPPLIER) {
+        $lines = 0;
+        $rep->NewLine(1,0,72);
+        $sup = get_supplier($myrow['person_id']);
+        $rep->TextCol(0, 1, preg_replace("/\[[0-9]*./","", payment_person_name($myrow["person_type_id"],$myrow["person_id"], false)));
+        if ($sup['address'] != "") {
+            $subject=$sup['address'];
+            $separator = "\n";
+            $line = strtok($subject, $separator);
+            while ($line !== false) {
+                $rep->NewLine(1,0,12);
+                $rep->TextCol(0, 1, $line);
+                $line = strtok( $separator );
+                $lines++;
+                if ($lines > 3)
+                    break;
+            }
+        }
+    }
+
         
     } // end of section
 }
