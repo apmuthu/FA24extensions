@@ -17,16 +17,21 @@ $csv[0] = array_slice($csv[0], 0, 7);
 
     foreach ($csv as $value) {
         $value['total'] = 0;
-        $location=trim($value['Location']);
+        $location = $value['Location'] = trim($value['Location']);
         if ($location == "UNINCORPORATED NO PHYSICAL LOCATION")
             $value['Location'] = $location = strtoupper(trim($value['County']) . " COUNTY");
         else if ($location == "UNINCORPORATED")
             $value['Location'] = $location = strtoupper("UNINCORPORATED " . trim($value['County']) . " COUNTY");
         for ($i=0; $value[$i] != null; $i +=3) {
-            if (strpos($value[$i], 'food') === false)
+            if (strpos($value[$i], 'food') === false
+                && $value[$i] != 'LID')  // Local improvement district, probably small area
                 $value['total'] += $value[$i+1];
         }
-        if (!isset($tax_rates[$location]))  // Denver is duplicate (depending on county)
+
+        // Use highest tax rate if location is duplicate
+        // applies to DENVER
+        if (!isset($tax_rates[$location])
+            || $tax_rates[$location]['total'] < $value['total'])
             $tax_rates[$location] = $value;
     }
     $tax_rates['GRAND JUNCTION'] = $tax_rates['UNINCORPORATED MESA COUNTY'];
@@ -40,7 +45,7 @@ $csv[0] = array_slice($csv[0], 0, 7);
             if ($tax_rates == array())
                 do_init_rate();
 //display_notification(print_r($tax_rates, true));
-            $i = strpos($address, ",");
+            $i = strrpos($address, ",");
             $j = strrpos($address, "\n", -(strlen($address)-$i));
             $k = substr($address, $j+1, $i-$j+1);
             $city = trim($k);
@@ -52,12 +57,15 @@ $csv[0] = array_slice($csv[0], 0, 7);
                 $best_city = 0;
                 $best_sim = -1;
                 foreach ($tax_rates as $maybe_city => $rate) {
-                    $sim = levenshtein($maybe_city, $city);
-                    if ($sim < $best_sim || $best_sim == -1) {
+                    $sim = levenshtein(substr($maybe_city,0,strlen($city)), $city);
+                    if ($best_sim == -1
+                        || $sim < $best_sim
+                        || $sim == $best_sim && $rate['total'] > $tax_rates[$best_city]['total']) {
                         $best_city = $maybe_city;
                         $best_sim = $sim;
                     }
                 }
+//display_notification($best_city);
                 return $tax_rates[$best_city];
             }
         }
