@@ -32,11 +32,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $body = new \SquareConnect\Model\BatchDeleteCatalogObjectsRequest(); // \SquareConnect\Model\BatchDeleteCatalogObjectsRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->batchDeleteCatalogObjects($body);
+    $result = $apiInstance->batchDeleteCatalogObjects($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->batchDeleteCatalogObjects: ', $e->getMessage(), PHP_EOL;
@@ -80,11 +80,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $body = new \SquareConnect\Model\BatchRetrieveCatalogObjectsRequest(); // \SquareConnect\Model\BatchRetrieveCatalogObjectsRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->batchRetrieveCatalogObjects($body);
+    $result = $apiInstance->batchRetrieveCatalogObjects($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->batchRetrieveCatalogObjects: ', $e->getMessage(), PHP_EOL;
@@ -128,11 +128,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $body = new \SquareConnect\Model\BatchUpsertCatalogObjectsRequest(); // \SquareConnect\Model\BatchUpsertCatalogObjectsRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->batchUpsertCatalogObjects($body);
+    $result = $apiInstance->batchUpsertCatalogObjects($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->batchUpsertCatalogObjects: ', $e->getMessage(), PHP_EOL;
@@ -176,10 +176,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 
 try {
-    $result = $api_instance->catalogInfo();
+    $result = $apiInstance->catalogInfo();
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->catalogInfo: ', $e->getMessage(), PHP_EOL;
@@ -220,11 +220,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $object_id = "object_id_example"; // string | The ID of the [CatalogObject](#type-catalogobject) to be deleted. When an object is deleted, other objects in the graph that depend on that object will be deleted as well (for example, deleting a [CatalogItem](#type-catalogitem) will delete its [CatalogItemVariation](#type-catalogitemvariation)s).
 
 try {
-    $result = $api_instance->deleteCatalogObject($object_id);
+    $result = $apiInstance->deleteCatalogObject($object_id);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->deleteCatalogObject: ', $e->getMessage(), PHP_EOL;
@@ -258,7 +258,7 @@ Name | Type | Description  | Notes
 
 ListCatalog
 
-Returns a list of [CatalogObject](#type-catalogobject)s that includes all objects of a set of desired types (for example, all [CatalogItem](#type-catalogitem) and [CatalogTax](#type-catalogtax) objects) in the catalog. The types parameter is specified as a comma-separated list of valid [CatalogObject](#type-catalogobject) types: `ITEM`, `ITEM_VARIATION`, `MODIFIER`, `MODIFIER_LIST`, `CATEGORY`, `DISCOUNT`, `TAX`.
+Returns a list of [CatalogObject](#type-catalogobject)s that includes all objects of a set of desired types (for example, all [CatalogItem](#type-catalogitem) and [CatalogTax](#type-catalogtax) objects) in the catalog. The `types` parameter is specified as a comma-separated list of valid [CatalogObject](#type-catalogobject) types: `ITEM`, `ITEM_VARIATION`, `MODIFIER`, `MODIFIER_LIST`, `CATEGORY`, `DISCOUNT`, `TAX`.  __Important:__ ListCatalog does not return deleted catalog items. To retrieve deleted catalog items, use SearchCatalogObjects and set `include_deleted_objects` to `true`.
 
 ### Example
 ```php
@@ -268,12 +268,12 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $cursor = "cursor_example"; // string | The pagination cursor returned in the previous response. Leave unset for an initial request. See [Pagination](/basics/api101/pagination) for more information.
-$types = "types_example"; // string | An optional case-insensitive, comma-separated list of object types to retrieve, for example `ITEM,ITEM_VARIATION,CATEGORY`.  The legal values are taken from the [CatalogObjectType](#type-catalogobjecttype) enumeration, namely `\"ITEM\"`, `\"ITEM_VARIATION\"`, `\"CATEGORY\"`, `\"DISCOUNT\"`, `\"TAX\"`, `\"MODIFIER\"`, or `\"MODIFIER_LIST\"`.
+$types = "types_example"; // string | An optional case-insensitive, comma-separated list of object types to retrieve, for example `ITEM,ITEM_VARIATION,CATEGORY,IMAGE`.  The legal values are taken from the [CatalogObjectType](#type-catalogobjecttype) enumeration, namely `ITEM`, `ITEM_VARIATION`, `CATEGORY`, `DISCOUNT`, `TAX`, `MODIFIER`, `MODIFIER_LIST`, or `IMAGE`.
 
 try {
-    $result = $api_instance->listCatalog($cursor, $types);
+    $result = $apiInstance->listCatalog($cursor, $types);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->listCatalog: ', $e->getMessage(), PHP_EOL;
@@ -286,7 +286,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cursor** | **string**| The pagination cursor returned in the previous response. Leave unset for an initial request. See [Pagination](/basics/api101/pagination) for more information. | [optional]
- **types** | **string**| An optional case-insensitive, comma-separated list of object types to retrieve, for example &#x60;ITEM,ITEM_VARIATION,CATEGORY&#x60;.  The legal values are taken from the [CatalogObjectType](#type-catalogobjecttype) enumeration, namely &#x60;\&quot;ITEM\&quot;&#x60;, &#x60;\&quot;ITEM_VARIATION\&quot;&#x60;, &#x60;\&quot;CATEGORY\&quot;&#x60;, &#x60;\&quot;DISCOUNT\&quot;&#x60;, &#x60;\&quot;TAX\&quot;&#x60;, &#x60;\&quot;MODIFIER\&quot;&#x60;, or &#x60;\&quot;MODIFIER_LIST\&quot;&#x60;. | [optional]
+ **types** | **string**| An optional case-insensitive, comma-separated list of object types to retrieve, for example &#x60;ITEM,ITEM_VARIATION,CATEGORY,IMAGE&#x60;.  The legal values are taken from the [CatalogObjectType](#type-catalogobjecttype) enumeration, namely &#x60;ITEM&#x60;, &#x60;ITEM_VARIATION&#x60;, &#x60;CATEGORY&#x60;, &#x60;DISCOUNT&#x60;, &#x60;TAX&#x60;, &#x60;MODIFIER&#x60;, &#x60;MODIFIER_LIST&#x60;, or &#x60;IMAGE&#x60;. | [optional]
 
 ### Return type
 
@@ -318,12 +318,12 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $object_id = "object_id_example"; // string | The object ID of any type of [CatalogObject](#type-catalogobject)s to be retrieved.
-$include_related_objects = true; // bool | If `true`, the response will include additional objects that are related to the requested object, as follows:  If the `object` field of the response contains a [CatalogItem](#type-catalogitem), its associated [CatalogCategory](#type-catalogcategory), [CatalogTax](#type-catalogtax)es, and [CatalogModifierList](#type-catalogmodifierlist)s will be returned in the `related_objects` field of the response. If the `object` field of the response contains a [CatalogItemVariation](#type-catalogitemvariation), its parent [CatalogItem](#type-catalogitem) will be returned in the `related_objects` field of the response.  Default value: `false`
+$include_related_objects = true; // bool | If `true`, the response will include additional objects that are related to the requested object, as follows:  If the `object` field of the response contains a [CatalogItem](#type-catalogitem), its associated [CatalogCategory](#type-catalogcategory), [CatalogTax](#type-catalogtax)es, [CatalogImage](#type-catalogimage)s and [CatalogModifierList](#type-catalogmodifierlist)s will be returned in the `related_objects` field of the response. If the `object` field of the response contains a [CatalogItemVariation](#type-catalogitemvariation), its parent [CatalogItem](#type-catalogitem) will be returned in the `related_objects` field of  the response.  Default value: `false`
 
 try {
-    $result = $api_instance->retrieveCatalogObject($object_id, $include_related_objects);
+    $result = $apiInstance->retrieveCatalogObject($object_id, $include_related_objects);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->retrieveCatalogObject: ', $e->getMessage(), PHP_EOL;
@@ -336,7 +336,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **object_id** | **string**| The object ID of any type of [CatalogObject](#type-catalogobject)s to be retrieved. |
- **include_related_objects** | **bool**| If &#x60;true&#x60;, the response will include additional objects that are related to the requested object, as follows:  If the &#x60;object&#x60; field of the response contains a [CatalogItem](#type-catalogitem), its associated [CatalogCategory](#type-catalogcategory), [CatalogTax](#type-catalogtax)es, and [CatalogModifierList](#type-catalogmodifierlist)s will be returned in the &#x60;related_objects&#x60; field of the response. If the &#x60;object&#x60; field of the response contains a [CatalogItemVariation](#type-catalogitemvariation), its parent [CatalogItem](#type-catalogitem) will be returned in the &#x60;related_objects&#x60; field of the response.  Default value: &#x60;false&#x60; | [optional]
+ **include_related_objects** | **bool**| If &#x60;true&#x60;, the response will include additional objects that are related to the requested object, as follows:  If the &#x60;object&#x60; field of the response contains a [CatalogItem](#type-catalogitem), its associated [CatalogCategory](#type-catalogcategory), [CatalogTax](#type-catalogtax)es, [CatalogImage](#type-catalogimage)s and [CatalogModifierList](#type-catalogmodifierlist)s will be returned in the &#x60;related_objects&#x60; field of the response. If the &#x60;object&#x60; field of the response contains a [CatalogItemVariation](#type-catalogitemvariation), its parent [CatalogItem](#type-catalogitem) will be returned in the &#x60;related_objects&#x60; field of  the response.  Default value: &#x60;false&#x60; | [optional]
 
 ### Return type
 
@@ -368,11 +368,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $body = new \SquareConnect\Model\SearchCatalogObjectsRequest(); // \SquareConnect\Model\SearchCatalogObjectsRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->searchCatalogObjects($body);
+    $result = $apiInstance->searchCatalogObjects($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->searchCatalogObjects: ', $e->getMessage(), PHP_EOL;
@@ -416,11 +416,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $body = new \SquareConnect\Model\UpdateItemModifierListsRequest(); // \SquareConnect\Model\UpdateItemModifierListsRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->updateItemModifierLists($body);
+    $result = $apiInstance->updateItemModifierLists($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->updateItemModifierLists: ', $e->getMessage(), PHP_EOL;
@@ -464,11 +464,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $body = new \SquareConnect\Model\UpdateItemTaxesRequest(); // \SquareConnect\Model\UpdateItemTaxesRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->updateItemTaxes($body);
+    $result = $apiInstance->updateItemTaxes($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->updateItemTaxes: ', $e->getMessage(), PHP_EOL;
@@ -512,11 +512,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\CatalogApi();
+$apiInstance = new SquareConnect\Api\CatalogApi();
 $body = new \SquareConnect\Model\UpsertCatalogObjectRequest(); // \SquareConnect\Model\UpsertCatalogObjectRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->upsertCatalogObject($body);
+    $result = $apiInstance->upsertCatalogObject($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CatalogApi->upsertCatalogObject: ', $e->getMessage(), PHP_EOL;

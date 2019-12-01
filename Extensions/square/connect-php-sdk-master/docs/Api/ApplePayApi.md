@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 RegisterDomain
 
-Activates a domain for use with Web Apple Pay and Square. A validation will be performed on this domain by Apple to ensure is it properly set up as an Apple Pay enabled domain.  This endpoint provides an easy way for platform developers to bulk activate Web Apple Pay with Square for merchants using their platform.  To learn more about Apple Pay on Web see the Apple Pay section in the [Embedding the Square Payment Form](/payments/sqpaymentform/overview) guide.
+Activates a domain for use with Web Apple Pay and Square. A validation will be performed on this domain by Apple to ensure is it properly set up as an Apple Pay enabled domain.  This endpoint provides an easy way for platform developers to bulk activate Web Apple Pay with Square for merchants using their platform.  To learn more about Apple Pay on Web see the Apple Pay section in the [Embedding the Square Payment Form](/payment-form/add-digital-wallets/apple-pay) guide.
 
 ### Example
 ```php
@@ -22,11 +22,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: oauth2
 SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new SquareConnect\Api\ApplePayApi();
+$apiInstance = new SquareConnect\Api\ApplePayApi();
 $body = new \SquareConnect\Model\RegisterDomainRequest(); // \SquareConnect\Model\RegisterDomainRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 
 try {
-    $result = $api_instance->registerDomain($body);
+    $result = $apiInstance->registerDomain($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ApplePayApi->registerDomain: ', $e->getMessage(), PHP_EOL;

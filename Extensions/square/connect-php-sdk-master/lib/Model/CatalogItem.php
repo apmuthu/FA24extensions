@@ -34,10 +34,10 @@ class CatalogItem implements ArrayAccess
         'category_id' => 'string',
         'tax_ids' => 'string[]',
         'modifier_list_info' => '\SquareConnect\Model\CatalogItemModifierListInfo[]',
-        'image_url' => 'string',
         'variations' => '\SquareConnect\Model\CatalogObject[]',
         'product_type' => 'string',
-        'skip_modifier_screen' => 'bool'
+        'skip_modifier_screen' => 'bool',
+        'item_options' => '\SquareConnect\Model\CatalogItemOptionForItem[]'
     );
   
     /** 
@@ -55,10 +55,10 @@ class CatalogItem implements ArrayAccess
         'category_id' => 'category_id',
         'tax_ids' => 'tax_ids',
         'modifier_list_info' => 'modifier_list_info',
-        'image_url' => 'image_url',
         'variations' => 'variations',
         'product_type' => 'product_type',
-        'skip_modifier_screen' => 'skip_modifier_screen'
+        'skip_modifier_screen' => 'skip_modifier_screen',
+        'item_options' => 'item_options'
     );
   
     /**
@@ -76,10 +76,10 @@ class CatalogItem implements ArrayAccess
         'category_id' => 'setCategoryId',
         'tax_ids' => 'setTaxIds',
         'modifier_list_info' => 'setModifierListInfo',
-        'image_url' => 'setImageUrl',
         'variations' => 'setVariations',
         'product_type' => 'setProductType',
-        'skip_modifier_screen' => 'setSkipModifierScreen'
+        'skip_modifier_screen' => 'setSkipModifierScreen',
+        'item_options' => 'setItemOptions'
     );
   
     /**
@@ -97,10 +97,10 @@ class CatalogItem implements ArrayAccess
         'category_id' => 'getCategoryId',
         'tax_ids' => 'getTaxIds',
         'modifier_list_info' => 'getModifierListInfo',
-        'image_url' => 'getImageUrl',
         'variations' => 'getVariations',
         'product_type' => 'getProductType',
-        'skip_modifier_screen' => 'getSkipModifierScreen'
+        'skip_modifier_screen' => 'getSkipModifierScreen',
+        'item_options' => 'getItemOptions'
     );
   
     /**
@@ -114,7 +114,7 @@ class CatalogItem implements ArrayAccess
       */
     protected $description;
     /**
-      * $abbreviation The text of the item's display label in the Square Point of Sale app. Only up to the first five characters of the string are used.  Searchable. This field has max length of 24 Unicode code points.
+      * $abbreviation The text of the item's display label in the Square Point of Sale app. Only up to the first five characters of the string are used. Searchable. This field has max length of 24 Unicode code points.
       * @var string
       */
     protected $abbreviation;
@@ -154,17 +154,12 @@ class CatalogItem implements ArrayAccess
       */
     protected $modifier_list_info;
     /**
-      * $image_url __Deprecated__. The URL of an image representing this item. Deprecated in favor of `image_id` in [`CatalogObject`](#type-catalogobject).
-      * @var string
-      */
-    protected $image_url;
-    /**
-      * $variations A list of [CatalogObject](#type-catalogobject)s containing the [CatalogItemVariation](#type-catalogitemvariation)s for this item.
+      * $variations A list of [CatalogObject](#type-catalogobject)s containing the [CatalogItemVariation](#type-catalogitemvariation)s for this item.  Maximum: 250 item variations
       * @var \SquareConnect\Model\CatalogObject[]
       */
     protected $variations;
     /**
-      * $product_type The product type of the item. May not be changed once an item has been created.  Only items of product type `REGULAR` may be created by this API; items with other product types are read-only. See [CatalogItemProductType](#type-catalogitemproducttype) for possible values
+      * $product_type The product type of the item. May not be changed once an item has been created.  Only items of product type `REGULAR` or `APPOINTMENTS_SERVICE` may be created by this API; items with other product types are read-only. See [CatalogItemProductType](#type-catalogitemproducttype) for possible values
       * @var string
       */
     protected $product_type;
@@ -173,6 +168,11 @@ class CatalogItem implements ArrayAccess
       * @var bool
       */
     protected $skip_modifier_screen;
+    /**
+      * $item_options List of item options IDs for this item. Used to manage and group item variations in a specified order.  Maximum: 6 item options.
+      * @var \SquareConnect\Model\CatalogItemOptionForItem[]
+      */
+    protected $item_options;
 
     /**
      * Constructor
@@ -231,11 +231,6 @@ class CatalogItem implements ArrayAccess
             } else {
               $this->modifier_list_info = null;
             }
-            if (isset($data["image_url"])) {
-              $this->image_url = $data["image_url"];
-            } else {
-              $this->image_url = null;
-            }
             if (isset($data["variations"])) {
               $this->variations = $data["variations"];
             } else {
@@ -250,6 +245,11 @@ class CatalogItem implements ArrayAccess
               $this->skip_modifier_screen = $data["skip_modifier_screen"];
             } else {
               $this->skip_modifier_screen = null;
+            }
+            if (isset($data["item_options"])) {
+              $this->item_options = $data["item_options"];
+            } else {
+              $this->item_options = null;
             }
         }
     }
@@ -302,7 +302,7 @@ class CatalogItem implements ArrayAccess
   
     /**
      * Sets abbreviation
-     * @param string $abbreviation The text of the item's display label in the Square Point of Sale app. Only up to the first five characters of the string are used.  Searchable. This field has max length of 24 Unicode code points.
+     * @param string $abbreviation The text of the item's display label in the Square Point of Sale app. Only up to the first five characters of the string are used. Searchable. This field has max length of 24 Unicode code points.
      * @return $this
      */
     public function setAbbreviation($abbreviation)
@@ -444,25 +444,6 @@ class CatalogItem implements ArrayAccess
         return $this;
     }
     /**
-     * Gets image_url
-     * @return string
-     */
-    public function getImageUrl()
-    {
-        return $this->image_url;
-    }
-  
-    /**
-     * Sets image_url
-     * @param string $image_url __Deprecated__. The URL of an image representing this item. Deprecated in favor of `image_id` in [`CatalogObject`](#type-catalogobject).
-     * @return $this
-     */
-    public function setImageUrl($image_url)
-    {
-        $this->image_url = $image_url;
-        return $this;
-    }
-    /**
      * Gets variations
      * @return \SquareConnect\Model\CatalogObject[]
      */
@@ -473,7 +454,7 @@ class CatalogItem implements ArrayAccess
   
     /**
      * Sets variations
-     * @param \SquareConnect\Model\CatalogObject[] $variations A list of [CatalogObject](#type-catalogobject)s containing the [CatalogItemVariation](#type-catalogitemvariation)s for this item.
+     * @param \SquareConnect\Model\CatalogObject[] $variations A list of [CatalogObject](#type-catalogobject)s containing the [CatalogItemVariation](#type-catalogitemvariation)s for this item.  Maximum: 250 item variations
      * @return $this
      */
     public function setVariations($variations)
@@ -492,7 +473,7 @@ class CatalogItem implements ArrayAccess
   
     /**
      * Sets product_type
-     * @param string $product_type The product type of the item. May not be changed once an item has been created.  Only items of product type `REGULAR` may be created by this API; items with other product types are read-only. See [CatalogItemProductType](#type-catalogitemproducttype) for possible values
+     * @param string $product_type The product type of the item. May not be changed once an item has been created.  Only items of product type `REGULAR` or `APPOINTMENTS_SERVICE` may be created by this API; items with other product types are read-only. See [CatalogItemProductType](#type-catalogitemproducttype) for possible values
      * @return $this
      */
     public function setProductType($product_type)
@@ -517,6 +498,25 @@ class CatalogItem implements ArrayAccess
     public function setSkipModifierScreen($skip_modifier_screen)
     {
         $this->skip_modifier_screen = $skip_modifier_screen;
+        return $this;
+    }
+    /**
+     * Gets item_options
+     * @return \SquareConnect\Model\CatalogItemOptionForItem[]
+     */
+    public function getItemOptions()
+    {
+        return $this->item_options;
+    }
+  
+    /**
+     * Sets item_options
+     * @param \SquareConnect\Model\CatalogItemOptionForItem[] $item_options List of item options IDs for this item. Used to manage and group item variations in a specified order.  Maximum: 6 item options.
+     * @return $this
+     */
+    public function setItemOptions($item_options)
+    {
+        $this->item_options = $item_options;
         return $this;
     }
     /**

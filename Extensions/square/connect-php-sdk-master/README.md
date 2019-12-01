@@ -1,4 +1,11 @@
-Square Connect PHP SDK [![Build Status](https://travis-ci.org/square/connect-php-sdk.svg?branch=master)](https://travis-ci.org/square/connect-php-sdk)
+![Square logo]
+
+# Square Connect PHP SDK
+
+---
+
+[![Build Status](https://travis-ci.org/square/connect-php-sdk.svg?branch=master)](https://travis-ci.org/square/connect-php-sdk)
+[![Apache-2 license](https://img.shields.io/badge/license-Apache2-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ==================
 
 **If you have feedback about the new SDKs, or just want to talk to other Square Developers, request an invite to the new [slack community for Square Developers](https://squ.re/2JkDBcO)**
@@ -64,9 +71,12 @@ require 'vendor/autoload.php';
 
 $access_token = 'YOUR_ACCESS_TOKEN';
 # setup authorization
-\SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken($access_token);
+$api_config = new \SquareConnect\Configuration();
+$api_config->setHost("https://connect.squareup.com");
+$api_config->setAccessToken($access_token);
+$api_client = new \SquareConnect\ApiClient($api_config);
 # create an instance of the Location API
-$locations_api = new \SquareConnect\Api\LocationsApi();
+$locations_api = new \SquareConnect\Api\LocationsApi($api_client);
 
 try {
   $locations = $locations_api->listLocations();
@@ -86,37 +96,59 @@ try {
 require 'vendor/autoload.php';
 
 $access_token = 'YOUR_ACCESS_TOKEN';
+
 # setup authorization
-\SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken($access_token);
-# create an instance of the Transaction API class
-$transactions_api = new \SquareConnect\Api\TransactionsApi();
+$api_config = new \SquareConnect\Configuration();
+$api_config->setHost("https://connect.squareup.com");
+$api_config->setAccessToken($access_token);
+$api_client = new \SquareConnect\ApiClient($api_config);
+
+# create an instance of the Payments API class
+$payments_api = new \SquareConnect\Api\PaymentsApi($api_client);
 $location_id = 'YOUR_LOCATION_ID'
 $nonce = 'YOUR_NONCE'
 
-$request_body = array (
-    "card_nonce" => $nonce,
-    # Monetary amounts are specified in the smallest unit of the applicable currency.
-    # This amount is in cents. It's also hard-coded for $1.00, which isn't very useful.
-    "amount_money" => array (
-        "amount" => 100,
-        "currency" => "USD"
-    ),
-    # Every payment you process with the SDK must have a unique idempotency key.
-    # If you're unsure whether a particular payment succeeded, you can reattempt
-    # it with the same idempotency key without worrying about double charging
-    # the buyer.
-    "idempotency_key" => uniqid()
-);
+$body = new \SquareConnect\Model\CreatePaymentRequest();
+
+$amountMoney = new \SquareConnect\Model\Money();
+
+# Monetary amounts are specified in the smallest unit of the applicable currency.
+# This amount is in cents. It's also hard-coded for $1.00, which isn't very useful.
+$amountMoney->setAmount(100);
+$amountMoney->setCurrency("USD");
+
+$body->setSourceId($nonce);
+$body->setAmountMoney($amountMoney);
+$body->setLocationId($location_id);
+
+# Every payment you process with the SDK must have a unique idempotency key.
+# If you're unsure whether a particular payment succeeded, you can reattempt
+# it with the same idempotency key without worrying about double charging
+# the buyer.
+$body->setIdempotencyKey(uniqid());
 
 try {
-    $result = $transactions_api->charge($location_id,  $request_body);
+    $result = $payments_api->createPayment($body);
     print_r($result);
 } catch (\SquareConnect\ApiException $e) {
-    echo "Exception when calling TransactionApi->charge:";
+    echo "Exception when calling PaymentsApi->createPayment:";
     var_dump($e->getResponseBody());
 }
 ```
 
+### How to configure sandbox environment
+```php
+require 'vendor/autoload.php';
+
+$access_token = 'YOUR_SANDBOX_ACCESS_TOKEN';
+# setup authorization
+$api_config = new \SquareConnect\Configuration();
+$api_config->setHost("https://connect.squareupsandbox.com");
+$api_config->setAccessToken($access_token);
+$api_client = new \SquareConnect\ApiClient($api_config);
+# create an instance of the Location API
+$locations_api = new \SquareConnect\Api\LocationsApi($api_client);
+```
 
 ## Documentation for API Endpoints
 
@@ -175,6 +207,18 @@ Class | Method | HTTP request | Description
 *OAuthApi* | [**revokeToken**](docs/Api/OAuthApi.md#revoketoken) | **POST** /oauth2/revoke | RevokeToken
 *OrdersApi* | [**batchRetrieveOrders**](docs/Api/OrdersApi.md#batchretrieveorders) | **POST** /v2/locations/{location_id}/orders/batch-retrieve | BatchRetrieveOrders
 *OrdersApi* | [**createOrder**](docs/Api/OrdersApi.md#createorder) | **POST** /v2/locations/{location_id}/orders | CreateOrder
+*OrdersApi* | [**payOrder**](docs/Api/OrdersApi.md#payorder) | **POST** /v2/orders/{order_id}/pay | PayOrder
+*OrdersApi* | [**searchOrders**](docs/Api/OrdersApi.md#searchorders) | **POST** /v2/orders/search | SearchOrders
+*OrdersApi* | [**updateOrder**](docs/Api/OrdersApi.md#updateorder) | **PUT** /v2/locations/{location_id}/orders/{order_id} | UpdateOrder
+*PaymentsApi* | [**cancelPayment**](docs/Api/PaymentsApi.md#cancelpayment) | **POST** /v2/payments/{payment_id}/cancel | CancelPayment
+*PaymentsApi* | [**cancelPaymentByIdempotencyKey**](docs/Api/PaymentsApi.md#cancelpaymentbyidempotencykey) | **POST** /v2/payments/cancel | CancelPaymentByIdempotencyKey
+*PaymentsApi* | [**completePayment**](docs/Api/PaymentsApi.md#completepayment) | **POST** /v2/payments/{payment_id}/complete | CompletePayment
+*PaymentsApi* | [**createPayment**](docs/Api/PaymentsApi.md#createpayment) | **POST** /v2/payments | CreatePayment
+*PaymentsApi* | [**getPayment**](docs/Api/PaymentsApi.md#getpayment) | **GET** /v2/payments/{payment_id} | GetPayment
+*PaymentsApi* | [**listPayments**](docs/Api/PaymentsApi.md#listpayments) | **GET** /v2/payments | ListPayments
+*RefundsApi* | [**getPaymentRefund**](docs/Api/RefundsApi.md#getpaymentrefund) | **GET** /v2/refunds/{refund_id} | GetPaymentRefund
+*RefundsApi* | [**listPaymentRefunds**](docs/Api/RefundsApi.md#listpaymentrefunds) | **GET** /v2/refunds | ListPaymentRefunds
+*RefundsApi* | [**refundPayment**](docs/Api/RefundsApi.md#refundpayment) | **POST** /v2/refunds | RefundPayment
 *ReportingApi* | [**listAdditionalRecipientReceivableRefunds**](docs/Api/ReportingApi.md#listadditionalrecipientreceivablerefunds) | **GET** /v2/locations/{location_id}/additional-recipient-receivable-refunds | ListAdditionalRecipientReceivableRefunds
 *ReportingApi* | [**listAdditionalRecipientReceivables**](docs/Api/ReportingApi.md#listadditionalrecipientreceivables) | **GET** /v2/locations/{location_id}/additional-recipient-receivables | ListAdditionalRecipientReceivables
 *TransactionsApi* | [**captureTransaction**](docs/Api/TransactionsApi.md#capturetransaction) | **POST** /v2/locations/{location_id}/transactions/{transaction_id}/capture | CaptureTransaction
@@ -261,6 +305,7 @@ Class | Method | HTTP request | Description
  - [AdditionalRecipientReceivable](docs/Model/AdditionalRecipientReceivable.md)
  - [AdditionalRecipientReceivableRefund](docs/Model/AdditionalRecipientReceivableRefund.md)
  - [Address](docs/Model/Address.md)
+ - [BalancePaymentDetails](docs/Model/BalancePaymentDetails.md)
  - [BatchChangeInventoryRequest](docs/Model/BatchChangeInventoryRequest.md)
  - [BatchChangeInventoryResponse](docs/Model/BatchChangeInventoryResponse.md)
  - [BatchDeleteCatalogObjectsRequest](docs/Model/BatchDeleteCatalogObjectsRequest.md)
@@ -276,10 +321,17 @@ Class | Method | HTTP request | Description
  - [BatchUpsertCatalogObjectsRequest](docs/Model/BatchUpsertCatalogObjectsRequest.md)
  - [BatchUpsertCatalogObjectsResponse](docs/Model/BatchUpsertCatalogObjectsResponse.md)
  - [BreakType](docs/Model/BreakType.md)
+ - [BusinessHours](docs/Model/BusinessHours.md)
+ - [BusinessHoursPeriod](docs/Model/BusinessHoursPeriod.md)
+ - [CancelPaymentByIdempotencyKeyRequest](docs/Model/CancelPaymentByIdempotencyKeyRequest.md)
+ - [CancelPaymentByIdempotencyKeyResponse](docs/Model/CancelPaymentByIdempotencyKeyResponse.md)
+ - [CancelPaymentRequest](docs/Model/CancelPaymentRequest.md)
+ - [CancelPaymentResponse](docs/Model/CancelPaymentResponse.md)
  - [CaptureTransactionRequest](docs/Model/CaptureTransactionRequest.md)
  - [CaptureTransactionResponse](docs/Model/CaptureTransactionResponse.md)
  - [Card](docs/Model/Card.md)
  - [CardBrand](docs/Model/CardBrand.md)
+ - [CardPaymentDetails](docs/Model/CardPaymentDetails.md)
  - [CatalogCategory](docs/Model/CatalogCategory.md)
  - [CatalogDiscount](docs/Model/CatalogDiscount.md)
  - [CatalogDiscountType](docs/Model/CatalogDiscountType.md)
@@ -290,8 +342,13 @@ Class | Method | HTTP request | Description
  - [CatalogInfoResponseLimits](docs/Model/CatalogInfoResponseLimits.md)
  - [CatalogItem](docs/Model/CatalogItem.md)
  - [CatalogItemModifierListInfo](docs/Model/CatalogItemModifierListInfo.md)
+ - [CatalogItemOption](docs/Model/CatalogItemOption.md)
+ - [CatalogItemOptionForItem](docs/Model/CatalogItemOptionForItem.md)
+ - [CatalogItemOptionValue](docs/Model/CatalogItemOptionValue.md)
+ - [CatalogItemOptionValueForItemVariation](docs/Model/CatalogItemOptionValueForItemVariation.md)
  - [CatalogItemProductType](docs/Model/CatalogItemProductType.md)
  - [CatalogItemVariation](docs/Model/CatalogItemVariation.md)
+ - [CatalogMeasurementUnit](docs/Model/CatalogMeasurementUnit.md)
  - [CatalogModifier](docs/Model/CatalogModifier.md)
  - [CatalogModifierList](docs/Model/CatalogModifierList.md)
  - [CatalogModifierListSelectionType](docs/Model/CatalogModifierListSelectionType.md)
@@ -299,9 +356,13 @@ Class | Method | HTTP request | Description
  - [CatalogObject](docs/Model/CatalogObject.md)
  - [CatalogObjectBatch](docs/Model/CatalogObjectBatch.md)
  - [CatalogObjectType](docs/Model/CatalogObjectType.md)
+ - [CatalogPricingRule](docs/Model/CatalogPricingRule.md)
  - [CatalogPricingType](docs/Model/CatalogPricingType.md)
+ - [CatalogProductSet](docs/Model/CatalogProductSet.md)
  - [CatalogQuery](docs/Model/CatalogQuery.md)
  - [CatalogQueryExact](docs/Model/CatalogQueryExact.md)
+ - [CatalogQueryItemVariationsForItemOptionValues](docs/Model/CatalogQueryItemVariationsForItemOptionValues.md)
+ - [CatalogQueryItemsForItemOptions](docs/Model/CatalogQueryItemsForItemOptions.md)
  - [CatalogQueryItemsForModifierList](docs/Model/CatalogQueryItemsForModifierList.md)
  - [CatalogQueryItemsForTax](docs/Model/CatalogQueryItemsForTax.md)
  - [CatalogQueryPrefix](docs/Model/CatalogQueryPrefix.md)
@@ -309,11 +370,15 @@ Class | Method | HTTP request | Description
  - [CatalogQuerySortedAttribute](docs/Model/CatalogQuerySortedAttribute.md)
  - [CatalogQueryText](docs/Model/CatalogQueryText.md)
  - [CatalogTax](docs/Model/CatalogTax.md)
+ - [CatalogTimePeriod](docs/Model/CatalogTimePeriod.md)
  - [CatalogV1Id](docs/Model/CatalogV1Id.md)
  - [ChargeRequest](docs/Model/ChargeRequest.md)
  - [ChargeRequestAdditionalRecipient](docs/Model/ChargeRequestAdditionalRecipient.md)
  - [ChargeResponse](docs/Model/ChargeResponse.md)
  - [Checkout](docs/Model/Checkout.md)
+ - [CompletePaymentRequest](docs/Model/CompletePaymentRequest.md)
+ - [CompletePaymentResponse](docs/Model/CompletePaymentResponse.md)
+ - [Coordinates](docs/Model/Coordinates.md)
  - [Country](docs/Model/Country.md)
  - [CreateBreakTypeRequest](docs/Model/CreateBreakTypeRequest.md)
  - [CreateBreakTypeResponse](docs/Model/CreateBreakTypeResponse.md)
@@ -331,6 +396,8 @@ Class | Method | HTTP request | Description
  - [CreateOrderRequestModifier](docs/Model/CreateOrderRequestModifier.md)
  - [CreateOrderRequestTax](docs/Model/CreateOrderRequestTax.md)
  - [CreateOrderResponse](docs/Model/CreateOrderResponse.md)
+ - [CreatePaymentRequest](docs/Model/CreatePaymentRequest.md)
+ - [CreatePaymentResponse](docs/Model/CreatePaymentResponse.md)
  - [CreateRefundRequest](docs/Model/CreateRefundRequest.md)
  - [CreateRefundResponse](docs/Model/CreateRefundResponse.md)
  - [CreateShiftRequest](docs/Model/CreateShiftRequest.md)
@@ -347,6 +414,7 @@ Class | Method | HTTP request | Description
  - [CustomerSort](docs/Model/CustomerSort.md)
  - [CustomerSortField](docs/Model/CustomerSortField.md)
  - [DateRange](docs/Model/DateRange.md)
+ - [DayOfWeek](docs/Model/DayOfWeek.md)
  - [DeleteBreakTypeRequest](docs/Model/DeleteBreakTypeRequest.md)
  - [DeleteBreakTypeResponse](docs/Model/DeleteBreakTypeResponse.md)
  - [DeleteCatalogObjectRequest](docs/Model/DeleteCatalogObjectRequest.md)
@@ -368,6 +436,10 @@ Class | Method | HTTP request | Description
  - [GetBreakTypeResponse](docs/Model/GetBreakTypeResponse.md)
  - [GetEmployeeWageRequest](docs/Model/GetEmployeeWageRequest.md)
  - [GetEmployeeWageResponse](docs/Model/GetEmployeeWageResponse.md)
+ - [GetPaymentRefundRequest](docs/Model/GetPaymentRefundRequest.md)
+ - [GetPaymentRefundResponse](docs/Model/GetPaymentRefundResponse.md)
+ - [GetPaymentRequest](docs/Model/GetPaymentRequest.md)
+ - [GetPaymentResponse](docs/Model/GetPaymentResponse.md)
  - [GetShiftRequest](docs/Model/GetShiftRequest.md)
  - [GetShiftResponse](docs/Model/GetShiftResponse.md)
  - [InventoryAdjustment](docs/Model/InventoryAdjustment.md)
@@ -395,6 +467,10 @@ Class | Method | HTTP request | Description
  - [ListEmployeesResponse](docs/Model/ListEmployeesResponse.md)
  - [ListLocationsRequest](docs/Model/ListLocationsRequest.md)
  - [ListLocationsResponse](docs/Model/ListLocationsResponse.md)
+ - [ListPaymentRefundsRequest](docs/Model/ListPaymentRefundsRequest.md)
+ - [ListPaymentRefundsResponse](docs/Model/ListPaymentRefundsResponse.md)
+ - [ListPaymentsRequest](docs/Model/ListPaymentsRequest.md)
+ - [ListPaymentsResponse](docs/Model/ListPaymentsResponse.md)
  - [ListRefundsRequest](docs/Model/ListRefundsRequest.md)
  - [ListRefundsResponse](docs/Model/ListRefundsResponse.md)
  - [ListTransactionsRequest](docs/Model/ListTransactionsRequest.md)
@@ -405,18 +481,30 @@ Class | Method | HTTP request | Description
  - [LocationCapability](docs/Model/LocationCapability.md)
  - [LocationStatus](docs/Model/LocationStatus.md)
  - [LocationType](docs/Model/LocationType.md)
+ - [MeasurementUnit](docs/Model/MeasurementUnit.md)
+ - [MeasurementUnitArea](docs/Model/MeasurementUnitArea.md)
+ - [MeasurementUnitCustom](docs/Model/MeasurementUnitCustom.md)
+ - [MeasurementUnitGeneric](docs/Model/MeasurementUnitGeneric.md)
+ - [MeasurementUnitLength](docs/Model/MeasurementUnitLength.md)
+ - [MeasurementUnitUnitType](docs/Model/MeasurementUnitUnitType.md)
+ - [MeasurementUnitVolume](docs/Model/MeasurementUnitVolume.md)
+ - [MeasurementUnitWeight](docs/Model/MeasurementUnitWeight.md)
  - [ModelBreak](docs/Model/ModelBreak.md)
  - [Money](docs/Model/Money.md)
  - [ObtainTokenRequest](docs/Model/ObtainTokenRequest.md)
  - [ObtainTokenResponse](docs/Model/ObtainTokenResponse.md)
  - [Order](docs/Model/Order.md)
+ - [OrderEntry](docs/Model/OrderEntry.md)
  - [OrderFulfillment](docs/Model/OrderFulfillment.md)
  - [OrderFulfillmentPickupDetails](docs/Model/OrderFulfillmentPickupDetails.md)
  - [OrderFulfillmentPickupDetailsScheduleType](docs/Model/OrderFulfillmentPickupDetailsScheduleType.md)
  - [OrderFulfillmentRecipient](docs/Model/OrderFulfillmentRecipient.md)
+ - [OrderFulfillmentShipmentDetails](docs/Model/OrderFulfillmentShipmentDetails.md)
  - [OrderFulfillmentState](docs/Model/OrderFulfillmentState.md)
  - [OrderFulfillmentType](docs/Model/OrderFulfillmentType.md)
  - [OrderLineItem](docs/Model/OrderLineItem.md)
+ - [OrderLineItemAppliedDiscount](docs/Model/OrderLineItemAppliedDiscount.md)
+ - [OrderLineItemAppliedTax](docs/Model/OrderLineItemAppliedTax.md)
  - [OrderLineItemDiscount](docs/Model/OrderLineItemDiscount.md)
  - [OrderLineItemDiscountScope](docs/Model/OrderLineItemDiscountScope.md)
  - [OrderLineItemDiscountType](docs/Model/OrderLineItemDiscountType.md)
@@ -424,9 +512,28 @@ Class | Method | HTTP request | Description
  - [OrderLineItemTax](docs/Model/OrderLineItemTax.md)
  - [OrderLineItemTaxScope](docs/Model/OrderLineItemTaxScope.md)
  - [OrderLineItemTaxType](docs/Model/OrderLineItemTaxType.md)
+ - [OrderMoneyAmounts](docs/Model/OrderMoneyAmounts.md)
+ - [OrderQuantityUnit](docs/Model/OrderQuantityUnit.md)
+ - [OrderReturn](docs/Model/OrderReturn.md)
+ - [OrderReturnDiscount](docs/Model/OrderReturnDiscount.md)
+ - [OrderReturnLineItem](docs/Model/OrderReturnLineItem.md)
+ - [OrderReturnLineItemModifier](docs/Model/OrderReturnLineItemModifier.md)
+ - [OrderReturnServiceCharge](docs/Model/OrderReturnServiceCharge.md)
+ - [OrderReturnTax](docs/Model/OrderReturnTax.md)
+ - [OrderRoundingAdjustment](docs/Model/OrderRoundingAdjustment.md)
+ - [OrderServiceCharge](docs/Model/OrderServiceCharge.md)
+ - [OrderServiceChargeCalculationPhase](docs/Model/OrderServiceChargeCalculationPhase.md)
  - [OrderSource](docs/Model/OrderSource.md)
+ - [OrderState](docs/Model/OrderState.md)
+ - [PayOrderRequest](docs/Model/PayOrderRequest.md)
+ - [PayOrderResponse](docs/Model/PayOrderResponse.md)
+ - [Payment](docs/Model/Payment.md)
+ - [PaymentRefund](docs/Model/PaymentRefund.md)
+ - [ProcessingFee](docs/Model/ProcessingFee.md)
  - [Product](docs/Model/Product.md)
  - [Refund](docs/Model/Refund.md)
+ - [RefundPaymentRequest](docs/Model/RefundPaymentRequest.md)
+ - [RefundPaymentResponse](docs/Model/RefundPaymentResponse.md)
  - [RefundStatus](docs/Model/RefundStatus.md)
  - [RegisterDomainRequest](docs/Model/RegisterDomainRequest.md)
  - [RegisterDomainResponse](docs/Model/RegisterDomainResponse.md)
@@ -447,6 +554,8 @@ Class | Method | HTTP request | Description
  - [RetrieveInventoryCountResponse](docs/Model/RetrieveInventoryCountResponse.md)
  - [RetrieveInventoryPhysicalCountRequest](docs/Model/RetrieveInventoryPhysicalCountRequest.md)
  - [RetrieveInventoryPhysicalCountResponse](docs/Model/RetrieveInventoryPhysicalCountResponse.md)
+ - [RetrieveLocationRequest](docs/Model/RetrieveLocationRequest.md)
+ - [RetrieveLocationResponse](docs/Model/RetrieveLocationResponse.md)
  - [RetrieveTransactionRequest](docs/Model/RetrieveTransactionRequest.md)
  - [RetrieveTransactionResponse](docs/Model/RetrieveTransactionResponse.md)
  - [RevokeTokenRequest](docs/Model/RevokeTokenRequest.md)
@@ -455,6 +564,17 @@ Class | Method | HTTP request | Description
  - [SearchCatalogObjectsResponse](docs/Model/SearchCatalogObjectsResponse.md)
  - [SearchCustomersRequest](docs/Model/SearchCustomersRequest.md)
  - [SearchCustomersResponse](docs/Model/SearchCustomersResponse.md)
+ - [SearchOrdersCustomerFilter](docs/Model/SearchOrdersCustomerFilter.md)
+ - [SearchOrdersDateTimeFilter](docs/Model/SearchOrdersDateTimeFilter.md)
+ - [SearchOrdersFilter](docs/Model/SearchOrdersFilter.md)
+ - [SearchOrdersFulfillmentFilter](docs/Model/SearchOrdersFulfillmentFilter.md)
+ - [SearchOrdersQuery](docs/Model/SearchOrdersQuery.md)
+ - [SearchOrdersRequest](docs/Model/SearchOrdersRequest.md)
+ - [SearchOrdersResponse](docs/Model/SearchOrdersResponse.md)
+ - [SearchOrdersSort](docs/Model/SearchOrdersSort.md)
+ - [SearchOrdersSortField](docs/Model/SearchOrdersSortField.md)
+ - [SearchOrdersSourceFilter](docs/Model/SearchOrdersSourceFilter.md)
+ - [SearchOrdersStateFilter](docs/Model/SearchOrdersStateFilter.md)
  - [SearchShiftsRequest](docs/Model/SearchShiftsRequest.md)
  - [SearchShiftsResponse](docs/Model/SearchShiftsResponse.md)
  - [Shift](docs/Model/Shift.md)
@@ -469,6 +589,8 @@ Class | Method | HTTP request | Description
  - [ShiftWorkdayMatcher](docs/Model/ShiftWorkdayMatcher.md)
  - [SortOrder](docs/Model/SortOrder.md)
  - [SourceApplication](docs/Model/SourceApplication.md)
+ - [StandardUnitDescription](docs/Model/StandardUnitDescription.md)
+ - [StandardUnitDescriptionGroup](docs/Model/StandardUnitDescriptionGroup.md)
  - [TaxCalculationPhase](docs/Model/TaxCalculationPhase.md)
  - [TaxInclusionType](docs/Model/TaxInclusionType.md)
  - [Tender](docs/Model/Tender.md)
@@ -488,6 +610,8 @@ Class | Method | HTTP request | Description
  - [UpdateItemModifierListsResponse](docs/Model/UpdateItemModifierListsResponse.md)
  - [UpdateItemTaxesRequest](docs/Model/UpdateItemTaxesRequest.md)
  - [UpdateItemTaxesResponse](docs/Model/UpdateItemTaxesResponse.md)
+ - [UpdateOrderRequest](docs/Model/UpdateOrderRequest.md)
+ - [UpdateOrderResponse](docs/Model/UpdateOrderResponse.md)
  - [UpdateShiftRequest](docs/Model/UpdateShiftRequest.md)
  - [UpdateShiftResponse](docs/Model/UpdateShiftResponse.md)
  - [UpdateWorkweekConfigRequest](docs/Model/UpdateWorkweekConfigRequest.md)
@@ -630,6 +754,7 @@ Class | Method | HTTP request | Description
  - [V1SettlementEntryType](docs/Model/V1SettlementEntryType.md)
  - [V1SettlementStatus](docs/Model/V1SettlementStatus.md)
  - [V1Tender](docs/Model/V1Tender.md)
+ - [V1TenderCardBrand](docs/Model/V1TenderCardBrand.md)
  - [V1TenderEntryMethod](docs/Model/V1TenderEntryMethod.md)
  - [V1TenderType](docs/Model/V1TenderType.md)
  - [V1Timecard](docs/Model/V1Timecard.md)
@@ -655,6 +780,7 @@ Class | Method | HTTP request | Description
  - [V1VariationPricingType](docs/Model/V1VariationPricingType.md)
  - [VoidTransactionRequest](docs/Model/VoidTransactionRequest.md)
  - [VoidTransactionResponse](docs/Model/VoidTransactionResponse.md)
+ - [WebhookEvents](docs/Model/WebhookEvents.md)
  - [Weekday](docs/Model/Weekday.md)
  - [WorkweekConfig](docs/Model/WorkweekConfig.md)
 
@@ -674,7 +800,7 @@ Class | Method | HTTP request | Description
  - **EMPLOYEES_WRITE**: __HTTP Method__: `POST`, `PUT`, `DELETE`  Grants write access to employee profile information. For example, to create and modify employee profiles.
  - **INVENTORY_READ**: __HTTP Method__: `GET`  Grants read access to inventory information. For example, to call the RetrieveInventoryCount endpoint.
  - **INVENTORY_WRITE**: __HTTP Method__:  `POST`, `PUT`, `DELETE`  Grants write access to inventory information. For example, to call the BatchChangeInventory endpoint.
- - **ITEMS_READ**: __HTTP Method__: `GET`  Grants read access to business and location information. For example, to obtain a location ID for subsequent activity.
+ - **ITEMS_READ**: __HTTP Method__: `GET`  Grants read access to product catalog information. For example, to get an  item or a list of items.
  - **ITEMS_WRITE**: __HTTP Method__: `POST`, `PUT`, `DELETE`  Grants write access to product catalog information. For example, to modify or add to a product catalog.
  - **MERCHANT_PROFILE_READ**: __HTTP Method__: `GET`  Grants read access to business and location information. For example, to obtain a location ID for subsequent activity.
  - **ORDERS_READ**: __HTTP Method__: `GET`  Grants read access to order information. For example, to call the BatchRetrieveOrders endpoint.
@@ -760,3 +886,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+[//]: # "Link anchor definitions"
+[Square Logo]: https://docs.connect.squareup.com/images/github/github-square-logo.svg

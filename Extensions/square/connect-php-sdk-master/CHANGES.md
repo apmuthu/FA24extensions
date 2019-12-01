@@ -1,5 +1,64 @@
 # Change Log
 
+## Version 2.20190814.2 (2019-08-23)
+
+* **Bug fix**: Fixed path parameters for `UpdateOrder`
+
+## Version 2.20190814.1 (2018-08-16)
+
+* **Bug fix**: Removed a currently unsupported API object type
+## Version 2.20190814.0 (2019-08-15)
+
+* **New functionality**: All SDKs have been updated to support the Sandbox v2 BETA release
+* **Deprecated functionality**: All Transactions API functionality is deprecated in favor of Payments API and Refunds API functionality.
+* **New functionality**: All SDKs have been updated to support the Payments API GA.
+* **New functionality**: All SDKs have been updated to support the Refunds API GA.
+* **New functionality**: All SDKs have been updated to support Orders API updates:
+  * Pickup Fulfillments, SearchOrders, and ServiceCharges move from BETA to GA.
+  * New BETA endpoint: Orders.UpdateOrder &mdash; use the UpdateOrder endpoint to update existing orders.
+  * New BETA functionality: Create shipment-type fulfillments. 
+* **New functionality**: Locations.RetrieveLocation &mdash; use the RetrieveLocation endpoint to load details for a specific Location.
+
+## Version 2.20190724.0 (2019-07-24)
+
+* **BETA releases**:
+  * Catalog API: supports item options with datatypes and enums for item options and item option values.
+
+## Version 2.20190710.0 (2019-07-10)
+
+* **Retired functionality** &mdash; The `CatalogItem.image_url` field (deprecated under `Square-Version` YYYYMMDD) is retired and no longer included in Connect SDKs.
+
+## Version 2.20190612.1 (2019-06-26)
+
+* **Bug fix**: `Transaction.Charge` and `Customers.CreateCustomerCard` request objects &mdash; now include the `verification_token` required for [Strong Customer Authentication](https://developer.squareup.com/docs/sca-overview).
+
+## Version 2.20190612.0 (2019-06-12)
+
+* **BETA releases**:
+  * Orders API: supports service charges with a new field and datatype.
+  * Catalog API: supports measurement unites for item variation quantities with a new field and datatype.
+* **New functionality**: `Order` entities &mdash; now include a `source` field that contains details on where the order originated.
+* **Improved functionality**: ListLocations &mdash; Expanded business information available through the Locations API, including business hours, contact email, social media handles, and longitude/latitude for physical locations.
+
+## Version 2.20190508.0 (2019-05-08)
+
+## Details
+
+* **Beta functionality**: Orders API &mdash; support for fractional quantities,
+  expanded metadata, and embedded information on payments, refunds, and returns.
+* **Beta functionality**: Inventory API &mdash; support for fractional quantities.
+* **New functionality**: `Locations.business_hours` &mdash; read-only field with
+  information about the business hours at a particular location.
+
+## Version 2.20190410.1 (2019-04-24)
+
+## Details
+
+* **New functionality**: Employees API (Connect v2) &mdash; New fields to
+  capture contact information for employee profiles.
+* **New functionality**: `V1Tender.CardBrand` &mdash; New V1 enum to represent
+  brand information for credit cars.
+
 ## Version 2.20190410.0 (2019-04-10)
 
 ## New features: Orders API beta
@@ -43,15 +102,15 @@
 ## New API: Labor API
 
 The Labor API now includes functionality
-that gives a Square account the ability to track and retrieve employee labor hours 
-including multiple hourly wage rates per employee, work shift break tracking, and 
+that gives a Square account the ability to track and retrieve employee labor hours
+including multiple hourly wage rates per employee, work shift break tracking, and
 standardized break templates.
 
 See the Connect v2 Technical Reference.
 
 ## New API: Employees API
 
-The Employees API includes the ability to list employees for a Square 
+The Employees API includes the ability to list employees for a Square
 account and retrieve a single employee by ID.
 
 See the Connect v2 Technical Reference.
