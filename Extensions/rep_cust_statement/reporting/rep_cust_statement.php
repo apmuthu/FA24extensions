@@ -183,10 +183,15 @@ function print_cust_statements()
             $rep->NewLine();
         }
 
+        $rep->TextCol(0, 2, _("Statement End Date"));
+        $rep->TextCol(2, 3,	$enddate, -2);
+        $rep->NewLine();
+        
+
 		$nowdue = "1-" . $PastDueDays1 . " " . _("Days");
 		$pastdue1 = $PastDueDays1 + 1 . "-" . $PastDueDays2 . " " . _("Days");
 		$pastdue2 = _("Over") . " " . $PastDueDays2 . " " . _("Days");
-		$CustomerRecord = get_customer_details($myrow['debtor_no'], null, false);
+		$CustomerRecord = get_customer_details($myrow['debtor_no'], $enddate, false);
 		$str = array(_("Current"), $nowdue, $pastdue1, $pastdue2, _("Total Balance"));
 		$str2 = array(number_format2(($CustomerRecord["Balance"] - $CustomerRecord["Due"]),$dec),
 			number_format2(($CustomerRecord["Due"]-$CustomerRecord["Overdue1"]),$dec),
