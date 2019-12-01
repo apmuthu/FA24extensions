@@ -24,7 +24,6 @@ include_once($path_to_root . "/includes/date_functions.inc");
 include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/modules/tax_rate/get_tax_rate.inc");
 
-define("ACCOUNT_NUMBER", '01514419-0001');
 define("FEIN", '84-1457020');
 define("CUSTOMER_GROUP_CHARITY", 'Government, Religious Or Charity');
 define("TAX_GROUP_PHYSICAL",'1'); // physical location
@@ -38,7 +37,68 @@ define("TAX_GROUP_EXEMPT_USE",'11');
 
 //----------------------------------------------------------------------------------------------------
 
+$sites=array();
+read_sites();
+
+$eventids=array();
+read_eventids();
+
 print_dr0100();
+
+// sites are just extra useless data the DOR wants
+// https://www.colorado.gov/pacific/tax/sales-and-use-tax-rates-lookup
+function read_sites()
+{
+   global $path_to_root, $sites;
+   $csv = array_map('str_getcsv', file($path_to_root . "/modules/rep_dr0100/reporting" . "/wwhsitenumbers.csv"));
+   foreach ($csv[0] as $key =>$value)
+    $csv[0][$key]=preg_replace( '/\s*/m', '',$value);
+
+    array_walk($csv, function(&$a) use ($csv) {
+      $a = array_combine($csv[0], $a);
+    });
+
+    array_shift($csv); # remove column header
+    // display_notification(print_r($csv, true));
+
+    foreach ($csv as $value) {
+        $location=trim($value['LocationCode']);
+        $sites[$location] = $value;
+    }
+
+    //display_notification(print_r($sites, true));
+}
+
+// event ids are just more extra useless data the DOR wants
+// GO to Verify a License or Certificate
+// Verify a single license
+// CAN or Location ID: 02768867
+
+function read_eventids()
+{
+   global $path_to_root, $eventids;
+   $csv = array_map('str_getcsv', file($path_to_root . "/modules/rep_dr0100/reporting" . "/wwheventids.csv"));
+   foreach ($csv[0] as $key =>$value)
+    $csv[0][$key]=preg_replace( '/\s*/m', '',$value);
+
+    array_walk($csv, function(&$a) use ($csv) {
+      $a = array_combine($csv[0], $a);
+    });
+
+    array_shift($csv); # remove column header
+    // display_notification(print_r($csv, true));
+
+    foreach ($csv as $value) {
+        $address=trim($value['Address']);
+        $start = strpos($address, ",")+2;
+        $end = strpos($address, ",", $start);
+        $address=substr($address, $start, $end-$start);
+        $eventids[$address] = $value;
+    }
+
+    // display_notification(print_r($eventids, true));
+}
+
 
 // Note: food includes grape sales, import adjustments, credit card testing
 function GetPhysicalSales($from, $to)
@@ -47,7 +107,7 @@ function GetPhysicalSales($from, $to)
     $todate = date2sql($to);
 
     $sql= "SELECT
-            'Physical' as description,
+            'Physical Location' as description,
 
             SUM(CASE WHEN dt.type=".ST_CUSTCREDIT."
                 THEN (ttd.net_amount)*-1
@@ -127,6 +187,7 @@ function GetNonPhysicalSales($period, $from, $to)
                 'Grand Junction',
                 'California',
                 'Out-of-state')
+            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_CHARITY."'
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WHOLESALE."'
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_USE."'
         GROUP BY location, a.description";
@@ -139,7 +200,7 @@ function GetNonPhysicalSales($period, $from, $to)
 
 function print_dr0100()
 {
-    global $path_to_root;
+    global $path_to_root, $sites, $eventids;
 
     // Get the payment
     $period = $_POST['PARAM_0'];
@@ -149,14 +210,14 @@ function print_dr0100()
 
     include_once($path_to_root . "/reporting/includes/pdf_report.inc");
 
-    $rep = new FrontReport(_('DR0100 Summary Report'), "DR0100SummaryReport", user_pagesize(), 9, 'P');
+    $rep = new FrontReport(_('DR0100/DR0098 Summary Report'), "DR0100SummaryReport", user_pagesize(), 9, 'P');
 
     $params =   array(0 => '', 
                       1 => array('text' => _('Period'), 'from' => $from_date, 'to' => $to_date));
 
-    $cols = array(0, 100, 300, 330, 430, 530);
+    $cols = array(0, 80, 250, 330, 430, 530);
 
-    $headers = array(_('Area'), _('Location'), _('Jurisdiction'), _('Self-Collected'), _('State-Collected'));
+    $headers = array(_('Area'), _('Location'), _('Account No.'), _('Self-Collected'), _('State-Collected'));
     $aligns = array('left', 'left', 'left', 'right', 'right');
 
     $rep->Font();
@@ -177,22 +238,37 @@ while (1) {
         $sales = db_fetch(GetPhysicalSales($from_date, $to_date));
         $first = 1;
         $address = get_company_pref('postal_address');
+        $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
+        $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
+        $site=substr($site,0,strlen($site)-4)."-0001";
     } else {
         if (!($sales = db_fetch($nonphys)))
             break;
+        if ($sales['net'] == 0)
+            continue;
         $address="\n" . trim($sales['location']) .  ", CO";
+        $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
+        if (isset($sites[$tax_rates['JurisdictionCode']])) {
+            $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
+            $site=substr($site,0,strlen($site)-4)."-".substr($site,-4);
+        } else {
+            $site = "";
+            display_error("
+                WWH sales tax location not found for " . $tax_rates['JurisdictionCode'] . " address " . $address . '. ' .
+                "This means that Colorado DOR advertises a sales tax jurisdiction at https://www.colorado.gov/pacific/tax/sales-and-use-tax-rates-lookup " .
+                "that is not in the list WWH sales tax locations.  Call DOR and find out what to do.");
+        }
 // display_notification($address);
     }
 
-display_notification(print_r($sales, true));
+// display_notification(print_r($sales, true));
 
-$tax_rates=get_tax_rates("Colorado Sales Tax", $address);
 // display_notification("tax rates" . print_r($tax_rates,true));
 
 // optional taxes
 
-$service_fee = Array('SD'=> 0, 'RTD' => 0, 'City' => 0);
-$tax_rate = Array('SD'=> 0, 'RTD' => 0, 'City' => 0);
+$service_fee = Array('SD'=> 0, 'RTD' => 0, 'City' => 0, 'County' => 0);
+$tax_rate = Array('SD'=> 0, 'RTD' => 0, 'City' => 0, 'County' => 0);
 
 for ($i=0; $tax_rates[$i] != null; $i += 3) {
     switch ($tax_rates[$i]) {
@@ -220,10 +296,18 @@ if ($period >= "2019-06")
 if ($sales['food'] <= 1)
     $sales['food'] = 0;
 
-    if ($sales['description'] == 'Special Event')
+    if ($sales['description'] == 'Special Event') {
         $PRECISION = 0;
-    else
+        if (isset($eventids[$tax_rates['Location']]['ID'])) {
+            $site = $eventids[$tax_rates['Location']]['ID'];
+            $site = substr($site, 0, 7) . '-' . substr($site,7);
+        } else {
+            display_error("Special Event " . $tax_rates['Location'] . " account number not found.  Fill in manually or add to wwheventids.csv and rerun report");
+            $site = "";
+        }
+    } else
         $PRECISION = 2;
+    
 
 $sales['net'] = round($sales['net'], $PRECISION);
 
@@ -255,7 +339,7 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 
     $rep->TextCol(0, 1, $sales['description']);
     $rep->TextCol(1, 2, $tax_rates['Location']);
-    $rep->TextCol(2, 3, $tax_rates['JurisdictionCode']);
+    $rep->TextCol(2, 3, $site);
 
     if ($tax_rates['HomeRule'] == 'Self-collected') {
         $rep->AmountCol(3, 4, $tax_due_city, $dec);
@@ -282,7 +366,7 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 
 	array('x' => 8.0, 'y' => 8.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
-	array('x' => 1, 'y' => 8.2, 'text' => ACCOUNT_NUMBER),
+	array('x' => 1, 'y' => 8.2, 'text' => $site),
 
 	array('x' => 1, 'y' => 7.8, 'text' => $tax_rates['Location']),
 	array('x' => 2.5, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
@@ -410,7 +494,7 @@ _begin_job_
 	// phone number does not print, do not know why?!?!?
 	array('x' => 6.7, 'y' => 7.8, 'text' => '970 434-6868'),
 
-	array('x' => 1, 'y' => 7.2, 'text' => ACCOUNT_NUMBER),
+	array('x' => 1, 'y' => 7.2, 'text' => $site),
 	array('x' => 3.0, 'y' => 7.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
 	array('x' => 4.6, 'y' => 7.2, 'text' => $tax_rates['JurisdictionCode']),
@@ -492,7 +576,7 @@ _begin_job_
 	}
 
     $annote2 = array(
-	array('x' => 1, 'y' => 9.6, 'text' => ACCOUNT_NUMBER),
+	array('x' => 1, 'y' => 9.6, 'text' => $site),
 	array('x' => 5, 'y' => 9.6, 'text' => strtoupper(get_company_pref('coy_name'))),
 	array('x' => 3.3, 'y' => 9.6, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
@@ -508,7 +592,7 @@ _begin_job_
    );
 
     $annote3 = array(
-	array('x' => 1, 'y' => 9.0, 'text' => ACCOUNT_NUMBER),
+	array('x' => 1, 'y' => 9.0, 'text' => $site),
 	array('x' => 5, 'y' => 9.0, 'text' => strtoupper(get_company_pref('coy_name'))),
 	array('x' => 3.3, 'y' => 9.0, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
@@ -645,7 +729,7 @@ _begin_job_
      }
 
     $rep->NewLine();
-    $rep->TextCol(0, 1, 'TOTAL DUE STATE ON DR0100');
+    $rep->TextCol(0, 2, 'TOTAL DUE STATE ON DR0100/DR0098');
     $rep->AmountCol(4, 5, $total, $dec);
 
    $rep->end();
