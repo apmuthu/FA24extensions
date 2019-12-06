@@ -1,6 +1,12 @@
+# FrontAccounting 2.4
+# Copyright (C) 2007-2019 FrontAccounting, LLC.
+# This file is distributed under the same license as the FrontAccounting package.
+# VICTOR RODRIGUEZ <Caribe95@gmail.com>, 2012.
+# Victor van Herpt Valdivia <victor@teidis.com>, 2012.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: FrontAccounting\n"
+"Project-Id-Version: FrontAccounting 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-11 13:17+0100\n"
 "PO-Revision-Date: 2012-11-29 10:24+0100\n"
@@ -10,12 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: /frontaccounting.php:75 /frontaccounting.php:76
 msgid "Main  Menu"
@@ -14741,9 +14746,7 @@ msgstr ""
 
 #: /sales/sales_order_entry.php:751 /sales/sales_order_entry.php:760
 msgid "You are about to void this Document.\\nDo you want to continue?"
-msgstr ""
-"Está a punto de anular este Documento. \n"
-"¿Desea continuar?"
+msgstr "Está a punto de anular este Documento. \\n¿Desea continuar?"
 
 #: /sales/sales_order_entry.php:754
 msgid "Validate changes and update document"
@@ -14754,9 +14757,7 @@ msgstr "Validar los cambios y actualizar el documento"
 msgid ""
 "You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
-msgstr ""
-"Está a punto de anular este Documento. \n"
-"¿Desea continuar?"
+msgstr "Está a punto de anular este Documento.\\n¿Desea continuar?"
 
 #: /sales/allocations/customer_allocate.php:28
 msgid "Allocate Customer Payment or Credit Note"

@@ -1,3 +1,4 @@
+2019-12-06  Ap.Muthu     Updated es_ES language files
 2019-09-03  Phuong       Updated FrontHRM with Job Positions and Attendance fixes
 2019-07-06  Phuong       Updated FrontHRM with shortcuts
 2019-07-06  Phuong       Updated FrontHRM to v2.4.0-3
