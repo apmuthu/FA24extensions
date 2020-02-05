@@ -1,3 +1,4 @@
+2020-02-06  Ap.Muthu     Updated ta_IN, hi_IN language files for FA 2.4.8
 2020-02-01  Ap.Muthu     Updated nl_NL chart file
 2019-12-06  Ap.Muthu     Updated es_ES language files
 2019-09-03  Phuong       Updated FrontHRM with Job Positions and Attendance fixes
