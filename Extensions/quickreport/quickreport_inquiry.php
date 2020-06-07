@@ -275,9 +275,13 @@ function show_results()
         }
         if ($row2 != null && $myrow['type_no'] == $row2['type_no']) {
             $acct = $row2['account'];
-            $myrow['amount'] = $row2['amount'];
-            if ($acct == $myrow['account'])
+        // changed from equal(=) to add(+=) because of
+        // split transactions on Rent or Lease (blgs)
+            if ($acct == $myrow['account']) {
+                $myrow['amount'] += $row2['amount'];
                 $split=true;
+            } else
+                $myrow['amount'] = $row2['amount'];
             continue;
         }
 

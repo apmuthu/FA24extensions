@@ -31,46 +31,136 @@ add_css_file('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css');
 
 function getBranchInfo($branch)
 {
-    $sql = "SELECT d.debtor_no, d.name AS cust_name, sm.latlong, b.br_address, b.br_post_address, b.branch_code
+    $sql = "SELECT d.debtor_no, d.name AS cust_name, b.br_address, b.br_post_address, b.branch_code
         FROM ".TB_PREF."cust_branch b
         LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no=b.debtor_no
-        LEFT JOIN ".TB_PREF."sales_map sm ON b.branch_code=sm.branch_code
         WHERE b.branch_code=".db_escape($branch);
     return db_query($sql,"No transactions were returned");
 }
 
-
-
-function getTransactions($from, $to, $tax_group_id, $stock_id)
+function getTransactions($from, $to, $tax_group_id, $customer_id, $stock_id)
 {
     if (!empty($from)) {
         $fromdate = date2sql($from);
         $todate = date2sql($to);
+    } else {
+        $fromdate = date2sql(add_years(Today(), -1));
+        $todate = date2sql(Today());
     }
 
-    $sql = "SELECT d.debtor_no, d.name AS cust_name, dt.type, dt.trans_no,  dt.tran_date, sm.latlong, cb.br_address, cb.br_post_address, dt.branch_code
+    $sql = "SELECT d.debtor_no, d.name AS cust_name, dt.type, dt.trans_no,  dt.tran_date, cb.br_address, cb.br_post_address, dt.branch_code
         FROM ".TB_PREF."debtor_trans dt
             LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no=dt.debtor_no
             LEFT JOIN ".TB_PREF."cust_branch cb ON dt.branch_code=cb.branch_code
             LEFT JOIN ".TB_PREF."tax_groups st ON cb.tax_group_id=st.id
-            LEFT JOIN ".TB_PREF."sales_map sm ON dt.branch_code=sm.branch_code
-            LEFT JOIN ".TB_PREF."sales_order_details sod ON dt.order_ = sod.order_no
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
 
     if (!empty($stock_id))
         $sql .= "AND stk_code=".db_escape($stock_id) . " ";
 
-    if (!empty($from))
+    if (!empty($fromdate))
         $sql .= "AND dt.tran_date >=".db_escape($fromdate)." AND dt.tran_date<=".db_escape($todate);
 
     if (!empty($tax_group_id))
         $sql .= " AND tax_group_id = '" . $tax_group_id . "'";
 
-    $sql .= " GROUP BY debtor_no ORDER BY cust_name";
+    $sql .= " GROUP BY debtor_no";
 
+    $sql .= " UNION
+        SELECT d.debtor_no, d.name AS cust_name, 'a', 'b', 'c', cb.br_address, cb.br_post_address, cb.branch_code
+            FROM ".TB_PREF."debtors_master d
+            LEFT JOIN ".TB_PREF."cust_branch cb ON d.debtor_no=cb.debtor_no
+        WHERE d.debtor_no=".db_escape($customer_id);
+
+    $sql .= " ORDER BY cust_name";
     return db_query($sql,"No transactions were returned");
 }
 
+function getLatLong($address)
+{
+    $sql = "SELECT latlong, lookup_date
+        FROM ".TB_PREF."address_map
+        WHERE address =".db_escape($address);
+    $result = db_query($sql,"No transactions were returned");
+    return db_fetch($result);
+}
+
+
+function getCensusGeoCode($address)
+{
+    $request_url = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" . urlencode($address) . "&benchmark=4";
+
+    // $request_url = "https://nominatim.openstreetmap.org/search?q=" . urlencode($address) . "&format=xml";
+
+    // this should work but not with openstreet
+    // $xml = simplexml_load_file($request_url) or die("url not loading");
+
+    // instead use curl
+    $ch = curl_init($request_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Identify the request User Agent as Chrome - any real browser, or perhaps any value may work
+    // depending on the resource you are trying to hit
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+    $feed = curl_exec($ch);
+    if ($feed === false) {
+        display_error("curl_exec failed");
+        return ",";
+    }
+
+    $data=strpos($feed, "Coordinates:");
+    if ($data === false)
+        return ",";
+    $feed = substr($feed, $data);
+
+    $X = strpos($feed, "X:");
+    $Y = strpos($feed, "Y:");
+    $br = strpos($feed, "<br");
+    $lng = substr($feed, $X+3, $Y-$X-4);
+    $lat = substr($feed, $Y+3, $br-$Y-3);
+
+    $latlong = $lat . "," . $lng;
+    return $latlong;
+}
+
+function getGeoCode($address)
+{
+    $request_url = "http://maps.googleapis.com/maps/api/geocode/xml?address=" . urlencode($address) . "&sensor=false";
+
+    // $request_url = "https://nominatim.openstreetmap.org/search?q=" . urlencode($address) . "&format=xml";
+
+    // this should work but not with openstreet
+    // $xml = simplexml_load_file($request_url) or die("url not loading");
+
+    // instead use curl
+    $ch = curl_init($request_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Identify the request User Agent as Chrome - any real browser, or perhaps any value may work
+    // depending on the resource you are trying to hit
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+//print($address);
+//die();
+    $feed = curl_exec($ch);
+    if ($feed === false) {
+        display_error("curl_exec failed");
+        return ",";
+    }
+
+    $xml = new SimpleXMLElement($feed);
+
+//display_notification($request_url);
+//display_notification(print_r($xml, true));
+
+    if (isset($xml->place)) {
+      // Successful geocode
+      $lat = $xml->place['lat'];
+      $lng = $xml->place['lon'];
+      return $lat . "," . $lng;
+    }
+
+    return ",";
+}
 function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
 {
     if (!empty($from)) {
@@ -106,8 +196,10 @@ function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
     return db_query($sql,"No transactions were returned");
 }
 
-function clientarray_string($branch, $stock_id, $tax_group_id)
+$centerLat = $centerLong = $centerCount = 0;
+function clientarray_string($branch, $stock_id, $tax_group_id, $customer_id)
 {
+    global $centerLat, $centerLong, $centerCount;
 	$clientArray="var clientArray = new Array();\n";
 
 	$count=0;
@@ -115,11 +207,11 @@ function clientarray_string($branch, $stock_id, $tax_group_id)
     if ($branch != "")
         $res = getBranchInfo($branch);
     else
-        $res = getTransactions(null, null, $tax_group_id, get_post('stock_id'));
+        $res = getTransactions(null, null, $tax_group_id, $customer_id, get_post('stock_id'));
 
     while ($cust=db_fetch($res)) {
 
-        $old_address = trim($cust["br_address"]);
+        $old_address = trim($cust["br_post_address"]);
         if ($old_address == "")
             continue;
         $address = preg_replace("/^[^0-9]*/", "", $old_address);
@@ -131,50 +223,54 @@ function clientarray_string($branch, $stock_id, $tax_group_id)
         $lastchar = substr($address, strlen($address)-1,1);
         if (!is_numeric($lastchar)) {
             // No zip code? Skipping address
+            display_notification($cust["cust_name"] . "missing zipcode for $address");
             continue;
         }
 
         // #suite numbers confuse openstreetmap/nominatim 
         $address = preg_replace("/#[0-9]*/", "", $address);
 
-        if ($cust["latlong"] == "" || $cust["latlong"] == ",") {
-            $request_url = "https://nominatim.openstreetmap.org/search?q=" . urlencode($address) . "&format=xml";
+        $latlong = '';
+        $row = getLatLong($address);
+        if ($row) {
+            $latlong = $row['latlong'];
+            // if you query the server more than once per day for the same bad address
+            // you risk your IP getting blacklisted
+            if ($latlong == ",") {
+                if ($row['lookup_date'] = date2sql(Today())) {
+                    if (!isset($_POST['noheader']))
+                        display_notification("Lookup failed once today:" . $cust["cust_name"] . " at " . $address);
+                    $latlong = $centerLat . "," . $centerLong;
+                }
+            }
+        }
 
-            // this should work but not with openstreet
-            // $xml = simplexml_load_file($request_url) or die("url not loading");
+        if ($latlong == '' || $latlong == ',') {
+            $latlong = getGeocode($address);
+            if ($latlong == ',')
+                $latlong = getCensusGeocode($address);
 
-            // instead use curl
-            $ch = curl_init($request_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if ($latlong != ',' || !$row) {
+                $sql = "INSERT ".TB_PREF."address_map (address, latlong, lookup_date) VALUES('" . $address . "','" . $latlong . "','" . date2sql(Today()) . "')";
+                db_query($sql,"No transactions were returned");
+            }
 
-            // Identify the request User Agent as Chrome - any real browser, or perhaps any value may work
-            // depending on the resource you are trying to hit
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+            if ($latlong == ',') {
+                $latlong = $centerLat . "," . $centerLong;
 
-            $feed = curl_exec($ch);
-            $xml = new SimpleXMLElement($feed);
+                if (!isset($_POST['noheader']))
+                    display_notification("bad geocode for " . $cust["cust_name"] . " at " . $address);
+            }
+        }
 
-    //display_notification($request_url);
-    //display_notification(print_r($xml, true));
+        $foo = explode(",", $latlong);
+        $lat = $foo[0];
+        $lng = $foo[1];
 
-            if (isset($xml->place)) {
-              // Successful geocode
-              $geocode_pending = false;
-              $lat = $xml->place['lat'];
-              $lng = $xml->place['lon'];
-
-              $sql = "INSERT ".TB_PREF."sales_map (branch_code, latlong) VALUES('" . $cust["branch_code"] . "','" . $lat . "," . $lng . "')";
-              db_query($sql,"No transactions were returned");
-           } else {
-            if (!isset($_POST['noheader']))
-                display_notification("bad geocode for " . $cust["cust_name"] . " at " . $address);
-            // syslog(LOG_NOTICE, "sales_map: bad geocode for " . $cust["cust_name"] . " at " . $address . ";" . $status);
-            continue;
-           }
-        } else {
-            $foo = explode(",", $cust["latlong"]);
-            $lat = $foo[0];
-            $lng = $foo[1];
+        if ($cust['debtor_no'] == $customer_id) {
+            $centerLat = $lat;
+            $centerLong = $lng;
+            $centerCount = $count;
         }
 
         $crm = get_customer_contacts($cust["debtor_no"]);
@@ -208,51 +304,48 @@ $result       = db_query($sql, "could not show tables");
 $found        = 0;
 $config_found = 0;
 while (($row = db_fetch_row($result))) {
-    if ($row[0] == $cur_prefix."sales_map") $found = 1;
-    if ($row[0] == $cur_prefix."sales_map_config") $config_found = 1;
+    if ($row[0] == $cur_prefix."address_map") $found = 1;
+    if ($row[0] == $cur_prefix."address_map_config") $config_found = 1;
 }
 
 if (!$found) {
-        $sql = "DROP TABLE IF EXISTS ".TB_PREF."sales_map";
+        $sql = "DROP TABLE IF EXISTS ".TB_PREF."address_map";
         db_query($sql, "Error dropping table");
-        $sql = "CREATE TABLE ".TB_PREF."sales_map (
-            `branch_code` int(11) NOT NULL,
+        $sql = "CREATE TABLE ".TB_PREF."address_map (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `address` varchar(255) NOT NULL,
             `latlong` varchar(32) NOT NULL default '',
-            PRIMARY KEY  (`branch_code`)) ENGINE=InnoDB";
+            `lookup_date` date NOT NULL default '0000-00-00',
+            UNIQUE(address),
+            PRIMARY KEY  (`id`)) ENGINE=InnoDB";
         db_query($sql, "Error creating table");
 }
 
 if ($config_found) {
     // Get Configuration variables
-    $sql     = "SELECT * FROM ".TB_PREF."sales_map_config WHERE name = 'tile_server'";
+    $sql     = "SELECT * FROM ".TB_PREF."address_map_config WHERE name = 'tile_server'";
     $result  = db_query($sql, "could not get tile server");
     $row     = db_fetch_row($result);
     if ($row)
         $tile_Server = $row[1];
 
-    $sql     = "SELECT * FROM ".TB_PREF."sales_map_config WHERE name = 'center_lat'";
-    $result  = db_query($sql, "could not get map center latitude");
-    $row     = db_fetch_row($result);
-    if ($row)
-        $center_Lat = $row[1];
-
-    $sql     = "SELECT * FROM ".TB_PREF."sales_map_config WHERE name = 'center_long'";
-    $result  = db_query($sql, "could not get map center longitude");
-    $row     = db_fetch_row($result);
-    if ($row)
-        $center_Long = $row[1];
-
-    $sql     = "SELECT * FROM ".TB_PREF."sales_map_config WHERE name = 'cat'";
+    $sql     = "SELECT * FROM ".TB_PREF."address_map_config WHERE name = 'cat'";
     $result  = db_query($sql, "could not get category");
     $row     = db_fetch_row($result);
     if ($row)
         $cat_ = $row[1];
 
-    $sql     = "SELECT * FROM ".TB_PREF."sales_map_config WHERE name = 'tax_group_id'";
+    $sql     = "SELECT * FROM ".TB_PREF."address_map_config WHERE name = 'tax_group_id'";
     $result  = db_query($sql, "could not get tax_group");
     $row     = db_fetch_row($result);
     if ($row)
         $tax_group_id_ = $row[1];
+
+    $sql     = "SELECT * FROM ".TB_PREF."address_map_config WHERE name = 'customer_id'";
+    $result  = db_query($sql, "could not get customer");
+    $row     = db_fetch_row($result);
+    if ($row)
+        $customer_id_ = $row[1];
 }
 
 // -----------------------------------------------------------------
@@ -260,9 +353,9 @@ if ($config_found) {
 
     // Create Table
     if (get_post('action') == 'create') {
-        $sql = "DROP TABLE IF EXISTS ".TB_PREF."sales_map_config";
+        $sql = "DROP TABLE IF EXISTS ".TB_PREF."address_map_config";
         db_query($sql, "Error dropping table");
-        $sql = "CREATE TABLE ".TB_PREF."sales_map_config ( `name` char(15) NOT NULL default '', " .
+        $sql = "CREATE TABLE ".TB_PREF."address_map_config ( `name` char(15) NOT NULL default '', " .
                " `value` varchar(256) NOT NULL default '', PRIMARY KEY  (`name`)) ENGINE=InnoDB";
         db_query($sql, "Error creating table");
         header("Location: sales_map.php?action=show");
@@ -270,36 +363,30 @@ if ($config_found) {
 
     if (get_post('action') == 'update') {
 
-            $centerLat = get_post('centerLat');
-            $centerLong = get_post('centerLong');
+            $customer_id = get_post('customer_id');
             $tileServer = get_post('tileServer');
             $cat = get_post('category');
             $tax_group_id = get_post('tax_group_id');
 
-            if ($centerLat == "") $sql = "DELETE FROM ".TB_PREF."sales_map_config WHERE name = 'center_lat'";
-            else if (!isset($center_Lat)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('center_lat', ".db_escape($centerLat).")";
-            else $sql = "UPDATE  ".TB_PREF."sales_map_config SET value = ".db_escape($centerLat)." WHERE name = 'center_lat'";
-            db_query($sql, "Update 'center_lat'");
-
-            if ($centerLong == '') $sql = "DELETE FROM ".TB_PREF."sales_map_config WHERE name = 'center_long'";
-            else if (!isset($center_Long)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('center_long', ".db_escape($centerLong).")";
-            else $sql = "UPDATE  ".TB_PREF."sales_map_config SET value = ".db_escape($centerLong)." WHERE name = 'center_long'";
-            db_query($sql, "Update 'center_long'");
-
-            if ($tileServer == '') $sql = "DELETE FROM ".TB_PREF."sales_map_config WHERE name = 'tile_server'";
-            else if (!isset($tile_Server)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('tile_server', ".db_escape($tileServer).")";
-            else $sql = "UPDATE  ".TB_PREF."sales_map_config SET value = ".db_escape($tileServer)." WHERE name = 'tile_server'";
+            if ($tileServer == '') $sql = "DELETE FROM ".TB_PREF."address_map_config WHERE name = 'tile_server'";
+            else if (!isset($tile_Server)) $sql = "INSERT INTO ".TB_PREF."address_map_config (name, value) VALUES ('tile_server', ".db_escape($tileServer).")";
+            else $sql = "UPDATE  ".TB_PREF."address_map_config SET value = ".db_escape($tileServer)." WHERE name = 'tile_server'";
             db_query($sql, "Update 'tile_server'");
 
-            if ($cat == '') $sql = "DELETE FROM ".TB_PREF."sales_map_config WHERE name = 'cat'";
-            else if (!isset($cat_)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('cat', ".db_escape($cat).")";
-            else $sql = "UPDATE  ".TB_PREF."sales_map_config SET value = ".db_escape($cat)." WHERE name = 'cat'";
+            if ($cat == '') $sql = "DELETE FROM ".TB_PREF."address_map_config WHERE name = 'cat'";
+            else if (!isset($cat_)) $sql = "INSERT INTO ".TB_PREF."address_map_config (name, value) VALUES ('cat', ".db_escape($cat).")";
+            else $sql = "UPDATE  ".TB_PREF."address_map_config SET value = ".db_escape($cat)." WHERE name = 'cat'";
             db_query($sql, "Update 'cat'");
 
-            if ($tax_group_id == '') $sql = "DELETE FROM ".TB_PREF."sales_map_config WHERE name = 'tax_group_id'";
-            else if (!isset($tax_group_id_)) $sql = "INSERT INTO ".TB_PREF."sales_map_config (name, value) VALUES ('tax_group_id', ".db_escape($tax_group_id).")";
-            else $sql = "UPDATE  ".TB_PREF."sales_map_config SET value = ".db_escape($tax_group_id)." WHERE name = 'tax_group_id'";
+            if ($tax_group_id == '') $sql = "DELETE FROM ".TB_PREF."address_map_config WHERE name = 'tax_group_id'";
+            else if (!isset($tax_group_id_)) $sql = "INSERT INTO ".TB_PREF."address_map_config (name, value) VALUES ('tax_group_id', ".db_escape($tax_group_id).")";
+            else $sql = "UPDATE  ".TB_PREF."address_map_config SET value = ".db_escape($tax_group_id)." WHERE name = 'tax_group_id'";
             db_query($sql, "Update 'tax_group_id'");
+
+            if ($customer_id == '') $sql = "DELETE FROM ".TB_PREF."address_map_config WHERE name = 'customer_id'";
+            else if (!isset($customer_id_)) $sql = "INSERT INTO ".TB_PREF."address_map_config (name, value) VALUES ('customer_id', ".db_escape($customer_id).")";
+            else $sql = "UPDATE  ".TB_PREF."address_map_config SET value = ".db_escape($customer_id)." WHERE name = 'customer_id'";
+            db_query($sql, "Update 'customer_id'");
 
     } else {
 
@@ -310,14 +397,7 @@ if ($config_found) {
             $tileServer = $tile_Server;
         else
             $tileServer = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-        if (isset($center_Lat))
-            $centerLat = $center_Lat;
-        else
-            $centerLat = 39.066667;
-        if (isset($center_Long))
-            $centerLong = $center_Long;
-        else
-            $centerLong = -108.566667;
+
         if (isset($cat_))
             $cat = $cat_;
         else
@@ -326,6 +406,10 @@ if ($config_found) {
             $tax_group_id = $tax_group_id_;
         else
             $tax_group_id = "";
+        if (isset($customer_id_))
+            $customer_id = $customer_id_;
+        else
+            $customer_id = "";
     }
 
 // ----------------------------------------------------------------
@@ -339,16 +423,56 @@ if (get_post('debtor_no')) {
     exit();
 }
 
-$js = "";
+// ----------------------------------------------------------------
+
+if (get_post('action') == 'show') {
+    page(_($help_context = "Sales Map"), get_post('noheader'), false, "", "");
+    start_form(true);
+    start_table(TABLESTYLE);
+
+    $th = array("Function", "Description");
+    table_header($th);
+
+    $k = 0;
+
+    alt_table_row_color($k);
+
+    label_cell("Table Status");
+    if ($config_found) $table_st = "Found";
+    else $table_st = "<font color=red>Not Found</font>";
+    label_cell($table_st);
+    end_row();
+
+    if ($config_found) {
+        text_row("Tile Server<br>(See usage policy)", 'tileServer', $tileServer, 40, 100);
+        customer_list_row("Map Center Customer", 'customer_id', $customer_id);
+        stock_categories_list_row("Item Category", 'category', $cat, "All Categories");
+        tax_groups_list_row("Tax Group", 'tax_group_id', $tax_group_id);
+    }
+
+    end_table(1);
+
+    if (!$config_found) {
+        hidden('action', 'create');
+        submit_center('create', 'Create Table');
+    } else {
+        hidden('action', 'update');
+        submit_center('update', 'Update Mysql');
+    }
+
+    end_form();
+
+    end_page();
+    exit();
+}
 
 define ('SCRIPT', '
-' . clientarray_string(get_post('branch'), get_post('stock_id'), $tax_group_id) . '
+' . clientarray_string(get_post('branch'), get_post('stock_id'), $tax_group_id, $customer_id) . '
   var side_bar_html = "<DIV id=\'title\'></DIV>";
 
 function map_init()
 {
-    var map = L.map("map_canvas").setView([' . "$centerLat, $centerLong" . '], 13);
-
+    var map = L.map("map_canvas").setView([' . $centerLat . ',' . $centerLong . '], 13);
     L.tileLayer("' . $tileServer . '", {
         attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"
     }).addTo(map);
@@ -358,6 +482,8 @@ function map_init()
 
 	//side bar html into side bar div
 	document.getElementById("side_bar").innerHTML = side_bar_html;
+
+    clickList('. $centerCount . ');
 }
 
 function popup(mylink, windowname)
@@ -392,14 +518,17 @@ function formatXml(xml, tab)
 
 var markers = [];
 var names = [];
+var addresses = [];
 var drawnItems = new L.FeatureGroup();
 
 function getkml()
 {
     var json = drawnItems.toGeoJSON();
 
-    for (i=0; i < names.length; i++)
+    for (i=0; i < names.length; i++) {
         json.features[i].properties.name=decodeHtml(names[i]);
+        json.features[i].properties.address=decodeHtml(addresses[i]);
+    }
     var kml = tokml(json);
     return formatXml(kml, "    ");
 }
@@ -442,6 +571,7 @@ function codeAddress(map, i) {
     drawnItems.addLayer(marker);
 
     names[i] = clientArray[i][0];
+    addresses[i] = clientArray[i][1];
     markers[i] = marker;    // store for list click
 }
 
@@ -456,6 +586,7 @@ Behaviour.addLoadEvent(map_init);
 
 ');
 
+$js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
@@ -465,52 +596,7 @@ $js .= file_get_contents("https://raw.githubusercontent.com/mapbox/tokml/master/
 $js .= get_js_history(array('debtor_no', 'stock_id'));
 $js .= SCRIPT;
 
-
 page(_($help_context = "Sales Map"), get_post('noheader'), false, "", $js);
-
-
-// ----------------------------------------------------------------
-
-if (get_post('action') == 'show') {
-    start_form(true);
-    start_table(TABLESTYLE);
-
-    $th = array("Function", "Description");
-    table_header($th);
-
-    $k = 0;
-
-    alt_table_row_color($k);
-
-    label_cell("Table Status");
-    if ($config_found) $table_st = "Found";
-    else $table_st = "<font color=red>Not Found</font>";
-    label_cell($table_st);
-    end_row();
-
-    if ($config_found) {
-        text_row("Tile Server<br>(See usage policy)", 'tileServer', $tileServer, 40, 100);
-        text_row("Map Center Latitude", 'centerLat', $centerLat, 20, 40);
-        text_row("Map Center Longitude", 'centerLong', $centerLong, 20, 40);
-        stock_categories_list_row("Item Category", 'category', $cat, "All Categories");
-        tax_groups_list_row("Tax Group", 'tax_group_id', $tax_group_id);
-    }
-
-    end_table(1);
-
-    if (!$config_found) {
-        hidden('action', 'create');
-        submit_center('create', 'Create Table');
-    } else {
-        hidden('action', 'update');
-        submit_center('update', 'Update Mysql');
-    }
-
-    end_form();
-
-    end_page();
-    exit();
-}
 
 
 start_form();

@@ -18,10 +18,11 @@ $csv[0] = array_slice($csv[0], 0, 7);
     foreach ($csv as $value) {
         $value['total'] = 0;
         $location = $value['Location'] = trim($value['Location']);
-        if ($location == "UNINCORPORATED NO PHYSICAL LOCATION")
+// Note: The ColoradoJurisdictionCodesRates.csv has entries for UNINCORPORATED PHYSICAL LOCATION
+// but these are not used.  For example, the wwhsitenumbers.csv file has entries like
+// 470206,AURORA-DOUGLAS (0206),15144190004,Multi Loc (Non-Physical) but not for 470207
+        if ($location == "UNINCORPORATED")
             $value['Location'] = $location = strtoupper(trim($value['County']) . " COUNTY");
-        else if ($location == "UNINCORPORATED")
-            $value['Location'] = $location = strtoupper("UNINCORPORATED " . trim($value['County']) . " COUNTY");
         for ($i=0; $value[$i] != null; $i +=3) {
             if (strpos($value[$i], 'food') === false
                 && $value[$i] != 'LID')  // Local improvement district, probably small area
@@ -34,8 +35,8 @@ $csv[0] = array_slice($csv[0], 0, 7);
             || $tax_rates[$location]['total'] < $value['total'])
             $tax_rates[$location] = $value;
     }
-    $tax_rates['GRAND JUNCTION'] = $tax_rates['UNINCORPORATED MESA COUNTY'];
-    $tax_rates['ENGLEWOOD'] = $tax_rates['UNINCORPORATED DOUGLAS COUNTY'];
+    $tax_rates['GRAND JUNCTION'] = $tax_rates['MESA COUNTY'];
+    $tax_rates['ENGLEWOOD'] = $tax_rates['DOUGLAS COUNTY'];
 }
 
     function get_tax_rates($tax_group_name, $address)

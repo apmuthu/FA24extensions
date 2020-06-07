@@ -49,20 +49,20 @@ function getLiters($from, $to)
     $sql = "SELECT
         SUM(IF(
             sm.type=".ST_INVADJUST.",
-                sm.qty*IF(LOCATE('wt:2.0', item.long_description) != 0,.375,.75),
+                sm.qty*IF(LOCATE('wt&gt;2.0', item.long_description) != 0,.375,.75),
             0)) AS adj_liters,
         SUM(IF(
-            sm.type=".ST_WORKORDER.",
-                sm.qty*IF(LOCATE('wt:2.0', item.long_description) != 0,.375,.75),
+            sm.type=".ST_WORKORDER." OR sm.type=".ST_MANURECEIVE.",
+                sm.qty*IF(item.units = '375ml',.375,.75),
             0)) AS mfg_liters,
         SUM(IF(
-            sm.type!=".ST_WORKORDER." AND sm.type!=".ST_INVADJUST.",
-                sm.qty*IF(LOCATE('wt:2.0', item.long_description) != 0,.375,.75),
+            sm.type!=".ST_WORKORDER." AND sm.type!=".ST_INVADJUST." AND sm.type !=".ST_MANURECEIVE.",
+                sm.qty*IF(item.units = '375ml',.375,.75),
             0)) AS liters
         FROM ".TB_PREF."stock_moves sm
             LEFT JOIN ".TB_PREF."stock_master item ON sm.stock_id=item.stock_id
             WHERE tran_date BETWEEN '$fromdate' AND '$todate'
-                AND item.category_id=36";
+                AND (item.units='375ml' OR item.units='750ml')";
 //display_notification($sql);
 
     return db_query($sql,"No transactions were returned");
@@ -74,10 +74,10 @@ function getInvLiters($d, $include=false)
     $d = date2sql($d);
 
     $sql = "SELECT
-        SUM(sm.qty*IF(LOCATE('wt:2.0', item.long_description) != 0,.375,.75)) AS liters
+        SUM(sm.qty*IF(item.units='375ml',.375,.75)) AS liters
         FROM ".TB_PREF."stock_moves sm
             LEFT JOIN ".TB_PREF."stock_master item ON sm.stock_id=item.stock_id
-                WHERE item.category_id=36";
+                WHERE item.units='375ml' OR item.units='750ml'";
     if ($include)
         $sql .= " AND tran_date <= '$d'";
     else
@@ -94,13 +94,13 @@ function getExportLiters($from, $to)
     $todate = date2sql($to);
 
     $sql = "SELECT
-        SUM(sm.qty*IF(LOCATE('wt:2.0', item.long_description) != 0,.375,.75)) AS liters
+        SUM(sm.qty*IF(item.units='375ml',.375,.75)) AS liters
         FROM ".TB_PREF."stock_moves sm
             LEFT JOIN ".TB_PREF."stock_master item ON sm.stock_id=item.stock_id
             LEFT JOIN ".TB_PREF."debtor_trans t ON t.trans_no=sm.trans_no AND t.type=sm.type
             LEFT JOIN ".TB_PREF."cust_branch cb ON cb.debtor_no=t.debtor_no AND cb.branch_code=t.branch_code
             WHERE sm.tran_date BETWEEN '$fromdate' AND '$todate'
-                AND item.category_id=36
+                AND (item.units='375ml' OR item.units='750ml')
                 AND tax_group_id IN ('8','3')";
 
 //display_notification($sql);
@@ -118,8 +118,8 @@ function getExportSales($from, $to)
         cb.*,
         SUBSTRING_INDEX(SUBSTRING_INDEX(so.delivery_address,', ',-1),' ', 1) as state,
         so.customer_ref as invoice_number,
-        SUBSTRING_INDEX(so.delivery_address,'\n', 1) as deliver_to,
-        SUM(sm.qty*IF(LOCATE('wt:2.0', item.long_description) != 0,.375,.75)) AS liters
+        deliver_to,
+        SUM(sm.qty*IF(item.units='375ml',.375,.75)) AS liters
         FROM ".TB_PREF."stock_moves sm
             LEFT JOIN ".TB_PREF."stock_master item ON sm.stock_id=item.stock_id
             LEFT JOIN ".TB_PREF."debtor_trans t ON t.trans_no=sm.trans_no AND t.type=sm.type
@@ -127,7 +127,7 @@ function getExportSales($from, $to)
             LEFT JOIN ".TB_PREF."cust_branch cb ON cb.debtor_no=t.debtor_no AND cb.branch_code=t.branch_code
             LEFT JOIN ".TB_PREF."tax_groups tg ON cb.tax_group_id=tg.id
             WHERE sm.tran_date BETWEEN '$fromdate' AND '$todate'
-                AND item.category_id=36
+                AND (item.units='375ml' OR item.units='750ml')
                 AND cb.tax_group_id IN ('8','3')
             GROUP BY t.order_
             ORDER BY cb.tax_group_id, state";
@@ -147,7 +147,8 @@ function print_dr0442()
     // Get the payment
     $period = $_POST['PARAM_0'];
     $beg_inv = $_POST['PARAM_1'];
-    $grape_tons = $_POST['PARAM_2'];
+    $mfg = $_POST['PARAM_2'];
+    $grape_tons = $_POST['PARAM_3'];
     if ($grape_tons == '')
         $grape_tons = 0;
 
@@ -188,6 +189,9 @@ if ($beg_inv == '') {
     $inv = db_fetch(getInvLiters($from_date));
     $beg_inv = $inv['liters'];
 }
+
+if ($mfg != '')
+    $sm['mfg_liters'] = $mfg;
 
 $end_inv = db_fetch(getInvLiters($to_date, true));
 $actual_totalliters = $beg_inv - $end_inv['liters'] + $sm['mfg_liters'];
@@ -240,7 +244,8 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
 	array('x' => 4, 'y' => 7.7, 'text' => 'GRAND JUNCTION'),
 	array('x' => 6.8, 'y' => 7.7, 'text' => 'CO 81503-9642'),
 	array('x' => 1, 'y' => 7.35, 'text' => ACCOUNT_NUMBER),
-	array('x' => 4.7, 'y' => 7.35, 'text' => substr($period, 5, 2) . "/" . substr($period, 0, 4)),
+	array('x' => 4.7, 'y' => 7.35, 'text' => substr($period, 5, 2) . "/" . substr($period, 2, 2)),
+	array('x' => 5.5, 'y' => 7.35, 'text' => substr($period, 5, 2) . "/" . substr($period, 2, 2)),
 	array('x' => 7, 'y' => 7.35, 'text' => $duedate),
 	array('x' => 4, 'y' => 7.0, 'text' => FEIN),
 	array('x' => 3.4, 'y' => 5.9, 'text' => $beg_inv), // beginning inventory

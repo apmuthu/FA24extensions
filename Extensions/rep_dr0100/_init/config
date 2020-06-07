@@ -1,6 +1,6 @@
 Package: rep_dr0100
-Description: Colorado DR0100 Tax Report
-Name: Colorado DR0100 Tax Report
+Description: Colorado DR0100/DR0098 Tax Report
+Name: Colorado DR0100/DR0098 Tax Report
 Filename: rep_dr0100
 Author: Joe Hunt <joe.hunt.consulting@gmail.com>
 Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com>

@@ -20,6 +20,7 @@ include_once($path_to_root . "/includes/ui.inc");
 // The second field is the number of header lines that should be ignored
 // The third field is the array of columns
 $items = array();
+$items[] =  array("Bank Of Colorado", 1, array( "account", "checkno", "debit", "credit", "balance", "date", "comment" ));
 $items[] =  array("Wells", 0, array( "date", "amount", "", "checkno", "comment" ));
 $items[] =  array("United", 1, array( "card", "date", "postdate", "comment", "category", "type", "amount", "memo"));
 $items[] =  array("Vanguard", 5, array( "", "date", "postdate", "ttype", "comment", "investment", "shareprice", "shares", "gross", "amount"));
@@ -388,6 +389,13 @@ if (isset($_POST['import'])) {
                         $toacct = "";
                 } else
                     $toacct = "";
+
+                if (!isset($amount)) {
+                    if (!empty($debit))
+                        $amount = -$debit;
+                    else
+                        $amount = $credit;
+                }
 
                 $early = true;
                 $result = get_bank_transaction($_POST['reconcile_date'], $toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);

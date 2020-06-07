@@ -201,6 +201,16 @@ function get_sales_point_by_name($name)
         return db_fetch($result);
 }
 
+function get_shipper_by_name($name)
+{
+    $sql = "SELECT * FROM ".TB_PREF."shippers
+            WHERE shipper_name=".db_escape($name);
+
+    $result = db_query($sql, "could not get shipper");
+    return db_fetch($result);
+}
+
+
 function addImageToFA($stock_id, $oscwebsite, $name)
 {
     if (!is_null($oscwebsite)) {
@@ -376,6 +386,36 @@ function get_FA_payment_terms($cart)
                 return $row['terms_indicator'];
     }
     return null;
+}
+
+
+// calculate osc subtotal of discountable items excluding discounts
+function calc_subtotal($oID)
+{
+    global $osc_Id;
+
+    $default_sales_act = get_company_pref('default_sales_act');
+    $sql                     = "SELECT op.*, p.products_quantity as inv FROM orders_products op LEFT JOIN products p ON op.products_id = p.products_id WHERE orders_id = ".osc_escape($oID);
+    $result                  = osc_dbQuery($sql, true);
+    $rows                    = db_num_rows($result);
+    $total                   = 0;
+
+    while ($prod = mysqli_fetch_assoc($result)) {
+        $osc_id = get_osc_id($prod[$osc_Id], $prod['inv']);
+        $sql    = "SELECT stock_id, sales_account FROM ".TB_PREF."stock_master WHERE stock_id=".db_escape($osc_id);
+        $item = db_query($sql, "could not get item");
+        $row  = db_fetch_row($item);
+        if (!$row) {
+
+            display_error("osC order " . $oID . " item " . $osc_id . " not in FA.  Do an Item Import first.");
+            break;  // total check below will fail
+        }
+
+        // display_notification($oID . ":" . $osc_id . ":" . $prod['final_price'] . ":" . $row[1]);
+        if ($default_sales_act == $row[1])
+            $total += $prod['final_price'] * $prod['products_quantity'];
+    }
+    return $total;
 }
 
 
@@ -742,28 +782,26 @@ if (isset($_POST['action'])) {
                 $total_total = 0;
                 $total_tax = 0;
                 $total_discount = 0;
-                $total_subtotal = 0;
                 $found_subtotal = false;
+                $ship_via = '';
                 $total_result = osc_dbQuery($sql, true);
                 while ($total = mysqli_fetch_assoc($total_result)) {
                     switch ($total['class']) {
                         case 'ot_shipping' :
                             $total_shipping = $total['value'];
+                            $ship_via = $total['title'];
+                            $ship_via = substr($ship_via, 0, strpos($ship_via, ' '));
                             break;
                         case 'ot_total' :
                             $total_total = round($total['value'],2);
                             break;
                         case 'ot_subtotal' :
-                            $total_subtotal += $total['value'];
-                            $found_subtotal = true;
                             break;
                         case 'ot_tax' :
                             $total_tax = $total['value'];
                             break;
                         case 'ot_discount' :
                         default:
-                            if ($found_subtotal == false)
-                                $total_subtotal -= $total['value'];
                             $total_discount -= $total['value'];
                             break;
                     }
@@ -773,7 +811,9 @@ if (isset($_POST['action'])) {
                 $sql      = "SELECT comments FROM orders_status_history WHERE orders_id = ".osc_escape($oID);
                 $result   = osc_dbQuery($sql, true);
 
-                $comments = "";
+                // FA dates do not have order time, so add order time to $comments
+                list($date, $comments) = explode(' ', $date_purchased);
+                $comments .= " ";
                 while ($row = mysqli_fetch_assoc($result)) {
                     if (not_null($row['comments'])) $comments .= $row['comments'] . "\n";
                 }
@@ -872,7 +912,14 @@ if (isset($_POST['action'])) {
                     $branch["branch_code"],
                     $branch["tax_group_id"],
                     $addr);
-                $cart->set_delivery($branch['default_ship_via'], $customers_name, $addr, $total_shipping);
+
+                if ($ship_via == '')
+                    $ship_via = $branch['default_ship_via'];
+                else {
+                    $shipper = get_shipper_by_name($ship_via);
+                    $ship_via = $shipper['shipper_id'];
+                }
+                $cart->set_delivery($ship_via, $order['delivery_name'], $addr, $total_shipping);
 
                 $cart->cust_ref          = "osC Order # $oID";
                 $cart->Comments          = $comments;
@@ -893,9 +940,13 @@ if (isset($_POST['action'])) {
                 $cart->dimension2_id     = $customer['dimension2_id'];
                 $cart->payment_info      = $order['cc_owner'] . ' ' . $order['cc_number'];
 
+                // get subtotal of discountable items before discounts
+                $total_subtotal = calc_subtotal($oID);
+
                 // calculate the FA line item discount based on order discount
                 $disc_percent = 0;
                 if ($total_discount != 0) {
+
 
             // total_subtotal can be zero if the order does
             // not contain any positive quantities and there is
@@ -942,14 +993,20 @@ if (isset($_POST['action'])) {
             // is an order of those stock ids in FA, rather than the
             // parent product.
 
-            // If a product with attributes is ordered, the import code
-            // assigns the product line price to the first attribute.
-
             // Note: This code supports one OSC attribute per item.
             // The FA stock id format is :<parent>-<attr>.
             // To support more than one OSC attribute, the FA
             // stock id could be <parent>-<attr>-<attr> ...
-            // For example, a shirt with a size and a color option.
+            // For example, a shirt with a size AND a color option.
+
+            // OSC could have "Polo Shirt" priced at $20 and size options at $0.
+            // Or it could have "Polo Shirt" priced at $0 and size options priced at varying
+            // prices.  When OSC creates an order, it adds the option price to the shirt price
+            // and puts it into the orders_product product_price.
+
+            // If a product with attributes is ordered, the import code
+            // assigns the product line price to the stock id for the first attribute.
+
 
                     $sql = "select pa.products_attributes_id, opa.options_values_price FROM orders_products_attributes opa LEFT JOIN products_options po on opa.products_options = po.products_options_name LEFT JOIN products_options_values pov ON opa.products_options_values=pov.products_options_values_name LEFT JOIN orders_products op on op.orders_products_id=opa.orders_products_id LEFT JOIN products_attributes pa on op.products_id=pa.products_id AND po.products_options_id=pa.options_id AND pov.products_options_values_id=pa.options_values_id WHERE pa.products_id=".osc_escape($prod[$osc_Id])." AND opa.orders_products_id=".osc_escape($prod['orders_products_id']);
 
@@ -957,7 +1014,7 @@ if (isset($_POST['action'])) {
                     if (db_num_rows($pa_result) == 0) {
 
             // Only items on the OSC order that are sales items are discounted and included in OSC subtotal
-            // (Partial payment: Move Balance To Order is not discounted)
+            // ('Partial payment: Move Balance To Order' and Tips are not discounted)
 
                         if ($default_sales_act == $row[1]) {
                             add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $disc_percent);
@@ -978,14 +1035,16 @@ if (isset($_POST['action'])) {
                             }
 
             // Only items on the OSC order that are sales items are discounted and included in OSC subtotal
-            // (Partial payment: Move Balance To Order is not discounted)
+            // ('Partial payment: Move Balance To Order' and Tips are not discounted)
 
-                            if ($default_sales_act == $row[1]) {
+                            if ($default_sales_act == $row['sales_account']) {
                                 $total += round($prod['products_quantity'] * $price * (1 -$disc_percent),2);
                                 add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, $disc_percent);
-                            } else
+                            } else {
+display_notification($pa_osc_id . " " .  $prod['products_quantity'] . " " . $price);
                                 add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, 0);
-                            $price = 0;
+                            }
+                            $price = 0; // product price is assigned to first option
                         }
                         mysqli_free_result($pa_result);
                     }
@@ -1190,7 +1249,7 @@ display_notification($sql);
             $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('oscwebsite', ".db_escape($oscwebsite).") ON DUPLICATE KEY UPDATE name='oscwebsite', value=".db_escape($oscwebsite);
             db_query($sql, "Update 'oscwebsite'");
 
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, CONCAT(pd.products_description, ' (wt:', p.products_weight, ')') AS description, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode, p.products_image FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, CONCAT(pd.products_description, '\n<wt>', p.products_weight, '</wt>', '\n<alc>', p.products_percent_alcohol, '</alc>') AS description, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode, p.products_image FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
 
             $p_result = osc_dbQuery($sql, true);
             while ($pp = mysqli_fetch_assoc($p_result)) {
