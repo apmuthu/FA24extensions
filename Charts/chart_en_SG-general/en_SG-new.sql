@@ -1545,6 +1545,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('legal_text', 'glsetup.customer', 'tinytext', '0', ''),
 ('loc_notification', 'glsetup.inventory', 'tinyint', '1', '0'),
 ('login_tout', 'setup.company', 'smallint', '6', '600'),
+,('long_description_invoice', 'setup.company', 'tinyint', '1', '0')
 ('no_customer_list', 'setup.company', 'tinyint', '1', '0'),
 ('no_item_list', 'setup.company', 'tinyint', '1', '0'),
 ('no_supplier_list', 'setup.company', 'tinyint', '1', '0'),
