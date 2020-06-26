@@ -216,9 +216,11 @@ function addImageToFA($stock_id, $oscwebsite, $name)
     if (!is_null($oscwebsite)) {
         $filename = company_path().'/images';
         $filename .= "/".item_img_name($stock_id).".jpg";
-        $file_buf = @file_get_contents($oscwebsite . "/catalog/images/" . $name);
-        if ($file_buf !== false)
-            imagejpeg( imagecreatefromstring( $file_buf), $filename );
+        if (!file_exists($filename)) {
+            $file_buf = @file_get_contents($oscwebsite . "/catalog/images/" . $name);
+            if ($file_buf !== false)
+                imagejpeg( imagecreatefromstring( $file_buf), $filename );
+        }
     }
 }
 
@@ -1036,8 +1038,9 @@ if (isset($_POST['action'])) {
 
             // Only items on the OSC order that are sales items are discounted and included in OSC subtotal
             // ('Partial payment: Move Balance To Order' and Tips are not discounted)
+display_notification(print_r($row, true));
 
-                            if ($default_sales_act == $row['sales_account']) {
+                            if ($default_sales_act == $row[1]) {
                                 $total += round($prod['products_quantity'] * $price * (1 -$disc_percent),2);
                                 add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, $disc_percent);
                             } else {

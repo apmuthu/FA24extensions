@@ -23,9 +23,9 @@ include_once($path_to_root . "/includes/session.inc");
 include_once($path_to_root . "/includes/date_functions.inc");
 include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/modules/tax_rate/get_tax_rate.inc");
+include_once($path_to_root . "/modules/rep_dr0100/reporting/testcases.inc");
 
 define("FEIN", '84-1457020');
-define("CUSTOMER_GROUP_CHARITY", 'Government, Religious Or Charity');
 define("TAX_GROUP_EXEMPT_WHOLESALE",'2');
 define("TAX_GROUP_THORNTON",'4');
 define("TAX_GROUP_COLORADO",'5'); // non-physical locations
@@ -33,7 +33,6 @@ define("TAX_GROUP_DOUGLAS_COUNTY",'7');
 define("TAX_GROUP_EXEMPT_OOS",'8');
 define("TAX_GROUP_EXEMPT_CHARITY",'10');
 define("TAX_GROUP_EXEMPT_WINEMAKERS",'11');
-define("TAX_GROUP_EXEMPT_USE",'11');
 
 //----------------------------------------------------------------------------------------------------
 
@@ -43,7 +42,7 @@ read_sites();
 $eventids=array();
 read_eventids();
 
-print_dr0100();
+company_dr0100($testcases);
 
 // sites are just extra useless data the DOR wants
 // https://www.colorado.gov/pacific/tax/sales-and-use-tax-rates-lookup
@@ -100,7 +99,19 @@ function read_eventids()
 }
 
 
-// Note: food includes grape sales, import adjustments, credit card testing
+// Note: food includes import adjustments, credit card testing
+// Food include grape sales to home winemakers, but not to wineries,
+// because wineries are WINEMAKERS.
+
+// Note that Nancy does not want wholesale bottle sales to include bulk wine or grape sales,
+// so the tax group of these customers is WINEMAKERS instead.  If a winery is
+// erroneously set to WHOLESALE, and gets bulk wine, it will show up as food!
+
+// However, the DOR wholesale includes bluk wine and grapes sales to wineries
+
+// net is our actual sales from Grand Junction Tasting Room, incl. food
+// (gross according to DOR is net + wholesale + charity + oota, etc,
+//  but that all gets subtracted off)
 function GetPhysicalSales($from, $to)
 {
     $fromdate = date2sql($from);
@@ -110,39 +121,36 @@ function GetPhysicalSales($from, $to)
             'Physical Location' as description,
 
             ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
+                    .TAX_GROUP_EXEMPT_OOS.","
+                    .TAX_GROUP_EXEMPT_CHARITY.","
+                    .TAX_GROUP_EXEMPT_WHOLESALE.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.")
+                AND a.description = 'Grand Junction'
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS net,
 
-            SUM(CASE WHEN cb.tax_group_id=".TAX_GROUP_EXEMPT_WHOLESALE."
-                THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
-                ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END) AS tax_exempt,
-
-            ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
+            SUM(CASE WHEN cb.tax_group_id IN ("
                     .TAX_GROUP_EXEMPT_WHOLESALE.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.")
-                AND a.description != 'Grand Junction'
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
-                ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS oota,
+                ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END) AS WholesaleSales,
 
             ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
                     .TAX_GROUP_EXEMPT_WHOLESALE.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.","
                     .TAX_GROUP_COLORADO.")
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
-                ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS ootac,
+                ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS OutsideOfColorado,
 
             ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
                     .TAX_GROUP_EXEMPT_OOS.","
-                    .TAX_GROUP_EXEMPT_USE.","
                     .TAX_GROUP_EXEMPT_CHARITY.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.","
                     .TAX_GROUP_EXEMPT_WHOLESALE.")
-                 AND ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS food,
+                 AND ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS Food,
 
             ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
                     .TAX_GROUP_EXEMPT_OOS.","
-                    .TAX_GROUP_EXEMPT_USE.","
                     .TAX_GROUP_EXEMPT_CHARITY.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.","
                     .TAX_GROUP_EXEMPT_WHOLESALE.")
@@ -180,9 +188,8 @@ function GetNonPhysicalSales($period, $from, $to)
             SUM(CASE WHEN dt.type=".ST_CUSTCREDIT."
                 THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) AS net,
-            0 AS tax_exempt, 0 AS oota, 0 as ootac,
 
-            ROUND(SUM(CASE WHEN ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS food,
+            ROUND(SUM(CASE WHEN ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS Food,
 
             ROUND(SUM(CASE WHEN ttd.tax_type_id=2 THEN ttd.net_amount ELSE 0 END),2) AS candy
 
@@ -203,150 +210,306 @@ function GetNonPhysicalSales($period, $from, $to)
                 'Out-of-state')
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_CHARITY."'
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WHOLESALE."'
-            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_USE."'
+            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WINEMAKERS."'
         GROUP BY location, a.description";
 
 //display_notification($sql);
     return db_query($sql, "Error getting order details");
 }
 
-//----------------------------------------------------------------------------------------------------
-
-function print_dr0100()
+function xml_deduct($d, $amt)
 {
-    global $path_to_root, $sites, $eventids;
-
-    // Get the payment
-    $period = $_POST['PARAM_0'];
-    $dr0098 = $_POST['PARAM_1'];
-    $from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
-    $to_date = substr($from_date,0,3) . "31" . substr($from_date,5);
-    $dec = user_price_dec();
-
-    include_once($path_to_root . "/reporting/includes/pdf_report.inc");
-
-    $rep = new FrontReport(_('DR0100 Summary Report'), "DR0100SummaryReport", user_pagesize(), 9, 'P');
-
-    $params =   array(0 => '', 
-                      1 => array('text' => _('Period'), 'from' => $from_date, 'to' => $to_date));
-
-    $cols = array(0, 80, 250, 330, 430, 530);
-
-    $headers = array(_('Area'), _('Location'), _('Account No.'), _('Self-Collected'), _('State-Collected'));
-    $aligns = array('left', 'left', 'left', 'right', 'right');
-
-    $rep->Font();
-    $rep->Info($params, $cols, $headers, $aligns);
-    $rep->NewPage();
-
-$formfile= $path_to_root . '/tmp/newform.ps';
-$handle = fopen($formfile, 'w');
-if ($handle) {
-
-$nonphys = GetNonPhysicalSales($period, $from_date, $to_date);
-
-$first=0;
-$total=0;
-
-while (1) {
-    if ($first == 0) {
-        $sales = db_fetch(GetPhysicalSales($from_date, $to_date));
-        $first = 1;
-        $address = get_company_pref('postal_address');
-        $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
-        $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
-        $site=substr($site,0,strlen($site)-4)."-0001";
-    } else {
-        if (!($sales = db_fetch($nonphys)))
-            break;
-        if ($sales['net'] == 0)
-            continue;
-        $address="\n" . trim($sales['location']) .  ", CO";
-        $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
-        if (isset($sites[$tax_rates['JurisdictionCode']])) {
-            $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
-            $site=substr($site,0,strlen($site)-4)."-".substr($site,-4);
-        } else {
-            $site = "";
-            display_error("
-                WWH sales tax location not found for " . $tax_rates['JurisdictionCode'] . " address " . $address . '. ' .
-                "This means that Colorado DOR advertises a sales tax jurisdiction at https://www.colorado.gov/pacific/tax/sales-and-use-tax-rates-lookup " .
-                "that is not in the list WWH sales tax locations.  Call DOR and find out what to do.");
-        }
-// display_notification($address);
-    }
-
-// display_notification(print_r($sales, true));
-
-// display_notification("tax rates" . print_r($tax_rates,true));
-
-// optional taxes
-
-$service_fee = Array('SD'=> 0, 'RTD' => 0, 'City' => 0, 'County' => 0);
-$tax_rate = Array('SD'=> 0, 'RTD' => 0, 'City' => 0, 'County' => 0);
-
-for ($i=0; $tax_rates[$i] != null; $i += 3) {
-    switch ($tax_rates[$i]) {
-        case 'City' :
-        case 'State' :
-        case 'County' :
-            $service_fee[$tax_rates[$i]]=$tax_rates[$i+2]/100;
-            $tax_rate[$tax_rates[$i]]=$tax_rates[$i+1]/100;
-            break;
-        case 'RTD' :
-        case 'CD' :
-            $service_fee['RTD']=$tax_rates[$i+2]/100;
-            $tax_rate['RTD']+=$tax_rates[$i+1]/100;
-            break;
-        default :   // special district?
-            if (strpos($tax_rates[$i], 'food') === false) {
-                $service_fee['SD']=$tax_rates[$i+2]/100;    // unclear which service fee to use
-                $tax_rate['SD']+=$tax_rates[$i+1]/100;
-            }
-            break;
-    }
+    return "                <Deductions>
+                    <ExemptionDeductionDescription>$d</ExemptionDeductionDescription>
+                    <ExemptionDeductionAmount>$amt</ExemptionDeductionAmount>
+                </Deductions>\n";
 }
 
-if ($period >= "2019-06")
-    $sales['ootac'] = $sales['oota'];
+function xml_header($period, $fein, $coacct)
+{
+    $seq="0000001";
+    return '<?xml version="1.0" encoding="UTF-8"?>
+<ReturnState xsi:noNamespaceSchemaLocation="FERReturnState.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ReturnHeaderState binaryAttachmentCount="0">
+    <Jurisdiction>CO</Jurisdiction>
+    <Timestamp>' . date("c") . '</Timestamp>
+    <TaxPeriodBeginDate>' . $period . '-01</TaxPeriodBeginDate>
+    <TaxPeriodEndDate>' . $period . '-31</TaxPeriodEndDate>
+    <TaxYear>' . substr($period, 0, 4) . '</TaxYear>
+    <Originator>
+        <EFIN>000000</EFIN>
+        <Type>OnlineFiler</Type>
+    </Originator>
+    <SoftwareId>FrontAcct</SoftwareId>
+    <SoftwareVersion>2.4</SoftwareVersion>
+    <ReturnType>Sales</ReturnType>
+    <SubmissionID>' . substr($coacct, 0, 6) . date('Yz') . $seq . '</SubmissionID>
+    <FilingFrequency>M</FilingFrequency> 
+    <Filer> 
+        <TIN>
+            <TypeTIN>FEIN</TypeTIN>
+            <TINTypeValue>' . str_replace('-', '', $fein) . '</TINTypeValue> 
+        </TIN>
+        <StateTaxpayerID>' . $coacct . '</StateTaxpayerID>
+        <Name>
+            <BusinessNameLine1>Whitewater Hill Vineyards</BusinessNameLine1>
+        </Name>
+        <USAddress>
+            <AddressLine1>130 31 RD</AddressLine1> 
+            <City>Grand Junction</City>
+            <State>CO</State>
+            <ZIPCode>81503</ZIPCode>
+        </USAddress>
+        <DateSigned>'. date('Y-m-d') . '</DateSigned>
+    </Filer>
+    <Contact>
+        <ContactName>John Behrs</ContactName>
+        <ContactPhone>9704346868</ContactPhone>
+        <ContactEmail>behrsj@whitewaterhill.com</ContactEmail>
+    </Contact>
+    <AckAddress>behrsj@whitewaterhill.com.com</AckAddress>
+</ReturnHeaderState>
+<ReturnDataState>
+    <SubmissionID>' . substr($coacct, 0, 6) . date('Yz') . $seq . '</SubmissionID>
+';
+}
 
-if ($sales['food'] <= 1)
-    $sales['food'] = 0;
+//----------------------------------------------------------------------------------------------------
 
-    if ($sales['description'] == 'Special Event') {
-        $PRECISION = 0;
-        if (isset($eventids[$tax_rates['Location']]['ID'])) {
-            $site = $eventids[$tax_rates['Location']]['ID'];
-            $site = substr($site, 0, 7) . '-' . substr($site,7);
-        } else {
-            display_error("Special Event " . $tax_rates['Location'] . " account number not found.  Fill in manually or add to wwheventids.csv and rerun report");
-            $site = "";
+function print_dr0100($handle, $fein, $name, $site, $rep, $period, $sales, $tax_rates)
+{
+global $total, $total_service_fee, $eventids, $path_to_root;
+
+$dr0098 = $_POST['PARAM_1'];
+$xml_output = $_POST['PARAM_3'];
+$dec = user_price_dec();
+$xml = '';
+$xml .= '   <FilingBody FilingType="Location">
+    <LocationCode>' . str_replace('-', '', $site) . '</LocationCode>
+    <JurisdictionTax>
+        <LocationJurisCode>' . $tax_rates['JurisdictionCode'] . '</LocationJurisCode>
+';
+
+
+
+$from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
+
+// map entities to DR0100 columns
+$entities = array(
+    "State" => "state",
+    "RTD" => "rtd",
+    "RTA" => "sd",  // per DR1002
+    "CD" => "rtd",
+    "County" => "county",   // xml is Cnty
+    "HSD" => "sd",      // per DR1002
+    "PSI" => "sd",      // per DR1002
+    "MHA" => "sd",    //per DR1002
+    "MTS" => "county",    //per DR1002, xml is cnty???
+    "MDT" => "sd",    //per DR1002, xml is MT???
+    "LID" => "city",    // per DR1002
+    "City" => "city");
+
+for ($i=0; !($tax_rates[$i] == '' && $tax_rates[$i+1] == '' && $tax_rates[$i+2] == ''); $i += 3) {
+    if (strpos($tax_rates[$i], 'food') !== false)
+        continue;
+
+    if ($tax_rates[$i] == '' || !array_key_exists($tax_rates[$i], $entities)) {
+        display_error("Unsupported entity:" . $tax_rates[$i] . "," . $tax_rates[$i+1] . "," . $tax_rates[$i+2]);
+        continue;
+    }
+
+    $service_fee[$tax_rates[$i]]=$tax_rates[$i+2]/100;
+    $tax_rate[$tax_rates[$i]]=$tax_rates[$i+1]/100;
+}
+
+$deductions = array('Food',
+    'Machinery', 
+    'Electricity', 
+    'FarmEquipment', 
+    'LowEmitVehicle', 
+    'SchoolRelatedSales', 
+    'Cigarettes', 
+    'RenewableEnergyComponents', 
+    'SpaceFlight', 
+    'RetailMarijuana',
+    'OtherExemption');
+
+
+//display_notification(print_r($sales, true));
+
+// initialize
+foreach ($entities as $ent_xml => $col) {
+    $deduct_total[$col] = 0;
+    $deduct_total[$ent_xml] = 0;
+    $tax_rate[$col] = 0;
+    $service_fee[$col] = 0;
+
+}
+
+$exemptions = array('WholesaleSales',
+    'AgriculturalSales',
+    'Service',
+    'OutsideOfColorado',
+    'ExemptEntities',
+    'Gas',
+    'DrugsMedicalDevices',
+    'Tradeins',
+    'ComputerSoftware',
+    'UtilitiesRestaurant',
+    'BadDebt');
+
+// sql returns net but tests return gross
+// DOR wants gross
+
+$exempt_total = 0;
+foreach ($exemptions as $e)
+    if (isset($sales[$e]))
+        $exempt_total += $sales[$e];
+if (!isset($sales['net']))
+    $sales['net'] = $sales['gross'] - $exempt_total;
+if (!isset($sales['gross']))
+    $sales['gross'] = $sales['net'] + $exempt_total;
+
+
+foreach ($entities as $ent_xml => $col) {
+    if (isset($tax_rate[$ent_xml])) {
+
+        // The DR0100 maps tax codes into columns,
+        // but XML appears to do no mapping (see Sample Instance, CD & RTD)
+        $xml .= '           <SalesOrUseTaxes TaxType="Sales">' . "\n";
+        if ($ent_xml == "County")
+            $xml .= "            <TaxCode>Cnty</TaxCode>\n";
+        else if ($ent_xml == "MTS")
+            $xml .= "            <TaxCode>Cnty</TaxCode>\n";
+        else if ($ent_xml == "MDT")
+            $xml .= "            <TaxCode>MT</TaxCode>\n";
+        else
+            $xml .= "            <TaxCode>$ent_xml</TaxCode>\n";
+
+        $xml .= "            <TaxBasis>
+                <BasisAmount>" . $sales['gross'] . "</BasisAmount>\n";
+
+        foreach ($exemptions as $e)
+            if (isset($sales[$e]))
+                $xml .= xml_deduct($e, $sales[$e]);
+
+        // LID and City both mapped into "city", so add tax_rates
+        // RTD and CD both mapped into "rtd", so add tax_rates
+        $tax_rate[$col] += $tax_rate[$ent_xml]; // for dr0100
+
+        // unclear which service fee to use
+        $service_fee[$col] = $service_fee[$ent_xml];    // for dr0100
+
+        // add deductions
+        foreach ($deductions as $d) {
+            if (!isset($sales[$col][$d])) {
+                if (isset($sales[$ent_xml][$d])) {
+        //display_notification($col . " " .$d . " " . $sales[$ent_xml][$d]);
+                    $deduct_total[$col] += $sales[$ent_xml][$d];    // for dr0100
+                    $deduct_total[$ent_xml] += $sales[$ent_xml][$d];    // for xml
+                    $sales[$col][$d] = $sales[$ent_xml][$d];    // for dr0100
+                    $xml .= xml_deduct($d, $sales[$col][$d]);
+                } else if (isset($sales[$d])) { // deductions identical for all entities
+
+                    if ($d == 'Food') {
+                        // import adjustments are food, ignore them
+                        if ($sales['Food'] <= 1)
+                            $sales['Food'] = 0;
+
+// Does Mesa County MC define candy as food?
+// Nancy showed me a receipt dated 03/04/20 from City Market (CM).
+// Lindor Dark Choc Kisses has a tax class B.  Total was $10.00 and tax was 0.29.
+// CM also has a tax class T for taxable goods and a class F for food with no tax.
+// So it appears that candy is taxed at 2.9% (state tax) but exempt from other taxes,
+// so MC must define candy as food.
+
+                        if ($col == "state")
+                            $sales[$col][$d] = $sales[$d];  // for dr0100
+                        else
+                            $sales[$col][$d] = $sales[$d] + $sales['candy'];
+                    } else
+                        $sales[$col][$d] = $sales[$d];  // for dr0100
+
+                    $deduct_total[$col] += $sales[$col][$d];  // for dr0100
+                    $deduct_total[$ent_xml] += $sales[$col][$d];    // for xml
+                    $xml .= xml_deduct($d, $sales[$col][$d]);
+                }
+            }
+        } // deductions
+
+$taxableSales = $sales['net'] - $deduct_total[$ent_xml];
+$taxAmount = round($taxableSales * $tax_rate[$ent_xml], 2);
+$serviceFee = round($taxAmount * $service_fee[$ent_xml], 2);
+$taxDueAmount = $taxAmount - $serviceFee;
+
+$taxableSales = sprintf("%.2f", $taxableSales);
+$taxAmount = sprintf("%.2f", $taxAmount);
+$serviceFee = sprintf("%.2f", $serviceFee);
+$taxDueAmount = sprintf("%.2f", $taxDueAmount);
+$netSales = sprintf("%.2f", $sales['net']);
+
+$xml .= "                   <TaxableAmount>$netSales</TaxableAmount>
+                    <TaxRate>" . $tax_rate[$ent_xml] . "</TaxRate>
+                    <TaxAmount>$taxAmount</TaxAmount>
+                    <NetTaxableSales>$taxableSales</NetTaxableSales>
+                    <DeductionWorksheetTotal>$exempt_total</DeductionWorksheetTotal>
+                    <ExemptionWorksheetTotal>" . $deduct_total[$ent_xml] . "</ExemptionWorksheetTotal>
+                </TaxBasis>
+                <TaxDueAmount>$taxDueAmount</TaxDueAmount>
+                <TaxCollected>$taxAmount</TaxCollected>
+                <SalesTaxDueAmount>$taxDueAmount</SalesTaxDueAmount>
+                <Discounts>
+                    <DiscountRate>" . $service_fee[$ent_xml] . "</DiscountRate>
+                    <DiscountAmount>$serviceFee</DiscountAmount>
+                </Discounts>
+           </SalesOrUseTaxes>\n";
+
+    } // tax_rate set
+} // entities
+
+if ($sales['description'] == 'Special Event') {
+    $PRECISION = 0;
+    if (isset($eventids[$tax_rates['Location']]['ID'])) {
+        $site = $eventids[$tax_rates['Location']]['ID'];
+        $site = substr($site, 0, 7) . '-' . substr($site,7);
+    } else {
+        display_error("Special Event " . $tax_rates['Location'] . " account number not found.  Fill in manually or add to wwheventids.csv and rerun report");
+        $site = "";
+    }
+} else
+    $PRECISION = 2;
+
+    $columns = array('sd', 'rtd', 'city', 'county', 'state');
+    foreach ($columns as $col) {
+
+        $sales_taxed[$col] = round($sales['net'] - $deduct_total[$col], $PRECISION);
+
+        // zero out missing tax rates/deductions
+        if ($tax_rate[$col] == 0) {
+            $sales_taxed[$col] = round(0, $PRECISION);
+            $tax_rate[$col] = 0;
+            $service_fee[$col] = 0;
         }
-    } else
-        $PRECISION = 2;
-    
+        foreach ($deductions as $e) {
+            if (!isset($sales[$col][$e]))
+                $sales[$col][$e] = 0;
+        }
+        foreach ($exemptions as $e)
+            if (!isset($sales[$e]))
+                $sales[$e] = 0;
+    }
 
-$sales['net'] = round($sales['net'], $PRECISION);
+    $tax_sd = round($sales_taxed['sd'] * $tax_rate['sd'], $PRECISION);
+    $tax_rtdcd = round($sales_taxed['rtd'] * $tax_rate['rtd'], $PRECISION);
+    $tax_city = round($sales_taxed['city'] * $tax_rate['city'], $PRECISION);
+    $tax_county = round($sales_taxed['county'] * $tax_rate['county'], $PRECISION);
+    $tax_state = round($sales_taxed['state'] * $tax_rate['state'], $PRECISION);
 
-$sales_taxed_state=round($sales['net'] - $sales['tax_exempt'] - $sales['ootac'] -  $sales['food'], $PRECISION);
-$sales_taxed_county=round($sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'], $PRECISION);
-$sales_taxed_rtdcd=round(($tax_rate['RTD']? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0), $PRECISION);
-$sales_taxed_sd=round(($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0), $PRECISION);
-$sales_taxed_city=round(($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] - $sales['oota'] - $sales['food'] - $sales['candy'] : 0), $PRECISION);
-
-$sales_customer[CUSTOMER_GROUP_CHARITY]=0;
-
-    $tax_sd = round($sales_taxed_county * $tax_rate['SD'], $PRECISION);
-    $tax_rtdcd = round($sales_taxed_county * $tax_rate['RTD'], $PRECISION);
-    $tax_city = round($sales_taxed_county * $tax_rate['City'], $PRECISION);
-    $tax_county = round($sales_taxed_county * $tax_rate['County'], $PRECISION);
-    $tax_state = round($sales_taxed_state * $tax_rate['State'], $PRECISION);
-
-    $service_fee_sd = round($tax_sd * $service_fee['SD'], $PRECISION);
-    $service_fee_rtdcd = round($tax_rtdcd * $service_fee['RTD'], $PRECISION);
-    $service_fee_city = round($tax_city * $service_fee['City'], $PRECISION);
-    $service_fee_county = round($tax_county * $service_fee['County'], $PRECISION);
-    $service_fee_state = round($tax_state * $service_fee['State'], $PRECISION);
+    $service_fee_sd = round($tax_sd * $service_fee['sd'], $PRECISION);
+    $service_fee_rtdcd = round($tax_rtdcd * $service_fee['rtd'], $PRECISION);
+    $service_fee_city = round($tax_city * $service_fee['city'], $PRECISION);
+    $service_fee_county = round($tax_county * $service_fee['county'], $PRECISION);
+    $service_fee_state = round($tax_state * $service_fee['state'], $PRECISION);
 
     $tax_due_sd = round($tax_sd - $service_fee_sd, $PRECISION);
     $tax_due_rtdcd = round($tax_rtdcd - $service_fee_rtdcd, $PRECISION);
@@ -355,9 +518,10 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
     $tax_due_state = round($tax_state - $service_fee_state, $PRECISION);
 
     $tax_due = $tax_due_sd + $tax_due_rtdcd + $tax_due_county + $tax_due_state;
+    $service_fee_due = $service_fee_sd + $service_fee_rtdcd + $service_fee_county + $service_fee_state;
 
     if ($tax_due == 0)  // maybe we just sold them spices?
-        continue;
+        return;
 
     if ($dr0098 == 0) {
         $rep->TextCol(0, 1, $sales['description']);
@@ -368,24 +532,36 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
     if ($tax_rates['HomeRule'] == 'Self-collected') {
         if ($dr0098 == 0)
             $rep->AmountCol(3, 4, $tax_due_city, $dec);
-        $tax_city = $service_fee_city = $tax_due_city = $sales_taxed_city = 00;
-        $tax_rate['City'] = 0;
+        $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 00;
+        $tax_rate['city'] = 0;
     } else
         $tax_due += $tax_due_city;
 
     if ($dr0098 == 0) {
         $rep->AmountCol(4, 5, $tax_due, $dec);
         $rep->NewLine();
+        if ($sales['description'] != 'Special Event') {
+            $total += $tax_due;
+            $total_service_fee += $service_fee_due;
+        }
     }
+
+    if ($xml_output) {
+        $xml .= "               <TotalTaxDueAmount>$tax_due</TotalTaxDueAmount>
+            </JurisdictionTax>
+        </FilingBody>\n";
+
+        fputs($handle, $xml);
+    } else {
 
     if ($sales['description'] == 'Special Event') {
 
     if ($dr0098) {
 
     $special = array(
-	array('x' => 6.5, 'y' => 9.2, 'text' => FEIN),
+	array('x' => 6.5, 'y' => 9.2, 'text' => $fein),
 
-	array('x' => 1, 'y' => 8.7, 'text' => strtoupper(get_company_pref('coy_name'))),
+	array('x' => 1, 'y' => 8.7, 'text' => strtoupper($name)),
 	array('x' => 6.7, 'y' => 8.7, 'text' => '970 434-6868'),
 
 	array('x' => 4.6, 'y' => 8.2, 'text' => $tax_rates['JurisdictionCode']),
@@ -398,24 +574,24 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 	array('x' => 1, 'y' => 7.8, 'text' => $tax_rates['Location']),
 	array('x' => 2.5, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
 
-	array('x' => 2.5, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
-	array('x' => 3.7, 'y' => 5.5, 'text' => ($tax_rate['RTD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
-	array('x' => 5, 'y' => 5.5, 'text' => ($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
-	array('x' => 6, 'y' => 5.5, 'text' => $sales['net'] - $sales['tax_exempt']),
-	array('x' => 7.2, 'y' => 5.5, 'text' => ($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
+	array('x' => 2.5, 'y' => 5.5, 'text' => $sales['net']),
+	array('x' => 3.7, 'y' => 5.5, 'text' => ($tax_rate['rtd'] ? $sales['net'] : "N/A")),
+	array('x' => 5, 'y' => 5.5, 'text' => ($tax_rate['sd'] ? $sales['net'] : "N/A")),
+	array('x' => 6, 'y' => 5.5, 'text' => $sales['net']),
+	array('x' => 7.2, 'y' => 5.5, 'text' => ($tax_rate['city'] ? $sales['net'] : "N/A")),
 
 
-	array('x' => 2.5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_state)),
-	array('x' => 3.7, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_rtdcd)),
-	array('x' => 5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_sd)),
-	array('x' => 6, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_county)),
-	array('x' => 7.2, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_city)),
+	array('x' => 2.5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['state'])),
+	array('x' => 3.7, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['rtd'])),
+	array('x' => 5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['sd'])),
+	array('x' => 6, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['county'])),
+	array('x' => 7.2, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['city'])),
 
-	array('x' => 2.5, 'y' => 4.4, 'text' => number_format($tax_rate['State'],4)),
-	array('x' => 3.7, 'y' => 4.4, 'text' => number_format($tax_rate['RTD'],4)),
-	array('x' => 5, 'y' => 4.4, 'text' => number_format($tax_rate['SD'],4)),
-	array('x' => 6, 'y' => 4.4, 'text' => number_format($tax_rate['County'],4)),
-	array('x' => 7.2, 'y' => 4.4, 'text' => number_format($tax_rate['City'],4)),
+	array('x' => 2.5, 'y' => 4.4, 'text' => number_format($tax_rate['state'],4)),
+	array('x' => 3.7, 'y' => 4.4, 'text' => number_format($tax_rate['rtd'],4)),
+	array('x' => 5, 'y' => 4.4, 'text' => number_format($tax_rate['sd'],4)),
+	array('x' => 6, 'y' => 4.4, 'text' => number_format($tax_rate['county'],4)),
+	array('x' => 7.2, 'y' => 4.4, 'text' => number_format($tax_rate['city'],4)),
 
 	array('x' => 2.5, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_state)),
 	array('x' => 3.7, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_rtdcd)),
@@ -423,11 +599,11 @@ $sales_customer[CUSTOMER_GROUP_CHARITY]=0;
 	array('x' => 6, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_county)),
 	array('x' => 7.2, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_city)),
 
-	array('x' => 2.5, 'y' => 3.9, 'text' => number_format($service_fee['State'],4)),
-	array('x' => 3.7, 'y' => 3.9, 'text' => number_format($service_fee['RTD'],4)),
-	array('x' => 5, 'y' => 3.9, 'text' => number_format($service_fee['SD'],4)),
-	array('x' => 6, 'y' => 3.9, 'text' => number_format($service_fee['County'],4)),
-	array('x' => 7.2, 'y' => 3.9, 'text' => number_format($service_fee['City'],4)),
+	array('x' => 2.5, 'y' => 3.9, 'text' => number_format($service_fee['state'],4)),
+	array('x' => 3.7, 'y' => 3.9, 'text' => number_format($service_fee['rtd'],4)),
+	array('x' => 5, 'y' => 3.9, 'text' => number_format($service_fee['sd'],4)),
+	array('x' => 6, 'y' => 3.9, 'text' => number_format($service_fee['county'],4)),
+	array('x' => 7.2, 'y' => 3.9, 'text' => number_format($service_fee['city'],4)),
 
 	array('x' => 2.5, 'y' => 3.4, 'text' => $service_fee_state),
 	array('x' => 3.7, 'y' => 3.4, 'text' => $service_fee_rtdcd),
@@ -509,17 +685,15 @@ _begin_job_
 
     } // $dr0098
 
-    } else {
+    } else {    // not a special event
 
     if ($dr0098 == 0) {
 
-    $total += $tax_due;
-
     $annote = array(
 	array('x' => 6.5, 'y' => 9.3, 'text' => date('m/d/y')),
-	array('x' => 6.5, 'y' => 8.7, 'text' => FEIN),
+	array('x' => 6.5, 'y' => 8.7, 'text' => $fein),
 
-	array('x' => 1, 'y' => 8.3, 'text' => strtoupper(get_company_pref('coy_name'))),
+	array('x' => 1, 'y' => 8.3, 'text' => strtoupper($name)),
 
 	array('x' => 1, 'y' => 7.8, 'text' => '130 31 RD                                               GRAND JCT      CO          81503'),
 
@@ -529,38 +703,38 @@ _begin_job_
 	array('x' => 1, 'y' => 7.2, 'text' => $site),
 	array('x' => 3.0, 'y' => 7.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 	array('x' => 3.8, 'y' => 7.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
+	array('x' => 4.6, 'y' => 7.2, 'text' => $tax_rates['JurisdictionCode']),
 	array('x' => 6.8, 'y' => 7.2, 'text' => date('m/d/y', strtotime($from_date . "+1 month +19 days"))),
 
-	array('x' => 4.6, 'y' => 7.2, 'text' => $tax_rates['JurisdictionCode']),
-	array('x' => 3.6, 'y' => 7.05, 'text' => $tax_rates['Location']),
-	array('x' => 6.8, 'y' => 6.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
-	array('x' => 6.8, 'y' => 5.8, 'text' => $sales['tax_exempt'] + $sales['oota'] + $sales_customer[CUSTOMER_GROUP_CHARITY]),
+	array('x' => 3.3, 'y' => 6.9, 'text' => $tax_rates['Location']),
+	array('x' => 6.8, 'y' => 6.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['gross'])),
+	array('x' => 6.8, 'y' => 5.8, 'text' => $exempt_total),
 
-	array('x' => 2.5, 'y' => 5.2, 'text' => $sales['net'] - $sales['tax_exempt']),
-	array('x' => 3.7, 'y' => 5.2, 'text' => ($tax_rate['RTD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
-	array('x' => 5, 'y' => 5.2, 'text' => ($tax_rate['SD'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
-	array('x' => 6, 'y' => 5.2, 'text' => $sales['net'] - $sales['tax_exempt']),
-	array('x' => 7.2, 'y' => 5.2, 'text' => ($tax_rate['City'] ? $sales['net'] - $sales['tax_exempt'] : "N/A")),
-
+	array('x' => 2.5, 'y' => 5.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
+	array('x' => 3.7, 'y' => 5.2, 'text' => ($tax_rate['rtd'] ? sprintf("%6.".$PRECISION."f", $sales['net']): "N/A")),
+	array('x' => 5, 'y' => 5.2, 'text' => ($tax_rate['sd'] ? sprintf("%6.".$PRECISION."f", $sales['net']): "N/A")),
+	array('x' => 6, 'y' => 5.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
+	array('x' => 7.2, 'y' => 5.2, 'text' => ($tax_rate['city'] ? sprintf("%6.".$PRECISION."f", $sales['net']): "N/A")),
 
 
-	array('x' => 2.5, 'y' => 4.5, 'text' => $sales['food']),
-	array('x' => 3.7, 'y' => 4.5, 'text' => ($tax_rate['RTD'] ? $sales['food']+$sales['candy'] : "N/A")),
-	array('x' => 5, 'y' => 4.5, 'text' => ($tax_rate['SD'] ? $sales['food']+$sales['candy'] : "N/A")),
-	array('x' => 6, 'y' => 4.5, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 7.2, 'y' => 4.5, 'text' => ($tax_rate['City'] ? $sales['food']+$sales['candy'] : "N/A")),
 
-	array('x' => 2.5, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_state)),
-	array('x' => 3.7, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_rtdcd)),
-	array('x' => 5, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_sd)),
-	array('x' => 6, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_county)),
-	array('x' => 7.2, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed_city)),
+	array('x' => 2.5, 'y' => 4.5, 'text' => $deduct_total['state']),
+	array('x' => 3.7, 'y' => 4.5, 'text' => ($tax_rate['rtd'] ? $deduct_total['rtd'] : "N/A")),
+	array('x' => 5, 'y' => 4.5, 'text' => ($tax_rate['sd'] ? $deduct_total['sd'] : "N/A")),
+	array('x' => 6, 'y' => 4.5, 'text' => $deduct_total['county']),
+	array('x' => 7.2, 'y' => 4.5, 'text' => ($tax_rate['city'] ? $deduct_total['city'] : "N/A")),
 
-	array('x' => 2.5, 'y' => 4.0, 'text' => number_format($tax_rate['State'],4)),
-	array('x' => 3.7, 'y' => 4.0, 'text' => number_format($tax_rate['RTD'],4)),
-	array('x' => 5, 'y' => 4.0, 'text' => number_format($tax_rate['SD'],4)),
-	array('x' => 6, 'y' => 4.0, 'text' => number_format($tax_rate['County'],4)),
-	array('x' => 7.2, 'y' => 4.0, 'text' => number_format($tax_rate['City'],4)),
+	array('x' => 2.5, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['state'])),
+	array('x' => 3.7, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['rtd'])),
+	array('x' => 5, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['sd'])),
+	array('x' => 6, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['county'])),
+	array('x' => 7.2, 'y' => 4.3, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['city'])),
+
+	array('x' => 2.5, 'y' => 4.0, 'text' => number_format($tax_rate['state'],4)),
+	array('x' => 3.7, 'y' => 4.0, 'text' => number_format($tax_rate['rtd'],4)),
+	array('x' => 5, 'y' => 4.0, 'text' => number_format($tax_rate['sd'],4)),
+	array('x' => 6, 'y' => 4.0, 'text' => number_format($tax_rate['county'],4)),
+	array('x' => 7.2, 'y' => 4.0, 'text' => number_format($tax_rate['city'],4)),
 
 	array('x' => 2.5, 'y' => 3.7, 'text' => sprintf("%6.".$PRECISION."f", $tax_state)),
 	array('x' => 3.7, 'y' => 3.7, 'text' => sprintf("%6.".$PRECISION."f", $tax_rtdcd)),
@@ -574,11 +748,11 @@ _begin_job_
 	array('x' => 6, 'y' => 2.9, 'text' => sprintf("%6.".$PRECISION."f", $tax_county)),
 	array('x' => 7.2, 'y' => 2.9, 'text' => sprintf("%6.".$PRECISION."f", $tax_city)),
 
-	array('x' => 2.5, 'y' => 2.6, 'text' => number_format($service_fee['State'],4)),
-	array('x' => 3.7, 'y' => 2.6, 'text' => number_format($service_fee['RTD'],4)),
-	array('x' => 5, 'y' => 2.6, 'text' => number_format($service_fee['SD'],4)),
-	array('x' => 6, 'y' => 2.6, 'text' => number_format($service_fee['County'],4)),
-	array('x' => 7.2, 'y' => 2.6, 'text' => number_format($service_fee['City'],4)),
+	array('x' => 2.5, 'y' => 2.6, 'text' => number_format($service_fee['state'],4)),
+	array('x' => 3.7, 'y' => 2.6, 'text' => number_format($service_fee['rtd'],4)),
+	array('x' => 5, 'y' => 2.6, 'text' => number_format($service_fee['sd'],4)),
+	array('x' => 6, 'y' => 2.6, 'text' => number_format($service_fee['county'],4)),
+	array('x' => 7.2, 'y' => 2.6, 'text' => number_format($service_fee['city'],4)),
 
 	array('x' => 2.5, 'y' => 2.1, 'text' => $service_fee_state),
 	array('x' => 3.7, 'y' => 2.1, 'text' => $service_fee_rtdcd),
@@ -602,7 +776,7 @@ _begin_job_
 
     $annote2 = array(
 	array('x' => 1, 'y' => 9.6, 'text' => $site),
-	array('x' => 5, 'y' => 9.6, 'text' => strtoupper(get_company_pref('coy_name'))),
+	array('x' => 5, 'y' => 9.6, 'text' => strtoupper($name)),
 	array('x' => 3.2, 'y' => 9.6, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 	array('x' => 3.8, 'y' => 9.6, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
@@ -619,31 +793,45 @@ _begin_job_
 	array('x' => 7.2, 'y' => 7.6, 'text' => sprintf("%6.".$PRECISION."f", $tax_due_city)),
 
 	array('x' => 7.2, 'y' => 7.1, 'text' => $tax_due_sd+$tax_due_county+$tax_due_state+$tax_due_city+$tax_due_rtdcd),
-	array('x' => 7.2, 'y' => 6.3, 'text' => sprintf("%6.".$PRECISION."f", $sales['tax_exempt'])),
-	array('x' => 7.2, 'y' => 5.8, 'text' => sprintf("%6.".$PRECISION."f", $sales['oota'])),
-	array('x' => 7.2, 'y' => 4.7, 'text' => $sales_customer[CUSTOMER_GROUP_CHARITY])
+	array('x' => 7.2, 'y' => 6.3, 'text' => sprintf("%6.".$PRECISION."f", $sales['WholesaleSales'])),
+	array('x' => 7.2, 'y' => 5.8, 'text' => sprintf("%6.".$PRECISION."f", $sales['OutsideOfColorado'])),
+	array('x' => 7.2, 'y' => 5.3, 'text' => sprintf("%6.".$PRECISION."f", $sales['Service'])),
+	array('x' => 7.2, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales['ExemptEntities'])),
+	array('x' => 7.2, 'y' => 4.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['Gas'])),
+	array('x' => 7.2, 'y' => 3.7, 'text' => sprintf("%6.".$PRECISION."f", $sales['DrugsMedicalDevices'])),
+	array('x' => 7.2, 'y' => 3.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['Tradeins'])),
+	array('x' => 7.2, 'y' => 2.7, 'text' => sprintf("%6.".$PRECISION."f", $sales['BadDebt'])),
+	array('x' => 7.2, 'y' => 2.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['UtilitiesRestaurant'])),
+	array('x' => 7.2, 'y' => 1.7, 'text' => sprintf("%6.".$PRECISION."f", $sales['AgriculturalSales'])),
+	array('x' => 7.2, 'y' => 1.2, 'text' => sprintf("%6.".$PRECISION."f", $sales['ComputerSoftware']))
    );
 
     $annote3 = array(
 	array('x' => 1, 'y' => 9.6, 'text' => $site),
-	array('x' => 5, 'y' => 9.6, 'text' => strtoupper(get_company_pref('coy_name'))),
+	array('x' => 5, 'y' => 9.6, 'text' => strtoupper($name)),
 	array('x' => 3.2, 'y' => 9.6, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 	array('x' => 3.8, 'y' => 9.6, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
-	array('x' => 7.2, 'y' => 8.3, 'text' => $sales['tax_exempt'] + $sales['oota'] + $sales_customer[CUSTOMER_GROUP_CHARITY]),
+	array('x' => 7.2, 'y' => 8.3, 'text' => $exempt_total),
 
-	array('x' => 2.5, 'y' => 7.2, 'text' => $sales['food']),
-	array('x' => 3.7, 'y' => 7.2, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 5, 'y' => 7.2, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 6, 'y' => 7.2, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 7.2, 'y' => 7.2, 'text' => $sales['food']+$sales['candy']),
-
-	array('x' => 2.5, 'y' => 1.2, 'text' => $sales['food']),
-	array('x' => 3.7, 'y' => 1.2, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 5, 'y' => 1.2, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 6, 'y' => 1.2, 'text' => $sales['food']+$sales['candy']),
-	array('x' => 7.2, 'y' => 1.2, 'text' => $sales['food']+$sales['candy'])
+	array('x' => 2.5, 'y' => 1.2, 'text' => $deduct_total['state']),
+	array('x' => 3.7, 'y' => 1.2, 'text' => $deduct_total['rtd']),
+	array('x' => 5, 'y' => 1.2, 'text' => $deduct_total['sd']),
+	array('x' => 6, 'y' => 1.2, 'text' => $deduct_total['county']),
+	array('x' => 7.2, 'y' => 1.2, 'text' => $deduct_total['city'])
    );
+
+    $y = 7.2;
+    foreach ($deductions as $d) {
+        $annote3 = array_merge($annote3, array(
+            array('x' => 2.5, 'y' => $y, 'text' => $sales['state'][$d]),
+            array('x' => 3.7, 'y' => $y, 'text' => $sales['rtd'][$d]),
+            array('x' => 5, 'y' => $y, 'text' => $sales['sd'][$d]),
+            array('x' => 6, 'y' => $y, 'text' => $sales['county'][$d]),
+            array('x' => 7.2, 'y' => $y, 'text' => $sales['city'][$d])));
+
+            $y -= .5;
+    }
 
 
 fputs($handle, '
@@ -754,28 +942,138 @@ _begin_job_
 	   fputs($handle, '_end_job_
 ');
 
-} // dr0100 stuff
+} // dr00098 = 0
 
-} // $dr0098 == 0
+} // not a special event
 
-} // while
+} // not xml_output
 
-	     fclose($handle);
-     } else { // end of handle
-	print "Unable to write " . $formfile;
-	die();
-     }
+}
 
+$total=0;
+$total_service_fee=0;
 
-    if (!$dr0098) {
-    $rep->NewLine();
-    $rep->TextCol(0, 2, 'TOTAL DUE STATE ON DR0100 ONLY');
-    $rep->AmountCol(4, 5, $total, $dec);
+function company_dr0100($testcases)
+{
+    global $path_to_root, $sites, $total, $total_service_fee;
 
-   $rep->end();
+    // Get the payment
+    $period = $_POST['PARAM_0'];
+    $dr0098 = $_POST['PARAM_1'];
+    $test = $_POST['PARAM_2'];
+    $xml_output = $_POST['PARAM_3'];
+
+    $from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
+    $to_date = substr($from_date,0,3) . "31" . substr($from_date,5);
+    $dec = user_price_dec();
+
+    include_once($path_to_root . "/reporting/includes/pdf_report.inc");
+
+    $rep = new FrontReport(_('DR0100 Summary Report'), "DR0100SummaryReport", user_pagesize(), 9, 'P');
+
+    $params =   array(0 => '', 
+                      1 => array('text' => _('Period'), 'from' => $from_date, 'to' => $to_date));
+
+    $cols = array(0, 80, 250, 330, 430, 530);
+
+    $headers = array(_('Area'), _('Location'), _('Account No.'), _('Self-Collected'), _('State-Collected'));
+    $aligns = array('left', 'left', 'left', 'right', 'right');
+
+    $rep->Font();
+    $rep->Info($params, $cols, $headers, $aligns);
+    $rep->NewPage();
+
+    if ($xml_output)
+        $formfile= $path_to_root . '/tmp/newform.txt';
+    else
+        $formfile= $path_to_root . '/tmp/newform.ps';
+    $handle = fopen($formfile, 'w');
+    if (!$handle) {
+        print "Unable to write " . $formfile;
+        die();
     }
 
-   exec("ps2pdf $path_to_root/tmp/newform.ps $path_to_root/tmp/newform.pdf");
-   meta_forward($path_to_root . "/tmp/newform.pdf");
+
+        if ($test) {
+            $t = $testcases[$test];
+            $fein = "99-9999999";
+            if ($xml_output)
+                fputs($handle, xml_header($t['period'], $fein, $t["coacct"]));
+            foreach ($t['sales'] as $sales) {
+                print_dr0100($handle, $fein, $t["name"], $sales["site"], $rep, $t["period"], $sales, get_tax_rate_by_code($sales['code']));
+            }
+        } else {
+            $sales = db_fetch(GetPhysicalSales($from_date, $to_date));
+            $address = get_company_pref('postal_address');
+            $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
+            $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
+            $coacct=substr($site,0,strlen($site)-4);
+            $site=$coacct."-0001";
+            if ($xml_output)
+                fputs($handle, xml_header($period, FEIN, $coacct));
+            print_dr0100($handle, FEIN, get_company_pref('coy_name'), $site, $rep, $period, $sales, $tax_rates);
+
+            $nonphys = GetNonPhysicalSales($period, $from_date, $to_date);
+            while ($sales = db_fetch($nonphys)) {
+                if ($sales['net'] == 0)
+                    continue;
+                $address="\n" . trim($sales['location']) .  ", CO";
+                $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
+                if (isset($sites[$tax_rates['JurisdictionCode']])) {
+                    $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
+                    $site=substr($site,0,strlen($site)-4)."-".substr($site,-4);
+                } else {
+                    $site = "";
+                    display_error("
+                        WWH sales tax location not found for " . $tax_rates['JurisdictionCode'] . " address " . $address . '. ' .
+                        "This means that Colorado DOR advertises a sales tax jurisdiction at https://www.colorado.gov/pacific/tax/sales-and-use-tax-rates-lookup " .
+                        "that is not in the list WWH sales tax locations.  Call DOR and find out what to do.");
+                }
+            // display_notification($address);
+
+            // display_notification(print_r($sales, true));
+
+            // display_notification("tax rates" . print_r($tax_rates,true));
+
+            // optional taxes
+
+                print_dr0100($handle, FEIN, get_company_pref('coy_name'), $site, $rep, $period, $sales, $tax_rates);
+            } // while
+        }
+
+    if (!$dr0098) {
+        $rep->NewLine();
+        $rep->TextCol(0, 2, 'TOTAL DUE STATE ON DR0100 ONLY');
+        $rep->AmountCol(4, 5, $total, $dec);
+
+       $rep->end();
+    }
+
+    if ($xml_output) {
+        if ($total_service_fee > 1000)
+            $excess_service_fee = $total_service_fee - 1000;
+        else
+            $excess_service_fee = 0;
+        $total_payment_due = $total + $excess_service_fee;
+
+        fputs($handle, "        <StateServiceFeeCap>
+            <StateServiceFeeTotalReturnAmt>$total_service_fee</StateServiceFeeTotalReturnAmt>
+            <ExcessStateServiceFeeAmt>$excess_service_fee</ExcessStateServiceFeeAmt>
+            <TotalTaxDueThisReturnAmt>$total</TotalTaxDueThisReturnAmt>
+            <TotalPaymentDueThisReturnAmt>$total_payment_due</TotalPaymentDueThisReturnAmt>
+        </StateServiceFeeCap>
+</ReturnDataState>
+</ReturnState>\n");
+    }
+
+    fclose($handle);
+
+    if ($xml_output)
+        meta_forward($path_to_root . "/tmp/newform.txt");
+    else {
+        exec("ps2pdf $path_to_root/tmp/newform.ps $path_to_root/tmp/newform.pdf");
+        meta_forward($path_to_root . "/tmp/newform.pdf");
+    }
 }
+
 ?>

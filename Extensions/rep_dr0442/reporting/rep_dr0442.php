@@ -61,7 +61,9 @@ function getLiters($from, $to)
             0)) AS liters
         FROM ".TB_PREF."stock_moves sm
             LEFT JOIN ".TB_PREF."stock_master item ON sm.stock_id=item.stock_id
-            WHERE tran_date BETWEEN '$fromdate' AND '$todate'
+            LEFT JOIN ".TB_PREF."voided v ON sm.type=v.type AND sm.trans_no=v.id
+            WHERE ISNULL(v.id)
+                AND tran_date BETWEEN '$fromdate' AND '$todate'
                 AND (item.units='375ml' OR item.units='750ml')";
 //display_notification($sql);
 
@@ -76,8 +78,10 @@ function getInvLiters($d, $include=false)
     $sql = "SELECT
         SUM(sm.qty*IF(item.units='375ml',.375,.75)) AS liters
         FROM ".TB_PREF."stock_moves sm
+            LEFT JOIN ".TB_PREF."voided v ON sm.type=v.type AND sm.trans_no=v.id
             LEFT JOIN ".TB_PREF."stock_master item ON sm.stock_id=item.stock_id
-                WHERE item.units='375ml' OR item.units='750ml'";
+                WHERE ISNULL(v.id)
+                    AND (item.units='375ml' OR item.units='750ml')";
     if ($include)
         $sql .= " AND tran_date <= '$d'";
     else
@@ -239,44 +243,43 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
 
 
     $annote = array(
-	array('x' => 1, 'y' => 8.1, 'text' => 'WHITEWATER HILL VINEYARDS'),
+	array('x' => 1, 'y' => 8.2, 'text' => 'WHITEWATER HILL VINEYARDS'),
 	array('x' => 1, 'y' => 7.7, 'text' => '130 31 ROAD'),
 	array('x' => 4, 'y' => 7.7, 'text' => 'GRAND JUNCTION'),
-	array('x' => 6.8, 'y' => 7.7, 'text' => 'CO 81503-9642'),
+	array('x' => 6.4, 'y' => 7.7, 'text' => 'CO   81503-9642'),
 	array('x' => 1, 'y' => 7.35, 'text' => ACCOUNT_NUMBER),
-	array('x' => 4.7, 'y' => 7.35, 'text' => substr($period, 5, 2) . "/" . substr($period, 2, 2)),
-	array('x' => 5.5, 'y' => 7.35, 'text' => substr($period, 5, 2) . "/" . substr($period, 2, 2)),
-	array('x' => 7, 'y' => 7.35, 'text' => $duedate),
-	array('x' => 4, 'y' => 7.0, 'text' => FEIN),
-	array('x' => 3.4, 'y' => 5.9, 'text' => $beg_inv), // beginning inventory
-	array('x' => 4.5, 'y' => 5.9, 'text' => 'N/A'), // beginning inventory
-	array('x' => 5.5, 'y' => 5.9, 'text' => 'N/A'), // beginning inventory
-	array('x' => 6.5, 'y' => 5.9, 'text' => 'N/A'), // beginning inventory
-	array('x' => 7.5, 'y' => 5.9, 'text' => 'N/A'), // beginning inventory
-	array('x' => 3.4, 'y' => 5.5, 'text' => $sm['mfg_liters']), // manufactured in Colorado
-	array('x' => 3.4, 'y' => 5, 'text' => '0'),
-	array('x' => 3.4, 'y' => 4.7, 'text' => '0'),
-	array('x' => 3.4, 'y' => 4.4, 'text' => $beg_inv + $sm['mfg_liters']), // total
-	array('x' => 3.4, 'y' => 4, 'text' => $end_inv['liters']), // ending inventory 
-	array('x' => 3.4, 'y' => 3.65, 'text' => $actual_totalliters), // beginning - ending inventory
-	array('x' => 3.4, 'y' => 3.45, 'text' => $export_liters),
-	array('x' => 3.4, 'y' => 3.05, 'text' => '0'),
-	array('x' => 3.4, 'y' => 2.85, 'text' => '0'),
-	array('x' => 3.4, 'y' => 2.35, 'text' => $export_liters),
-	array('x' => 3.4, 'y' => 2.0, 'text' => $actual_totalliters-$export_liters), // taxable sales
-	array('x' => 3.4, 'y' => 1.8, 'text' => '0'), // taxable sales
-	array('x' => 3.4, 'y' => 1.4, 'text' => $actual_totalliters-$export_liters) // tax due sales
+	array('x' => 4.7, 'y' => 7.35, 'text' => substr($period, 5, 2) . "/" . substr($period, 2, 2) . " - " . substr($period, 5, 2) . "/" . substr($period, 2, 2)),
+	array('x' => 4, 'y' => 6.8, 'text' => FEIN),
+	array('x' => 3.6, 'y' => 5.8, 'text' => $beg_inv), // beginning inventory
+	array('x' => 5.5, 'y' => 5.8, 'text' => 'N/A'), // beginning inventory
+	array('x' => 6.5, 'y' => 5.8, 'text' => 'N/A'), // beginning inventory
+	array('x' => 7.5, 'y' => 5.8, 'text' => 'N/A'), // beginning inventory
+	array('x' => 3.6, 'y' => 5.4, 'text' => $sm['mfg_liters']), // manufactured in Colorado
+	array('x' => 3.6, 'y' => 4.8, 'text' => '0'),
+	array('x' => 3.6, 'y' => 4.6, 'text' => '0'),
+	array('x' => 3.6, 'y' => 4.3, 'text' => $beg_inv + $sm['mfg_liters']), // total
+	array('x' => 3.6, 'y' => 3.9, 'text' => $end_inv['liters']), // ending inventory 
+	array('x' => 3.6, 'y' => 3.65, 'text' => $actual_totalliters), // beginning - ending inventory
+	array('x' => 3.6, 'y' => 3.25, 'text' => $export_liters),
+	array('x' => 3.6, 'y' => 2.85, 'text' => '0'),
+	array('x' => 3.6, 'y' => 2.65, 'text' => '0'),
+	array('x' => 3.6, 'y' => 2.35, 'text' => $export_liters),
+	array('x' => 3.6, 'y' => 2.0, 'text' => $actual_totalliters-$export_liters), // taxable sales
+	array('x' => 3.6, 'y' => 1.6, 'text' => '0'), // taxable sales
+	array('x' => 3.6, 'y' => 1.3, 'text' => $actual_totalliters-$export_liters) // tax due sales
  );
 
     $annote2 = array(
-	array('x' => 3.6, 'y' => 8.85, 'text' => number_format(($actual_totalliters-$export_liters)*.0733,2,'.',',')),
-	array('x' => 3.6, 'y' => 8.5, 'text' => number_format(($actual_totalliters-$export_liters)*.01,2,'.',',')),
-	array('x' => 2.4, 'y' => 7.9, 'text' => $actual_totalliters-$export_liters), // tax due sales
-	array('x' => 3.6, 'y' => 7.9, 'text' => number_format($actual_totalliters_05*.05 + $actual_totalliters_03*.03,2,'.',',')),
-	array('x' => 3.6, 'y' => 7.55, 'text' => number_format($grape_tons*10,2,'.',',')),
-	array('x' => 3.7, 'y' => 7, 'text' => $tax_due),
-	array('x' => 5.3, 'y' => 7, 'text' => $actual_totalliters_03 . ' liters @.03, ' . $actual_totalliters_05 . ' liters @.05'),
-	array('x' => 3.7, 'y' => 5.9, 'text' => $tax_due)
+	array('x' => 1, 'y' => 9.6, 'text' => 'WHITEWATER HILL VINEYARDS'),
+	array('x' => 6, 'y' => 9.6, 'text' => ACCOUNT_NUMBER),
+	array('x' => 3.8, 'y' => 8.45, 'text' => number_format(($actual_totalliters-$export_liters)*.0733,2,'.',',')),
+	array('x' => 3.8, 'y' => 8.1, 'text' => number_format(($actual_totalliters-$export_liters)*.01,2,'.',',')),
+	array('x' => 2.4, 'y' => 7.5, 'text' => $actual_totalliters-$export_liters), // tax due sales
+	array('x' => 3.8, 'y' => 7.5, 'text' => number_format($actual_totalliters_05*.05 + $actual_totalliters_03*.03,2,'.',',')),
+	array('x' => 3.8, 'y' => 7.1, 'text' => number_format($grape_tons*10,2,'.',',')),
+	array('x' => 6.1, 'y' => 6.7, 'text' => $tax_due),
+	array('x' => 6.1, 'y' => 5.7, 'text' => $tax_due),
+	array('x' => 3.8, 'y' => 3, 'text' => $actual_totalliters_03 . ' liters @.03, ' . $actual_totalliters_05 . ' liters @.05')
    );
 
 
@@ -299,16 +302,16 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
         $annote_export[$page][$i++] = array('x' => 4.3, 'y' => 9.0, 'text' => ACCOUNT_NUMBER);
         $annote_export[$page][$i++] = array('x' => 6.5, 'y' => 9.0, 'text' => $period);
         $annote_export[$page][$i++] = array('x' => 4.3, 'y' => 8.8, 'text' => $state);
-        $annote_export[$page][$i++] = array('x' => .7, 'y' => 8.3, 'text' => 'X');
+        $annote_export[$page][$i++] = array('x' => .8, 'y' => 8.3, 'text' => 'X');
     }
-    $line = 7.9 - $rows * .24;
+    $line = 8 - $rows * .24;
     $annote_export[$page][$i++] = array('x' => .5, 'y' => $line, 'text' => $row['tran_date']);
     $annote_export[$page][$i++] = array('x' => 1.5, 'y' => $line, 'text' => $row['deliver_to']);
     $annote_export[$page][$i++] = array('x' => 4.3, 'y' => $line, 'text' => $row['invoice_number']);
     $annote_export[$page][$i++] = array('x' => 6.5, 'y' => $line, 'text' => -$row['liters']);
     $total -= $row['liters'];
   }
-  $annote_export[$page][$i++] = array('x' => 6.5, 'y' => .9, 'text' => $total);
+  $annote_export[$page][$i++] = array('x' => 6.5, 'y' => 1.05, 'text' => $total);
 
 fputs($handle, '
 %!PS

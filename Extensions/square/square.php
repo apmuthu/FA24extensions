@@ -226,27 +226,25 @@ function square_variation($stock_id, $sq_item, $locationId)
     $result = get_all_item_codes($stock_id);
     $row    = db_fetch($result);
 
-    if (isset($sq_item)) {
-        $id = $sq_item->item_data->variations[0]->id;
-        $version = $sq_item->item_data->variations[0]->version;
-   } else {
-        $id = "#foovar";
-        $version = null;
+    if (isset($sq_item))
+        $obj = $sq_item["item_data"]["variations"][0];
+    else {
+        $obj = array(
+            "type" => "ITEM_VARIATION", 
+            "id" => "#foovar",
+            "version" => null,
+            "item_variation_data" => array(
+                "name" => $stock_id,
+                "pricing_type" => "FIXED_PRICING"),
+        );
     }
 
-    $obj = array(
-        "type" => "ITEM_VARIATION", 
-        "id" => $id,
-        "version" => $version,
-        "present_at_all_locations" => ($locationId == '0' ? true : false),
-        "item_variation_data" => array(
-            "name" => "Short",
-            "pricing_type" => "FIXED_PRICING",
+    $obj["item_variation_data"] = array_merge($obj["item_variation_data"],
+        array(
 
-// square searches for barcodes using the sku,
-// so we put the sku into the upc field
+// square searches for barcodes using the sku instead of upc
+// which is what I would have thought
 
-            "upc" => $stock_id,
             "sku" => $row['item_code'],
             "price_money" => array(
                 "amount" => round(100 * $myprice),
@@ -254,6 +252,13 @@ function square_variation($stock_id, $sq_item, $locationId)
             )
         )
     );
+
+    $obj = array_merge($obj,
+      array(
+        "present_at_all_locations" => ($locationId == '0' ? true : false),
+        )
+    );
+
     if ($_POST['online'] == 1)
         $obj = array_merge($obj, array("available online" => true));
     if ($locationId != '0')
@@ -264,23 +269,22 @@ function square_variation($stock_id, $sq_item, $locationId)
 
 function square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locationName, $taxName)
 {
-    if (isset($sq_item)) { // existing object
-      $obj=(array)$sq_item;
-    } else {
-      display_notification("New Item " . $trans['description']);
+    if (isset($sq_item))
+      $obj = $sq_item;
+    else {
       $obj = array(
         "type" => "ITEM",
         "id" => "#foo",
-        "present_at_all_locations" => ($locationId == '0' ? true : false)
+        "present_at_all_locations" => ($locationId == '0' ? true : false),
+        "item_data" => array()
       );
     }
 
-    $obj = array_merge($obj, array(
-        "item_data" => array(
-            "name" => str_replace("Whitewater Hill ","",$trans['description']),
+    $obj["item_data"] = array_merge($obj["item_data"],
+        array("name" => str_replace("Whitewater Hill ","",$trans['description']),
             "category_id" => $sq_cat,
             "variations" => array(square_variation($stock_id, $sq_item, $locationId))
-      )));
+      ));
 
     if ($locationId != '0') {
         $obj = array_merge($obj, array("present_at_location_ids" => array($locationId)));
@@ -290,7 +294,7 @@ function square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locat
             if (!isset($taxName[$tax_name]))
                 $tax_name = $locationName[$locationId];
             if (isset($taxName[$tax_name]))
-                $obj = array_merge($obj, array("tax_ids" => array($taxName[$tax_name])));
+                $obj["item_data"] = array_merge($obj["item_data"], array("tax_ids" => array($taxName[$tax_name])));
         }
     }
   return $obj;
@@ -530,18 +534,23 @@ do {
         display_error('Exception when calling CatalogApi->listCatalog: ' . $e->getMessage());
     }
 
-    foreach ($res->objects as $item)
-        $square_items[$item->item_data->name] = $item;
+    // check for an empty square inventory
+    if (!isset($res->objects))
+        break;
 
+    // map the stock_id to the square item (converted to array)
+    foreach ($res->objects as $item)
+        $square_items[$item->item_data->variations[0]->item_variation_data->name] =
+            json_decode(json_encode($item), true);
+        
     if (!isset($res->cursor))
         break;
     $cursor = $res->cursor;
+    
 } while (1);
 
     return $square_items;
 }
-
-
 
 // Add Items from selected category
 
@@ -814,6 +823,10 @@ try {
                 $dt->setTimezone( new \DateTimeZone( $timezone ) ); 
                 $date_purchased = $dt->format('Y-m-d');
 
+                // FA dates do not have order time, so add order time to $comments
+                $comments = $dt->format('H:i:s');
+                $cart->Comments = $comments;
+
                 $cart->set_branch(
                     $branch["branch_code"],
                     $branch["tax_group_id"],
@@ -864,6 +877,10 @@ try {
                             try {
                                 $item2 = $items_api->retrieveItem($location->id, $item_id);
                             } catch (Exception $e) {
+                                display_warning("Cannot retrieve item for " . $item->getName());
+        // Note: this causes the adjustment item to be used
+                                continue;
+/*
     // if the item is not found, perhaps the item was updated?
     // if so, grab the sku from the item with the same name
                                 global $square_items;
@@ -871,6 +888,7 @@ try {
                                     $square_items = list_square_items();
                                 $item_id = $square_items[$item->getName()]->id;
                                 $item2 = $items_api->retrieveItem($location->id, $item_id);
+*/
                             }
                             $item3 = $cat_api->retrieveCatalogObject($item2->getV2Id(), false);
                             $catobj = $item3->getObject();
@@ -887,16 +905,19 @@ try {
 
                 // discounts are applied differently to items including or excluding tax
 
-                if ($t->getInclusiveTaxMoney()->getAmount() != 0)
-                    $discount = -$item->getDiscountMoney()->getAmount()/($item->getTotalMoney()->getAmount() - $item->getDiscountMoney()->getAmount());
-                else
-                    $discount = -$item->getDiscountMoney()->getAmount()/$item->getGrossSalesMoney()->getAmount();
-display_notification($sku . " " . $item->getQuantity() . " " . $item->getSingleQuantityMoney()->getAmount()/100);
+                            if ($t->getInclusiveTaxMoney()->getAmount() != 0)
+                                $discount = -$item->getDiscountMoney()->getAmount()/($item->getTotalMoney()->getAmount() - $item->getDiscountMoney()->getAmount());
+                            else
+                                $discount = -$item->getDiscountMoney()->getAmount()/$item->getGrossSalesMoney()->getAmount();
+            display_notification($sku . " " . $item->getQuantity() . " " . $item->getSingleQuantityMoney()->getAmount()/100);
 
                             add_to_order($cart, $sku, $item->getQuantity(),
                                 $item->getSingleQuantityMoney()->getAmount()/100,
-                                $discount);
+                            $discount);
                         } // foreach item
+
+                if ($t->getTipMoney()->getAmount() != 0)
+                        add_to_order($cart, $tips, 1, $item->getTipMoney()->getAmount()/100, 0);
 
                 $total = $cart->get_trans_total();
                 $total_order = $t->getTender()[0]->getTotalMoney()->getAmount();
@@ -922,9 +943,8 @@ display_notification($sku . " " . $item->getQuantity() . " " . $item->getSingleQ
 
             } // dest customer found
 
-
             if ($_POST['trial_run'] == 0) {
-                if ($_POST['to_date'] > $lastdate) {
+                if (date2sql($_POST['to_date']) > date2sql($lastdate)) {
                     $sql = "UPDATE  ".TB_PREF."square SET value = ".db_escape($_POST['to_date'])." WHERE name = 'lastdate'";
                     db_query($sql, "Update 'lastdate'");
                     $last_date = $_POST['to_date'];
@@ -974,12 +994,11 @@ while ($trans=db_fetch($trans_res)) {
 // do not update item if the item is present at all locations
 // and we are exporting a specific location
 
-    $square_item = str_replace("Whitewater Hill ","",$trans['description']);
-    if (isset($square_items[$square_item])) {
-        $sq_item=$square_items[$square_item];
-        if ($sq_item->present_at_all_locations
+    if (isset($square_items[$stock_id])) {
+        $sq_item=$square_items[$stock_id];
+        if ($sq_item["present_at_all_locations"]
             && $locationId != "0") {
-            unset($square_items[$square_item]); // prevent deletion
+            unset($square_items[$stock_id]); // prevent deletion
             continue;
         }
     } else
@@ -1026,22 +1045,41 @@ while ($trans=db_fetch($trans_res)) {
                 $result = $api_instance->upsertCatalogObject($body);
                 $res = json_decode($result);
                 $sq_cat = $res->id_mappings[0]->object_id;
-                $categories[$trans['category_id']] = $sq_cat;
             } catch (Exception $e) {
                 display_error("Category " . trans['category_id'] . ': Exception when calling CatalogApi->upsertCatalogObject: '. $e->getMessage());
                 continue;   // should not happen, but try the next item
             }
         } // else create category
+        $categories[$trans['category_id']] = $sq_cat;
 
     } // if !isset sq_cat
 
 // Add/Update Item
 
-    $body = new \SquareConnect\Model\UpsertCatalogObjectRequest();
     $obj = square_v2body($stock_id, $sq_cat, @$sq_item, $trans, $locationId, $locationName, $taxName);
+
+// Skip items that have not been changed to save time
+
+    if (isset($sq_item)) {
+        // if sku is null, square does not retrieve it
+        if (!isset($sq_item["item_data"]["variations"][0]["item_variation_data"]["sku"]))
+            $sq_item["item_data"]["variations"][0]["item_variation_data"]["sku"] = '';
+        if ($obj == $sq_item)
+            continue;
+
+/*
+print_r($obj);
+print("<br><br>");
+print_r($sq_item);
+*/
+
+      display_notification("Changed Item " . $trans['description']);
+    } else
+      display_notification("New Item " . $trans['description']);
+
+    $body = new \SquareConnect\Model\UpsertCatalogObjectRequest();
     $body->setIdempotencyKey(uniqid());
     $body->setObject($obj);
-
 
     try {
         $result = $api_instance->upsertCatalogObject($body);
@@ -1052,8 +1090,9 @@ while ($trans=db_fetch($trans_res)) {
         continue;   // should not happen, try the next item
     }
 
-    unset($square_items[$square_item]);
+    unset($square_items[$stock_id]);
 
+/*
     // Update taxes (should not be necessary, but tax_ids field in item field not working)
 
     if (!$trans['exempt']) {
@@ -1077,6 +1116,7 @@ while ($trans=db_fetch($trans_res)) {
             continue; // should not happen, try the next item
         }
     }
+*/
 
     // Upload Images
 
@@ -1242,6 +1282,7 @@ if ($action == 'oimport') {
     date_row("To Order Date:", 'to_date');
     customer_list_row(_("Destination Customer:"), 'destCust', $destCust, false);
     sales_service_items_list_row(_('Adjustment Item:'),'adjustment', null, false, false, false);
+    sales_service_items_list_row(_('Tips Item:'),'tips', null, false, false, false);
 
     yesno_list_row(_("Errors"), 'errors', null, "Ignore", "Skip", false);
     yesno_list_row(_("Trial Run"), 'trial_run', null, "", "", false);

@@ -1,8 +1,9 @@
 <?php
 $tax_rates = array();
+$tax_rates_by_code = array();
 
 function  do_init_rate() {
-   global $path_to_root, $tax_rates;
+   global $path_to_root, $tax_rates, $tax_rates_by_code;
    $csv = array_map('str_getcsv', file($path_to_root . "/modules/tax_rate" . "/ColoradoJurisdictionCodesRates.csv"));
    foreach ($csv[0] as $key =>$value)
     $csv[0][$key]=preg_replace( '/\s*/m', '',$value);
@@ -34,6 +35,8 @@ $csv[0] = array_slice($csv[0], 0, 7);
         if (!isset($tax_rates[$location])
             || $tax_rates[$location]['total'] < $value['total'])
             $tax_rates[$location] = $value;
+
+        $tax_rates_by_code[$value['JurisdictionCode']] = $value;
     }
     $tax_rates['GRAND JUNCTION'] = $tax_rates['MESA COUNTY'];
     $tax_rates['ENGLEWOOD'] = $tax_rates['DOUGLAS COUNTY'];
@@ -77,5 +80,13 @@ $csv[0] = array_slice($csv[0], 0, 7);
 //display_notification($tax_group_name);
         if ($tax_group_name == "Colorado Sales Tax" && date('Ym') >= "201906")
             return get_tax_rates($tax_group_name, $address)['total'];
+    }
+
+    function get_tax_rate_by_code($j)
+    {
+        global $tax_rates_by_code;
+        if ($tax_rates_by_code == array())
+            do_init_rate();
+        return $tax_rates_by_code[$j];
     }
 ?>
