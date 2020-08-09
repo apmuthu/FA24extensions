@@ -1,6 +1,6 @@
 # MySQL dump of database 'faupgrade' on host 'localhost'
-# Backup Date and Time: 2016-02-23 17:11
-# Built by FrontAccounting 2.4.RC1
+# Backup Date and Time: 2020-06-14 17:11
+# Built by FrontAccounting 2.4.8
 # http://frontaccounting.com
 # Company: Training Co.
 # User: 
@@ -1727,6 +1727,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('default_workorder_required', 'glsetup.manuf', 'int', '11', '20'),
 ('deferred_income_act', 'glsetup.sales', 'varchar', '15', '21130001'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
+('dim_on_recurrent_invoice','setup.company', 'tinyint', 1, '0'),
 ('domicile', 'setup.company', 'varchar', '55', ''),
 ('email', 'setup.company', 'varchar', '100', 'delta@delta.com'),
 ('exchange_diff_act', 'glsetup.general', 'varchar', '15', '44010010'),
@@ -1739,6 +1740,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('legal_text', 'glsetup.customer', 'tinytext', '0', ''),
 ('loc_notification', 'glsetup.inventory', 'tinyint', '1', '0'),
 ('login_tout', 'setup.company', 'smallint', '6', '6000'),
+('long_description_invoice', 'setup.company', 'tinyint', '1', '0'),
 ('no_customer_list', 'setup.company', 'tinyint', '1', '0'),
 ('no_item_list', 'setup.company', 'tinyint', '1', '0'),
 ('no_supplier_list', 'setup.company', 'tinyint', '1', '0'),

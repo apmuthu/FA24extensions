@@ -1,3 +1,4 @@
+2020-08-09  Ap.Muthu     Updated all Charts with new Sys Prefs flags dim_on_recurrent_invoice, long_description_invoice
 2020-06-13  Ap.Muthu     Updated India and Singapore Charts with new Sys Prefs flag long_description_invoice
 2020-03-25  poncho1234   Updated additional_fields extension as of 2019-06-19
 2020-02-06  Ap.Muthu     Updated ta_IN, hi_IN language files for FA 2.4.8

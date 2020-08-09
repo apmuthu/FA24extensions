@@ -29,6 +29,21 @@ These FA extensions comprise:
 * Generate `_init/files` having the SHA1sum values for all files from within an extension folder with:
 `find . -type f -not -path "./_init/files" | xargs sha1sum | sed -e 's# \*\.\/# \/#' | awk '{print $2 ": " $1}' > ./_init/files`
 
+* To recursively re-compute `_init/files` for all the Charts, execute:
+````
+cd Charts
+for f in `ls ./`
+do
+  if [ -d "$f" ] && [ "$f" != "./" ] && [ "$f" != "../" ]
+  then
+    PWDval=`pwd`
+    cd "$f"
+    find . -type f -not -path "./_init/files" | xargs sha1sum | sed -e 's# \*\.\/# \/#' | awk '{print $2 ": " $1}' > ./_init/files
+    cd "$PWDval"
+  fi
+done
+````
+
 ## Caveats
 * This repo will be updated only when I have the time.
 * Files here are provided without any warranty / claims / support whatsoever.

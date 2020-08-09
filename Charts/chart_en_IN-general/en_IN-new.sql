@@ -1,6 +1,6 @@
 -- MySQL dump of database 'frontac24' on host 'localhost'
--- Backup Date and Time: 2018-01-18 14:14+0530
--- Built by FrontAccounting 2.4.3
+-- Backup Date and Time: 2020-06-14 14:14+0530
+-- Built by FrontAccounting 2.4.8
 -- http://frontaccounting.com
 -- Company: Training Co.
 -- Author: Ap.Muthu <apmuthu@usa.net>
@@ -1887,6 +1887,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ,('default_workorder_required', 'glsetup.manuf', 'int', '11', '20')
 ,('deferred_income_act', 'glsetup.sales', 'varchar', '15', '2105')
 ,('depreciation_period', 'glsetup.company', 'tinyint', '1', '1')
+,('dim_on_recurrent_invoice','setup.company', 'tinyint', 1, '0')
 ,('domicile', 'setup.company', 'varchar', '55', '')
 ,('email', 'setup.company', 'varchar', '100', 'accounts@example.com')
 ,('exchange_diff_act', 'glsetup.general', 'varchar', '15', '4450')
