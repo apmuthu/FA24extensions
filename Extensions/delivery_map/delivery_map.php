@@ -310,7 +310,6 @@ function clientarray_string($branch, $stock_id, $shipper_id, $fromdate, $todate,
 }
 
 // ---------------------------------------------------------------------
-
 global $db; // Allow access to the FA database connection
 $debug_sql = 0;
 

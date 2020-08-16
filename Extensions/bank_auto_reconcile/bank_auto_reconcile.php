@@ -20,7 +20,8 @@ include_once($path_to_root . "/includes/ui.inc");
 // The second field is the number of header lines that should be ignored
 // The third field is the array of columns
 $items = array();
-$items[] =  array("Bank Of Colorado", 1, array( "account", "checkno", "debit", "credit", "balance", "date", "comment" ));
+$items[] =  array("Bank Of CO", 1, array( "account", "checkno", "debit", "credit", "balance", "date", "comment" ));
+$items[] =  array("Bank Of CO Archive", 1, array( "account", "checkno", "debit", "credit", "date", "comment", "category", "trandatetime" ));
 $items[] =  array("Wells", 0, array( "date", "amount", "", "checkno", "comment" ));
 $items[] =  array("United", 1, array( "card", "date", "postdate", "comment", "category", "type", "amount", "memo"));
 $items[] =  array("Vanguard", 5, array( "", "date", "postdate", "ttype", "comment", "investment", "shareprice", "shares", "gross", "amount"));
@@ -365,6 +366,7 @@ if (isset($_POST['import'])) {
                     continue;
 
                 $checkno = "";
+                unset($amount);
                 foreach ($items[$_POST['csv_format']][2] as $key => $value) {
                     if ($value == "")
                         continue;
@@ -477,12 +479,15 @@ if (isset($_POST['import'])) {
     if (list_updated('bank_account'))
         $Ajax->activate('csv_format');
 */
-    $name = explode(" ", get_bank_account($_POST['bank_account'])['bank_account_name'])[0];
-    foreach ($items as $key => $value)
-        if ($value[0] == $name) {
+    $bank_name = get_bank_account($_POST['bank_account'])['bank_account_name'];
+    $max = 9999;
+    foreach ($items as $key => $value) {
+        $nc = levenshtein(substr($bank_name, 0, strlen($value[0])),$value[0]);
+        if ($nc < $max) {
             $_POST['csv_format'] = $key;
-            break;
+            $max = $nc;
         }
+    }
     csv_format_list_row("CSV Format", 'csv_format');
     label_row('CSV Bank Statement Import File', "<input type='file' id='imp' name='imp'>");
 

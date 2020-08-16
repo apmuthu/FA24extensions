@@ -304,8 +304,8 @@ $entities = array(
     "HSD" => "sd",      // per DR1002
     "PSI" => "sd",      // per DR1002
     "MHA" => "sd",    //per DR1002
-    "MTS" => "county",    //per DR1002, xml is cnty???
-    "MDT" => "sd",    //per DR1002, xml is MT???
+    "MTS" => "county",    //per DR1002
+    "MDT" => "sd",    //per DR1002
     "LID" => "city",    // per DR1002
     "City" => "city");
 
@@ -374,15 +374,26 @@ if (!isset($sales['gross']))
 foreach ($entities as $ent_xml => $col) {
     if (isset($tax_rate[$ent_xml])) {
 
+        // LID and City both mapped into "city", so add tax_rates
+        // RTD and CD both mapped into "rtd", so add tax_rates
+        $tax_rate[$col] += $tax_rate[$ent_xml]; // for dr0100
+
+        // unclear which service fee to use
+        $service_fee[$col] = $service_fee[$ent_xml];    // for dr0100
+
+        if ($tax_rates['HomeRule'] == 'Self-collected'
+            && $col == 'city')
+            continue;
+
         // The DR0100 maps tax codes into columns,
         // but XML appears to do no mapping (see Sample Instance, CD & RTD)
         $xml .= '           <SalesOrUseTaxes TaxType="Sales">' . "\n";
         if ($ent_xml == "County")
             $xml .= "            <TaxCode>Cnty</TaxCode>\n";
         else if ($ent_xml == "MTS")
-            $xml .= "            <TaxCode>Cnty</TaxCode>\n";
-        else if ($ent_xml == "MDT")
             $xml .= "            <TaxCode>MT</TaxCode>\n";
+        else if ($ent_xml == "MDT")
+            $xml .= "            <TaxCode>BGM</TaxCode>\n";
         else
             $xml .= "            <TaxCode>$ent_xml</TaxCode>\n";
 
@@ -392,13 +403,6 @@ foreach ($entities as $ent_xml => $col) {
         foreach ($exemptions as $e)
             if (isset($sales[$e]))
                 $xml .= xml_deduct($e, $sales[$e]);
-
-        // LID and City both mapped into "city", so add tax_rates
-        // RTD and CD both mapped into "rtd", so add tax_rates
-        $tax_rate[$col] += $tax_rate[$ent_xml]; // for dr0100
-
-        // unclear which service fee to use
-        $service_fee[$col] = $service_fee[$ent_xml];    // for dr0100
 
         // add deductions
         foreach ($deductions as $d) {
@@ -532,7 +536,7 @@ if ($sales['description'] == 'Special Event') {
     if ($tax_rates['HomeRule'] == 'Self-collected') {
         if ($dr0098 == 0)
             $rep->AmountCol(3, 4, $tax_due_city, $dec);
-        $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 00;
+        $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 0;
         $tax_rate['city'] = 0;
     } else
         $tax_due += $tax_due_city;

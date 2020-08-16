@@ -479,37 +479,37 @@ if ($found) {
     $sql     = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'myhost'";
     $result  = db_query($sql, "could not get host name");
     $row     = db_fetch_row($result);
-    $db_Host = $row[1];
+    $db_Host = ($row == false ? '' : $row[1]);
 
     // Get User Name
     $sql     = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'myuser'";
     $result  = db_query($sql, "could not get user name");
     $row     = db_fetch_row($result);
-    $db_User = $row[1];
+    $db_User = ($row == false ? '' : $row[1]);
 
     // Get Password
     $sql         = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'mypassword'";
     $result      = db_query($sql, "could not get password");
     $row         = db_fetch_row($result);
-    $db_Password = $row[1];
+    $db_Password = ($row == false ? '' : $row[1]);
 
     // Get DB Name
     $sql     = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'myname'";
     $result  = db_query($sql, "could not get DB name");
     $row     = db_fetch_row($result);
-    $db_Name = $row[1];
+    $db_Name = ($row == false ? '' : $row[1]);
 
     // Get item prefix
     $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'osc_prefix'";
     $result     = db_query($sql, "could not get osc_prefix");
     $row        = db_fetch_row($result);
-    $osc_Prefix = $row[1];
+    $osc_Prefix = ($row == false ? '' : $row[1]);
 
     // Get item prefix
     $sql    = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'osc_id'";
     $result = db_query($sql, "could not get osc_id");
     $row    = db_fetch_row($result);
-    $osc_Id = $row[1];
+    $osc_Id = ($row == false ? '' : $row[1]);
 
     // Get last cID imported
     $sql    = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'lastcid'";
@@ -535,31 +535,31 @@ if ($found) {
     $sql              = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'taxgroup'";
     $result           = db_query($sql, "could not get taxgroup");
     $row              = db_fetch_row($result);
-    $default_TaxGroup = $row[1];
+    $default_TaxGroup = ($row == false ? '' : $row[1]);
 
     // Get destination customer
     $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'destCust'";
     $result     = db_query($sql, "could not get destCust");
     $row        = db_fetch_row($result);
-    $destCust  = $row[1];
+    $destCust  = ($row == false ? '' : $row[1]);
 
     // Get inventory customer
     $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'invCust'";
     $result     = db_query($sql, "could not get invtCust");
     $row        = db_fetch_row($result);
-    $invCust  = $row[1];
+    $invCust  = ($row == false ? '' : $row[1]);
 
     // Get status Id
     $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'statusId'";
     $result     = db_query($sql, "could not get statusId");
     $row        = db_fetch_row($result);
-    $statusId  = $row[1];
+    $statusId  = ($row == false ? '' : $row[1]);
 
     // Get osc website
     $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'oscwebsite'";
     $result     = db_query($sql, "could not get oscwebsite");
     $row        = db_fetch_row($result);
-    $oscwebsite  = $row[1];
+    $oscwebsite  = ($row == false ? '' : $row[1]);
 }
 
 $num_price_errors = -1;
@@ -1255,6 +1255,8 @@ display_notification($sql);
             $sql = "SELECT p." . $osc_Id . ", p.products_id, pd.products_name, CONCAT(pd.products_description, '\n<wt>', p.products_weight, '</wt>', '\n<alc>', p.products_percent_alcohol, '</alc>') AS description, cd.categories_name, p.products_price, p.products_quantity, tc.tax_class_title, p.products_status, p.products_barcode, p.products_image FROM products p left join products_description pd on p.products_id=pd.products_id left join products_to_categories pc on p.products_id=pc.products_id left join categories_description cd on pc.categories_id=cd.categories_id left join tax_class tc on p.products_tax_class_id=tc.tax_class_id";
 
             $p_result = osc_dbQuery($sql, true);
+            $oscItems = array();
+
             while ($pp = mysqli_fetch_assoc($p_result)) {
                 // WARNING: language character encoding import issue
                 // default FA iso-8859-1 requires utf8_decode
@@ -1265,6 +1267,7 @@ display_notification($sql);
                 $products_quantity = $pp['products_quantity'];
                 $products_status = $pp['products_status'];
                 $osc_id = get_osc_id($pp[$osc_Id], $products_quantity);
+                $oscItems[$osc_id] = true;
                 $mb_flag = 'B';
                 if ($products_quantity == "") {
                     $mb_flag = 'D';
@@ -1323,6 +1326,26 @@ display_notification($sql);
                 mysqli_free_result($pa_result);
             }
             mysqli_free_result($p_result);
+
+            // Delete items no longer in oscommerce
+            $sql = "SELECT stock_id, description, inactive FROM ".TB_PREF."stock_master WHERE substr(stock_id,1," . strlen($oscPrefix) . ")='" . $oscPrefix . "' AND LOCATE('-', stock_id) = 0";
+            $result = db_query($sql, "Can not look up stock_id");
+            while ($row = db_fetch($result))
+                if (!isset($oscItems[$row['stock_id']])) {
+                    if (item_used($row['stock_id'])) {
+                        if (!$row['inactive']) {
+                            display_notification("Making Inactive " . $row['stock_id'] . " " . $row['description']);
+                            $sql = "UPDATE ".TB_PREF."stock_master SET inactive=1
+                                WHERE stock_id=" . db_escape($row['stock_id']);
+
+                            db_query($sql, "The item could not be updated");
+                        }
+                    } else {
+                        display_notification("Deleting " . $row['stock_id'] . " " . $row['description']);
+                        delete_item($row['stock_id']);
+                    }
+                }
+
             $action = 'iimport';
         }
 

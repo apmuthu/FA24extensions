@@ -286,17 +286,27 @@ function square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locat
             "variations" => array(square_variation($stock_id, $sq_item, $locationId))
       ));
 
-    if ($locationId != '0') {
+    if ($locationId != '0')
         $obj = array_merge($obj, array("present_at_location_ids" => array($locationId)));
 
-        if (!$trans['exempt']) {
-            $tax_name = $locationName[$locationId] . " " . $trans['tax_name'];
-            if (!isset($taxName[$tax_name]))
-                $tax_name = $locationName[$locationId];
-            if (isset($taxName[$tax_name]))
-                $obj["item_data"] = array_merge($obj["item_data"], array("tax_ids" => array($taxName[$tax_name])));
-        }
+    if (!$trans['exempt']) {
+        $tax_array = array();
+        foreach ($locationName as $loc_key => $loc_name)
+            if ($locationId == '0' || $loc_key == $locationId) {
+                $tax_name = $loc_name . " " . $trans['tax_name'];
+
+                // if "location taxrate" is not defined in Square Taxes
+                // check for just "location" to apply Square tax rate to all non-exempt items
+
+                if (!isset($taxName[$tax_name]))
+                    $tax_name = $loc_name;
+                if (isset($taxName[$tax_name]))
+                    $tax_array = array_merge($tax_array, array($taxName[$tax_name]));
+
+            }
+        $obj["item_data"] = array_merge($obj["item_data"], array("tax_ids" => $tax_array));
     }
+
   return $obj;
 }
 
@@ -896,7 +906,7 @@ try {
                             $var = $item_data->getVariations();
                             $vardata = $var[0]->getItemVariationData();
 
-                            $sku = $vardata->getUpc();
+                            $sku = $vardata->getName();
                             if ($sku == '') {
                                 display_warning("Missing SKU for " . $item->getName());
         // Note: this causes the adjustment item to be used
@@ -917,7 +927,7 @@ try {
                         } // foreach item
 
                 if ($t->getTipMoney()->getAmount() != 0)
-                        add_to_order($cart, $tips, 1, $item->getTipMoney()->getAmount()/100, 0);
+                        add_to_order($cart, $_POST['tips'], 1, $t->getTipMoney()->getAmount()/100, 0);
 
                 $total = $cart->get_trans_total();
                 $total_order = $t->getTender()[0]->getTotalMoney()->getAmount();
@@ -985,8 +995,7 @@ try {
 
 $square_items = list_square_items();
 
-$cat = $_POST['category'];
-$trans_res = getTransactions($cat, 'all', $_POST['stocklike']);
+$trans_res = getTransactions($_POST['category'], 'all', $_POST['stocklike']);
 
 while ($trans=db_fetch($trans_res)) {
     $stock_id = $trans['stock_id'];
@@ -996,9 +1005,9 @@ while ($trans=db_fetch($trans_res)) {
 
     if (isset($square_items[$stock_id])) {
         $sq_item=$square_items[$stock_id];
+        unset($square_items[$stock_id]); // prevent deletion
         if ($sq_item["present_at_all_locations"]
             && $locationId != "0") {
-            unset($square_items[$stock_id]); // prevent deletion
             continue;
         }
     } else
@@ -1086,11 +1095,10 @@ print_r($sq_item);
         $res = json_decode($result);
         $sq_id=$res->catalog_object->id;
     } catch (Exception $e) {
-        display_error("$stock_id: Exception when calling CatalogApi->upsertCatalogObject: " .  $e->getMessage());
+        display_error("$stock_id: Exception when calling CatalogApi->upsertCatalogObject: " .  $e->getMessage() ." body=". print_r($body, true));
         continue;   // should not happen, try the next item
     }
 
-    unset($square_items[$stock_id]);
 
 /*
     // Update taxes (should not be necessary, but tax_ids field in item field not working)
@@ -1131,11 +1139,13 @@ print_r($sq_item);
 
 // Delete items in square that are not in FA
 
-foreach ($square_items as $sq_item)
-    if (isset($sq_item->id) && $sq_item->item_data->category_id == $sq_cat) {
+foreach ($square_items as $stock_id => $sq_item)
+    if (isset($sq_item['id']) &&
+        ($_POST['category'] == -1 || $sq_item['item_data']['category_id'] == $sq_cat)) {
+        display_notification("Deleting Item $stock_id " . $sq_item['item_data']['name']);
         $api_instance = new SquareConnect\Api\CatalogApi();
         try {
-            $result = $api_instance->deleteCatalogObject($sq_item->id);
+            $result = $api_instance->deleteCatalogObject($sq_item['id']);
         } catch (Exception $e) {
             display_error('Exception when calling CatalogApi->deleteCatalogObject: '. $e->getMessage());
         }
