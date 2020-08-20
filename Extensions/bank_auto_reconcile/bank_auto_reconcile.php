@@ -94,6 +94,26 @@ echo "<hr>";
     }
 }
 
+function get_unmatched_bank_transactions($rec_date, $account, $current)
+{
+    $rec_date = date2sql($rec_date);
+    $sql = "SELECT b.*, c.memo_ FROM ".TB_PREF."bank_trans b
+            LEFT JOIN ".TB_PREF."comments c ON b.type=c.type and c.id = b.trans_no
+            LEFT JOIN ".TB_PREF."voided v ON b.type=v.type AND b.trans_no=v.id
+            WHERE b.bank_act = '$account'
+            AND b.amount != 0
+            AND ISNULL(v.date_)
+            AND (ISNULL(b.reconciled) OR b.reconciled = " . db_escape($rec_date) . ")";
+
+    foreach ($current as $key => $value)
+        $sql .= " AND b.id != $key ";
+
+    $sql .= " ORDER BY trans_date";
+    // display_notification($sql);
+
+    return db_query($sql,"The transactions for '$account' could not be retrieved");
+}
+
 function get_bank_transaction($rec_date, $toacct, $date, $account, $amount, $check, $current, $early)
 {
     $rec_date = date2sql($rec_date);
@@ -447,13 +467,21 @@ if (isset($_POST['import'])) {
                         display_error($row['trans_date'] . ":" . $row['amount'] . ":" . $row['memo_']);
                     display_error("Hint: edit transaction dates to match bank statement.");
                 }
-            } // while
-            @fclose($fp);
+            } // foreach
+        } // for
+
+        $trial = (isset($_POST['trial']) ? $_POST['trial'] : false);
+
+        if ($trial == true) {
+            display_notification("Following is a list of transactions that have no match:");
+            $result = get_unmatched_bank_transactions($_POST['reconcile_date'], $_POST['bank_account'], $current);
+            while ($row = db_fetch($result))
+                display_notification($row['trans_date'] . ": $" . $row['amount'] . " : " . payment_person_name($row['person_type_id'],$row['person_id']) . " : " . $row['memo_']);
         }
+
         show_balance($total, $total_miss, $total_current);
 
         if ($total_miss == 0) {
-            $trial = (isset($_POST['trial']) ? $_POST['trial'] : false);
             if ($trial == true)
                 display_notification("Success.  Unclick trial run and rerun to auto reconcile.");
             else {
@@ -464,7 +492,7 @@ if (isset($_POST['import'])) {
     } else
         display_error("No CSV file selected");
         
-}
+} // import
 
     global $Ajax;
     start_form(true);
