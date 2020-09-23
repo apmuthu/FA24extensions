@@ -1,3 +1,4 @@
+2020-09-23  Ap.Muthu     Ordered SysAdmin security permissions in chart en_IN
 2020-08-21  BraathWaate  Updated all extension bank_auto_reconcile from upstream
 2020-08-09  Ap.Muthu     Updated all Charts with new Sys Prefs flags dim_on_recurrent_invoice, long_description_invoice
 2020-06-13  Ap.Muthu     Updated India and Singapore Charts with new Sys Prefs flag long_description_invoice
