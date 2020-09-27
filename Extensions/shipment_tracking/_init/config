@@ -1,0 +1,10 @@
+Package: shipment_tracking
+Description: Shipments -  Tracking Information
+Name: Shipment Tracking
+Filename: shipment_tracking
+Author: Mohsin F Mujawar <dearmosin@gmail.com>
+Maintenance: Impulse Solutions <contact@impulsesolutions.in>
+Homepage: impulsesolutions.in
+Type: extension
+InstallPath: modules/shipment_tracking
+Version: 2.4.0-1
