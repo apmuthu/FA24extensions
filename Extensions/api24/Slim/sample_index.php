@@ -30,7 +30,7 @@ $app = new \Slim\Slim();
  * is an anonymous function.
  */
 
-// GET route
+// GET routes
 $app->get(
     '/',
     function () {
@@ -131,11 +131,36 @@ EOT;
     }
 );
 
-// POST route
+$app->get(
+    '/hello',
+    function () {
+		$a = "Joe";
+		// your php code goes here
+        $template = <<<EOT
+		<h1>Hello $a</h1>
+EOT;
+        echo $template;
+    }
+);
+
+$app->get(
+    '/hello/:id',
+    function ($id) {
+		$a = "Joe";
+		// your php code goes here
+        $template = <<<EOT
+		<h1>Hello $a, you are $id</h1>
+EOT;
+        echo $template;
+    }
+);
+
+// POST routes
 $app->post(
     '/post',
     function () {
         echo 'This is a POST route';
+		echo print_r($_POST, true);
     }
 );
 

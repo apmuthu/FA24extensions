@@ -1,11 +1,13 @@
-# Slim Framework
-
-[![Build Status](https://travis-ci.org/slimphp/Slim.svg?branch=master)](https://travis-ci.org/slimphp/Slim)
+# Slim Framework v2.64
 
 Slim is a PHP micro framework that helps you quickly write simple yet powerful web applications and APIs.
 Slim is easy to use for both beginners and professionals. Slim favors cleanliness over terseness and common cases
 over edge cases. Its interface is simple, intuitive, and extensively documented — both online and in the code itself.
 Thank you for choosing the Slim Framework for your next project. I think you're going to love it.
+
+* [![Build Status](https://travis-ci.org/slimphp/Slim.svg?branch=master)](https://travis-ci.org/slimphp/Slim)
+* [https://travis-ci.com/github/slimphp/Slim/builds/172074375](https://travis-ci.com/github/slimphp/Slim/builds/172074375)
+* 2015-07-25: [Last commit in 2.x branch](https://github.com/slimphp/Slim/commit/e44a9198cbc05b75f720b0d9d12725e29eb3c310) - [Browse](https://github.com/slimphp/Slim/tree/e44a9198cbc05b75f720b0d9d12725e29eb3c310)
 
 ## Features
 
@@ -159,7 +161,7 @@ $app->run();
    
 ## Documentation
 
-<http://docs.slimframework.com/>
+[http://docs.slimframework.com](http://docs.slimframework.com)
 
 ## How to Contribute
 
@@ -209,4 +211,4 @@ PHP programmers to best practices and good information.
 
 The Slim Framework is released under the MIT public license.
 
-<https://github.com/slimphp/Slim/blob/master/LICENSE>
+[https://github.com/slimphp/Slim/blob/2.x/LICENSE](https://github.com/slimphp/Slim/blob/2.x/LICENSE)
