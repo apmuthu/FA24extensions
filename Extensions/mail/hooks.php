@@ -1,12 +1,12 @@
 <?php
 
 class hooks_mail extends hooks {
-    var $module_name = 'mail'; 
+	var $module_name = 'mail'; 
 
-    /*
-    * Install additonal menu options provided by module
-    */
-    function install_options($app) {
+	/*
+	* Install additonal menu options provided by module
+	*/
+	function install_options($app) {
 		global $path_to_root;
 
 		switch($app->id) {
@@ -15,5 +15,5 @@ class hooks_mail extends hooks {
 				$path_to_root."/modules/".$this->module_name."/mail_setup.php?", 'SA_SETUPCOMPANY', MENU_SETTINGS);
 			break;
 		}
-    }
+	}
 }

@@ -1,0 +1,19 @@
+/*
+# bash commands to parse most of the translatable strings
+grep '_("' hooks.php | awk '{split($0,a,"\""); print a[2]}' > translation_strings.txt
+grep '_("' mail_setup.php | awk '{split($0,a,"\""); print a[2]}' >> translation_strings.txt
+*/
+
+Mail sending setup
+The SMTP host must be entered.
+The SMTP port must be a positive number.
+The SMTP username must be entered.
+The SMTP password must be entered.
+The mail sending settings has been updated.
+Mail type:
+SMTP Host:
+SMTP Port:
+SMTP Secure:
+Username:
+Password:
+Update

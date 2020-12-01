@@ -7,10 +7,10 @@ include_once($path_to_root . "/modules/mail/includes/PHPMailer/class.smtp.php");
 include_once($path_to_root . "/modules/mail/includes/PHPMailer/class.phpmailer.php");
 
 class email {
-    public $phpmailer = null;
-    public $charset = 'ISO-8859-1';
+	public $phpmailer = null;
+	public $charset = 'ISO-8859-1';
 
-    public function __construct($name, $email) {
+	public function __construct($name, $email) {
 		//create phpmailer object
 		$this->phpmailer = new PHPMailer;
 
@@ -27,12 +27,12 @@ class email {
 		$_mail_type = get_company_pref('mail_type');
 		switch($_mail_type) {
 			case 'SMTP':
-			$this->phpmailer->isSMTP();
-			break;
+				$this->phpmailer->isSMTP();
+				break;
 			case 'MAIL':
 			default:
-			$this->phpmailer->isMail();
-			break;
+				$this->phpmailer->isMail();
+				break;
 		}
 		//if we are sending via SMTP, make specific settings
 		if ($_mail_type == 'SMTP') {
@@ -75,57 +75,57 @@ class email {
 				error_log("DEBUG: class.mail.inc: PHPMailerdebug: $level: $str");
 			};
 		}
-    }
+	}
 
-    private function mailparse_rfc822($rfc822_email_string) {
+	private function mailparse_rfc822($rfc822_email_string) {
 		$data = array();
 		// match all words and whitespace, will be terminated by '<'
-        $name = preg_match('/[\w\s]+/', $rfc822_email_string, $matches);
-        $data['name'] = trim($matches[0]);
-                
-        // extract parts between the two parentheses
-        $address = preg_match('/(?:<)(.+)(?:>)$/', $rfc822_email_string, $matches);
-    	$data['email'] = $matches[1];
-        
-        return $data;
-    }
-    
-    public function to($mail) {
+		$name = preg_match('/[\w\s]+/', $rfc822_email_string, $matches);
+		$data['name'] = trim($matches[0]);
+
+		// extract parts between the two parentheses
+		$address = preg_match('/(?:<)(.+)(?:>)$/', $rfc822_email_string, $matches);
+		$data['email'] = $matches[1];
+
+		return $data;
+	}
+
+	public function to($mail) {
 		error_log("DEBUG: sending mail to: $mail");
 		$data = $this->mailparse_rfc822($mail);
 
 		error_log("DEBUG: parsed mail:" . print_r($data, true));
-	
+
 		$this->phpmailer->addAddress($data['email'], $data['name']);
-    }
-    
-    public function cc($mail) {
+	}
+
+	public function cc($mail) {
 		$data = $this->mailparse_rfc822($mail);
 		$this->phpmailer->addCC($data['email'], $data['name']);
-    }
-    
-    public function bcc($mail) {
+	}
+
+	public function bcc($mail) {
 		$data = $this->mailparse_rfc822($mail);
 		$this->phpmailer->addBCC($data['email'], $data['name']);
-    }
-    
-    public function subject($subject) {
+	}
+
+	public function subject($subject) {
 		$this->phpmailer->Subject = $subject;
-    }
-    
-    public function attachment($file) {
+	}
+
+	public function attachment($file) {
 		$this->phpmailer->addAttachment($file);
-    }
-    
-    public function text($text) {
+	}
+
+	public function text($text) {
 		$this->phpmailer->Body = $text;
-    }
-    
-    public function html($html) {
+	}
+
+	public function html($html) {
 		$this->phpmailer->msgHTML($html);
-    }
-    
-    public function send() {
+	}
+
+	public function send() {
 		$this->phpmailerCharSet = $this->charset;
 
 		//send the message, check for errors
@@ -136,5 +136,5 @@ class email {
 		} else {
 			return 1;
 		}
-    }
+	}
 }

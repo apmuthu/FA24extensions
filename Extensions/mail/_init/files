@@ -1,5 +1,5 @@
-/class.mail.inc: 64b494d43f662c0b389c5cf8ba2072226c221d02
-/hooks.php: ef8e10cbbd66621c3c64d618d218f622262e8499
+/class.mail.inc: 559e5850532bc8f3477e1ff91c335e78d660058f
+/hooks.php: 8f352ffcfa591f33f7b174f35d7849f2ba1c2cfa
 /includes/PHPMailer/class.phpmailer.php: f06e34fdb71186dab8e2477d30130023d3a166b3
 /includes/PHPMailer/class.phpmaileroauth.php: 84e79ab8c59082238def6d6a426b69d46e1cf0ef
 /includes/PHPMailer/class.phpmaileroauthgoogle.php: 84a5bf8fc0abc9efac41db6ed86476cd2ddbb983
@@ -109,6 +109,7 @@
 /includes/PHPMailer/LICENSE: 7c7d178d9ce31b21a4869940a881b043b086f007
 /includes/PHPMailer/PHPMailerAutoload.php: c5fd35be762592bb0af1fc1d375f0e5ed80d5cc4
 /includes/PHPMailer/VERSION: f797455fa5348b4e6c903e8a489e9141acd35260
-/mail_setup.php: 59e03dfa7adc9347584b36a455679d0241aed928
+/mail_setup.php: 1d6fc0deec6f32e3bb25a7c0ed68b77846626dc8
 /README.md: e73a2c0cfbe5c377c3536a42b9d2e1b5418bd777
-/_init/config: cd07d01cb80a07acda6dad0791561fc255a6b71d
+/translation_strings.txt: c9cca051ae5bfb48a00a57f71a5d1a3f115ae0bc
+/_init/config: 58c058beec742a28800b26bfcf78f5dcec7826e5

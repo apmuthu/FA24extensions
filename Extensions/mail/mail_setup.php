@@ -1,13 +1,13 @@
 <?php
 /**********************************************************************
-    Copyright (C) FrontAccounting, LLC.
+	Copyright (C) FrontAccounting, LLC.
 	Released under the terms of the GNU General Public License, GPL, 
 	as published by the Free Software Foundation, either version 3 
 	of the License, or (at your option) any later version.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-    See the License here <http://www.gnu.org/licenses/gpl-3.0.html>.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+	See the License here <http://www.gnu.org/licenses/gpl-3.0.html>.
 ***********************************************************************/
 $page_security = 'SA_SETUPCOMPANY';
 $path_to_root="../..";
@@ -53,16 +53,16 @@ if (get_company_pref('smtp_secure') === null) {
 }
 
 if ($init)
-    refresh_sys_prefs();
+	refresh_sys_prefs();
 
 
 function can_process() {
-    if ($_POST['mail_type'] == 'MAIL')
+	if ($_POST['mail_type'] == 'MAIL')
 		return true;
 
-    $errors = 0;
+	$errors = 0;
 
-    if ($_POST['mail_type'] == 'SMTP') {
+	if ($_POST['mail_type'] == 'SMTP') {
 		if (empty($_POST['smtp_host'])) {
 			$errors++;
 			display_error(_("The SMTP host must be entered."));
@@ -82,8 +82,8 @@ function can_process() {
 			$errors++;
 			display_error(_("The SMTP password must be entered."));
 		}
-    }
-    return ($errors == 0);
+	}
+	return ($errors == 0);
 
 }
 
@@ -112,11 +112,11 @@ if (list_updated('mail_type')) {
 $prefs = get_company_prefs();
 
 if (!isset($_POST['mail_type'])) {
-    $_POST['mail_type'] = $prefs['mail_type'];
+	$_POST['mail_type'] = $prefs['mail_type'];
 }
 
-$_POST['smtp_host']     = $prefs['smtp_host'];
-$_POST['smtp_port']     = $prefs['smtp_port'];
+$_POST['smtp_host']	 = $prefs['smtp_host'];
+$_POST['smtp_port']	 = $prefs['smtp_port'];
 $_POST['smtp_secure']   = $prefs['smtp_secure'];
 $_POST['smtp_username'] = $prefs['smtp_username'];
 $_POST['smtp_password'] = $prefs['smtp_password'];
@@ -127,10 +127,10 @@ start_form();
 start_table(TABLESTYLE_NOBORDER);
 start_row();
 $_selector = array_selector(
-    'mail_type',
-    $_POST['mail_type'],
-    array('MAIL' => 'PHP\'s mail function', 'SMTP' => 'SMTP server'),
-    array('select_submit' => true)
+	'mail_type',
+	$_POST['mail_type'],
+	array('MAIL' => 'PHP\'s mail function', 'SMTP' => 'SMTP server'),
+	array('select_submit' => true)
 );
 label_cells(_("Mail type:"), $_selector);
 end_row();
@@ -140,21 +140,21 @@ echo "<hr>";
 
 div_start('details');
 if ($_POST['mail_type'] != 'MAIL') {
-    start_table(TABLESTYLE2);
-    text_row(_("SMTP Host:"), 'smtp_host', $_POST['smtp_host'], 50, 52);
-    text_row(_("SMTP Port:"), 'smtp_port', $_POST['smtp_port'], 10, 12);
+	start_table(TABLESTYLE2);
+	text_row(_("SMTP Host:"), 'smtp_host', $_POST['smtp_host'], 50, 52);
+	text_row(_("SMTP Port:"), 'smtp_port', $_POST['smtp_port'], 10, 12);
 
-    //smtp auth row
-    echo "<tr><td class='label'>" . _("SMTP Secure:") . "</td><td>";
-    echo array_selector('smtp_secure'
-	                  , $_POST['smtp_secure']
+	//smtp auth row
+	echo "<tr><td class='label'>" . _("SMTP Secure:") . "</td><td>";
+	echo array_selector('smtp_secure'
+					  , $_POST['smtp_secure']
 					  , array('none' => 'None', 'tls' => 'TLS', 'ssl' => 'SSL')
 					  );
-    echo "</td></tr>\n";
+	echo "</td></tr>\n";
 
-    text_row(_("Username:"), 'smtp_username', $_POST['smtp_username'], 60, 62);
-    text_row(_("Password:"), 'smtp_password', $_POST['smtp_password'], 60, 62);
-    end_table(1);
+	text_row(_("Username:"), 'smtp_username', $_POST['smtp_username'], 60, 62);
+	text_row(_("Password:"), 'smtp_password', $_POST['smtp_password'], 60, 62);
+	end_table(1);
 }
 div_end();
 
