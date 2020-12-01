@@ -1,3 +1,4 @@
+2020-12-01  Ap.Muthu     Added Mail extension by Serban Constantinescu to replace php mail() with PHPMailer
 2020-09-27  dearmoshin   Added Shipment Tracking extension
 2020-09-23  Ap.Muthu     Ordered SysAdmin security permissions in chart en_IN
 2020-08-21  BraathWaate  Updated all extension bank_auto_reconcile from upstream

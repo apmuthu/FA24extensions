@@ -1,0 +1,16 @@
+Package: mail
+Description: FrontAccounting PHPMailer mail class replacement.
+ The purpose of this module is to allow FA to use PHPMailer's extensive 
+ options in configuring the SMTP Mail sending framework instead of the 
+ default PHP mail() class in reporting/includes/class.mail.inc it substitutes.
+Author: Serban Constantinescu <office@qwerty-sol.ro>
+License: http://www.gnu.org/copyleft/gpl-3.0.html GNU/GPL
+Maintenance: Ap.Muthu <apmuthu@usa.net>
+Homepage: https://github.com/serbanconstantinescu/fa_mail_phpmailer
+Depends: 
+Type: extension
+Name: Mail
+InstallPath: modules/mail
+Filename: mail
+Version: 2.4.0-1
+
