@@ -28,7 +28,7 @@ include_once($path_to_root . "/includes/dashboard.inc"); // here are all the das
 $js = "";
 if (user_use_date_picker())
 	$js = get_js_date_picker();
-$js .= get_js_history(array('TransFromDate', 'TransToDate', 'AccGrp', 'Dimension'));
+$js .= get_js_history(array('payment_type', 'tax_groups', 'year', 'month'));
 
 page(_($help_context = "Sales History"), false, false, "", $js);
 
@@ -40,12 +40,11 @@ if (get_post('Show'))
 	$Ajax->activate('sales_tbl');
 }
 
-set_posts(array("tax_groups", "year", "month"));
-
+set_posts(array("payment_type", "tax_groups", "year", "month"));
 
 function getYears()
 {
-    $sql = "select year(dt.tran_date) row_year  from ".TB_PREF."debtor_trans dt GROUP BY year(dt.tran_date)";
+    $sql = "select year(dt.tran_date) row_year  from ".TB_PREF."debtor_trans dt WHERE type=".ST_SALESINVOICE." GROUP BY year(dt.tran_date)";
     return db_query($sql,"No transactions were returned");
 }
 
@@ -156,7 +155,7 @@ function getBankTransactions($tran_date, $sel_month, $tax_groups)
     return db_query($sql,"No transactions were returned");
 }
 
-function getTaxTransactions($from, $sel_month, $tax_groups, $invert)
+function getTaxTransactions($payment_type, $from, $sel_month, $tax_groups, $invert)
 {
 	$sql = "SELECT 
 
@@ -175,10 +174,18 @@ function getTaxTransactions($from, $sel_month, $tax_groups, $invert)
 
             FROM ".TB_PREF."debtor_trans dt
 			LEFT JOIN ".TB_PREF."cust_branch br ON br.branch_code=dt.branch_code
-            LEFT JOIN ".TB_PREF."voided as v
-                ON dt.trans_no=v.id AND dt.type=v.type
+            LEFT JOIN ".TB_PREF."voided as v ON dt.trans_no=v.id AND dt.type=v.type";
 
-		WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT." OR dt.type=".ST_JOURNAL.") ";
+    if ($payment_type != -1)
+        $sql .= " LEFT JOIN ".TB_PREF."cust_allocations ca ON dt.type=trans_type_to AND dt.trans_no=trans_no_to
+            LEFT JOIN ".TB_PREF."bank_trans bt ON trans_type_from=bt.type and trans_no_from=bt.trans_no
+            LEFT JOIN ".TB_PREF."bank_accounts ba ON bt.bank_act = ba.id";
+
+    $sql .= " WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT." OR dt.type=".ST_JOURNAL.") ";
+
+    if ($payment_type != -1)
+        $sql .= " AND ba.account_type = " . db_escape($payment_type);
+
 	if ($tax_groups)
 		$sql .= "AND br.tax_group_id IN (" . $tax_groups . ")";
 	$sql .= " AND year(dt.tran_date) >= '" . $from . "'
@@ -197,7 +204,7 @@ if (!$invert) $sql .= "ASC"; else $sql .= "DESC";
     return db_query($sql,"No transactions were returned");
 }
 
-function getTaxes($tran_date, $sel_month, $tax_groups, $invert)
+function getTaxes($payment_type, $tran_date, $sel_month, $tax_groups, $invert)
 {
 	$sql = "SELECT 
 
@@ -210,22 +217,30 @@ function getTaxes($tran_date, $sel_month, $tax_groups, $invert)
                 ELSE (net_amount) END ELSE 0 END) AS taxed_sales,
 
 			SUM(CASE WHEN included_in_price = 1 THEN
-                CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (amount)*-1 
-                ELSE (amount) END *ex_rate ELSE 0 END) AS tax_included,
+                CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (td.amount)*-1 
+                ELSE (td.amount) END *ex_rate ELSE 0 END) AS tax_included,
 
 			SUM(CASE WHEN included_in_price = 0 THEN
-                CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (amount)*-1 
-                ELSE (amount) END *ex_rate ELSE 0 END) AS tax_added
+                CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (td.amount)*-1 
+                ELSE (td.amount) END *ex_rate ELSE 0 END) AS tax_added
 
             FROM ".TB_PREF."debtor_trans dt
 			LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no=dt.debtor_no
 			LEFT JOIN ".TB_PREF."cust_branch br ON br.branch_code=dt.branch_code
 			LEFT JOIN ".TB_PREF."tax_groups t ON br.tax_group_id=t.id
 			LEFT JOIN ".TB_PREF."trans_tax_details td ON td.trans_type=dt.type AND td.trans_no=dt.trans_no
-            LEFT JOIN ".TB_PREF."voided as v
-                ON dt.trans_no=v.id AND dt.type=v.type
+            LEFT JOIN ".TB_PREF."voided as v ON dt.trans_no=v.id AND dt.type=v.type";
 
-		WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
+    if ($payment_type != -1)
+        $sql .= " LEFT JOIN ".TB_PREF."cust_allocations ca ON dt.type=trans_type_to AND dt.trans_no=trans_no_to
+            LEFT JOIN ".TB_PREF."bank_trans bt ON trans_type_from=bt.type and trans_no_from=bt.trans_no
+            LEFT JOIN ".TB_PREF."bank_accounts ba ON bt.bank_act = ba.id";
+
+    $sql .= " WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
+
+    if ($payment_type != -1)
+        $sql .= " AND ba.account_type = " . db_escape($payment_type);
+
 	if ($tax_groups)
 		$sql .= "AND br.tax_group_id IN (" . $tax_groups . ")";
 	$sql .= " 
@@ -243,7 +258,7 @@ function getTaxes($tran_date, $sel_month, $tax_groups, $invert)
     return db_query($sql,"No transactions were returned");
 }
 
-function compare_graph($pg, $pg_years)
+function compare_graph($sel_month, $pg, $pg_years)
 {
     // display_notification(print_r($pg_years, true));
     // display_notification(print_r($pg, true));
@@ -253,7 +268,7 @@ function compare_graph($pg, $pg_years)
     $today = Today();
     $title = "Sales Comparison";
 
-    source_graphic($today, $title, _("Month"), $pg, $pg_years[0], $pg_years[1], 1);
+    source_graphic($today, $title, ($sel_month == 0 ? _("Month") : _("Day")), $pg, $pg_years[0], $pg_years[1], 1);
 }
 
 
@@ -318,12 +333,10 @@ if (@$_GET['print']=='yes') $print=true; else $print=false;
 // set inversion toggle
 if (@$_GET['invert']=='yes') $invert=true; else $invert=false;
 
-// detect whether this is monthly detail request
-$sel_month = 0;
+$invert=true;
 
-	if (@$_GET['month']&& @$_GET['year']) {
-	$sel_month = $_GET['month'];
-	};
+// detect whether this is monthly detail request
+    $sel_month = @$_GET['month'];
 
     start_form();
     start_table(TABLESTYLE);
@@ -337,7 +350,15 @@ $sel_month = 0;
     else
         $default_year = $max_year;
 
-    menu_list_cells('year', 'year', $default_year, $years_array, true);
+    menu_list_cells('year', 'year', $default_year, $years_array, false);
+
+    $_POST['payment_type'] = -1;
+/*
+    $payment_types[$_POST['payment_type']] = "All";
+    foreach ($bank_transfer_types as $b)
+        $payment_types[] = $b;
+    menu_list_row('payment_type', 'payment_type', null, $payment_types, false);
+*/
 
 // Ajax breaks tax groups filter array
     submit_cells('Show',_("Show"));
@@ -387,7 +408,7 @@ table_header($th);
 //
 // loop here for each row reported
 $rows=0;
-$transactions = getTaxTransactions($default_year, $sel_month, implode(",", $taxgroup), $invert);
+$transactions = getTaxTransactions($_POST['payment_type'], $default_year, $sel_month, implode(",", $taxgroup), $invert);
 $num_rows=db_num_rows($transactions);
 $k = 0;
     $pg = new graph();
@@ -397,7 +418,7 @@ while ($sales=db_fetch($transactions)) {
    alt_table_row_color($k);
 	$rows++;
 
-    $taxes = db_fetch(getTaxes($sales['tran_date'], $sel_month, implode(",", $taxgroup), $invert));
+    $taxes = db_fetch(getTaxes($_POST['payment_type'], $sales['tran_date'], $sel_month, implode(",", $taxgroup), $invert));
 
     $sales['gross_sales'] = $sales['total'] + $taxes['tax_added'];
     $sales['nf'] = $sales['nf'] + $taxes['tax_added'];
@@ -498,7 +519,7 @@ end_row();
 <td class="dataTableContent" align="left">
 <?php  // live link to report monthly detail
 if ($sel_month == 0	&& !$print) {
-	echo "<a href='" . $_SERVER['PHP_SELF'] . "?" . http_build_query(array('tax_groups' => $taxgroup)) . "&month=" . $sales['i_month'] . "&year=" . $sales['row_year'] . "' title='" . "TEXT_BUTTON_REPORT_GET_DETAIL" . "'>";
+	echo "<a href='" . $_SERVER['PHP_SELF'] . "?" . http_build_query(array('tax_groups' => $taxgroup)) . "&month=" . $sales['i_month'] . "&year=" . $_POST['year'] . "&payment_type=" . $_POST['payment_type'] . "' title='" . "TEXT_BUTTON_REPORT_GET_DETAIL" . "'>";
 	}
 mirror_out(substr($sales['row_month'],0,3)); 
 if ($sel_month == 0 && !$print) echo '</a>';
@@ -621,7 +642,7 @@ $footer_other = 0;
 
 end_table();
 
-compare_graph($pg, $pg_years);
+compare_graph($sel_month, $pg, $pg_years);
 
 div_end();
 end_page();

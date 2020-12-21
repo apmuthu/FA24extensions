@@ -360,12 +360,12 @@ function get_osc_id($item_code, $qty)
     return $osc_Prefix . $item_code . ($qty == "" ? "D" : "");
 }
 
-function show_items($stock)
+function show_items($stock_array)
 {
     $list="";
-    foreach ($stock as $stock_id) {
+    foreach ($stock_array as $stock_id => $qty) {
         $item = get_item($stock_id);
-        $list.="{" . $stock_id . "=" . $item['description'] . "}";
+        $list.="{" . $stock_id . "=" . $item['description'] . ", $qty}";
     }
     return $list;
 }
@@ -759,7 +759,7 @@ if (isset($_POST['action'])) {
             if ($statusId != "")
                 $sql .= " AND orders_status != " . $statusId;
 
-            display_notification($sql);
+            // display_notification($sql);
             $oid_result = osc_dbQuery($sql, true);
             display_notification("Found " . mysqli_num_rows($oid_result) . " New Orders");
 
@@ -791,8 +791,9 @@ if (isset($_POST['action'])) {
                     switch ($total['class']) {
                         case 'ot_shipping' :
                             $total_shipping = $total['value'];
+
+                            // get the shipper name
                             $ship_via = $total['title'];
-                            $ship_via = substr($ship_via, 0, strpos($ship_via, ' '));
                             break;
                         case 'ot_total' :
                             $total_total = round($total['value'],2);
@@ -815,7 +816,12 @@ if (isset($_POST['action'])) {
 
                 // FA dates do not have order time, so add order time to $comments
                 list($date, $comments) = explode(' ', $date_purchased);
-                $comments .= " ";
+
+                $comments = "@" . $order['server'] . " " . $comments;
+
+                // cc_owner could contain name on check as well as cc name
+                $comments .= " " . $order['payment_method'] . " " . $order['cc_owner'] . "\n";
+
                 while ($row = mysqli_fetch_assoc($result)) {
                     if (not_null($row['comments'])) $comments .= $row['comments'] . "\n";
                 }
@@ -918,8 +924,15 @@ if (isset($_POST['action'])) {
                 if ($ship_via == '')
                     $ship_via = $branch['default_ship_via'];
                 else {
+                    # get the shipper name
+                    $osc_ship_via = $ship_via;
+                    $ship_via = substr($ship_via, 0, strpos($ship_via, ' '));
                     $shipper = get_shipper_by_name($ship_via);
-                    $ship_via = $shipper['shipper_id'];
+                    if ($shipper == false) {
+                        display_notification("osc_ship_via $osc_ship_via not found");
+                        $ship_via = 0;
+                    } else
+                        $ship_via = $shipper['shipper_id'];
                 }
                 $cart->set_delivery($ship_via, $order['delivery_name'], $addr, $total_shipping);
 
@@ -1078,7 +1091,7 @@ display_notification($pa_osc_id . " " .  $prod['products_quantity'] . " " . $pri
 
                 if ($_POST['invoice'] == 1) {
                     if (!$SysPrefs->allow_negative_stock() && ($low_stock = $cart->check_qoh())) {
-                        display_error(_("This document cannot be processed because there is insufficient quantity for items: " . show_items($low_stock) . " on " . $cart->document_date));
+                        display_error(_("osC order $oID cannot be processed because there is insufficient quantity for items: " . show_items($low_stock) . " on " . $cart->document_date));
                         if ($errors == 0) {
                             display_error('Skipping order ' . $oID);
                             continue;
@@ -1297,8 +1310,8 @@ display_notification($sql);
                     $_POST['wip_account'],
                     $_POST['units'],
                     "B",
-                    "",
-                    0,
+                    $_POST['dimension_id'],
+                    $_POST['dimension2_id'],
                     0,
                     0
                     );

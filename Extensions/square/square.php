@@ -186,7 +186,9 @@ curl -v -X POST \
 
 EOT;
 
-$res=exec($command);
+$result = array();
+exec($command, $result);
+// display_notification(print_r($result, true));
 
 /*
 $cfile = new CURLFile($output, 'image/jpeg', 'image_data');
@@ -304,7 +306,9 @@ function square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locat
                     $tax_array = array_merge($tax_array, array($taxName[$tax_name]));
 
             }
-        $obj["item_data"] = array_merge($obj["item_data"], array("tax_ids" => $tax_array));
+        // $obj["item_data"] = array_merge($obj["item_data"], array("tax_ids" => $tax_array));
+
+        $obj["item_data"]["tax_ids"] = $tax_array;
     }
 
   return $obj;
@@ -585,10 +589,8 @@ while (($row = db_fetch_row($result))) {
 $accessToken           = "";
 $lastdate         = "";
 $destCust         = 0;
-$oscwebsite       = "";
 
 $access_Token          = "";
-$location_id          = "";
 $last_date        = "";
 
 $min_cid = 0;
@@ -605,12 +607,6 @@ if ($found) {
     $row     = db_fetch_row($result);
     $access_Token = $row[1];
 
-    // Get Location Id
-    $sql     = "SELECT * FROM ".TB_PREF."square WHERE name = 'location_id'";
-    $result  = db_query($sql, "could not get host name");
-    $row     = db_fetch_row($result);
-    $location_id = $row[1];
-
     // Get last order imported
     $sql = "SELECT * FROM ".TB_PREF."square WHERE name = 'lastdate'";
     $result = db_query($sql, "could not get DB name");
@@ -626,12 +622,6 @@ if ($found) {
     $result     = db_query($sql, "could not get destCust");
     $row        = db_fetch_row($result);
     $destCust  = $row[1];
-
-    // Get osc website
-    $sql        = "SELECT * FROM ".TB_PREF."square WHERE name = 'oscwebsite'";
-    $result     = db_query($sql, "could not get oscwebsite");
-    $row        = db_fetch_row($result);
-    $oscwebsite  = $row[1];
 }
 
 $num_price_errors = -1;
@@ -1073,9 +1063,13 @@ while ($trans=db_fetch($trans_res)) {
         // if sku is null, square does not retrieve it
         if (!isset($sq_item["item_data"]["variations"][0]["item_variation_data"]["sku"]))
             $sq_item["item_data"]["variations"][0]["item_variation_data"]["sku"] = '';
+        if (isset($obj["item_data"]["tax_ids"])
+            && isset($sq_item["item_data"]["tax_ids"])) {
+            sort($obj["item_data"]["tax_ids"]);
+            sort($sq_item["item_data"]["tax_ids"]);
+        }
         if ($obj == $sq_item)
             continue;
-
 /*
 print_r($obj);
 print("<br><br>");

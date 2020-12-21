@@ -157,7 +157,7 @@ function print_dr0442()
         $grape_tons = 0;
 
     $from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
-    $to_date = substr($from_date,0,3) . "31" . substr($from_date,5);
+    $to_date =  date("m/t/Y", strtotime($period . "-01"));
     $dec = user_price_dec();
 
     include_once($path_to_root . "/reporting/includes/pdf_report.inc");

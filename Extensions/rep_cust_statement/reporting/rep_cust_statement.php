@@ -192,6 +192,8 @@ function print_cust_statements()
 		$pastdue1 = $PastDueDays1 + 1 . "-" . $PastDueDays2 . " " . _("Days");
 		$pastdue2 = _("Over") . " " . $PastDueDays2 . " " . _("Days");
 		$CustomerRecord = get_customer_details($myrow['debtor_no'], $enddate, false);
+        if ($CustomerRecord == null)
+            continue;
 		$str = array(_("Current"), $nowdue, $pastdue1, $pastdue2, _("Total Balance"));
 		$str2 = array(number_format2(($CustomerRecord["Balance"] - $CustomerRecord["Due"]),$dec),
 			number_format2(($CustomerRecord["Due"]-$CustomerRecord["Overdue1"]),$dec),

@@ -34,8 +34,12 @@ define("TAX_GROUP_EXEMPT_OOS",'8');
 define("TAX_GROUP_EXEMPT_CHARITY",'10');
 define("TAX_GROUP_EXEMPT_WINEMAKERS",'11');
 
-//----------------------------------------------------------------------------------------------------
+define("REPORT_TYPE_SUMMARY",'0');
+define("REPORT_TYPE_DR0100",'1');
+define("REPORT_TYPE_XML",'2');
+define("REPORT_TYPE_DR0098",'3');
 
+//----------------------------------------------------------------------------------------------------
 $sites=array();
 read_sites();
 
@@ -125,15 +129,15 @@ function GetPhysicalSales($from, $to)
                     .TAX_GROUP_EXEMPT_CHARITY.","
                     .TAX_GROUP_EXEMPT_WHOLESALE.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.")
-                AND a.description = 'Grand Junction'
+                AND (dt.ship_via = 0 OR dt.ship_via = 5)
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS net,
 
-            SUM(CASE WHEN cb.tax_group_id IN ("
+            ROUND(SUM(CASE WHEN cb.tax_group_id IN ("
                     .TAX_GROUP_EXEMPT_WHOLESALE.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.")
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
-                ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END) AS WholesaleSales,
+                ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS WholesaleSales,
 
             ROUND(SUM(CASE WHEN cb.tax_group_id NOT IN ("
                     .TAX_GROUP_EXEMPT_WHOLESALE.","
@@ -201,27 +205,29 @@ function GetNonPhysicalSales($period, $from, $to)
         LEFT JOIN ".TB_PREF."trans_tax_details ttd ON ttd.trans_type=dt.type AND ttd.trans_no=dt.trans_no
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.")
             AND ISNULL(v.date_)
+            AND so.ship_via != 0
+            AND so.ship_via != 5
             AND dt.tran_date >='$fromdate'
             AND dt.tran_date <='$todate'
             AND a.description NOT IN (
                 ".($period >= "2019-06" ? '' : 'Colorado'). "
-                'Grand Junction',
                 'California',
                 'Out-of-state')
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_CHARITY."'
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WHOLESALE."'
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WINEMAKERS."'
-        GROUP BY location, a.description";
+        GROUP BY location ORDER BY location";
 
-//display_notification($sql);
+//display_notification(str_replace('&TB_PREF&', '1_', $sql));
     return db_query($sql, "Error getting order details");
 }
 
-function xml_deduct($d, $amt)
+function xml_deduct($d, $amt, $comment = null)
 {
     return "                <Deductions>
                     <ExemptionDeductionDescription>$d</ExemptionDeductionDescription>
                     <ExemptionDeductionAmount>$amt</ExemptionDeductionAmount>
+                    <OtherExemptionExplanation>$comment</OtherExemptionExplanation>
                 </Deductions>\n";
 }
 
@@ -234,7 +240,7 @@ function xml_header($period, $fein, $coacct)
     <Jurisdiction>CO</Jurisdiction>
     <Timestamp>' . date("c") . '</Timestamp>
     <TaxPeriodBeginDate>' . $period . '-01</TaxPeriodBeginDate>
-    <TaxPeriodEndDate>' . $period . '-31</TaxPeriodEndDate>
+    <TaxPeriodEndDate>' . date("Y-m-t", strtotime($period . '-01')) . '</TaxPeriodEndDate>
     <TaxYear>' . substr($period, 0, 4) . '</TaxYear>
     <Originator>
         <EFIN>000000</EFIN>
@@ -280,8 +286,7 @@ function print_dr0100($handle, $fein, $name, $site, $rep, $period, $sales, $tax_
 {
 global $total, $total_service_fee, $eventids, $path_to_root;
 
-$dr0098 = $_POST['PARAM_1'];
-$xml_output = $_POST['PARAM_3'];
+$report_type = $_POST['PARAM_1'];
 $dec = user_price_dec();
 $xml = '';
 $xml .= '   <FilingBody FilingType="Location">
@@ -408,11 +413,11 @@ foreach ($entities as $ent_xml => $col) {
         foreach ($deductions as $d) {
             if (!isset($sales[$col][$d])) {
                 if (isset($sales[$ent_xml][$d])) {
-        //display_notification($col . " " .$d . " " . $sales[$ent_xml][$d]);
+        // display_notification($col . " " .$d . " " . $sales[$ent_xml][$d]);
                     $deduct_total[$col] += $sales[$ent_xml][$d];    // for dr0100
                     $deduct_total[$ent_xml] += $sales[$ent_xml][$d];    // for xml
                     $sales[$col][$d] = $sales[$ent_xml][$d];    // for dr0100
-                    $xml .= xml_deduct($d, $sales[$col][$d]);
+                    $xml .= xml_deduct($d, $sales[$col][$d], @$sales['Comment'][$d]);
                 } else if (isset($sales[$d])) { // deductions identical for all entities
 
                     if ($d == 'Food') {
@@ -527,30 +532,30 @@ if ($sales['description'] == 'Special Event') {
     if ($tax_due == 0)  // maybe we just sold them spices?
         return;
 
-    if ($dr0098 == 0) {
-        $rep->TextCol(0, 1, $sales['description']);
-        $rep->TextCol(1, 2, $tax_rates['Location']);
-        $rep->TextCol(2, 3, $site);
+    if ($report_type == REPORT_TYPE_SUMMARY) {
+        $rep->TextCol(0, 1, $tax_rates['Location']);
+        $rep->TextCol(1, 2, $site);
     }
 
     if ($tax_rates['HomeRule'] == 'Self-collected') {
-        if ($dr0098 == 0)
-            $rep->AmountCol(3, 4, $tax_due_city, $dec);
+        if ($report_type == REPORT_TYPE_SUMMARY)
+            $rep->AmountCol(2, 3, $tax_due_city, $dec);
         $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 0;
         $tax_rate['city'] = 0;
     } else
         $tax_due += $tax_due_city;
 
-    if ($dr0098 == 0) {
-        $rep->AmountCol(4, 5, $tax_due, $dec);
+    if ($report_type == REPORT_TYPE_SUMMARY) {
+        $rep->AmountCol(3, 4, $tax_due, $dec);
         $rep->NewLine();
-        if ($sales['description'] != 'Special Event') {
-            $total += $tax_due;
-            $total_service_fee += $service_fee_due;
-        }
     }
 
-    if ($xml_output) {
+    if ($sales['description'] != 'Special Event') {
+        $total += $tax_due;
+        $total_service_fee += $service_fee_due;
+    }
+
+    if ($report_type == REPORT_TYPE_XML) {
         $xml .= "               <TotalTaxDueAmount>$tax_due</TotalTaxDueAmount>
             </JurisdictionTax>
         </FilingBody>\n";
@@ -560,7 +565,7 @@ if ($sales['description'] == 'Special Event') {
 
     if ($sales['description'] == 'Special Event') {
 
-    if ($dr0098) {
+    if ($report_type == REPORT_TYPE_DR0098) {
 
     $special = array(
 	array('x' => 6.5, 'y' => 9.2, 'text' => $fein),
@@ -687,11 +692,12 @@ _begin_job_
 
 
 
+
     } // $dr0098
 
     } else {    // not a special event
 
-    if ($dr0098 == 0) {
+    if ($report_type == REPORT_TYPE_DR0100) {
 
     $annote = array(
 	array('x' => 6.5, 'y' => 9.3, 'text' => date('m/d/y')),
@@ -773,10 +779,12 @@ _begin_job_
 
  );
 
+/*
 	// excise report fields
 	foreach ($annote as $value) {
 		echo '<tr><td>' . $value['text'] . '</td></tr>';
 	}
+*/
 
     $annote2 = array(
 	array('x' => 1, 'y' => 9.6, 'text' => $site),
@@ -817,6 +825,8 @@ _begin_job_
 	array('x' => 3.8, 'y' => 9.6, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
 	array('x' => 7.2, 'y' => 8.3, 'text' => $exempt_total),
+
+	array('x' => 2.5, 'y' => 1.8, 'text' => @$sales['Comment']['OtherExemption']),
 
 	array('x' => 2.5, 'y' => 1.2, 'text' => $deduct_total['state']),
 	array('x' => 3.7, 'y' => 1.2, 'text' => $deduct_total['rtd']),
@@ -963,12 +973,12 @@ function company_dr0100($testcases)
 
     // Get the payment
     $period = $_POST['PARAM_0'];
-    $dr0098 = $_POST['PARAM_1'];
+    $report_type = $_POST['PARAM_1'];
     $test = $_POST['PARAM_2'];
-    $xml_output = $_POST['PARAM_3'];
 
     $from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
-    $to_date = substr($from_date,0,3) . "31" . substr($from_date,5);
+    $to_date = date("m/t/Y", strtotime($from_date));
+
     $dec = user_price_dec();
 
     include_once($path_to_root . "/reporting/includes/pdf_report.inc");
@@ -978,16 +988,16 @@ function company_dr0100($testcases)
     $params =   array(0 => '', 
                       1 => array('text' => _('Period'), 'from' => $from_date, 'to' => $to_date));
 
-    $cols = array(0, 80, 250, 330, 430, 530);
+    $cols = array(0, 200, 300, 400, 460);
 
-    $headers = array(_('Area'), _('Location'), _('Account No.'), _('Self-Collected'), _('State-Collected'));
+    $headers = array(_('Location'), _('Account No.'), _('Self-Collected'), _('State-Collected'));
     $aligns = array('left', 'left', 'left', 'right', 'right');
 
     $rep->Font();
     $rep->Info($params, $cols, $headers, $aligns);
     $rep->NewPage();
 
-    if ($xml_output)
+    if ($report_type == REPORT_TYPE_XML)
         $formfile= $path_to_root . '/tmp/newform.txt';
     else
         $formfile= $path_to_root . '/tmp/newform.ps';
@@ -1001,7 +1011,7 @@ function company_dr0100($testcases)
         if ($test) {
             $t = $testcases[$test];
             $fein = "99-9999999";
-            if ($xml_output)
+            if ($report_type == REPORT_TYPE_XML)
                 fputs($handle, xml_header($t['period'], $fein, $t["coacct"]));
             foreach ($t['sales'] as $sales) {
                 print_dr0100($handle, $fein, $t["name"], $sales["site"], $rep, $t["period"], $sales, get_tax_rate_by_code($sales['code']));
@@ -1013,8 +1023,10 @@ function company_dr0100($testcases)
             $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
             $coacct=substr($site,0,strlen($site)-4);
             $site=$coacct."-0001";
-            if ($xml_output)
+            if ($report_type == REPORT_TYPE_XML)
                 fputs($handle, xml_header($period, FEIN, $coacct));
+$sales['State']['OtherExemption'] = $sales['net'] - $sales['Food'];
+$sales['Comment']['OtherExemption'] = "COVID Deduction";
             print_dr0100($handle, FEIN, get_company_pref('coy_name'), $site, $rep, $period, $sales, $tax_rates);
 
             $nonphys = GetNonPhysicalSales($period, $from_date, $to_date);
@@ -1041,19 +1053,32 @@ function company_dr0100($testcases)
 
             // optional taxes
 
-                print_dr0100($handle, FEIN, get_company_pref('coy_name'), $site, $rep, $period, $sales, $tax_rates);
+            // Because different cities can map into the same jurisdiction
+            // we add them up here.  For example, Ft. Collins and Fort Collins.
+            // Note: this will take more work once we start using the actual address
+            // rather than just the city.
+
+                $siteSales[$site]['tax_rates'] = $tax_rates;
+                @$siteSales[$site]['sales']['net'] += $sales['net'];
+                @$siteSales[$site]['sales']['Food'] += $sales['Food'];
+                @$siteSales[$site]['sales']['candy'] += $sales['candy'];
+                $siteSales[$site]['sales']['description'] = $sales['description'];
+
             } // while
+
+            foreach ($siteSales as $site => $siteSale)
+                print_dr0100($handle, FEIN, get_company_pref('coy_name'), $site, $rep, $period, $siteSale['sales'], $siteSale['tax_rates']);
         }
 
-    if (!$dr0098) {
+    if ($report_type == REPORT_TYPE_SUMMARY) {
         $rep->NewLine();
         $rep->TextCol(0, 2, 'TOTAL DUE STATE ON DR0100 ONLY');
-        $rep->AmountCol(4, 5, $total, $dec);
+        $rep->AmountCol(3, 4, $total, $dec);
 
-       $rep->end();
+       $rep->End();
     }
 
-    if ($xml_output) {
+    if ($report_type == REPORT_TYPE_XML) {
         if ($total_service_fee > 1000)
             $excess_service_fee = $total_service_fee - 1000;
         else
@@ -1072,9 +1097,10 @@ function company_dr0100($testcases)
 
     fclose($handle);
 
-    if ($xml_output)
+    if ($report_type == REPORT_TYPE_XML)
         meta_forward($path_to_root . "/tmp/newform.txt");
-    else {
+    else if ($report_type == REPORT_TYPE_DR0100
+        || $report_type == REPORT_TYPE_DR0098) {
         exec("ps2pdf $path_to_root/tmp/newform.ps $path_to_root/tmp/newform.pdf");
         meta_forward($path_to_root . "/tmp/newform.pdf");
     }

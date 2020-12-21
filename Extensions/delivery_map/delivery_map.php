@@ -162,8 +162,8 @@ function getGeoCode($address)
                 return ",";
         }
       // Successful geocode
-      $lat = $xml->place['lat'];
-      $lng = $xml->place['lon'];
+      $lat = substr($xml->place['lat'], 0, 15);
+      $lng = substr($xml->place['lon'], 0, 15);
       return $lat . "," . $lng;
     }
 
