@@ -1,0 +1,12 @@
+Package: delivery_map
+Name: Delivery Map
+Description: Displays an interactive map of deliveries
+Author: Tom Hallman
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/delivery_map
+Type: extension
+Filename: delivery-map-2.4.0-2
+Version: 2.4.0-2
+
