@@ -1,3 +1,4 @@
+2020-12-22  BraathWaate  Added extension sales_history
 2020-12-22  BraathWaate  Updated extension bank_auto_reconcile with AUTOCREATE: in comment
 2020-12-22  BraathWaate  Added extension delivery_map based on OpenStreetMap.org
 2020-12-01  Ap.Muthu     Added Mail extension by Serban Constantinescu to replace php mail() with PHPMailer

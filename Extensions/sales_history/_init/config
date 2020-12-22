@@ -1,0 +1,12 @@
+Package: sales_history
+Name: Sales History
+Description: This extension shows yearly, monthly, and daily sales in tabular form.
+Author: John Behrs
+Maintenance: Joe Hunt
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/sales_history
+Type: extension
+Filename: sales_history-2.4.0-2
+Version: 2.4.0-2
+
