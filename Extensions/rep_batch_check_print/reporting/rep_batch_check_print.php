@@ -32,9 +32,11 @@ print_bank_check();
 
 function get_bank_transactions_to_print($account, $start)
 {
-        $sql = "SELECT b.* FROM ".TB_PREF."bank_trans b
+        $sql = "SELECT b.*, ba.bank_account_name FROM ".TB_PREF."bank_trans b
                 LEFT JOIN ".TB_PREF."comments c
                 ON b.type=c.type and c.id = b.trans_no
+                LEFT JOIN ".TB_PREF."bank_accounts ba
+                ON b.bank_act=ba.id
                 WHERE b.bank_act = '$account'
                 AND (b.type = " . ST_BANKPAYMENT . "
                 OR b.type = " . ST_SUPPAYMENT . ")
@@ -168,13 +170,13 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
 
     
     $date = sql2date($myrow['trans_date']);
-    $memo = get_comments_string($myrow['type'], $myrow['trans_no']) . " [" . $check_no . "]";
+    $memo = get_comments_string($myrow['type'], $myrow['trans_no']);
     
     //////////////////
     // Check portion
     
-    $rep->NewLine(1,0,20);
-    $rep->cols = array(63, 340, 470, 600);
+    $rep->NewLine(1,0,30);
+    $rep->cols = array(80, 340, 480, 590);
     $rep->aligns = array('left', 'left', 'right', 'right');
     
     // Date
@@ -196,7 +198,7 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
     $rep->NewLine(1,0,24);
     $rep->TextCol(0, 1, $name);
     $lines=0;
-    if ($myrow['type'] == ST_SUPPAYMENT) {
+    if ($myrow['person_type_id'] == PT_SUPPLIER) {
         $sup = get_supplier($myrow['person_id']);
         if ($sup['address'] != "") {
             $subject=$sup['address'];
@@ -213,11 +215,11 @@ function rep_print_3up($rep, $account, $dec, $myrow, $check_no)
         }
     }
 
-    $rep->NewLine(1,0,56 - $lines * 12);
+    $rep->NewLine(1,0,46 - $lines * 12);
     
     // Memo
     $rep->TextCol(0, 1, $memo);
-    $rep->NewLine(1,0,10);
+    // $rep->NewLine(1,0,10);
 }
 
 //--------------------------------------------------------------------------------
@@ -242,20 +244,26 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
     $from_trans = get_remittance($myrow['type'], $myrow['trans_no']);
     
     $date = sql2date($myrow['trans_date']);
-    $memo = get_comments_string($myrow['type'], $myrow['trans_no']) . " [" . $check_no . "]";
+    $memo = get_comments_string($myrow['type'], $myrow['trans_no']);
     
     //////////////////
     // Check portion
     
-    $rep->NewLine(1,0,76);
-    $rep->cols = array(63, 340, 470, 565);
+    $rep->cols = array(63, 340, 500, 600);
     $rep->aligns = array('left', 'left', 'right', 'right');
-    
-    // Pay to    
-    $rep->TextCol(0, 1, payment_person_name($myrow["person_type_id"],$myrow["person_id"], false));
+
+    $rep->NewLine(1,0,20);
 
     // Date
-    $rep->DateCol(1, 2, $rep->DatePrettyPrint($date, 0, 0));
+    $rep->DateCol(2, 3, $rep->DatePrettyPrint($date, 0, 0));
+
+    $rep->NewLine();
+    $rep->NewLine();
+    $rep->NewLine();
+    
+    // Pay to    
+    $rep->TextCol(0, 1, preg_replace("/\[[0-9]*./","", payment_person_name($myrow["person_type_id"],$myrow["person_id"], false)));
+
     
     // Amount (numeric)
     $rep->TextCol(2, 3, '***'.number_format2(-$total_amt, $dec));
@@ -277,7 +285,7 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
     {
         $rep->fontSize = 12;        
         // Move down to the correct section
-        $rep->row = $section == 1 ? 505 : 255;
+        $rep->row = $section == 1 ? 505 : 245;
         $rep->cols = array(20, 340, 470, 588);
         $rep->aligns = array('left', 'left', 'right', 'right');
         
@@ -301,47 +309,46 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
             $tno = $myrow['trans_no'];
         $rep->TextCol(0, 3, sprintf( _("Payment # %s - from Customer: %s - %s"), $tno,
             $from_trans['supp_account_no'], $rep->company['coy_name']));
-    } else {
-        if ($print_invoice_no == 0)
-            $tno = $myrow['ref'];
-        else
-            $tno = $myrow['trans_no'];
-        $rep->TextCol(0, 3, sprintf( _("Payment # %s - from Customer: %s - %s"), $tno,
-            $myrow['bank_act'], $rep->company['coy_name']));
-    }
-        
-    // Add memo
-    $rep->NewLine();
-    $rep->TextCol(0, 3, _("Memo: ").$memo);    
-        
-    // TODO: Do we want to set a limit on # of item details?  (Max is probably 6-7)
-
-    if ($myrow["type"] == ST_SUPPAYMENT) {
-
-        // Get item details
-    $result = get_allocations_for_remittance($from_trans['supplier_id'], $from_trans['type'], $from_trans['trans_no']);
-
-        // Fill in details
-        $rep->NewLine(2);
-        $rep->fontSize = 10;
-        // Use different columns now for the additional info
-        $rep->cols = array(20, 160, 235, 290, 370, 480, 588);
-        $rep->aligns = array('left', 'left', 'left', 'right', 'right', 'right');
-        
-        // Add headers
-        $rep->Font('b');
-        $rep->TextCol(0, 1, _("Type/Id"));
-        $rep->TextCol(1, 2, _("Trans Date"));
-        $rep->TextCol(2, 3, _("Due Date"));
-        $rep->TextCol(3, 4, _("Total Amount"));
-        $rep->TextCol(4, 5, _("Left to Allocate"));
-        $rep->TextCol(5, 6, _("This Allocation"));
+        } else {
+            if ($print_invoice_no == 0)
+                $tno = $myrow['ref'];
+            else
+                $tno = $myrow['trans_no'];
+            $rep->TextCol(0, 3, sprintf( _("Payment # %s - from %s - %s"), $tno,
+                $myrow['bank_account_name'], $rep->company['coy_name']));
+        }
+            
+        // Add memo
         $rep->NewLine();
-        
-        $rep->Font();    
-        $total_allocated = 0;
-        while ($item=db_fetch($result))
-        {
+        $rep->TextCol(0, 3, _("Memo: ").$memo);    
+            
+        // TODO: Do we want to set a limit on # of item details?  (Max is probably 6-7)
+
+        if ($myrow["type"] == ST_SUPPAYMENT) {
+
+            // Get item details
+        $result = get_allocations_for_remittance($from_trans['supplier_id'], $from_trans['type'], $from_trans['trans_no']);
+
+            // Fill in details
+            $rep->NewLine(2);
+            $rep->fontSize = 10;
+            // Use different columns now for the additional info
+            $rep->cols = array(20, 160, 235, 290, 370, 480, 588);
+            $rep->aligns = array('left', 'left', 'left', 'right', 'right', 'right', 'right');
+            
+            // Add headers
+            $rep->Font('b');
+            $rep->TextCol(0, 1, _("Type/Id"));
+            $rep->TextCol(1, 2, _("Trans Date"));
+            $rep->TextCol(2, 3, _("Due Date"));
+            $rep->TextCol(3, 4, _("Total Amount"));
+            $rep->TextCol(4, 5, _("Left to Allocate"));
+            $rep->TextCol(5, 6, _("This Allocation"));
+            $rep->NewLine();
+            
+            $rep->Font();    
+            $total_allocated = 0;
+            while ($item=db_fetch($result)) {
                $rep->TextCol(0, 1, $systypes_array[$item['type']]." ".$item['supp_reference']);
                $rep->TextCol(1, 2, sql2date($item['tran_date']));
                $rep->TextCol(2, 3, sql2date($item['due_date']));
@@ -350,16 +357,36 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
                $rep->AmountCol(5, 6, $item['amt'], $dec);
                $total_allocated += $item['amt'];
                $rep->NewLine(1, 0, $rep->lineHeight + 3); // Space it out
+            }
+            $rep->NewLine();
+               $rep->TextCol(4, 5, _("Total Allocated"));
+               $rep->AmountCol(5, 6, $total_allocated, $dec);
+            $rep->NewLine();
+               $rep->TextCol(4, 5, _("Left to Allocate"));
+               $rep->AmountCol(5, 6, -$from_trans['Total'] - $total_allocated, $dec);
         }
-        $rep->NewLine();
-           $rep->TextCol(4, 5, _("Total Allocated"));
-           $rep->AmountCol(5, 6, $total_allocated, $dec);
-        $rep->NewLine();
-           $rep->TextCol(4, 5, _("Left to Allocate"));
-           $rep->AmountCol(5, 6, -$from_trans['Total'] - $total_allocated, $dec);
-    }
-        
-    } // end of section
+        else if ($myrow['person_type_id'] == PT_SUPPLIER) {
+            $lines = 0;
+            $sup = get_supplier($myrow['person_id']);
+            $rep->cols = array(100, 600);
+            $rep->aligns = array('left', 'left');
+            $rep->NewLine(1,0,100);
+            $rep->TextCol(0, 1, preg_replace("/\[[0-9]*./","", payment_person_name($myrow["person_type_id"],$myrow["person_id"], false)));
+            if ($sup['address'] != "") {
+                $subject=$sup['address'];
+                $separator = "\n";
+                $line = strtok($subject, $separator);
+                while ($line !== false) {
+                    $rep->NewLine(1,0,12);
+                    $rep->TextCol(0, 1, $line);
+                    $line = strtok( $separator );
+                    $lines++;
+                    if ($lines > 3)
+                        break;
+                }
+            }
+        }
+    } // end of section for
 }
 
 //--------------------------------------------------------------------------------
