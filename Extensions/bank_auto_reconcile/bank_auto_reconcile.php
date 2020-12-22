@@ -316,7 +316,7 @@ function auto_create($current) {
                 update_reconciled_values($id, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
             }
 
-            add_comments($sim['type'], $trans_no, $newdate, $comment);
+            add_comments($sim['type'], $trans_no, $newdate, "AUTOCREATE: " . $comment);
 
         } else
             display_error("$id $amt not found");
