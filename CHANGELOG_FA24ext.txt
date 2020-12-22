@@ -1,3 +1,4 @@
+2020-12-22  BraathWaate  Added extension quickreport - compact g/l inquiry
 2020-12-22  BraathWaate  Added extension sales_history
 2020-12-22  BraathWaate  Updated extension bank_auto_reconcile with AUTOCREATE: in comment
 2020-12-22  BraathWaate  Added extension delivery_map based on OpenStreetMap.org
