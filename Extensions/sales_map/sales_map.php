@@ -554,7 +554,7 @@ function clickList(i) {
 function codeAddress(map, i) {
 	var htmlListing = "<P><H2 onclick=clickList(" + i + ") style=\'margin-bottom:2px;\'><a href=" + window.location.href +"#title>" + clientArray[i][0] + "</a></H2>"	//name
 					+ clientArray[i][1] +  "<br>"  //address
-					+ clientArray[i][4] + "<br>" // phone
+                    + "<a href=\"tel:" + clientArray[i][4] + "\">" + clientArray[i][4] + "</a><br>"; // phone
  + "<a href=" + location.protocol + "//" + location.host + location.pathname + "?debtor_no=" + clientArray[i][5] + " onClick=\'return popup(this, \"Items Carried\")\'>Items Carried</a>" ;
 
 	side_bar_html += htmlListing;	
@@ -562,7 +562,7 @@ function codeAddress(map, i) {
 	var markerText =  "<div STYLE=\'background-color:#00068f;font-weight:bold\'><font size=3 face=\'trebuchet MS\' color=white>&nbsp;"
 		        + clientArray[i][0] + "<font size=2 color=blue></div>" 
 						        + clientArray[i][1] + "<br>"
-						        + clientArray[i][4] + "</font>";
+                                + "<a href=\"tel:" + clientArray[i][4] + "\">" + clientArray[i][4] + "</a></font>"; // phone
     										
     marker = L.marker([clientArray[i][2], clientArray[i][3]]);
     marker.addTo(map)
