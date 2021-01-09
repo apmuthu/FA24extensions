@@ -9,6 +9,7 @@ $path_to_root="../..";
 
 include_once($path_to_root . "/includes/ui/items_cart.inc");
 include_once($path_to_root . "/gl/includes/db/gl_db_trans.inc");
+include_once($path_to_root . "/gl/includes/db/gl_db_banking.inc");
 include_once($path_to_root . "/includes/session.inc");
 add_access_extensions();
 
@@ -23,6 +24,8 @@ function init_entry(&$entry,$type,$date,$reference) // See gl/gl_journal::create
 	$entry = new items_cart($type);
 	$entry->order_id = 0;
 	$entry->tran_date = $date;
+	$entry->event_date = $date;
+	$entry->doc_date = $date;
 	$entry->reference = $reference;
 	$entry->memo_ = 'Imported via \'Import Multiple Journal Entries\' plugin';	
 }
@@ -66,7 +69,7 @@ function write_trans($type, $entry, $curEntryId, $bank_account)
 			write_journal_entries($entry, false, false); // FA built-in function
 	} 
 	elseif ($type == ST_BANKDEPOSIT || $type == ST_BANKPAYMENT) {
-		add_bank_transaction($entry->trans_type, $bank_account, $entry, $entry->tran_date, // FA built-in function
+		write_bank_transaction($entry->trans_type, $entry->order_id, $bank_account, $entry, $entry->tran_date, // FA built-in function
 			false, false, false, $entry->reference, $entry->memo_, false);
 	}
 
