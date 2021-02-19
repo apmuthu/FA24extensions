@@ -210,7 +210,7 @@ function auto_reconcile($current)
             WHERE b.id = '$key'";
         $result = db_query($sql,"The transaction for '$key' could not be retrieved");
         $row = db_fetch($result);
-        update_comments($row['type'], $row['trans_no'], null, $row['memo_'] . " " . $comment);
+        update_comments($row['type'], $row['trans_no'], null, substr($row['memo_'] . " " . $comment, 0, 255));
     }
     display_notification("Success");
 }
@@ -324,7 +324,7 @@ function auto_create($current)
                 update_reconciled_values($id, $reconcile_value, $newdate, input_num('end_balance'), $_POST['bank_account']);
             }
 
-            add_comments($sim['type'], $trans_no, $newdate, "AUTOCREATE: " . $comment);
+            add_comments($sim['type'], $trans_no, $newdate, substr("AUTOCREATE: " . $comment, 0, 255));
 
         } else
             display_error("$id $amt not found");
@@ -365,6 +365,9 @@ $js .= get_js_date_picker();
 if ($SysPrefs->use_popup_windows)
     $js .= get_js_open_window(800, 500);
 $help_context="Bank Auto Reconcile";
+
+set_posts(array('reconcile_date', 'bank_account'));
+
 page(_($help_context), false, false, "", $js);
 
 
@@ -418,6 +421,8 @@ if (isset($_POST['import'])) {
                     else
                         $amount = $credit;
                 }
+                if ($amount == 0)
+                    continue;
 
                 $early = true;
                 $result = get_bank_transaction($_POST['reconcile_date'], $toacct, $date, $_POST['bank_account'], $amount, $checkno, $current, $early);
