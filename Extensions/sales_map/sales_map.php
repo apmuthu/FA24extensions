@@ -292,10 +292,6 @@ function clientarray_string($branch, $stock_id, $tax_group_id, $customer_id)
 }
 
 // ---------------------------------------------------------------------
-
-global $db; // Allow access to the FA database connection
-$debug_sql = 0;
-
 global $db_connections;
 $cur_prefix = $db_connections[$_SESSION["wa_current_user"]->cur_con]['tbpref'];
 
@@ -316,6 +312,7 @@ if (!$found) {
             `address` varchar(255) NOT NULL,
             `latlong` varchar(32) NOT NULL default '',
             `lookup_date` date NOT NULL default '0000-00-00',
+            `jurisdiction` varchar(32) NOT NULL default '',
             UNIQUE(address),
             PRIMARY KEY  (`id`)) ENGINE=InnoDB";
         db_query($sql, "Error creating table");
