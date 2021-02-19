@@ -16,7 +16,8 @@ function check_start($param, $type)
     if ($type == 'CHECK_START') {
 
 // find the last computer printed check
-        $sql = "SELECT memo_ FROM ".TB_PREF."bank_trans bt LEFT JOIN " .TB_PREF."comments c ON bt.trans_no=c.id AND bt.type=c.type  WHERE (bt.type = " . ST_BANKPAYMENT . " OR bt.type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\[[0-9]+\]$' ORDER BY bt.id DESC LIMIT 1";
+        $sql = "SELECT memo_ FROM ".TB_PREF."bank_trans bt LEFT JOIN " .TB_PREF."comments c ON bt.trans_no=c.id AND bt.type=c.type  WHERE (bt.type = " . ST_BANKPAYMENT . " OR bt.type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\\\\[[0-9]+\\\\]$' ORDER BY bt.id DESC LIMIT 1";
+// display_notification($sql);
         $result = db_query($sql, "The check number cannot be retrieved");
         $row = db_fetch($result);
         $checkno='';
@@ -37,7 +38,7 @@ function bank_payments($param, $type)
 // find all the supplier and bank payments after the last
 // computer printed check
 
-        $sql = "SELECT child.id, CONCAT(IF(child.person_type_id = '" . PT_SUPPLIER . "', supp.supp_name, IF(child.person_type_id = '" . PT_QUICKENTRY . "', qe.description, child.person_id)) , ' (', child.amount, ')')  as IName FROM ".TB_PREF."bank_trans AS child LEFT JOIN ".TB_PREF."suppliers supp ON supplier_id=child.person_id LEFT JOIN ".TB_PREF."quick_entries qe ON qe.id=child.person_id, (select max(bt.id) AS maxid FROM ".TB_PREF."bank_trans bt LEFT JOIN " .TB_PREF."comments c ON bt.trans_no=c.id AND bt.type=c.type  WHERE (bt.type = " . ST_BANKPAYMENT . " OR bt.type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\[[0-9]+\]$') AS parent WHERE amount != 0 AND (child.type = " . ST_BANKPAYMENT . " OR child.type = " . ST_SUPPAYMENT . ") AND (ISNULL(parent.maxid) OR  child.id > parent.maxid) ORDER BY child.id";
+        $sql = "SELECT child.id, CONCAT(IF(child.person_type_id = '" . PT_SUPPLIER . "', supp.supp_name, IF(child.person_type_id = '" . PT_QUICKENTRY . "', qe.description, child.person_id)) , ' (', child.amount, ')')  as IName FROM ".TB_PREF."bank_trans AS child LEFT JOIN ".TB_PREF."suppliers supp ON supplier_id=child.person_id LEFT JOIN ".TB_PREF."quick_entries qe ON qe.id=child.person_id, (select max(bt.id) AS maxid FROM ".TB_PREF."bank_trans bt LEFT JOIN " .TB_PREF."comments c ON bt.trans_no=c.id AND bt.type=c.type  WHERE (bt.type = " . ST_BANKPAYMENT . " OR bt.type = " . ST_SUPPAYMENT . ") AND memo_ REGEXP '\\\\[[0-9]+\\\\]$') AS parent WHERE amount != 0 AND (child.type = " . ST_BANKPAYMENT . " OR child.type = " . ST_SUPPAYMENT . ") AND (ISNULL(parent.maxid) OR  child.id > parent.maxid) ORDER BY child.id";
         return combo_input($param, '', $sql, 'order_no', 'IName',array('order'=>false));
     }
 }
