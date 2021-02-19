@@ -937,7 +937,7 @@ if (isset($_POST['action'])) {
                 $cart->set_delivery($ship_via, $order['delivery_name'], $addr, $total_shipping);
 
                 $cart->cust_ref          = "osC Order # $oID";
-                $cart->Comments          = $comments;
+                $cart->Comments          = substr($comments,0,255);
                 $cart->document_date     = sql2date($date_purchased);
 
                 // If the osc order did not have tax, assume tax was included
