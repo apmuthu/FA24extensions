@@ -43,5 +43,6 @@ $reports->addReport(RC_CUSTOMER, "_dr0100",_('&Colorado DR0100 Sales Tax Form'),
     array(  _('Period (YYYY-MM)') => 'TEXT',
         ('Report Type') => 'REPORT_TYPE',
         ('Use Test Case Data') => 'TEST_CASE',
+        ('New SUTS System') => 'YES_NO',
 ));
 ?>

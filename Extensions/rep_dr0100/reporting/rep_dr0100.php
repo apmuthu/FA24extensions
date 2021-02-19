@@ -181,21 +181,16 @@ function GetNonPhysicalSales($period, $from, $to)
     $todate = date2sql($to);
 
     $sql= "SELECT
-            substring_index(
-                LEFT(
-                    IF(delivery_address!='',delivery_address,br_address),
-                    LENGTH(IF(delivery_address!='',delivery_address,br_address)) -
-                        LOCATE(',', REVERSE(IF(delivery_address!='',delivery_address,br_address)))),
-                '\n', -1) AS location,
+            so.delivery_address as address,
             a.description,
 
-            SUM(CASE WHEN dt.type=".ST_CUSTCREDIT."
+            (CASE WHEN dt.type=".ST_CUSTCREDIT."
                 THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) AS net,
 
-            ROUND(SUM(CASE WHEN ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS Food,
+            ROUND((CASE WHEN ttd.tax_type_id=0 THEN ttd.net_amount ELSE 0 END),2) AS Food,
 
-            ROUND(SUM(CASE WHEN ttd.tax_type_id=2 THEN ttd.net_amount ELSE 0 END),2) AS candy
+            ROUND((CASE WHEN ttd.tax_type_id=2 THEN ttd.net_amount ELSE 0 END),2) AS candy
 
         FROM ".TB_PREF."debtor_trans dt
         LEFT JOIN ".TB_PREF."voided as v ON dt.trans_no=v.id AND dt.type=v.type
@@ -215,10 +210,9 @@ function GetNonPhysicalSales($period, $from, $to)
                 'Out-of-state')
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_CHARITY."'
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WHOLESALE."'
-            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WINEMAKERS."'
-        GROUP BY location ORDER BY location";
+            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WINEMAKERS."'";
 
-//display_notification(str_replace('&TB_PREF&', '1_', $sql));
+// display_notification(str_replace('&TB_PREF&', '1_', $sql));
     return db_query($sql, "Error getting order details");
 }
 
@@ -249,7 +243,7 @@ function xml_header($period, $fein, $coacct)
     <SoftwareId>FrontAcct</SoftwareId>
     <SoftwareVersion>2.4</SoftwareVersion>
     <ReturnType>Sales</ReturnType>
-    <SubmissionID>' . substr($coacct, 0, 6) . date('Yz') . $seq . '</SubmissionID>
+    <SubmissionID>' . substr($coacct, 0, 6) . date('Y') . sprintf('%03d', (int)date('z'))  . $seq . '</SubmissionID>
     <FilingFrequency>M</FilingFrequency> 
     <Filer> 
         <TIN>
@@ -276,7 +270,7 @@ function xml_header($period, $fein, $coacct)
     <AckAddress>behrsj@whitewaterhill.com.com</AckAddress>
 </ReturnHeaderState>
 <ReturnDataState>
-    <SubmissionID>' . substr($coacct, 0, 6) . date('Yz') . $seq . '</SubmissionID>
+    <SubmissionID>' . substr($coacct, 0, 6) . date('Y') . sprintf('%03d', (int)date('z'))  . $seq . '</SubmissionID>
 ';
 }
 
@@ -284,9 +278,8 @@ function xml_header($period, $fein, $coacct)
 
 function print_dr0100($handle, $fein, $name, $site, $rep, $period, $sales, $tax_rates)
 {
-global $total, $total_service_fee, $eventids, $path_to_root;
+global $total, $total_service_fee, $eventids, $path_to_root, $report_type, $suts;
 
-$report_type = $_POST['PARAM_1'];
 $dec = user_price_dec();
 $xml = '';
 $xml .= '   <FilingBody FilingType="Location">
@@ -386,7 +379,8 @@ foreach ($entities as $ent_xml => $col) {
         // unclear which service fee to use
         $service_fee[$col] = $service_fee[$ent_xml];    // for dr0100
 
-        if ($tax_rates['HomeRule'] == 'Self-collected'
+        if ($suts == false
+            && $tax_rates['HomeRule'] == 'Self-collected'
             && $col == 'city')
             continue;
 
@@ -537,7 +531,8 @@ if ($sales['description'] == 'Special Event') {
         $rep->TextCol(1, 2, $site);
     }
 
-    if ($tax_rates['HomeRule'] == 'Self-collected') {
+    if ($suts == false
+        && $tax_rates['HomeRule'] == 'Self-collected') {
         if ($report_type == REPORT_TYPE_SUMMARY)
             $rep->AmountCol(2, 3, $tax_due_city, $dec);
         $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 0;
@@ -969,12 +964,13 @@ $total_service_fee=0;
 
 function company_dr0100($testcases)
 {
-    global $path_to_root, $sites, $total, $total_service_fee;
+    global $path_to_root, $sites, $total, $total_service_fee, $report_type, $suts;
 
     // Get the payment
     $period = $_POST['PARAM_0'];
     $report_type = $_POST['PARAM_1'];
     $test = $_POST['PARAM_2'];
+    $suts = $_POST['PARAM_3'];
 
     $from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
     $to_date = date("m/t/Y", strtotime($from_date));
@@ -1019,7 +1015,7 @@ function company_dr0100($testcases)
         } else {
             $sales = db_fetch(GetPhysicalSales($from_date, $to_date));
             $address = get_company_pref('postal_address');
-            $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
+            $tax_rates=get_tax_rates($address);
             $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
             $coacct=substr($site,0,strlen($site)-4);
             $site=$coacct."-0001";
@@ -1033,13 +1029,16 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
             while ($sales = db_fetch($nonphys)) {
                 if ($sales['net'] == 0)
                     continue;
-                $address="\n" . trim($sales['location']) .  ", CO";
-                $tax_rates=get_tax_rates("Colorado Sales Tax", $address);
+
+                $address = $sales['address'];
+                $tax_rates=get_tax_rates($address);
                 if (isset($sites[$tax_rates['JurisdictionCode']])) {
                     $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
                     $site=substr($site,0,strlen($site)-4)."-".substr($site,-4);
+                    $location=$tax_rates['Location'];
                 } else {
                     $site = "";
+                    $location = "";
                     display_error("
                         WWH sales tax location not found for " . $tax_rates['JurisdictionCode'] . " address " . $address . '. ' .
                         "This means that Colorado DOR advertises a sales tax jurisdiction at https://www.colorado.gov/pacific/tax/sales-and-use-tax-rates-lookup " .
@@ -1058,16 +1057,18 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
             // Note: this will take more work once we start using the actual address
             // rather than just the city.
 
-                $siteSales[$site]['tax_rates'] = $tax_rates;
-                @$siteSales[$site]['sales']['net'] += $sales['net'];
-                @$siteSales[$site]['sales']['Food'] += $sales['Food'];
-                @$siteSales[$site]['sales']['candy'] += $sales['candy'];
-                $siteSales[$site]['sales']['description'] = $sales['description'];
+                $siteSales[$location]['site'] = $site;
+                $siteSales[$location]['tax_rates'] = $tax_rates;
+                @$siteSales[$location]['sales']['net'] += $sales['net'];
+                @$siteSales[$location]['sales']['Food'] += $sales['Food'];
+                @$siteSales[$location]['sales']['candy'] += $sales['candy'];
+                $siteSales[$location]['sales']['description'] = $sales['description'];
 
             } // while
 
-            foreach ($siteSales as $site => $siteSale)
-                print_dr0100($handle, FEIN, get_company_pref('coy_name'), $site, $rep, $period, $siteSale['sales'], $siteSale['tax_rates']);
+            ksort($siteSales);
+            foreach ($siteSales as $location => $siteSale)
+                print_dr0100($handle, FEIN, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates']);
         }
 
     if ($report_type == REPORT_TYPE_SUMMARY) {
