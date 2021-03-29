@@ -1901,6 +1901,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ,('loc_notification', 'glsetup.inventory', 'tinyint', '1', '0')
 ,('login_tout', 'setup.company', 'smallint', '6', '600')
 ,('long_description_invoice', 'setup.company', 'tinyint', '1', '0')
+,('max_days_in_docs','setup.company', 'smallint', 5, '180')
 ,('no_customer_list', 'setup.company', 'tinyint', '1', '0')
 ,('no_item_list', 'setup.company', 'tinyint', '1', '0')
 ,('no_supplier_list', 'setup.company', 'tinyint', '1', '0')
