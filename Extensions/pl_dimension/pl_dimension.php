@@ -26,7 +26,7 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 $js = "";
 if (user_use_date_picker())
 	$js = get_js_date_picker();
-$js .= get_js_history(array('TransFromDate', 'TransToDate', 'AccGrp', 'Dimension'));
+$js .= get_js_history(array('PL_FromDate', 'PL_ToDate', 'AccGrp', 'Dimension'));
 
 page(_($help_context = "Profit & Loss All Dimensions"), false, false, "", $js);
 
@@ -43,7 +43,10 @@ if (get_post('Show'))
 	$Ajax->activate('pl_tbl');
 }
 
-set_posts(array("TransFromDate", "TransToDate", "Compare", "Dimension", "AccGrp"));
+unset($_SESSION['Dimension']);
+unset($_SESSION['AccGrp']);
+unset($_SESSION['Compare']);
+set_posts(array("PL_FromDate", "PL_ToDate", "Compare", "Dimension", "AccGrp"));
 
 //----------------------------------------------------------------------------------------------------
 function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $convert,
@@ -85,8 +88,8 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		
 		if ($drilldown && $levelptr == 0)
 		{
-			$url = "<a href='$path_to_root/gl/inquiry/gl_account_inquiry.php?TransFromDate=" 
-				. $from . "&TransToDate=" . $to;
+			$url = "<a href='$path_to_root/gl/inquiry/gl_account_inquiry.php?PL_FromDate=" 
+				. $from . "&PL_ToDate=" . $to;
             if ($filter)
                 $url .= "&Dimension=$dimension&Dimension2=$dimension2";
             $url .= "&account=" . $account['account_code'];
@@ -140,8 +143,8 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
                 $url = "<a href='$path_to_root/$path_to_file";
             else
                 $url = "<a href='$path_to_root/gl/inquiry/profit_loss.php";
-            $url .= "?TransFromDate=" 
-				. $from . "&TransToDate=" . $to . "&Compare=" . $compare .  "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
+            $url .= "?PL_FromDate=" 
+				. $from . "&PL_ToDate=" . $to . "&Compare=" . $compare .  "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
 				. "&AccGrp=" . $type ."'>" . $type . " " . $typename ."</a>";
 				
 			alt_table_row_color($k);
@@ -178,12 +181,12 @@ function inquiry_controls()
     start_table(TABLESTYLE_NOBORDER);
     
 	$date = today();
-	if (!isset($_POST['TransToDate']))
-		$_POST['TransToDate'] = end_month($date);
-	if (!isset($_POST['TransFromDate']))
-		$_POST['TransFromDate'] = add_days(end_month($date), -abs(user_transaction_days()));
-    date_cells(_("From:"), 'TransFromDate');
-	date_cells(_("To:"), 'TransToDate');
+	if (!isset($_POST['PL_ToDate']))
+		$_POST['PL_ToDate'] = end_month($date);
+	if (!isset($_POST['PL_FromDate']))
+		$_POST['PL_FromDate'] = add_days(end_month($date), -abs(user_transaction_days()));
+    date_cells(_("From:"), 'PL_FromDate');
+	date_cells(_("To:"), 'PL_ToDate');
 	
 	echo "<td>"._("Compare to").":</td>\n";
 	echo "<td>";
@@ -230,8 +233,8 @@ function display_profit_and_loss_dimension($compare, $dimension, $dimension2, $n
         $levelptr='';
         $k='';
 
-	$from = $_POST['TransFromDate'];
-	$to = $_POST['TransToDate'];
+	$from = $_POST['PL_FromDate'];
+	$to = $_POST['PL_ToDate'];
 	
 	if (isset($_POST["AccGrp"]) && (strlen($_POST['AccGrp']) > 0))
 		$drilldown = 1; // Deeper Level
@@ -296,8 +299,8 @@ function display_profit_and_loss_dimension($compare, $dimension, $dimension2, $n
                         $url = "<a href='$path_to_root/$path_to_file";
                     else
                         $url = "<a href='$path_to_root/gl/inquiry/profit_loss.php";
-					$url .= "?TransFromDate=" 
-						. $from . "&TransToDate=" . $to . "&Compare=" . $compare .  "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
+					$url .= "?PL_FromDate=" 
+						. $from . "&PL_ToDate=" . $to . "&Compare=" . $compare .  "&Dimension=" . $dimension . "&Dimension2=" . $dimension2
 						. "&AccGrp=" . $accounttype['id'] ."'>" . $accounttype['id'] . " " . $accounttype['name'] ."</a>";
 						
 					alt_table_row_color($k);
