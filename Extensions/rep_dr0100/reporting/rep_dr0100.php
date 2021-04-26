@@ -25,7 +25,6 @@ include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/modules/tax_rate/get_tax_rate.inc");
 include_once($path_to_root . "/modules/rep_dr0100/reporting/testcases.inc");
 
-define("FEIN", '84-1457020');
 define("TAX_GROUP_EXEMPT_WHOLESALE",'2');
 define("TAX_GROUP_THORNTON",'4');
 define("TAX_GROUP_COLORADO",'5'); // non-physical locations
@@ -38,6 +37,8 @@ define("REPORT_TYPE_SUMMARY",'0');
 define("REPORT_TYPE_DR0100",'1');
 define("REPORT_TYPE_XML",'2');
 define("REPORT_TYPE_DR0098",'3');
+
+define("SHIPPER_PICKUP",'5');
 
 //----------------------------------------------------------------------------------------------------
 $sites=array();
@@ -129,7 +130,7 @@ function GetPhysicalSales($from, $to)
                     .TAX_GROUP_EXEMPT_CHARITY.","
                     .TAX_GROUP_EXEMPT_WHOLESALE.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.")
-                AND (dt.ship_via = 0 OR dt.ship_via = 5)
+                AND (dt.ship_via = 0 OR dt.ship_via = '" . SHIPPER_PICKUP . "')
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS net,
 
@@ -201,11 +202,10 @@ function GetNonPhysicalSales($period, $from, $to)
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.")
             AND ISNULL(v.date_)
             AND so.ship_via != 0
-            AND so.ship_via != 5
+            AND so.ship_via != '" . SHIPPER_PICKUP."'
             AND dt.tran_date >='$fromdate'
             AND dt.tran_date <='$todate'
             AND a.description NOT IN (
-                ".($period >= "2019-06" ? '' : 'Colorado'). "
                 'California',
                 'Out-of-state')
             AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_CHARITY."'
@@ -218,18 +218,49 @@ function GetNonPhysicalSales($period, $from, $to)
 
 function xml_deduct($d, $amt, $comment = null)
 {
-    return "                <Deductions>
+    if ($amt != 0)
+        return "                <Deductions>
                     <ExemptionDeductionDescription>$d</ExemptionDeductionDescription>
                     <ExemptionDeductionAmount>$amt</ExemptionDeductionAmount>
                     <OtherExemptionExplanation>$comment</OtherExemptionExplanation>
                 </Deductions>\n";
 }
 
-function xml_header($period, $fein, $coacct)
+function randomNumber($length) {
+    $result = '';
+    for($i = 0; $i < $length; $i++) {
+        $result .= mt_rand(0, 9);
+    }
+    return $result;
+}
+
+function xml_header($period, $fein, $coacct, $coy_name='', $address, $phone, $email)
 {
+    global $suts;
     $seq="0000001";
-    return '<?xml version="1.0" encoding="UTF-8"?>
-<ReturnState xsi:noNamespaceSchemaLocation="FERReturnState.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    $timestamp=date("c");
+    $digits = 20;
+    $tid = randomNumber(20);
+
+    $address = str_replace("\r", "", $address);
+    $address = str_replace("\n", ", ", $address);
+    list($street, $city, $statezip) = explode(", ", $address);
+    list($state, $zip) = explode(" ", $statezip);
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+    $xml .= "\n";
+
+    if ($suts == true)
+        $xml .= '<Transmission xsi:noNamespaceSchemaLocation="FERTransmission.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <TransmissionHeader recordCount="1">
+        <Jurisdiction>CO</Jurisdiction>
+        <TransmissionId>'.$tid.'</TransmissionId>
+        <Timestamp>' . $timestamp . '</Timestamp>
+        <TransmitterId>' . get_company_pref("filer_fein")  . '</TransmitterId>
+        <TestIndicator>P</TestIndicator>
+    </TransmissionHeader>';
+
+    $xml .= '<ReturnState xsi:noNamespaceSchemaLocation="FERReturnState.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <ReturnHeaderState binaryAttachmentCount="0">
     <Jurisdiction>CO</Jurisdiction>
     <Timestamp>' . date("c") . '</Timestamp>
@@ -237,7 +268,7 @@ function xml_header($period, $fein, $coacct)
     <TaxPeriodEndDate>' . date("Y-m-t", strtotime($period . '-01')) . '</TaxPeriodEndDate>
     <TaxYear>' . substr($period, 0, 4) . '</TaxYear>
     <Originator>
-        <EFIN>000000</EFIN>
+        <EFIN>' . ($suts == true ? str_replace('-', '', get_company_pref("filer_fein")) : "000000") . '</EFIN> 
         <Type>OnlineFiler</Type>
     </Originator>
     <SoftwareId>FrontAcct</SoftwareId>
@@ -252,31 +283,34 @@ function xml_header($period, $fein, $coacct)
         </TIN>
         <StateTaxpayerID>' . $coacct . '</StateTaxpayerID>
         <Name>
-            <BusinessNameLine1>Whitewater Hill Vineyards</BusinessNameLine1>
+            <BusinessNameLine1>' . $coy_name . '</BusinessNameLine1>
         </Name>
         <USAddress>
-            <AddressLine1>130 31 RD</AddressLine1> 
-            <City>Grand Junction</City>
-            <State>CO</State>
-            <ZIPCode>81503</ZIPCode>
+            <AddressLine1>' . $street . '</AddressLine1> 
+            <City>' . $city . '</City>
+            <State>' . $state . '</State>
+            <ZIPCode>' . $zip . '</ZIPCode>
         </USAddress>
         <DateSigned>'. date('Y-m-d') . '</DateSigned>
     </Filer>
     <Contact>
-        <ContactName>John Behrs</ContactName>
-        <ContactPhone>9704346868</ContactPhone>
-        <ContactEmail>behrsj@whitewaterhill.com</ContactEmail>
+        <ContactName>Administrator</ContactName>
+        <ContactPhone>' . str_replace('-', '', $phone) . '</ContactPhone>
+        <ContactEmail>' . $email . '</ContactEmail>
     </Contact>
-    <AckAddress>behrsj@whitewaterhill.com.com</AckAddress>
+    <AckAddress>' . $email . '</AckAddress>
 </ReturnHeaderState>
 <ReturnDataState>
     <SubmissionID>' . substr($coacct, 0, 6) . date('Y') . sprintf('%03d', (int)date('z'))  . $seq . '</SubmissionID>
 ';
+
+    $xml .= "\n";
+    return $xml;
 }
 
 //----------------------------------------------------------------------------------------------------
 
-function print_dr0100($handle, $fein, $name, $site, $rep, $period, $sales, $tax_rates)
+function print_dr0100($handle, $fein, $name, $site, $rep, $period, $sales, $tax_rates, $suts_hr)
 {
 global $total, $total_service_fee, $eventids, $path_to_root, $report_type, $suts;
 
@@ -363,6 +397,12 @@ $exempt_total = 0;
 foreach ($exemptions as $e)
     if (isset($sales[$e]))
         $exempt_total += $sales[$e];
+
+if (!isset($sales['net']) && !isset($sales['gross'])) {
+    display_error("Period $period has no sales data");
+    die();
+}
+
 if (!isset($sales['net']))
     $sales['net'] = $sales['gross'] - $exempt_total;
 if (!isset($sales['gross']))
@@ -379,8 +419,10 @@ foreach ($entities as $ent_xml => $col) {
         // unclear which service fee to use
         $service_fee[$col] = $service_fee[$ent_xml];    // for dr0100
 
-        if ($suts == false
-            && $tax_rates['HomeRule'] == 'Self-collected'
+        if ($suts_hr) {
+            if ($col != 'city')
+                continue;
+        } else if ($tax_rates['HomeRule'] == 'Self-collected'
             && $col == 'city')
             continue;
 
@@ -397,7 +439,7 @@ foreach ($entities as $ent_xml => $col) {
             $xml .= "            <TaxCode>$ent_xml</TaxCode>\n";
 
         $xml .= "            <TaxBasis>
-                <BasisAmount>" . $sales['gross'] . "</BasisAmount>\n";
+                <BasisAmount>" . sprintf("%.2f", $sales['gross']) . "</BasisAmount>\n";
 
         foreach ($exemptions as $e)
             if (isset($sales[$e]))
@@ -531,12 +573,15 @@ if ($sales['description'] == 'Special Event') {
         $rep->TextCol(1, 2, $site);
     }
 
-    if ($suts == false
-        && $tax_rates['HomeRule'] == 'Self-collected') {
+    if ($tax_rates['HomeRule'] == 'Self-collected') {
         if ($report_type == REPORT_TYPE_SUMMARY)
             $rep->AmountCol(2, 3, $tax_due_city, $dec);
-        $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 0;
-        $tax_rate['city'] = 0;
+        if ($suts_hr)
+            $tax_due = $tax_due_city;
+        else {
+            $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 0;
+            $tax_rate['city'] = 0;
+        }
     } else
         $tax_due += $tax_due_city;
 
@@ -700,10 +745,10 @@ _begin_job_
 
 	array('x' => 1, 'y' => 8.3, 'text' => strtoupper($name)),
 
-	array('x' => 1, 'y' => 7.8, 'text' => '130 31 RD                                               GRAND JCT      CO          81503'),
+	array('x' => 1, 'y' => 7.8, 'text' => get_company_pref("postal_address")),
 
 	// phone number does not print, do not know why?!?!?
-	array('x' => 6.7, 'y' => 7.8, 'text' => '970 434-6868'),
+	array('x' => 6.7, 'y' => 7.8, 'text' => get_company_pref("phone")),
 
 	array('x' => 1, 'y' => 7.2, 'text' => $site),
 	array('x' => 3.0, 'y' => 7.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
@@ -968,6 +1013,10 @@ function company_dr0100($testcases)
 
     // Get the payment
     $period = $_POST['PARAM_0'];
+    if ($period < "201906") {
+        display_error("Period $period not supported");
+        die();
+    }
     $report_type = $_POST['PARAM_1'];
     $test = $_POST['PARAM_2'];
     $suts = $_POST['PARAM_3'];
@@ -1010,20 +1059,27 @@ function company_dr0100($testcases)
             if ($report_type == REPORT_TYPE_XML)
                 fputs($handle, xml_header($t['period'], $fein, $t["coacct"]));
             foreach ($t['sales'] as $sales) {
-                print_dr0100($handle, $fein, $t["name"], $sales["site"], $rep, $t["period"], $sales, get_tax_rate_by_code($sales['code']));
+                print_dr0100($handle, $fein, $t["name"], $sales["site"], $rep, $t["period"], $sales, get_tax_rate_by_code($sales['code']), false);
             }
         } else {
             $sales = db_fetch(GetPhysicalSales($from_date, $to_date));
             $address = get_company_pref('postal_address');
+            $fein = get_company_pref('gst_no');
             $tax_rates=get_tax_rates($address);
             $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
             $coacct=substr($site,0,strlen($site)-4);
             $site=$coacct."-0001";
             if ($report_type == REPORT_TYPE_XML)
-                fputs($handle, xml_header($period, FEIN, $coacct));
+                fputs($handle, xml_header($period, $fein, $coacct,
+                    get_company_pref('coy_name'),
+                    $address,
+                    get_company_pref('phone'),
+                    get_company_pref('email') ));
+/*
 $sales['State']['OtherExemption'] = $sales['net'] - $sales['Food'];
 $sales['Comment']['OtherExemption'] = "COVID Deduction";
-            print_dr0100($handle, FEIN, get_company_pref('coy_name'), $site, $rep, $period, $sales, $tax_rates);
+*/
+            print_dr0100($handle, $fein, get_company_pref('coy_name'), $site, $rep, $period, $sales, $tax_rates, false);
 
             $nonphys = GetNonPhysicalSales($period, $from_date, $to_date);
             while ($sales = db_fetch($nonphys)) {
@@ -1067,8 +1123,11 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
             } // while
 
             ksort($siteSales);
-            foreach ($siteSales as $location => $siteSale)
-                print_dr0100($handle, FEIN, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates']);
+            foreach ($siteSales as $location => $siteSale) {
+                print_dr0100($handle, $fein, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], false);
+                if ($suts && $siteSale['tax_rates']['HomeRule'] == 'Self-collected')
+                    print_dr0100($handle, $fein, get_company_pref('coy_name'), "0000", $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], true);
+            }
         }
 
     if ($report_type == REPORT_TYPE_SUMMARY) {
@@ -1092,8 +1151,26 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
             <TotalTaxDueThisReturnAmt>$total</TotalTaxDueThisReturnAmt>
             <TotalPaymentDueThisReturnAmt>$total_payment_due</TotalPaymentDueThisReturnAmt>
         </StateServiceFeeCap>
-</ReturnDataState>
-</ReturnState>\n");
+</ReturnDataState>\n");
+
+    if ($suts == true)
+        fputs($handle, "<FinancialTransaction>
+    <StatePayment>
+        <Checking>" . (get_company_pref("checking") ? "X" : "" ) . "</Checking>
+        <RoutingTransitNumber>" . get_company_pref("routing_transit_number") . "</RoutingTransitNumber>
+        <BankAccountNumber>" . get_company_pref("bank_account_number") . "</BankAccountNumber>
+        <PaymentAmount>$total_payment_due</PaymentAmount>
+        <AccountHolderName>" . get_company_pref("account_holder_name") . "</AccountHolderName>
+        <AccountHolderType>" . get_company_pref("account_holder_type") . "</AccountHolderType>
+        <RequestedPaymentDate>". date('Y-m-d') . "</RequestedPaymentDate>
+    </StatePayment>
+</FinancialTransaction>\n");
+
+
+        fputs($handle, "</ReturnState>\n");
+
+    if ($suts == true)
+        fputs($handle, "</Transmission>\n");
     }
 
     fclose($handle);
