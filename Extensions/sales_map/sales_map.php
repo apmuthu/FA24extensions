@@ -22,7 +22,7 @@ include_once($path_to_root . "/includes/db/crm_contacts_db.inc");
 
 // ---------------------------------------------------------------------
 
-set_posts(array('stock_id', 'debtor_no', 'noheader', 'action', 'branch'));
+set_posts(array('description', 'debtor_no', 'noheader', 'action', 'branch'));
 
 
 add_css_file('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css');
@@ -38,7 +38,7 @@ function getBranchInfo($branch)
     return db_query($sql,"No transactions were returned");
 }
 
-function getTransactions($from, $to, $tax_group_id, $customer_id, $stock_id)
+function getTransactions($cat, $from, $to, $tax_group_id, $customer_id, $description)
 {
     if (!empty($from)) {
         $fromdate = date2sql($from);
@@ -53,10 +53,19 @@ function getTransactions($from, $to, $tax_group_id, $customer_id, $stock_id)
             LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no=dt.debtor_no
             LEFT JOIN ".TB_PREF."cust_branch cb ON dt.branch_code=cb.branch_code
             LEFT JOIN ".TB_PREF."tax_groups st ON cb.tax_group_id=st.id
-        WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
+            LEFT JOIN ".TB_PREF."sales_order_details sod
+                ON dt.order_ = sod.order_no
+            LEFT JOIN ".TB_PREF."stock_master sm
+                ON sm.stock_id = sod.stk_code";
 
-    if (!empty($stock_id))
-        $sql .= "AND stk_code=".db_escape($stock_id) . " ";
+    $sql .= " WHERE (dt.type=".ST_SALESINVOICE."
+        OR dt.type=".ST_CUSTCREDIT." )";
+
+    if (!empty($cat))
+        $sql .= " AND sm.category_id = " . db_escape($cat);
+
+    if (!empty($description))
+        $sql .= "AND LOCATE(".db_escape($description).",sm.description) != 0 ";
 
     if (!empty($fromdate))
         $sql .= "AND dt.tran_date >=".db_escape($fromdate)." AND dt.tran_date<=".db_escape($todate);
@@ -168,7 +177,7 @@ function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
         $todate = date2sql($to);
     }
 
-    $sql = "SELECT stk_code, sm.description
+    $sql = "SELECT stk_code, SUBSTR(sm.description,1, LENGTH(sm.description)-1-LENGTH(SUBSTRING_INDEX(sm.description, ' ', -1))) as description
         FROM ".TB_PREF."debtor_trans dt
             LEFT JOIN ".TB_PREF."voided as v
                 ON dt.trans_no=v.id AND dt.type=v.type
@@ -180,7 +189,8 @@ function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
                 ON sm.stock_id = sod.stk_code
 
         WHERE ISNULL(v.date_)
-            AND (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
+            AND (dt.type=".ST_SALESINVOICE."
+                OR dt.type=".ST_CUSTCREDIT.") ";
 
         if (!empty($debtor_no))
             $sql .= " AND d.debtor_no = " . db_escape($debtor_no);
@@ -191,13 +201,13 @@ function getSalesItems($cat, $debtor_no = null, $from = null, $to = null)
     if (!empty($from))
         $sql .= "AND dt.tran_date >=".db_escape($fromdate)." AND dt.tran_date<=".db_escape($todate);
 
-    $sql .= " GROUP BY stk_code ORDER BY description";
+    $sql .= " GROUP BY SUBSTR(sm.description,1,LENGTH(sm.description)-1-LENGTH(SUBSTRING_INDEX(sm.description, ' ', -1))) ORDER BY sm.description";
 
     return db_query($sql,"No transactions were returned");
 }
 
 $centerLat = $centerLong = $centerCount = 0;
-function clientarray_string($branch, $stock_id, $tax_group_id, $customer_id)
+function clientarray_string($cat, $branch, $description, $tax_group_id, $customer_id)
 {
     global $centerLat, $centerLong, $centerCount;
 	$clientArray="var clientArray = new Array();\n";
@@ -207,7 +217,7 @@ function clientarray_string($branch, $stock_id, $tax_group_id, $customer_id)
     if ($branch != "")
         $res = getBranchInfo($branch);
     else
-        $res = getTransactions(null, null, $tax_group_id, $customer_id, get_post('stock_id'));
+        $res = getTransactions($cat, null, null, $tax_group_id, $customer_id, get_post('description'));
 
     while ($cust=db_fetch($res)) {
 
@@ -223,7 +233,8 @@ function clientarray_string($branch, $stock_id, $tax_group_id, $customer_id)
         $lastchar = substr($address, strlen($address)-1,1);
         if (!is_numeric($lastchar)) {
             // No zip code? Skipping address
-            display_notification($cust["cust_name"] . "missing zipcode for $address");
+            if (!isset($_POST['noheader']))
+                display_notification($cust["cust_name"] . "missing zipcode for $address");
             continue;
         }
 
@@ -464,7 +475,7 @@ if (get_post('action') == 'show') {
 }
 
 define ('SCRIPT', '
-' . clientarray_string(get_post('branch'), get_post('stock_id'), $tax_group_id, $customer_id) . '
+' . clientarray_string($cat, get_post('branch'), get_post('description'), $tax_group_id, $customer_id) . '
   var side_bar_html = "<DIV id=\'title\'></DIV>";
 
 function map_init()
@@ -551,7 +562,7 @@ function clickList(i) {
 function codeAddress(map, i) {
 	var htmlListing = "<P><H2 onclick=clickList(" + i + ") style=\'margin-bottom:2px;\'><a href=" + window.location.href +"#title>" + clientArray[i][0] + "</a></H2>"	//name
 					+ clientArray[i][1] +  "<br>"  //address
-                    + "<a href=\"tel:" + clientArray[i][4] + "\">" + clientArray[i][4] + "</a><br>"; // phone
+                    + "<a href=\"tel:" + clientArray[i][4] + "\">" + clientArray[i][4] + "</a><br>" // phone
  + "<a href=" + location.protocol + "//" + location.host + location.pathname + "?debtor_no=" + clientArray[i][5] + " onClick=\'return popup(this, \"Items Carried\")\'>Items Carried</a>" ;
 
 	side_bar_html += htmlListing;	
@@ -574,9 +585,10 @@ function codeAddress(map, i) {
 
 function stockFilter()
 {
-    var ddl = document.getElementById("stock_id");
-    var stock_id = ddl.options[ddl.selectedIndex].value;
-    window.location.href = location.protocol + "//" + location.host + location.pathname + "?stock_id=" + stock_id;
+    var ddl = document.getElementById("description");
+    var description = ddl.options[ddl.selectedIndex].value;
+    window.location.href = location.protocol + "//" + location.host + location.pathname
+        + "?description=" + description' .  (isset($_POST['noheader']) ? '+ "&noheader=1"' : '') .  '
 }
 
 Behaviour.addLoadEvent(map_init);
@@ -590,7 +602,7 @@ if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= file_get_contents("https://unpkg.com/leaflet@1.3.1/dist/leaflet.js");
 $js .= file_get_contents("https://raw.githubusercontent.com/mapbox/tokml/master/tokml.js");
-$js .= get_js_history(array('debtor_no', 'stock_id'));
+$js .= get_js_history(array('debtor_no', 'description'));
 $js .= SCRIPT;
 
 page(_($help_context = "Sales Map"), get_post('noheader'), false, "", $js);
@@ -601,16 +613,16 @@ start_table(TABLESTYLE);
 
 // Ajax does not work with map_canvas, so use direct javascript
 
-$sel = "<label for=\"stock_id\"> Item Options </label>
-<select id=\"stock_id\" name=\"stock_id\" onchange=\"stockFilter()\">";
+$sel = "<label for=\"description\"> Item Options </label>
+<select id=\"description\" name=\"description\" onchange=\"stockFilter()\">";
     $sel .= "<option value=\"\">All Items\n";
 $res = getSalesItems($cat);
 while ($item=db_fetch($res)) {
-        if ($item['stk_code'] == get_post('stock_id'))
+        if ($item['description'] == get_post('description'))
             $selected = " selected";
         else
             $selected = "";
-        $sel .= "<option value=\"" . $item['stk_code'] . "\"" . $selected . ">" . $item['description'] . "\n";
+        $sel .= "<option value=\"" . $item['description'] . "\"" . $selected . ">" . $item['description'] . "\n";
 }
 
 $sel .= "</select>";

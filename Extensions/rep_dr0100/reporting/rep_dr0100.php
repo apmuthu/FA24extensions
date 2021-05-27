@@ -37,8 +37,8 @@ define("REPORT_TYPE_SUMMARY",'0');
 define("REPORT_TYPE_DR0100",'1');
 define("REPORT_TYPE_XML",'2');
 define("REPORT_TYPE_DR0098",'3');
-
 define("SHIPPER_PICKUP",'5');
+
 
 //----------------------------------------------------------------------------------------------------
 $sites=array();
@@ -310,9 +310,9 @@ function xml_header($period, $fein, $coacct, $coy_name='', $address, $phone, $em
 
 //----------------------------------------------------------------------------------------------------
 
-function print_dr0100($handle, $fein, $name, $site, $rep, $period, $sales, $tax_rates, $suts_hr)
+function print_dr0100($handle, $fein, $name, $site, $rep, $period, $sales, $tax_rates, $suts_hr, $blacklisted=null)
 {
-global $total, $total_service_fee, $eventids, $path_to_root, $report_type, $suts;
+global $total, $total_state_service_fee, $eventids, $path_to_root, $report_type, $suts;
 
 $dec = user_price_dec();
 $xml = '';
@@ -565,34 +565,34 @@ if ($sales['description'] == 'Special Event') {
     $tax_due = $tax_due_sd + $tax_due_rtdcd + $tax_due_county + $tax_due_state;
     $service_fee_due = $service_fee_sd + $service_fee_rtdcd + $service_fee_county + $service_fee_state;
 
-    if ($tax_due == 0)  // maybe we just sold them spices?
-        return;
-
-    if ($report_type == REPORT_TYPE_SUMMARY) {
-        $rep->TextCol(0, 1, $tax_rates['Location']);
-        $rep->TextCol(1, 2, $site);
-    }
-
+    $self_paid = 0;
     if ($tax_rates['HomeRule'] == 'Self-collected') {
-        if ($report_type == REPORT_TYPE_SUMMARY)
-            $rep->AmountCol(2, 3, $tax_due_city, $dec);
         if ($suts_hr)
             $tax_due = $tax_due_city;
         else {
+            if (!$suts || in_array($tax_rates['Location'], $blacklisted))
+                $self_paid = $tax_due_city;
             $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 0;
             $tax_rate['city'] = 0;
         }
     } else
         $tax_due += $tax_due_city;
 
+    if ($tax_due == 0)  // maybe we just sold them spices?
+        return;
+
     if ($report_type == REPORT_TYPE_SUMMARY) {
+        $rep->TextCol(0, 1, $tax_rates['Location']);
+        $rep->TextCol(1, 2, $site);
+        if ($self_paid != 0)
+            $rep->AmountCol(2, 3, $self_paid, $dec);
         $rep->AmountCol(3, 4, $tax_due, $dec);
         $rep->NewLine();
     }
 
     if ($sales['description'] != 'Special Event') {
         $total += $tax_due;
-        $total_service_fee += $service_fee_due;
+        $total_state_service_fee += $service_fee_state;
     }
 
     if ($report_type == REPORT_TYPE_XML) {
@@ -1005,11 +1005,14 @@ _begin_job_
 }
 
 $total=0;
-$total_service_fee=0;
+$total_state_service_fee=0;
 
 function company_dr0100($testcases)
 {
-    global $path_to_root, $sites, $total, $total_service_fee, $report_type, $suts;
+    global $path_to_root, $sites, $total, $total_state_service_fee, $report_type, $suts;
+
+    $blacklisted=array('LAKEWOOD');
+    // $blacklisted=array('');
 
     // Get the payment
     $period = $_POST['PARAM_0'];
@@ -1124,8 +1127,10 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
 
             ksort($siteSales);
             foreach ($siteSales as $location => $siteSale) {
-                print_dr0100($handle, $fein, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], false);
-                if ($suts && $siteSale['tax_rates']['HomeRule'] == 'Self-collected')
+                print_dr0100($handle, $fein, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], false, $blacklisted);
+                if ($suts
+                        && $siteSale['tax_rates']['HomeRule'] == 'Self-collected'
+                        && !in_array($siteSale['tax_rates']['Location'], $blacklisted))
                     print_dr0100($handle, $fein, get_company_pref('coy_name'), "0000", $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], true);
             }
         }
@@ -1139,15 +1144,15 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
     }
 
     if ($report_type == REPORT_TYPE_XML) {
-        if ($total_service_fee > 1000)
-            $excess_service_fee = $total_service_fee - 1000;
+        if ($total_state_service_fee > 1000)
+            $excess_state_service_fee = $total_state_service_fee - 1000;
         else
-            $excess_service_fee = 0;
-        $total_payment_due = $total + $excess_service_fee;
+            $excess_state_service_fee = 0;
+        $total_payment_due = $total + $excess_state_service_fee;
 
         fputs($handle, "        <StateServiceFeeCap>
-            <StateServiceFeeTotalReturnAmt>$total_service_fee</StateServiceFeeTotalReturnAmt>
-            <ExcessStateServiceFeeAmt>$excess_service_fee</ExcessStateServiceFeeAmt>
+            <StateServiceFeeTotalReturnAmt>$total_state_service_fee</StateServiceFeeTotalReturnAmt>
+            <ExcessStateServiceFeeAmt>$excess_state_service_fee</ExcessStateServiceFeeAmt>
             <TotalTaxDueThisReturnAmt>$total</TotalTaxDueThisReturnAmt>
             <TotalPaymentDueThisReturnAmt>$total_payment_due</TotalPaymentDueThisReturnAmt>
         </StateServiceFeeCap>
