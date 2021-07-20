@@ -408,11 +408,19 @@ if (isset($_POST['import'])) {
                     || ($checkno == "" && $i == 0))
                     continue;
 
+/*
+
+// This code can autocreate a transfer
+// but how downloaded bank statements designate such a transfer varies,
+// so it may be best to manually enter such transfers
+// unless the designation is foolproof
+
                 if (strpos($comment, "TRANSFER") !== false) {
                     $toacct = substr($comment, -4);
                     if (!is_numeric($toacct))
                         $toacct = "";
                 } else
+*/
                     $toacct = "";
 
                 if (!isset($amount)) {
