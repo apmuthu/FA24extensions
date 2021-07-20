@@ -850,12 +850,22 @@ if (isset($_POST['action'])) {
                 $customer = db_fetch_assoc($result);
                 $debtor_no = $customer['debtor_no'];
 
-                // Find the customer branch
-                // by matching the FA area description
+                // Find the FA customer branch by matching the FA area description
                 // with the OSC delivery city or delivery state;
-                // otherwise use the default sales area code
-                // This is necessary to get the correct sales tax rate
-                // on the order.
+                // otherwise use the default sales area code.
+
+                // This lookup is necessary when a single Destination Customer is used
+                // to import orders rather than importing all OSC customers before importing
+                // orders.  In vanilla FA, this gets the correct sales tax rate
+                // on the order, assuming that a sales area determines the tax rate and
+                // so a FA customer branch is selected with the correct tax group for that area.
+
+                // In BF, tax rates can be determined by the physical delivery address,
+                // removing the need for lookup of a matching branch for those
+                // tax groups where tax rate is determined by address.
+                // However, it is still useful for reporting purposes for sales by customer
+                // branch which implies sales by sales area.
+
                 $found = false;
                 foreach ( array ($order['delivery_city'], $order['delivery_state']) as $value ) {
                     $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND description = " .db_escape($value);
