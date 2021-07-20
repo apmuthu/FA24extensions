@@ -26,9 +26,7 @@ include_once($path_to_root . "/modules/tax_rate/get_tax_rate.inc");
 include_once($path_to_root . "/modules/rep_dr0100/reporting/testcases.inc");
 
 define("TAX_GROUP_EXEMPT_WHOLESALE",'2');
-define("TAX_GROUP_THORNTON",'4');
 define("TAX_GROUP_COLORADO",'5'); // non-physical locations
-define("TAX_GROUP_DOUGLAS_COUNTY",'7');
 define("TAX_GROUP_EXEMPT_OOS",'8');
 define("TAX_GROUP_EXEMPT_CHARITY",'10');
 define("TAX_GROUP_EXEMPT_WINEMAKERS",'11');
@@ -37,7 +35,6 @@ define("REPORT_TYPE_SUMMARY",'0');
 define("REPORT_TYPE_DR0100",'1');
 define("REPORT_TYPE_XML",'2');
 define("REPORT_TYPE_DR0098",'3');
-define("SHIPPER_PICKUP",'5');
 
 
 //----------------------------------------------------------------------------------------------------
@@ -130,7 +127,7 @@ function GetPhysicalSales($from, $to)
                     .TAX_GROUP_EXEMPT_CHARITY.","
                     .TAX_GROUP_EXEMPT_WHOLESALE.","
                     .TAX_GROUP_EXEMPT_WINEMAKERS.")
-                AND (dt.ship_via = 0 OR dt.ship_via = '" . SHIPPER_PICKUP . "')
+                AND LOCATE('220 32 RD', so.delivery_address) != 0
                 THEN (CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ttd.net_amount)*-1
                 ELSE (ttd.net_amount) END *ex_rate) ELSE 0 END),2) AS net,
 
@@ -165,6 +162,7 @@ function GetPhysicalSales($from, $to)
         LEFT JOIN ".TB_PREF."voided as v ON dt.trans_no=v.id AND dt.type=v.type
         LEFT JOIN ".TB_PREF."cust_branch cb ON cb.branch_code = dt.branch_code
         LEFT JOIN ".TB_PREF."areas a ON cb.area = a.area_code
+        LEFT JOIN ".TB_PREF."sales_orders so ON so.order_no = dt.order_
         LEFT JOIN ".TB_PREF."trans_tax_details ttd ON ttd.trans_type=dt.type AND ttd.trans_no=dt.trans_no
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.")
             AND ISNULL(v.date_)
@@ -201,8 +199,7 @@ function GetNonPhysicalSales($period, $from, $to)
         LEFT JOIN ".TB_PREF."trans_tax_details ttd ON ttd.trans_type=dt.type AND ttd.trans_no=dt.trans_no
         WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.")
             AND ISNULL(v.date_)
-            AND so.ship_via != 0
-            AND so.ship_via != '" . SHIPPER_PICKUP."'
+            AND LOCATE('220 32 RD', so.delivery_address) = 0
             AND dt.tran_date >='$fromdate'
             AND dt.tran_date <='$todate'
             AND a.description NOT IN (
@@ -409,8 +406,27 @@ if (!isset($sales['gross']))
     $sales['gross'] = $sales['net'] + $exempt_total;
 
 
+$tax_due = 0;
+$service_fee_due = 0;
+
 foreach ($entities as $ent_xml => $col) {
     if (isset($tax_rate[$ent_xml])) {
+
+        if ($suts_hr) {
+            if ($col != 'city')
+                continue;
+        } else if ($tax_rates['HomeRule'] == 'Self-collected'
+            && $col == 'city') {
+                if (!$suts) {
+                    // LID and City both mapped into "city", so add tax_rates
+                    // RTD and CD both mapped into "rtd", so add tax_rates
+                    $tax_rate[$col] += $tax_rate[$ent_xml]; // for dr0100
+
+                    // unclear which service fee to use
+                    $service_fee[$col] = $service_fee[$ent_xml];    // for dr0100
+                }
+                continue;
+        }
 
         // LID and City both mapped into "city", so add tax_rates
         // RTD and CD both mapped into "rtd", so add tax_rates
@@ -418,13 +434,6 @@ foreach ($entities as $ent_xml => $col) {
 
         // unclear which service fee to use
         $service_fee[$col] = $service_fee[$ent_xml];    // for dr0100
-
-        if ($suts_hr) {
-            if ($col != 'city')
-                continue;
-        } else if ($tax_rates['HomeRule'] == 'Self-collected'
-            && $col == 'city')
-            continue;
 
         // The DR0100 maps tax codes into columns,
         // but XML appears to do no mapping (see Sample Instance, CD & RTD)
@@ -487,11 +496,18 @@ $taxAmount = round($taxableSales * $tax_rate[$ent_xml], 2);
 $serviceFee = round($taxAmount * $service_fee[$ent_xml], 2);
 $taxDueAmount = $taxAmount - $serviceFee;
 
+if ($col != "city") {
+    $tax_due += $taxDueAmount;
+    $service_fee_due += $serviceFee;
+}
+
 $taxableSales = sprintf("%.2f", $taxableSales);
 $taxAmount = sprintf("%.2f", $taxAmount);
 $serviceFee = sprintf("%.2f", $serviceFee);
 $taxDueAmount = sprintf("%.2f", $taxDueAmount);
 $netSales = sprintf("%.2f", $sales['net']);
+
+
 
 $xml .= "                   <TaxableAmount>$netSales</TaxableAmount>
                     <TaxRate>" . $tax_rate[$ent_xml] . "</TaxRate>
@@ -556,39 +572,43 @@ if ($sales['description'] == 'Special Event') {
     $service_fee_county = round($tax_county * $service_fee['county'], $PRECISION);
     $service_fee_state = round($tax_state * $service_fee['state'], $PRECISION);
 
-    $tax_due_sd = round($tax_sd - $service_fee_sd, $PRECISION);
-    $tax_due_rtdcd = round($tax_rtdcd - $service_fee_rtdcd, $PRECISION);
-    $tax_due_city = round($tax_city - $service_fee_city, $PRECISION);
-    $tax_due_county = round($tax_county - $service_fee_county, $PRECISION);
-    $tax_due_state = round($tax_state - $service_fee_state, $PRECISION);
-
-    $tax_due = $tax_due_sd + $tax_due_rtdcd + $tax_due_county + $tax_due_state;
-    $service_fee_due = $service_fee_sd + $service_fee_rtdcd + $service_fee_county + $service_fee_state;
+    $tax_due_sd = $tax_sd - $service_fee_sd;
+    $tax_due_rtdcd = $tax_rtdcd - $service_fee_rtdcd;
+    $tax_due_city = $tax_city - $service_fee_city;
+    $tax_due_county = $tax_county - $service_fee_county;
+    $tax_due_state = $tax_state - $service_fee_state;
 
     $self_paid = 0;
     if ($tax_rates['HomeRule'] == 'Self-collected') {
         if ($suts_hr)
-            $tax_due = $tax_due_city;
-        else {
-            if (!$suts || in_array($tax_rates['Location'], $blacklisted))
+            if (in_array($tax_rates['Location'], $blacklisted)) {
+                $tax_due = 0;
                 $self_paid = $tax_due_city;
+                $self_paid_sales = $sales_taxed['city'];
+            } else
+                $tax_due = $tax_due_city;
+        else {
+            $self_paid = $tax_due_city;
+            $self_paid_sales = $sales_taxed['city'];
             $tax_city = $service_fee_city = $tax_due_city = $sales_taxed['city'] = 0;
             $tax_rate['city'] = 0;
         }
     } else
         $tax_due += $tax_due_city;
 
-    if ($tax_due == 0)  // maybe we just sold them spices?
-        return;
-
     if ($report_type == REPORT_TYPE_SUMMARY) {
         $rep->TextCol(0, 1, $tax_rates['Location']);
         $rep->TextCol(1, 2, $site);
-        if ($self_paid != 0)
-            $rep->AmountCol(2, 3, $self_paid, $dec);
-        $rep->AmountCol(3, 4, $tax_due, $dec);
+        if ($self_paid != 0) {
+            $rep->AmountCol(2, 3, $self_paid_sales, $dec);
+            $rep->AmountCol(3, 4, $self_paid, $dec);
+        }
+        $rep->AmountCol(4, 5, $tax_due, $dec);
         $rep->NewLine();
     }
+
+    if ($tax_due == 0)  // maybe we just sold them spices?
+        return;
 
     if ($sales['description'] != 'Special Event') {
         $total += $tax_due;
@@ -1011,7 +1031,13 @@ function company_dr0100($testcases)
 {
     global $path_to_root, $sites, $total, $total_state_service_fee, $report_type, $suts;
 
-    $blacklisted=array('LAKEWOOD');
+    $blacklisted=array(
+        'THORNTON',
+        'GRAND JUNCTION',
+        'GREELEY',
+        'BROOMFIELD (CD Only)',
+        'BROOMFIELD (RTD AND CD)');
+
     // $blacklisted=array('');
 
     // Get the payment
@@ -1036,10 +1062,10 @@ function company_dr0100($testcases)
     $params =   array(0 => '', 
                       1 => array('text' => _('Period'), 'from' => $from_date, 'to' => $to_date));
 
-    $cols = array(0, 200, 300, 400, 460);
+    $cols = array(0, 200, 300, 360, 420, 480);
 
-    $headers = array(_('Location'), _('Account No.'), _('Self-Collected'), _('State-Collected'));
-    $aligns = array('left', 'left', 'left', 'right', 'right');
+    $headers = array(_('Location'), _('Account No.'), _('Sales'), _('Pay HR City'), _('Pay State'));
+    $aligns = array('left', 'left', 'right', 'right', 'right');
 
     $rep->Font();
     $rep->Info($params, $cols, $headers, $aligns);
@@ -1127,18 +1153,17 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
 
             ksort($siteSales);
             foreach ($siteSales as $location => $siteSale) {
-                print_dr0100($handle, $fein, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], false, $blacklisted);
+                print_dr0100($handle, $fein, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], false);
                 if ($suts
-                        && $siteSale['tax_rates']['HomeRule'] == 'Self-collected'
-                        && !in_array($siteSale['tax_rates']['Location'], $blacklisted))
-                    print_dr0100($handle, $fein, get_company_pref('coy_name'), "0000", $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], true);
+                        && $siteSale['tax_rates']['HomeRule'] == 'Self-collected')
+                    print_dr0100($handle, $fein, get_company_pref('coy_name'), "0000", $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], true, $blacklisted);
             }
         }
 
     if ($report_type == REPORT_TYPE_SUMMARY) {
         $rep->NewLine();
         $rep->TextCol(0, 2, 'TOTAL DUE STATE ON DR0100 ONLY');
-        $rep->AmountCol(3, 4, $total, $dec);
+        $rep->AmountCol(4, 5, $total, $dec);
 
        $rep->End();
     }

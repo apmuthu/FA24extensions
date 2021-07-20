@@ -26,8 +26,7 @@ $csv[0] = array_slice($csv[0], 0, 8);
         if ($location == "UNINCORPORATED")
             $value['Location'] = $location = strtoupper(trim($value['County']) . " COUNTY");
         for ($i=0; $value[$i] != null; $i +=3) {
-            if (strpos($value[$i], 'food') === false
-                && $value[$i] != 'LID') // Local improvement district, probably small area
+            if (strpos($value[$i], 'food') === false)
                 $value['total'] += $value[$i+1];
         }
 
