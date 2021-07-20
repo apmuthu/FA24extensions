@@ -258,17 +258,15 @@ function getTaxes($payment_type, $tran_date, $sel_month, $tax_groups, $invert)
     return db_query($sql,"No transactions were returned");
 }
 
-function compare_graph($sel_month, $pg, $pg_years)
+function compare_graph($sel_month, $pg)
 {
     // display_notification(print_r($pg_years, true));
     // display_notification(print_r($pg, true));
-    if (!isset($pg_years[1]))
-        return;
 
     $today = Today();
     $title = "Sales Comparison";
 
-    source_graphic($today, $title, ($sel_month == 0 ? _("Month") : _("Day")), $pg, $pg_years[0], $pg_years[1], 1);
+    source_graphic($today, $title, ($sel_month == 0 ? _("Month") : _("Day")), $pg);
 }
 
 
@@ -411,8 +409,7 @@ $rows=0;
 $transactions = getTaxTransactions($_POST['payment_type'], $default_year, $sel_month, implode(",", $taxgroup), $invert);
 $num_rows=db_num_rows($transactions);
 $k = 0;
-    $pg = new graph();
-$pg_rows = 0;
+    $pg = new Chart('bar');
 $pg_years=array();
 while ($sales=db_fetch($transactions)) {
    alt_table_row_color($k);
@@ -426,7 +423,6 @@ while ($sales=db_fetch($transactions)) {
     $sales['tax_coll'] = $taxes['tax_added'] + $taxes['tax_included'];
 
 	if ($rows>1 && $sales['row_year']<>$last_row_year) {  // emit annual footer
-$pg_rows = 0;
 ?>
 <td class="dataTableHeadingContent" align="left">
 <?php 
@@ -498,21 +494,29 @@ end_row();
 
     if (!in_array($sales['row_year'], $pg_years) )
         $pg_years[] = $sales['row_year'];
-    
-    if (!isset($pg->y[$pg_rows])) {
+    if (!isset($pg_years[1])) {
         if ($sel_month==0)
-            $pg->x[$pg_rows] = strtoupper(substr($sales['row_month'],0,3));
+            $pgx[] = strtoupper(substr($sales['row_month'],0,3));
         else
-            $pg->x[$pg_rows] = $sales['row_day'];
-        $pg->y[$pg_rows] = $sales['gross_sales'];
-        $pg_rows++;
+            $pgx[] = $sales['row_day'];
+        $pgy[] = $sales['gross_sales'];
     } else {
-        if ($sel_month==0)
-            $key = array_search(strtoupper(substr($sales['row_month'],0,3)), $pg->x);
-        else
-            $key = array_search($sales['row_day'], $pg->x);
-        if ($key !== FALSE)
-            $pg->z[$key] = $sales['gross_sales'];
+        if ($sel_month==0) {
+            $key = array_search(strtoupper(substr($sales['row_month'],0,3)), $pgx);
+            if ($key === FALSE) {
+                $pgx[] = strtoupper(substr($sales['row_month'],0,3));
+                $pgy[] = 0;
+                $key = array_key_last($pgx);
+            }
+        } else {
+            $key = array_search($sales['row_day'], $pgx);
+            if ($key === FALSE) {
+                $pgx[] = $sales['row_day'];
+                $pgy[] = 0;
+                $key = array_key_last($pgx);
+            }
+        }
+        $pgz[$sales['row_year']][$key] = $sales['gross_sales'];
     }
 
 ?>
@@ -642,7 +646,14 @@ $footer_other = 0;
 
 end_table();
 
-compare_graph($sel_month, $pg, $pg_years);
+if (isset($pg_years[1])) {
+$pg->setLabels($pgx);
+$pg->addSerie($pg_years[0], $pgy);
+for ($i = 1; isset($pg_years[$i]); $i++)
+    $pg->addSerie($pg_years[$i], $pgz[$pg_years[$i]]);
+
+compare_graph($sel_month, $pg);
+}
 
 div_end();
 end_page();
