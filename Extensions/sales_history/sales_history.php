@@ -28,7 +28,7 @@ include_once($path_to_root . "/includes/dashboard.inc"); // here are all the das
 $js = "";
 if (user_use_date_picker())
 	$js = get_js_date_picker();
-$js .= get_js_history(array('payment_type', 'tax_groups', 'year', 'month'));
+$js .= get_js_history(array('payment_type', 'taxgroup', 'tax_groups', 'year', 'month'));
 
 page(_($help_context = "Sales History"), false, false, "", $js);
 
@@ -40,7 +40,7 @@ if (get_post('Show'))
 	$Ajax->activate('sales_tbl');
 }
 
-set_posts(array("payment_type", "tax_groups", "year", "month"));
+set_posts(array("payment_type", 'taxgroup', "tax_groups", "year", "month"));
 
 function getYears()
 {
@@ -266,6 +266,7 @@ function compare_graph($sel_month, $pg)
     $today = Today();
     $title = "Sales Comparison";
 
+    dashboard("custom");
     source_graphic($today, $title, ($sel_month == 0 ? _("Month") : _("Day")), $pg);
 }
 
@@ -409,8 +410,12 @@ $rows=0;
 $transactions = getTaxTransactions($_POST['payment_type'], $default_year, $sel_month, implode(",", $taxgroup), $invert);
 $num_rows=db_num_rows($transactions);
 $k = 0;
-    $pg = new Chart('bar');
+    $pg = new chart('bar', 'd1');
+    if (isset($_POST['select_d1']))
+        $pg->type = $_POST['select_d1'];
+
 $pg_years=array();
+$pgx=array();
 while ($sales=db_fetch($transactions)) {
    alt_table_row_color($k);
 	$rows++;
@@ -492,8 +497,13 @@ end_row();
 	$footer_tax_coll += $sales['tax_coll'];
 	$footer_shiphndl += $sales['freight'];
 
-    if (!in_array($sales['row_year'], $pg_years) )
+    if (!in_array($sales['row_year'], $pg_years) ) {
         $pg_years[] = $sales['row_year'];
+        foreach ($pgx as $key => $value)
+            $pgz[$sales['row_year']][$key] = 0;
+            
+    }
+
     if (!isset($pg_years[1])) {
         if ($sel_month==0)
             $pgx[] = strtoupper(substr($sales['row_month'],0,3));

@@ -766,6 +766,7 @@ if (isset($_POST['action'])) {
 
 					if (!empty((array)$allPayments)) {
 						foreach ($allPayments as $t) {
+// display_notification(print_r($t, true));
 							$payment_method = str_replace("CREDIT_CARD", "CARD", $t->getSourceType());
 							if ($payment_method == "NO_SALE") {
 								display_notification("NO_SALE " . $t->getId());
@@ -860,9 +861,8 @@ if (isset($_POST['action'])) {
                             $ordersApi = $client->getOrdersApi();
                             $apiResponse = $ordersApi->retrieveOrder($t->getOrderId());
                             if (!$apiResponse->isSuccess()) {
-								display_error('Cannot retrieve order ' . $t->getOrderId());
-                                $errors = $apiResponse->getErrors();
-                                die();
+								display_notification('Cannot retrieve order ' . $t->getOrderId() . ". Maybe was canceled?" );
+                                continue;
                             }
                             $retrieveOrderResponse = $apiResponse->getResult();
                             $order = $retrieveOrderResponse->getOrder();
@@ -896,6 +896,7 @@ if (isset($_POST['action'])) {
 
 							$items = $order->getLineItems();
 							foreach ($items as $item) {
+// display_notification(print_r($item, true));
 // TBD: how to do this?
 /*
 								$type = $item->getItemizationType();
@@ -920,10 +921,7 @@ if (isset($_POST['action'])) {
                                     continue;
                                 }
 								$catobj = $item3->getObject();
-								$item_data = $catobj->getItemData();
-								$var = $item_data->getVariations();
-								$vardata = $var[0]->getItemVariationData();
-
+                                $vardata = $catobj->getItemVariationData();
 								$sku = $vardata->getName();
 								if ($sku == '') {
 									display_warning("Missing SKU for " . $item->getName());
@@ -932,15 +930,16 @@ if (isset($_POST['action'])) {
 								}
 
 								// discounts are applied differently to items including or excluding tax
-
+/*
 								if ($t->getInclusiveTaxMoney()->getAmount() != 0)
 									$discount = -$item->getTotalDiscountMoney()->getAmount()/($item->getTotalMoney()->getAmount() - $item->getDiscountMoney()->getAmount());
 								else
+*/
 									$discount = -$item->getTotalDiscountMoney()->getAmount()/$item->getGrossSalesMoney()->getAmount();
 								display_notification($sku . " " . $item->getQuantity() . " " . $item->getBasePriceMoney()->getAmount()/100);
 
 								add_to_order($cart, $sku, $item->getQuantity(),
-									$item->getBasePriceMoney()/100,
+									$item->getBasePriceMoney()->getAmount()/100,
 									$discount);
 							} // foreach item
 
@@ -960,7 +959,7 @@ if (isset($_POST['action'])) {
 								$order_no = $cart->write(1);
 								display_notification("Added Order Number $order_no for " . $customers_name);
 							} else {
-								display_notification("To Be Added:" . $total_order . " " . $cart->payment_info . " " . $cart->sales_type);
+								display_notification("To Be Added:" . $t->getCreatedAt() . " " . $total_order . " " . $cart->payment_info . " " . $cart->sales_type);
 							}
 
 						} // foreach payment
