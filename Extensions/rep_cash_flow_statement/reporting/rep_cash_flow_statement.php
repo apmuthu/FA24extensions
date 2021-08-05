@@ -95,7 +95,7 @@ function getPeriods($yr, $mo, $id, $dimension, $dimension2, $balance=false)
 }
 
 
-function display_bank_trans($yr, $mo, &$dec, &$rep, $dimension, $dimension2, $date)
+function display_bank_trans($yr, $mo, &$dec, &$rep, $dimension, $dimension2, $date, $bank_id)
 {
 	global $bank_account_types;
 	
@@ -106,7 +106,11 @@ function display_bank_trans($yr, $mo, &$dec, &$rep, $dimension, $dimension2, $da
 	$result = get_bank_accounts();	
 	while ($account=db_fetch($result))
 	{
-	
+
+		if($bank_id > 0 ){
+			if($bank_id != $account['id'])
+				continue;
+		}
 		$ctotal = array(1 => 0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 		$bal = getPeriods($yr, $mo, $account["id"], $dimension, $dimension2, true);
 		$per = getPeriods($yr, $mo, $account["id"], $dimension, $dimension2);
@@ -179,23 +183,26 @@ function print_cash_flow_statement()
 	if ($dim == 2)
 	{
 		$date = $_POST['PARAM_0'];
-		$dimension = $_POST['PARAM_1'];
-		$dimension2 = $_POST['PARAM_2'];
-		$comments = $_POST['PARAM_3'];
-		$destination = $_POST['PARAM_4'];
+		$bank_id = $_POST['PARAM_1'];
+		$dimension = $_POST['PARAM_2'];
+		$dimension2 = $_POST['PARAM_3'];
+		$comments = $_POST['PARAM_4'];
+		$destination = $_POST['PARAM_5'];
 	}
 	else if ($dim == 1)
 	{
 		$date = $_POST['PARAM_0'];
-		$dimension = $_POST['PARAM_1'];
-		$comments = $_POST['PARAM_2'];
-		$destination = $_POST['PARAM_3'];
+		$bank_id = $_POST['PARAM_1'];
+		$dimension = $_POST['PARAM_2'];
+		$comments = $_POST['PARAM_3'];
+		$destination = $_POST['PARAM_4'];
 	}
 	else
 	{
 		$date = $_POST['PARAM_0'];
-		$comments = $_POST['PARAM_1'];
-		$destination = $_POST['PARAM_2'];
+		$bank_id = $_POST['PARAM_1'];
+		$comments = $_POST['PARAM_2'];
+		$destination = $_POST['PARAM_3'];
 	}
 	if ($destination)
 		include_once($path_to_root . "/reporting/includes/excel_report.inc");
@@ -257,7 +264,7 @@ function print_cash_flow_statement()
 	   	$wrap_point = strpos($header_row[$i], ' ');
 	   	if ($wrap_point)
 	   	{
-			$headers2[] = _(substr($header_row[$i], 0, $wrap_point));
+			$headers2[] = substr($header_row[$i], 0, $wrap_point);
 			$headers[] = substr($header_row[$i], $wrap_point+1);
 	   	}
 	   	else
@@ -303,6 +310,10 @@ function print_cash_flow_statement()
                     	1 => array('text' => _("Report Period"),
                     		'from' => '', 'to' => $rep->DatePrettyPrint($enddate)));
     }
+    if($bank_id > 0){
+    	$bank = get_bank_account($bank_id);
+    	$params [] = array('text' => _("Bank Account"), 'from' => $bank['bank_account_name'], 'to' => '');
+    }
    	// Company logo setting
    	$companylogoenable = true;
 
@@ -322,7 +333,7 @@ function print_cash_flow_statement()
     $rep->SetLineWidth(0.1);
 	
 	$rep->row += 8;
-	display_bank_trans($yr, $mo, $dec, $rep, $dimension, $dimension2, $enddate);
+	display_bank_trans($yr, $mo, $dec, $rep, $dimension, $dimension2, $enddate, $bank_id);
 
 	$rep->Font();
 	$rep->End();

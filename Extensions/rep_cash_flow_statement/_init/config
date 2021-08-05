@@ -7,8 +7,9 @@ Description: A simple Cash Flow Statement.
  This is not sales on credit or purchases on credit.
  These will only reflect when you receive payment on those sales or when you pay your supplier.
  Each account will then have an opening and closing balance and the difference would be you negative or positive cash flow.
-Author: Joe Hunt <joe.hunt.cocnsulting@gmail.com
-Maintenance: Joe Hunt <joe.hunt.cocnsulting@gmail.com
+ Now with Bank Level Filter by @kvvaradha
+Author: Joe Hunt <joe.hunt.consulting@gmail.com
+Maintenance: Joe Hunt <joe.hunt.consulting@gmail.com
 Homepage: frontaccounting.com
 Type: extension
 InstallPath: modules/rep_cash_flow_statement
