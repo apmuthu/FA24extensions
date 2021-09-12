@@ -366,7 +366,8 @@ if ($SysPrefs->use_popup_windows)
     $js .= get_js_open_window(800, 500);
 $help_context="Bank Auto Reconcile";
 
-set_posts(array('reconcile_date', 'bank_account'));
+if (function_exists('set_posts'))
+    set_posts(array('reconcile_date', 'bank_account'));
 
 page(_($help_context), false, false, "", $js);
 
