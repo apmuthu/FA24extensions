@@ -94,7 +94,6 @@ function getLatLong($address)
     return db_fetch($result);
 }
 
-
 function getCensusGeoCode($address)
 {
     $request_url = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=" . urlencode($address) . "&benchmark=4";
@@ -117,16 +116,21 @@ function getCensusGeoCode($address)
         return ",";
     }
 
-    $data=strpos($feed, "Coordinates:");
-    if ($data === false)
-        return ",";
-    $feed = substr($feed, $data);
+    $feed=strip_tags($feed, '<br>');
+    $out = explode('<br/>',$feed);
 
-    $X = strpos($feed, "X:");
-    $Y = strpos($feed, "Y:");
-    $br = strpos($feed, "<br");
-    $lng = substr($feed, $X+3, $Y-$X-4);
-    $lat = substr($feed, $Y+3, $br-$Y-3);
+    foreach ($out as $outVar) {
+        if (strpos($outVar, ":") === false)
+            continue;
+       list($name,$value) = explode(':',$outVar);
+        if ($name == 'Interpolated Longitude (X) Coordinates')
+            $lng = $value;
+        if ($name == 'Interpolated Latitude (Y) Coordinates')
+            $lat = $value;
+    }
+
+    if (!isset($lng) || !isset($lat))
+        return ",";
 
     $latlong = $lat . "," . $lng;
     return $latlong;
