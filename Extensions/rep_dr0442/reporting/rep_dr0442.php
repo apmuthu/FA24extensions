@@ -65,7 +65,7 @@ function getLiters($from, $to)
             WHERE ISNULL(v.id)
                 AND tran_date BETWEEN '$fromdate' AND '$todate'
                 AND (item.units='375ml' OR item.units='750ml')";
-//display_notification($sql);
+// display_notification($sql);
 
     return db_query($sql,"No transactions were returned");
 
@@ -151,8 +151,9 @@ function print_dr0442()
     // Get the payment
     $period = $_POST['PARAM_0'];
     $beg_inv = $_POST['PARAM_1'];
-    $mfg = $_POST['PARAM_2'];
-    $grape_tons = $_POST['PARAM_3'];
+    // $mfg = $_POST['PARAM_2'];
+    $mfg = '';
+    $grape_tons = $_POST['PARAM_2'];
     if ($grape_tons == '')
         $grape_tons = 0;
 
