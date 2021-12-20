@@ -279,6 +279,8 @@ function print_GL_transactions()
 		}
 		$rep->NewLine();
 	}
+    $grandtotal += $total;
+
 	$rep->Font('bold');
 	$rep->TextCol(4, 6,	_("Total"));
 	if ($grandtotal > 0.0)
