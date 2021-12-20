@@ -414,7 +414,8 @@ function calc_subtotal($oID)
         }
 
         // display_notification($oID . ":" . $osc_id . ":" . $prod['final_price'] . ":" . $row[1]);
-        if ($default_sales_act == $row[1])
+        if ($default_sales_act == $row[1]
+            || substr($prod['products_name'], 0, 4) == 'Gift')
             $total += $prod['final_price'] * $prod['products_quantity'];
     }
     return $total;
@@ -451,7 +452,6 @@ $oscPrefix        = "";
 $lastcid          = 0;
 $lastdate         = "";
 $defaultTaxGroup  = 0;
-$destCust         = 0;
 $invCust          = 0;
 $statusId         = 0;
 $oscwebsite       = "";
@@ -536,12 +536,6 @@ if ($found) {
     $result           = db_query($sql, "could not get taxgroup");
     $row              = db_fetch_row($result);
     $default_TaxGroup = ($row == false ? '' : $row[1]);
-
-    // Get destination customer
-    $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'destCust'";
-    $result     = db_query($sql, "could not get destCust");
-    $row        = db_fetch_row($result);
-    $destCust  = ($row == false ? '' : $row[1]);
 
     // Get inventory customer
     $sql        = "SELECT * FROM ".TB_PREF."oscommerce WHERE name = 'invCust'";
@@ -738,10 +732,6 @@ if (isset($_POST['action'])) {
             $from_date = date2sql($_POST['from_date']);
             $end_date  = date2sql($_POST['to_date']);
 
-            $destCust        = $_POST['destCust'];
-            $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('destCust', ".db_escape($destCust).") ON DUPLICATE KEY UPDATE name='destCust', value=".db_escape($destCust);
-            db_query($sql, "Update 'destCust'");
-
             $statusId        = $_POST['statusId'];
             $sql = "INSERT INTO ".TB_PREF."oscommerce (name, value) VALUES ('statusId', ".db_escape($statusId).") ON DUPLICATE KEY UPDATE name='statusId', value=".db_escape($statusId);
             db_query($sql, "Update 'statusId'");
@@ -827,48 +817,45 @@ if (isset($_POST['action'])) {
                 }
                 mysqli_free_result($result);
 
-                if (empty($order['customers_name']))
-                    $customers_name = $order['customers_company'];
-                else
-                    $customers_name = $order['customers_name'];
-                $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE `name` = ".db_escape($customers_name);
-                $result = db_query($sql, "Could not find customer by name");
-                if (db_num_rows($result) == 0) { // customer not found
-                    if ($destCust == 0) {
-                        display_notification("Customer " . $customers_name . " not found");
-                        break;
-                    }
+                // Find the FA customer branch by matching the OSC delivery address.
 
-                    $sql    = "SELECT * FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
-                    $result = db_query($sql, "Could not find customer by debtor_no");
-                    if (db_num_rows($result) == 0) {
-                        display_error("Customer id " . $destCust  . " not found");
-                        display_error('Skipping order ' . $oID);
-                        break;
-                    }
-                }
-                $customer = db_fetch_assoc($result);
-                $debtor_no = $customer['debtor_no'];
+                // If no match is found, match on only the delivery state. This assumes that
+                // a customer branch is defined for that state, and tax paid to that state
+                // is uniform across that state, which is an assumption that is increasingly
+                // untrue.
 
-                // Find the FA customer branch by matching the FA area description
-                // with the OSC delivery city or delivery state;
-                // otherwise use the default sales area code.
+                // If no match is found, match on only the delivery country. This assumes that
+                // a customer branch is defined for that country, and tax paid to that country
+                // is uniform across that country.
 
-                // This lookup is necessary when a single Destination Customer is used
-                // to import orders rather than importing all OSC customers before importing
-                // orders.  In vanilla FA, this gets the correct sales tax rate
-                // on the order, assuming that a sales area determines the tax rate and
-                // so a FA customer branch is selected with the correct tax group for that area.
+                // The branch is necessary because it contains the tax group which is
+                // necessary to get the correct sales tax rate on the order.
 
-                // In BF, tax rates can be determined by the physical delivery address,
-                // removing the need for lookup of a matching branch for those
-                // tax groups where tax rate is determined by address.
-                // However, it is still useful for reporting purposes for sales by customer
-                // branch which implies sales by sales area.
+                // Note that matching based on customer name only is insufficient.  For example,
+                // there could be two customers with the name "John Smith" that live in
+                // different cities with different tax rates.
+
+                // In BF, matching on the delivery state returns the correct tax rate,
+                // even if the state has multiple tax districts, because BF uses the address
+                // to lookup the tax rate.
+
+                // Yet multiple branches within a state are still useful for reporting purposes,
+                // to show sales by customer branch.
 
                 $found = false;
-                foreach ( array ($order['delivery_city'], $order['delivery_state']) as $value ) {
-                    $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND description = " .db_escape($value);
+                foreach ( array (
+                    str_replace(array("\n", "\r"), '', osc_address_format($order, 'delivery_')),
+                    $order['delivery_state'],
+                    $order['delivery_country'] ) as $value ) {
+                    $sql       = "SELECT d.*,
+                            cb.br_name,
+                            cb.default_location,
+                            cb.branch_code,
+                            cb.tax_group_id,
+                            cb.default_ship_via,
+                            t.name AS tax_group_name FROM ".TB_PREF."cust_branch cb
+                        LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no = cb.debtor_no
+                        LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE REPLACE(br_address, '\n', '')  = " .db_escape($value);
                     $result = db_query($sql, "Could not load branch");
                     if (db_num_rows($result) != 0) {
                         $found = true;
@@ -876,18 +863,16 @@ if (isset($_POST['action'])) {
                     }
                 }
 
-                if ($found == false) {
-                    $sql       = "SELECT *, t.name AS tax_group_name FROM ".TB_PREF."cust_branch LEFT JOIN ".TB_PREF."areas ON area_code=area LEFT JOIN ".TB_PREF."tax_groups t ON tax_group_id=t.id WHERE debtor_no = ".db_escape($debtor_no) . " AND area_code = " .db_escape($_POST['area']);
-                    $result = db_query($sql, "Could not load branch");
-                    if (db_num_rows($result) == 0) {
-
-                        display_error("Customer branch for area " . $_POST['area'] . " not found");
-                        display_error('Skipping order ' . $oID);
-                        break;
-                    }
+                if (!$found) {
+                    display_error("Customer branch for"  . osc_address_format($order, 'delivery_') . " not found.");
+                    display_error('Skipping order ' . $oID);
+                    continue;
                 }
-                $branch                  = db_fetch_assoc($result);
-                // print_r($branch);
+
+                $customer                  = db_fetch_assoc($result);
+                // print_r($customer);
+                // display_notification($customer['br_name']);
+                // display_notification(osc_address_format($order, 'delivery_'));
 
                 if ($_POST['invoice'] == 1) {
                     $cart                = new Cart(ST_SALESINVOICE);
@@ -911,14 +896,7 @@ if (isset($_POST['action'])) {
                     $cart->payment_terms = get_payment_terms($cart->payment);
                 } else {
                     $cart                    = new Cart(ST_SALESORDER);
-                    $cart->Location          = $branch['default_location'];
-                }
-
-                if ($customer['sales_type'] == 0) {
-                    display_error("zero customer sales type");
-                    display_error(print_r($customer, true));
-                    display_error('Skipping order ' . $oID);
-                    continue;
+                    $cart->Location          = $customer['default_location'];
                 }
 
                 // Now Add Sales_Order and Sales_Order_Details
@@ -927,12 +905,12 @@ if (isset($_POST['action'])) {
 
                 $addr = osc_address_format($order, 'delivery_');
                 $cart->set_branch(
-                    $branch["branch_code"],
-                    $branch["tax_group_id"],
+                    $customer["branch_code"],
+                    $customer["tax_group_id"],
                     $addr);
 
                 if ($ship_via == '')
-                    $ship_via = $branch['default_ship_via'];
+                    $ship_via = $customer['default_ship_via'];
                 else {
                     # get the shipper name
                     $osc_ship_via = $ship_via;
@@ -947,7 +925,7 @@ if (isset($_POST['action'])) {
                 $cart->set_delivery($ship_via, $order['delivery_name'], $addr, $total_shipping);
 
                 $cart->cust_ref          = "osC Order # $oID";
-                $cart->Comments          = substr($comments,0,250); // temporary pending FA bugfix 5449
+                $cart->Comments          = substr($comments,0,240); // temporary pending FA bugfix 5449
                 $cart->document_date     = sql2date($date_purchased);
 
                 // If the osc order did not have tax, assume tax was included
@@ -1041,7 +1019,8 @@ if (isset($_POST['action'])) {
             // Only items on the OSC order that are sales items are discounted and included in OSC subtotal
             // ('Partial payment: Move Balance To Order' and Tips are not discounted)
 
-                        if ($default_sales_act == $row[1]) {
+                        if ($default_sales_act == $row[1]
+                            || substr($prod['products_name'], 0, 4) == 'Gift') {
                             add_to_order($cart, $osc_id, $prod['products_quantity'], $prod['products_price'], $disc_percent);
                             $total += round($prod['products_quantity'] * $prod['products_price'] * (1 - $disc_percent),2);
                         } else
@@ -1063,7 +1042,8 @@ if (isset($_POST['action'])) {
             // ('Partial payment: Move Balance To Order' and Tips are not discounted)
 display_notification(print_r($row, true));
 
-                            if ($default_sales_act == $row[1]) {
+                            if ($default_sales_act == $row[1]
+                                || substr($prod['products_name'], 0, 4) == 'Gift') {
                                 $total += round($prod['products_quantity'] * $price * (1 -$disc_percent),2);
                                 add_to_order($cart, $pa_osc_id, $prod['products_quantity'], $price, $disc_percent);
                             } else {
@@ -1092,7 +1072,7 @@ display_notification($pa_osc_id . " " .  $prod['products_quantity'] . " " . $pri
                 mysqli_free_result($result);
 
                 if ($total_total != round($cart->get_trans_total(), 2)) {
-                    display_error("osC order $oID total OSC $total_total does not match FA total " . $cart->get_trans_total() . "\n. (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent." " .print_r($branch, true). print_r($cart->get_taxes()[1], true).")\n" . print_r($cart, true));
+                    display_error("osC order $oID total OSC $total_total does not match FA total " . $cart->get_trans_total() . "\n. (subtotal=" . $total_subtotal . " discount=".$total_discount." disc_percent=".$disc_percent." " .print_r($customer, true). print_r($cart->get_taxes()[1], true).")\n" . print_r($cart, true));
                     if ($errors == 0) {
                         display_error('Skipping order ' . $oID);
                         continue;
@@ -1143,7 +1123,7 @@ display_notification($pa_osc_id . " " .  $prod['products_quantity'] . " " . $pri
                         $order_no = $cart->write(1);
                     else
                         $order_no = $cart->write(0);
-                    display_notification("Added Order Number $order_no for " . $customers_name);
+                    display_notification("Added Order Number $order_no for " . $customer['br_name']);
 
                     $comments="Imported into FA";
                     $sql = "INSERT INTO orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) VALUES (" . osc_escape($oID) . "," .  $order['orders_status']. "," . osc_escape(date('Y-m-d H:i:s')) . ", 0, " . osc_escape($comments) . ")";
@@ -1729,7 +1709,6 @@ if ($action == 'oimport') {
     date_row("From Order Date:", 'from_date');
     date_row("To Order Date:", 'to_date');
     text_row("Skip Osc Status Id", 'statusId', $statusId, 20, 40);
-    customer_list_row(_("Destination Customer:"), 'destCust', $destCust, true);
     sales_areas_list_row("Sales Area:", 'area');
     yesno_list_row(_("Direct Invoice"), 'invoice', null, "", "", false);
     sales_service_items_list_row(_('Adjustment Item:'),'adjustment', null, false, false, false);
@@ -1737,12 +1716,6 @@ if ($action == 'oimport') {
     yesno_list_row(_("Errors"), 'errors', null, "Ignore", "Skip", false);
     yesno_list_row(_("Trial Run"), 'trial_run', null, "", "", false);
 
-    if ($destCust != 0) {
-            $sql    = "SELECT name FROM ".TB_PREF."debtors_master WHERE debtor_no=".$destCust;
-            $result = db_query($sql, "customer could not be retrieved");
-            $row    = db_fetch_assoc($result);
-
-    }
     label_row("Operation Result", $error_status);
 
     end_table(1);
