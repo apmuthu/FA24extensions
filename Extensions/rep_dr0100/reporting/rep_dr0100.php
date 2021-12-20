@@ -202,22 +202,18 @@ function GetNonPhysicalSales($period, $from, $to)
             AND LOCATE('220 32 RD', so.delivery_address) = 0
             AND dt.tran_date >='$fromdate'
             AND dt.tran_date <='$todate'
-            AND a.description NOT IN (
-                'California',
-                'Out-of-state')
-            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_CHARITY."'
-            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WHOLESALE."'
-            AND cb.tax_group_id != '". TAX_GROUP_EXEMPT_WINEMAKERS."'";
+            AND cb.tax_group_id = '" . TAX_GROUP_COLORADO ."'";
 
 // display_notification(str_replace('&TB_PREF&', '1_', $sql));
     return db_query($sql, "Error getting order details");
 }
 
-function xml_deduct($d, $amt, $comment = null)
+function xml_deduct($k, $d, $amt, $comment = null)
 {
     if ($amt != 0)
         return "                <Deductions>
                     <ExemptionDeductionDescription>$d</ExemptionDeductionDescription>
+                    <ExemptionDeductionCode>$k</ExemptionDeductionCode>
                     <ExemptionDeductionAmount>$amt</ExemptionDeductionAmount>
                     <OtherExemptionExplanation>$comment</OtherExemptionExplanation>
                 </Deductions>\n";
@@ -351,17 +347,17 @@ for ($i=0; !($tax_rates[$i] == '' && $tax_rates[$i+1] == '' && $tax_rates[$i+2] 
     $tax_rate[$tax_rates[$i]]=$tax_rates[$i+1]/100;
 }
 
-$deductions = array('Food',
-    'Machinery', 
-    'Electricity', 
-    'FarmEquipment', 
-    'LowEmitVehicle', 
-    'SchoolRelatedSales', 
-    'Cigarettes', 
-    'RenewableEnergyComponents', 
-    'SpaceFlight', 
-    'RetailMarijuana',
-    'OtherExemption');
+$deductions = array(
+    108 => 'Food',
+    110 => 'Machinery', 
+    112 => 'Electricity', 
+    114 => 'FarmEquipment', 
+    116 => 'LowEmitVehicle', 
+    118 => 'SchoolRelatedSales', 
+    112 => 'RenewableEnergyComponents', 
+    124 => 'SpaceFlight', 
+    126 => 'RetailMarijuana',
+    146 => 'OtherExemption');
 
 
 //display_notification(print_r($sales, true));
@@ -375,17 +371,18 @@ foreach ($entities as $ent_xml => $col) {
 
 }
 
-$exemptions = array('WholesaleSales',
-    'AgriculturalSales',
-    'Service',
-    'OutsideOfColorado',
-    'ExemptEntities',
-    'Gas',
-    'DrugsMedicalDevices',
-    'Tradeins',
-    'ComputerSoftware',
-    'UtilitiesRestaurant',
-    'BadDebt');
+$exemptions = array(
+    84 => 'WholesaleSales',
+    102 => 'AgriculturalSales',
+    88 => 'Service',
+    86 => 'OutsideOfColorado',
+    90 => 'ExemptEntities',
+    92 => 'Gas',
+    94 => 'DrugsMedicalDevices',
+    96 => 'Tradeins',
+    104 => 'ComputerSoftware',
+    100 => 'UtilitiesRestaurant',
+    98 => 'BadDebt');
 
 // sql returns net but tests return gross
 // DOR wants gross
@@ -450,19 +447,19 @@ foreach ($entities as $ent_xml => $col) {
         $xml .= "            <TaxBasis>
                 <BasisAmount>" . sprintf("%.2f", $sales['gross']) . "</BasisAmount>\n";
 
-        foreach ($exemptions as $e)
+        foreach ($exemptions as $k => $e)
             if (isset($sales[$e]))
-                $xml .= xml_deduct($e, $sales[$e]);
+                $xml .= xml_deduct($k, $e, $sales[$e]);
 
         // add deductions
-        foreach ($deductions as $d) {
+        foreach ($deductions as $k => $d) {
             if (!isset($sales[$col][$d])) {
                 if (isset($sales[$ent_xml][$d])) {
         // display_notification($col . " " .$d . " " . $sales[$ent_xml][$d]);
                     $deduct_total[$col] += $sales[$ent_xml][$d];    // for dr0100
                     $deduct_total[$ent_xml] += $sales[$ent_xml][$d];    // for xml
                     $sales[$col][$d] = $sales[$ent_xml][$d];    // for dr0100
-                    $xml .= xml_deduct($d, $sales[$col][$d], @$sales['Comment'][$d]);
+                    $xml .= xml_deduct($k, $d, $sales[$col][$d], @$sales['Comment'][$d]);
                 } else if (isset($sales[$d])) { // deductions identical for all entities
 
                     if ($d == 'Food') {
@@ -486,14 +483,26 @@ foreach ($entities as $ent_xml => $col) {
 
                     $deduct_total[$col] += $sales[$col][$d];  // for dr0100
                     $deduct_total[$ent_xml] += $sales[$col][$d];    // for xml
-                    $xml .= xml_deduct($d, $sales[$col][$d]);
+                    $xml .= xml_deduct($k, $d, $sales[$col][$d]);
                 }
             }
         } // deductions
 
+if ($sales['description'] == 'Special Event') {
+    $PRECISION = 0;
+    if (isset($eventids[$tax_rates['Location']]['ID'])) {
+        $site = $eventids[$tax_rates['Location']]['ID'];
+        $site = substr($site, 0, 7) . '-' . substr($site,7);
+    } else {
+        display_error("Special Event " . $tax_rates['Location'] . " account number not found.  Fill in manually or add to wwheventids.csv and rerun report");
+        $site = "";
+    }
+} else
+    $PRECISION = 2;
+
 $taxableSales = $sales['net'] - $deduct_total[$ent_xml];
-$taxAmount = round($taxableSales * $tax_rate[$ent_xml], 2);
-$serviceFee = round($taxAmount * $service_fee[$ent_xml], 2);
+$taxAmount = round($taxableSales * $tax_rate[$ent_xml], $PRECISION);
+$serviceFee = round($taxAmount * $service_fee[$ent_xml], $PRECISION);
 $taxDueAmount = $taxAmount - $serviceFee;
 
 if ($col != "city") {
@@ -527,18 +536,6 @@ $xml .= "                   <TaxableAmount>$netSales</TaxableAmount>
 
     } // tax_rate set
 } // entities
-
-if ($sales['description'] == 'Special Event') {
-    $PRECISION = 0;
-    if (isset($eventids[$tax_rates['Location']]['ID'])) {
-        $site = $eventids[$tax_rates['Location']]['ID'];
-        $site = substr($site, 0, 7) . '-' . substr($site,7);
-    } else {
-        display_error("Special Event " . $tax_rates['Location'] . " account number not found.  Fill in manually or add to wwheventids.csv and rerun report");
-        $site = "";
-    }
-} else
-    $PRECISION = 2;
 
     $columns = array('sd', 'rtd', 'city', 'county', 'state');
     foreach ($columns as $col) {
@@ -636,59 +633,59 @@ if ($sales['description'] == 'Special Event') {
 	array('x' => 4.6, 'y' => 8.2, 'text' => $tax_rates['JurisdictionCode']),
 
 
-	array('x' => 8.0, 'y' => 8.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
+	array('x' => 6.7, 'y' => 8.2, 'text' => substr($from_date,0,2)."/".substr($from_date,8,2)),
 
 	array('x' => 1, 'y' => 8.2, 'text' => $site),
 
 	array('x' => 1, 'y' => 7.8, 'text' => $tax_rates['Location']),
 	array('x' => 2.5, 'y' => 6.9, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
 
-	array('x' => 2.5, 'y' => 5.5, 'text' => $sales['net']),
-	array('x' => 3.7, 'y' => 5.5, 'text' => ($tax_rate['rtd'] ? $sales['net'] : "N/A")),
-	array('x' => 5, 'y' => 5.5, 'text' => ($tax_rate['sd'] ? $sales['net'] : "N/A")),
-	array('x' => 6, 'y' => 5.5, 'text' => $sales['net']),
-	array('x' => 7.2, 'y' => 5.5, 'text' => ($tax_rate['city'] ? $sales['net'] : "N/A")),
+	array('x' => 2.5, 'y' => 5.5, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
+	array('x' => 3.7, 'y' => 5.5, 'text' => ($tax_rate['rtd'] ? sprintf("%6.".$PRECISION."f", $sales['net']) : "N/A")),
+	array('x' => 4.7, 'y' => 5.5, 'text' => ($tax_rate['sd'] ? sprintf("%6.".$PRECISION."f", $sales['net']) : "N/A")),
+	array('x' => 6, 'y' => 5.5, 'text' => sprintf("%6.".$PRECISION."f", $sales['net'])),
+	array('x' => 7.2, 'y' => 5.5, 'text' => ($tax_rate['city'] ? sprintf("%6.".$PRECISION."f", $sales['net']) : "N/A")),
 
 
 	array('x' => 2.5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['state'])),
 	array('x' => 3.7, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['rtd'])),
-	array('x' => 5, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['sd'])),
+	array('x' => 4.7, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['sd'])),
 	array('x' => 6, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['county'])),
 	array('x' => 7.2, 'y' => 4.7, 'text' => sprintf("%6.".$PRECISION."f", $sales_taxed['city'])),
 
 	array('x' => 2.5, 'y' => 4.4, 'text' => number_format($tax_rate['state'],4)),
 	array('x' => 3.7, 'y' => 4.4, 'text' => number_format($tax_rate['rtd'],4)),
-	array('x' => 5, 'y' => 4.4, 'text' => number_format($tax_rate['sd'],4)),
+	array('x' => 4.7, 'y' => 4.4, 'text' => number_format($tax_rate['sd'],4)),
 	array('x' => 6, 'y' => 4.4, 'text' => number_format($tax_rate['county'],4)),
 	array('x' => 7.2, 'y' => 4.4, 'text' => number_format($tax_rate['city'],4)),
 
 	array('x' => 2.5, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_state)),
 	array('x' => 3.7, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_rtdcd)),
-	array('x' => 5, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_sd)),
+	array('x' => 4.7, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_sd)),
 	array('x' => 6, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_county)),
 	array('x' => 7.2, 'y' => 4.1, 'text' => sprintf("%6.".$PRECISION."f", $tax_city)),
 
-	array('x' => 2.5, 'y' => 3.9, 'text' => number_format($service_fee['state'],4)),
-	array('x' => 3.7, 'y' => 3.9, 'text' => number_format($service_fee['rtd'],4)),
-	array('x' => 5, 'y' => 3.9, 'text' => number_format($service_fee['sd'],4)),
-	array('x' => 6, 'y' => 3.9, 'text' => number_format($service_fee['county'],4)),
-	array('x' => 7.2, 'y' => 3.9, 'text' => number_format($service_fee['city'],4)),
+	array('x' => 2.5, 'y' => 3.8, 'text' => number_format($service_fee['state'],4)),
+	array('x' => 3.7, 'y' => 3.8, 'text' => number_format($service_fee['rtd'],4)),
+	array('x' => 4.7, 'y' => 3.8, 'text' => number_format($service_fee['sd'],4)),
+	array('x' => 6, 'y' => 3.8, 'text' => number_format($service_fee['county'],4)),
+	array('x' => 7.2, 'y' => 3.8, 'text' => number_format($service_fee['city'],4)),
 
-	array('x' => 2.5, 'y' => 3.4, 'text' => $service_fee_state),
-	array('x' => 3.7, 'y' => 3.4, 'text' => $service_fee_rtdcd),
-	array('x' => 5, 'y' => 3.4, 'text' => $service_fee_sd),
-	array('x' => 6, 'y' => 3.4, 'text' => $service_fee_county),
-	array('x' => 7.2, 'y' => 3.4, 'text' => $service_fee_city),
+	array('x' => 2.5, 'y' => 3.3, 'text' => $service_fee_state),
+	array('x' => 3.7, 'y' => 3.3, 'text' => $service_fee_rtdcd),
+	array('x' => 4.7, 'y' => 3.3, 'text' => $service_fee_sd),
+	array('x' => 6, 'y' => 3.3, 'text' => $service_fee_county),
+	array('x' => 7.2, 'y' => 3.3, 'text' => $service_fee_city),
 
 	array('x' => 2.5, 'y' => 3, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_state)),
 	array('x' => 3.7, 'y' => 3, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_rtdcd)),
-	array('x' => 5, 'y' => 3, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_sd)),
+	array('x' => 4.7, 'y' => 3, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_sd)),
 	array('x' => 6, 'y' => 3, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_county)),
 	array('x' => 7.2, 'y' => 3, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_city)),
 
 	array('x' => 2.5, 'y' => 1.5, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_state)),
 	array('x' => 3.7, 'y' => 1.5, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_rtdcd)),
-	array('x' => 5, 'y' => 1.5, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_sd)),
+	array('x' => 4.7, 'y' => 1.5, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_sd)),
 	array('x' => 6, 'y' => 1.5, 'text' =>sprintf("%6.".$PRECISION."f", $tax_due_county)),
 	array('x' => 7.2, 'y' => 1.5, 'text' => sprintf("%6.".$PRECISION."f",$tax_due_city)),
 
@@ -1032,6 +1029,10 @@ function company_dr0100($testcases)
     global $path_to_root, $sites, $total, $total_state_service_fee, $report_type, $suts;
 
     $blacklisted=array(
+        'AURORA',
+        'CASTLE ROCK',
+        'LAKEWOOD',
+        'LOUISVILLE',
         'THORNTON',
         'GRAND JUNCTION',
         'GREELEY',
@@ -1072,7 +1073,7 @@ function company_dr0100($testcases)
     $rep->NewPage();
 
     if ($report_type == REPORT_TYPE_XML)
-        $formfile= $path_to_root . '/tmp/newform.txt';
+        $formfile= $path_to_root . '/tmp/salestax' . $period . '.xml';
     else
         $formfile= $path_to_root . '/tmp/newform.ps';
     $handle = fopen($formfile, 'w');
@@ -1153,10 +1154,13 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
 
             ksort($siteSales);
             foreach ($siteSales as $location => $siteSale) {
-                print_dr0100($handle, $fein, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], false);
-                if ($suts
-                        && $siteSale['tax_rates']['HomeRule'] == 'Self-collected')
-                    print_dr0100($handle, $fein, get_company_pref('coy_name'), "0000", $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], true, $blacklisted);
+                if ($siteSale['sales']['description'] != 'Special Event'
+                    || $report_type == REPORT_TYPE_DR0098) {
+                    print_dr0100($handle, $fein, get_company_pref('coy_name'), $siteSale['site'], $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], false);
+                    if ($suts
+                            && $siteSale['tax_rates']['HomeRule'] == 'Self-collected')
+                        print_dr0100($handle, $fein, get_company_pref('coy_name'), "0000", $rep, $period, $siteSale['sales'], $siteSale['tax_rates'], true, $blacklisted);
+                }
             }
         }
 
@@ -1206,7 +1210,7 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
     fclose($handle);
 
     if ($report_type == REPORT_TYPE_XML)
-        meta_forward($path_to_root . "/tmp/newform.txt");
+        meta_forward($path_to_root . "/tmp/salestax" . $period . ".xml");
     else if ($report_type == REPORT_TYPE_DR0100
         || $report_type == REPORT_TYPE_DR0098) {
         exec("ps2pdf $path_to_root/tmp/newform.ps $path_to_root/tmp/newform.pdf");
