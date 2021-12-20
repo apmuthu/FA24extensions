@@ -226,8 +226,12 @@ function square_variation($stock_id, $sq_item, $locationId) {
 	if ($myprice < 0)
 		$myprice = 0;
 
+    // get the bar code, if any
+    $sku = null;
 	$result = get_all_item_codes($stock_id);
 	$row    = db_fetch($result);
+    if ($row)
+        $sku = $row['item_code'];
 
 	if (isset($sq_item))
 		$obj = $sq_item["item_data"]["variations"][0];
@@ -248,7 +252,7 @@ function square_variation($stock_id, $sq_item, $locationId) {
 			// square searches for barcodes using the sku instead of upc
 			// which is what I would have thought
 
-			"sku" => $row['item_code'],
+			"sku" => $sku,
 			"price_money" => array(
 				"amount" => round(100 * $myprice),
 				"currency" => "USD"
@@ -292,8 +296,8 @@ function square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locat
 	if ($locationId != '0')
 		$obj = array_merge($obj, array("present_at_location_ids" => array($locationId)));
 
+    $tax_array = array();
 	if (!$trans['exempt']) {
-		$tax_array = array();
 		foreach ($locationName as $loc_key => $loc_name)
 			if ($locationId == '0' || $loc_key == $locationId) {
 				$tax_name = $loc_name . " " . $trans['tax_name'];
@@ -309,8 +313,8 @@ function square_v2body($stock_id, $sq_cat, $sq_item, $trans, $locationId, $locat
 			}
 		// $obj["item_data"] = array_merge($obj["item_data"], array("tax_ids" => $tax_array));
 
-		$obj["item_data"]["tax_ids"] = $tax_array;
 	}
+    $obj["item_data"]["tax_ids"] = $tax_array;
 
 	return $obj;
 }
@@ -693,11 +697,11 @@ if (isset($_POST['action'])) {
 
 			$default_sales_act = get_company_pref('default_sales_act');
 
-			// find the tax included sales type for osc orders without tax
+			// find the tax included sales type
 			$result = get_all_sales_types();
 			while ($sales_type = db_fetch($result)) {
 				if ($sales_type['tax_included'])
-					$tax_included_sales_type_id  = $sales_type['id'];
+                    $tax_included_sales_type = get_sales_type($sales_type['id']);
 			}
 
 			if ($error == 0) {
@@ -758,6 +762,7 @@ if (isset($_POST['action'])) {
                             } else {
                                 $errors = $apiResponse->getErrors();
                             }
+                            $cursor = $apiResponse->getCursor();
                         } while (!is_null($cursor));
                     } catch (Exception $e) {
                         display_notification('Exception when calling listPayments: '. $e->getMessage());
@@ -867,17 +872,15 @@ if (isset($_POST['action'])) {
                             $retrieveOrderResponse = $apiResponse->getResult();
                             $order = $retrieveOrderResponse->getOrder();
 
-							if ($order->getTotalTaxMoney()->getAmount() != 0
-								&& isset($tax_included_sales_type_id))
-								$cart->sales_type    = $tax_included_sales_type_id;
-							else
-								$cart->sales_type    = $customer['sales_type'];
+        // FA customer has sales type, which determines tax inclusion/addition.
+        // But FA customer has branches, and branches could have differing sales types.
+        // For now, use the customer sales type and change it later if an item is tax inclusive
 
-							/*
-        // try to get the customer name into the comments (not available in V1)
-        // TBD: rewrite listTransactions to use v2 searchOrders
+                            $cart->sales_type    = $customer['sales_type'];
 
-                $customer_id = $t->getCustomerId();
+        // try to get the customer name into the comments
+
+                $customer_id = $order->getTenders()[0]->getCustomerId();
 
                 if ($customer_id != '') {
 
@@ -888,15 +891,24 @@ if (isset($_POST['action'])) {
                         display_error('Exception when calling CustomersApi->retrieveCustomer: '. $e->getMessage());
                     }
                     $r = json_decode($c_result);
-                    $cc_owner = $r->customer->given_name . " " . $r->customer->family_name;
+                    if (isset($r->customer->given_name))
+                        $cc_owner = $r->customer->given_name;
+                    else
+                        $cc_owner = '';
+                    if (isset($r->customer->family_name))
+                        $cc_owner .= " " . $r->customer->family_name;
                 } else
                     $cc_owner="Unknown";
-*/
 
+                $cart->Comments .= " " . $cc_owner;
 
 							$items = $order->getLineItems();
+                            $taxes = $order->getTaxes();
+                            if (is_null($taxes))
+                                $taxType = '';
+                            else
+                                $taxType = $taxes[0]->type;
 							foreach ($items as $item) {
-// display_notification(print_r($item, true));
 // TBD: how to do this?
 /*
 								$type = $item->getItemizationType();
@@ -930,13 +942,14 @@ if (isset($_POST['action'])) {
 								}
 
 								// discounts are applied differently to items including or excluding tax
-/*
-								if ($t->getInclusiveTaxMoney()->getAmount() != 0)
-									$discount = -$item->getTotalDiscountMoney()->getAmount()/($item->getTotalMoney()->getAmount() - $item->getDiscountMoney()->getAmount());
-								else
-*/
-									$discount = -$item->getTotalDiscountMoney()->getAmount()/$item->getGrossSalesMoney()->getAmount();
-								display_notification($sku . " " . $item->getQuantity() . " " . $item->getBasePriceMoney()->getAmount()/100);
+								if ($taxType == "INCLUSIVE") {
+									$discount = $item->getTotalDiscountMoney()->getAmount()/$item->getVariationTotalPriceMoney()->getAmount();
+								    if (isset($tax_included_sales_type))
+                                        $cart->set_sales_type($tax_included_sales_type['id'], $tax_included_sales_type['sales_type'],
+                                            $tax_included_sales_type['tax_included'], $tax_included_sales_type['factor']);
+								} else
+									$discount = $item->getTotalDiscountMoney()->getAmount()/$item->getGrossSalesMoney()->getAmount();
+								// display_notification($sku . " " . $item->getQuantity() . " " . $item->getBasePriceMoney()->getAmount()/100 . " " . $discount);
 
 								add_to_order($cart, $sku, $item->getQuantity(),
 									$item->getBasePriceMoney()->getAmount()/100,
@@ -949,7 +962,7 @@ if (isset($_POST['action'])) {
 
 							$total = $cart->get_trans_total();
 							$total_order = $t->getTotalMoney()->getAmount();
-							$adj = $total_order/100 - $total;
+							$adj = round($total_order/100 - $total, 2);
 							if ($adj != 0) {
 								display_warning("Order with square total " . $total_order/100 . " and FA total of " . $total . " requires adjustment of " . $adj);
 								add_to_order($cart, $_POST['adjustment'], 1, $adj, 0);
@@ -1329,7 +1342,7 @@ if ($action == 'oimport') {
 	end_table(1);
 
 	hidden('action', 'o_import');
-	submit_center('oimport', "Import osC Orders");
+	submit_center('oimport', "Import Orders");
 
 	end_form();
 	end_page();
