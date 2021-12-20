@@ -499,9 +499,16 @@ end_row();
 
     if (!in_array($sales['row_year'], $pg_years) ) {
         $pg_years[] = $sales['row_year'];
-        foreach ($pgx as $key => $value)
-            $pgz[$sales['row_year']][$key] = 0;
-            
+
+// zero out all months/days for years with missing data
+// this prevents php errors in graphic
+
+        if ($sel_month==0)
+            for ($i=0; $i<12; $i++)
+                $pgz[$sales['row_year']][$i] = 0;
+        else
+            for ($i=0; $i<31; $i++)
+                $pgz[$sales['row_year']][$i] = 0;
     }
 
     if (!isset($pg_years[1])) {
