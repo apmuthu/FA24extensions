@@ -1147,7 +1147,7 @@ display_notification($pa_osc_id . " " .  $prod['products_quantity'] . " " . $pri
 
         if ($action == 'p_check') { // Price Check
 
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_price, products_name, p.products_quantity FROM products p left join products_description pd on p.products_id = pd.products_id WHERE products_status = 1";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_price, products_name, p.products_quantity FROM products p left join products_description pd on p.products_id = pd.products_id";
             // echo $sql;
             $p_result         = osc_dbQuery($sql, true);
             $currency         = $_POST['currency'];
@@ -1197,7 +1197,7 @@ display_notification($pa_osc_id . " " .  $prod['products_quantity'] . " " . $pri
         if ($action == 'p_update') { // Price Update
             global $osc;
             //$sql              = "SELECT " . $osc_Id . ", products_price, products_quantity, products_name FROM products WHERE products_status = 1";
-            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_price, products_name, p.products_quantity FROM products p left join products_description pd on p.products_id = pd.products_id WHERE products_status = 1";
+            $sql = "SELECT p." . $osc_Id . ", p.products_id, products_price, products_name, p.products_quantity FROM products p left join products_description pd on p.products_id = pd.products_id";
             $p_result         = osc_dbQuery($sql, true);
             $currency         = $_POST['currency'];
             $sales_type       = $_POST['sales_type'];
