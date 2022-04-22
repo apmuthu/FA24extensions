@@ -24,6 +24,7 @@ include_once($path_to_root . "/includes/date_functions.inc");
 include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/modules/tax_rate/get_tax_rate.inc");
 include_once($path_to_root . "/modules/rep_dr0100/reporting/testcases.inc");
+include_once($path_to_root . "/modules/rep_dr0100/reporting/zerofilers.inc");
 
 define("TAX_GROUP_EXEMPT_WHOLESALE",'2');
 define("TAX_GROUP_COLORADO",'5'); // non-physical locations
@@ -44,7 +45,7 @@ read_sites();
 $eventids=array();
 read_eventids();
 
-company_dr0100($testcases);
+company_dr0100($testcases, $zerofilers);
 
 // sites are just extra useless data the DOR wants
 // https://www.colorado.gov/pacific/tax/sales-and-use-tax-rates-lookup
@@ -249,7 +250,7 @@ function xml_header($period, $fein, $coacct, $coy_name='', $address, $phone, $em
         <Jurisdiction>CO</Jurisdiction>
         <TransmissionId>'.$tid.'</TransmissionId>
         <Timestamp>' . $timestamp . '</Timestamp>
-        <TransmitterId>' . get_company_pref("filer_fein")  . '</TransmitterId>
+        <TransmitterId>' . get_company_pref("'gst_no'")  . '</TransmitterId>
         <TestIndicator>P</TestIndicator>
     </TransmissionHeader>';
 
@@ -261,7 +262,7 @@ function xml_header($period, $fein, $coacct, $coy_name='', $address, $phone, $em
     <TaxPeriodEndDate>' . date("Y-m-t", strtotime($period . '-01')) . '</TaxPeriodEndDate>
     <TaxYear>' . substr($period, 0, 4) . '</TaxYear>
     <Originator>
-        <EFIN>' . ($suts == true ? str_replace('-', '', get_company_pref("filer_fein")) : "000000") . '</EFIN> 
+        <EFIN>' . ($suts == true ? str_replace('-', '', get_company_pref("'gst_no'")) : "000000") . '</EFIN> 
         <Type>OnlineFiler</Type>
     </Originator>
     <SoftwareId>FrontAcct</SoftwareId>
@@ -317,6 +318,7 @@ $xml .= '   <FilingBody FilingType="Location">
 
 
 
+
 $from_date = substr($period,5,2) . "/01/" . substr($period,0,4);
 
 // map entities to DR0100 columns
@@ -359,6 +361,8 @@ $deductions = array(
     126 => 'RetailMarijuana',
     146 => 'OtherExemption');
 
+$hr_deductions[100040] = array(
+    'Food' => 43);
 
 //display_notification(print_r($sales, true));
 
@@ -402,6 +406,10 @@ if (!isset($sales['net']))
 if (!isset($sales['gross']))
     $sales['gross'] = $sales['net'] + $exempt_total;
 
+// If we refunded someone and there were not any positive offseting sales,
+// I just do not know how to get the tax refunded
+if ($sales['net'] < 0)
+    return;
 
 $tax_due = 0;
 $service_fee_due = 0;
@@ -454,18 +462,30 @@ foreach ($entities as $ent_xml => $col) {
         // add deductions
         foreach ($deductions as $k => $d) {
             if (!isset($sales[$col][$d])) {
+                if ($col == 'city' && isset($hr_deductions[$tax_rates['JurisdictionCode']][$d]))
+                    $code = $hr_deductions[$tax_rates['JurisdictionCode']][$d];
+                else
+                    $code = $k;
                 if (isset($sales[$ent_xml][$d])) {
         // display_notification($col . " " .$d . " " . $sales[$ent_xml][$d]);
                     $deduct_total[$col] += $sales[$ent_xml][$d];    // for dr0100
                     $deduct_total[$ent_xml] += $sales[$ent_xml][$d];    // for xml
                     $sales[$col][$d] = $sales[$ent_xml][$d];    // for dr0100
-                    $xml .= xml_deduct($k, $d, $sales[$col][$d], @$sales['Comment'][$d]);
+                    $xml .= xml_deduct($code, $d, $sales[$col][$d], @$sales['Comment'][$d]);
                 } else if (isset($sales[$d])) { // deductions identical for all entities
 
                     if ($d == 'Food') {
                         // import adjustments are food, ignore them
                         if ($sales['Food'] <= 1)
                             $sales['Food'] = 0;
+
+                        if ($col == 'city'
+                            && strpos($tax_rates['CityExemptions(state-collectedcities)'], 'A') === false)
+                            continue;
+
+                        if ($col != 'city'
+                            && strpos($tax_rates['CountyExemptions'], 'A') === false)
+                            continue;
 
 // Does Mesa County MC define candy as food?
 // Nancy showed me a receipt dated 03/04/20 from City Market (CM).
@@ -483,10 +503,10 @@ foreach ($entities as $ent_xml => $col) {
 
                     $deduct_total[$col] += $sales[$col][$d];  // for dr0100
                     $deduct_total[$ent_xml] += $sales[$col][$d];    // for xml
-                    $xml .= xml_deduct($k, $d, $sales[$col][$d]);
+                    $xml .= xml_deduct($code, $d, $sales[$col][$d]);
                 }
-            }
-        } // deductions
+            } // isset sales
+        } // foreach deductions
 
 if ($sales['description'] == 'Special Event') {
     $PRECISION = 0;
@@ -604,8 +624,8 @@ $xml .= "                   <TaxableAmount>$netSales</TaxableAmount>
         $rep->NewLine();
     }
 
-    if ($tax_due == 0)  // maybe we just sold them spices?
-        return;
+    // if ($tax_due == 0)  // maybe we just sold them spices?
+      //  return;
 
     if ($sales['description'] != 'Special Event') {
         $total += $tax_due;
@@ -1024,7 +1044,7 @@ _begin_job_
 $total=0;
 $total_state_service_fee=0;
 
-function company_dr0100($testcases)
+function company_dr0100($testcases, $zerofilers)
 {
     global $path_to_root, $sites, $total, $total_state_service_fee, $report_type, $suts;
 
@@ -1152,7 +1172,25 @@ $sales['Comment']['OtherExemption'] = "COVID Deduction";
 
             } // while
 
+            foreach ($zerofilers as $z) {
+                $tax_rates=get_tax_rate_by_code($z['JurisdictionCode']);
+                if (isset($sites[$tax_rates['JurisdictionCode']])) {
+                    $site = $sites[$tax_rates['JurisdictionCode']]['SiteID'];
+                    $site=substr($site,0,strlen($site)-4)."-".substr($site,-4);
+                    $location=$tax_rates['Location'];
+                } else {
+                    display_error("Zero filer not found");
+                    continue;
+                }
+
+                $siteSales[$location]['site'] = $site;
+                $siteSales[$location]['tax_rates'] = $tax_rates;
+                $siteSales[$location]['sales']['description'] = "Zero filer";
+                @$siteSales[$location]['sales']['net'] += 0;
+            }
+
             ksort($siteSales);
+//display_notification(print_r($siteSales, true));
             foreach ($siteSales as $location => $siteSale) {
                 if ($siteSale['sales']['description'] != 'Special Event'
                     || $report_type == REPORT_TYPE_DR0098) {

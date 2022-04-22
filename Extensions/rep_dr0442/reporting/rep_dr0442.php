@@ -52,11 +52,16 @@ function getLiters($from, $to)
                 sm.qty*IF(LOCATE('wt&gt;2.0', item.long_description) != 0,.375,.75),
             0)) AS adj_liters,
         SUM(IF(
-            sm.type=".ST_WORKORDER." OR sm.type=".ST_MANURECEIVE.",
+            sm.type=".ST_WORKORDER."
+                OR sm.type=".ST_MANURECEIVE."
+                OR sm.type=".ST_MANUISSUE.",
                 sm.qty*IF(item.units = '375ml',.375,.75),
             0)) AS mfg_liters,
         SUM(IF(
-            sm.type!=".ST_WORKORDER." AND sm.type!=".ST_INVADJUST." AND sm.type !=".ST_MANURECEIVE.",
+            sm.type!=".ST_WORKORDER."
+                AND sm.type!=".ST_INVADJUST."
+                AND sm.type!=".ST_MANUISSUE."
+                AND sm.type !=".ST_MANURECEIVE.",
                 sm.qty*IF(item.units = '375ml',.375,.75),
             0)) AS liters
         FROM ".TB_PREF."stock_moves sm

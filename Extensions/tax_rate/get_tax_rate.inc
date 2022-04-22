@@ -135,7 +135,7 @@ $csv[0] = array_slice($csv[0], 0, 8);
     {
         $t = get_tax_rate_by_code($j);
         if (abs($t["total"] - $obj->totalSalesTax * 100) > .01)
-            display_error("Inconsistent API/spreadsheet taxes: " . $t["total"] . " != "  . $obj->totalSalesTax * 100);
+            display_error("Inconsistent API/spreadsheet taxes for jurisdiction " . $j . ":" . $t["total"] . " != "  . $obj->totalSalesTax * 100);
     }
 
     function getJurisdictionByAPI($address)
