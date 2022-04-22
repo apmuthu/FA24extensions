@@ -67,7 +67,7 @@ global $Refs;
 
 
 //Turn these next two lines on for debugging
-error_reporting(E_ALL);
+// error_reporting(E_ALL);
 ini_set("display_errors", "on");
 
 //Set '$yes' to true if you are testing this module and you do not want to manually(phpmyadmin) delete previous test run records before each test run
