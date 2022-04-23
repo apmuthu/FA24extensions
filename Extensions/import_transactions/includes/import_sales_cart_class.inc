@@ -101,6 +101,7 @@ class import_sales_cart
 		$this->pos = get_sales_point(user_pos());
 		$this->read($type, $trans_no, $prepare_child);
 		$this->cart_id = uniqid('');
+		$this->prep_amount = 0;
 	}
 
 	/*

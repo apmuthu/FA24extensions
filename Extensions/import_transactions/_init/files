@@ -1,13 +1,13 @@
 /hooks.php: 202ed99ccb59ac052a5453fe4af8946d18b41365
 /import_transactions.php: b58b5ab5a283817fb6141714af7ae2fa5276a363
-/includes/import_sales_cart_class.inc: 32892afd0ca4868f8663e689ef8e2abd616e1e43
+/includes/import_sales_cart_class.inc: a3efcb1b5cbb62db744d5e798d75597f642b78db
 /includes/import_sales_order_entry.inc: fd4afe8c403b0da1b2f1ca7e230a0dc22850ef14
 /includes/import_sales_order_ui.inc: 12eb96fa96ec79316e145778fd1170c7034fc1bc
 /includes/import_transactions.inc: 8ecede1b6cc23031841f1bb206fb3a7c8d3483b4
 /LICENSE: 23a1f87d806ce0330b3d85485e399a5f9f553409
 /README.md: d1b25dcad53bac106d97e1f42c768d9aae97eae2
 /spreadsheet_headers.doc: ed454ea5842cc64cf7da099c5cff6a877b2a8d15
-/spreadsheet_headers.html: 67cd8b63d359849c1197900405cd3372e71cd207
+/spreadsheet_headers.html: 9e5335c871a6f622c140bea268b009a190bddfa7
 /templates/bank_en_GB.csv: 4e14ba6967babc2a5e9560ed2e24b0af48d06f96
 /templates/deposit_en_GB.csv: 9e61e2dc23b5851b150e0e9b07d9875cf03a9594
 /templates/journal_en_GB.csv: b9bf7769cb3777235ec8586606cb0ec7ddb57ea2
