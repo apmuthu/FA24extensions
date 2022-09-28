@@ -1,3 +1,4 @@
+2022-09-28  Ap.Muthu     Updated core Tamil language ta_IN for FA v2.4.13
 2022-03-13  Ap.Muthu     Updated core Tamil language ta_IN for FA v2.4.11
 2021-08-04  kvvaradha    Extension Cash Flow Statement now with Bank Level Filter
 2021-03-29  Joe Hunt     Upstream update for sys_prefs setting max_days_in_docs
