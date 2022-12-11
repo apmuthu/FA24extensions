@@ -249,7 +249,7 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
 
 
     $annote = array(
-	array('x' => 1, 'y' => 8.2, 'text' => 'WHITEWATER HILL VINEYARDS'),
+	array('x' => 1, 'y' => 8.2, 'text' => 'WHITEWATER HILL LLC'),
 	array('x' => 1, 'y' => 7.7, 'text' => '130 31 ROAD'),
 	array('x' => 4, 'y' => 7.7, 'text' => 'GRAND JUNCTION'),
 	array('x' => 6.4, 'y' => 7.7, 'text' => 'CO   81503-9642'),
@@ -276,7 +276,7 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
  );
 
     $annote2 = array(
-	array('x' => 1, 'y' => 9.6, 'text' => 'WHITEWATER HILL VINEYARDS'),
+	array('x' => 1, 'y' => 9.6, 'text' => 'WHITEWATER HILL LLC'),
 	array('x' => 6, 'y' => 9.6, 'text' => ACCOUNT_NUMBER),
 	array('x' => 3.8, 'y' => 8.45, 'text' => number_format(($actual_totalliters-$export_liters)*.0733,2,'.',',')),
 	array('x' => 3.8, 'y' => 8.1, 'text' => number_format(($actual_totalliters-$export_liters)*.01,2,'.',',')),
@@ -304,7 +304,7 @@ $july_export = db_fetch(getExportLiters($july_start_date, $to_date));
         $page++;
         $rows = 1;
         $i = 0;
-        $annote_export[$page][$i++] = array('x' => 1, 'y' => 9.0, 'text' => 'Whitewater Hill Vineyards');
+        $annote_export[$page][$i++] = array('x' => 1, 'y' => 9.0, 'text' => 'Whitewater Hill LLC');
         $annote_export[$page][$i++] = array('x' => 4.3, 'y' => 9.0, 'text' => ACCOUNT_NUMBER);
         $annote_export[$page][$i++] = array('x' => 6.5, 'y' => 9.0, 'text' => $period);
         $annote_export[$page][$i++] = array('x' => 4.3, 'y' => 8.8, 'text' => $state);
