@@ -537,7 +537,6 @@ $taxDueAmount = sprintf("%.2f", $taxDueAmount);
 $netSales = sprintf("%.2f", $sales['net']);
 
 
-
 $xml .= "                   <TaxableAmount>$netSales</TaxableAmount>
                     <TaxRate>" . $tax_rate[$ent_xml] . "</TaxRate>
                     <TaxAmount>$taxAmount</TaxAmount>
@@ -601,6 +600,8 @@ $xml .= "                   <TaxableAmount>$netSales</TaxableAmount>
             if (in_array($tax_rates['Location'], $blacklisted)) {
                 $tax_due = 0;
                 $self_paid = $tax_due_city;
+                if ($self_paid == 0)    // maybe we just sold them spices
+                    return;
                 $self_paid_sales = $sales_taxed['city'];
             } else
                 $tax_due = $tax_due_city;
@@ -624,8 +625,9 @@ $xml .= "                   <TaxableAmount>$netSales</TaxableAmount>
         $rep->NewLine();
     }
 
-    // if ($tax_due == 0)  // maybe we just sold them spices?
-      //  return;
+    // no xml for blacklisted homerule cities
+    if ($tax_due == 0 && $self_paid != 0)
+        return;
 
     if ($sales['description'] != 'Special Event') {
         $total += $tax_due;
@@ -1049,6 +1051,7 @@ function company_dr0100($testcases, $zerofilers)
     global $path_to_root, $sites, $total, $total_state_service_fee, $report_type, $suts;
 
     $blacklisted=array(
+        'CONNERS (MAIL VIA ARVADA)',
         'AURORA',
         'CASTLE ROCK',
         'LAKEWOOD',
