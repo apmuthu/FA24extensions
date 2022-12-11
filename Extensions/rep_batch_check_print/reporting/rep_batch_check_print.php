@@ -167,7 +167,7 @@ function print_bank_check()
 
                 if ($check_style == "1") {
                     if ($count%3 == 0) {
-                        $rep->SetHeaderType(null);
+                        $rep->SetHeaderType("None");
                         $rep->NewPage();
 
                         // Set the font
@@ -263,7 +263,7 @@ function rep_print_1up($rep, $account, $dec, $myrow, $check_no)
 {
     global $path_to_root, $systypes_array, $print_invoice_no;
 
-    $rep->SetHeaderType(null);
+    $rep->SetHeaderType("None");
     $rep->NewPage();
 
     // display_error(_('Cannot store next sales order reference.' . $rep->row . ":" . $rep->pageHeight . ":" . $rep->topMargin));
