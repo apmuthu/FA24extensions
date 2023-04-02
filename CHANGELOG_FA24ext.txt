@@ -1,3 +1,4 @@
+2023-04-02  Ap.Muthu     Updated core Tamil and Vietnamese languages ta_IN, vi_VN for FA v2.4.15, added th_TH
 2022-09-28  Ap.Muthu     Updated core Tamil language ta_IN for FA v2.4.13
 2022-03-13  Ap.Muthu     Updated core Tamil language ta_IN for FA v2.4.11
 2021-08-04  kvvaradha    Extension Cash Flow Statement now with Bank Level Filter

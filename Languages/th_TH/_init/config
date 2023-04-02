@@ -1,0 +1,16 @@
+Package: th_TH
+Version: 2.4.15-1
+Description: Thai translation
+Author: Ap.Muthu <apmuthu@usa.net>
+Maintenance: Ap.Muthu <apmuthu@usa.net>
+Homepage: frontaccounting.com
+Language: th_TH
+Encoding: utf-8
+RTLDir: no
+Depends: 
+Type: language
+Name: Thai
+Name-th_TH: แบบไทย
+InstallPath: lang/th_TH
+Filename: th_TH-2.4.15-1
+
