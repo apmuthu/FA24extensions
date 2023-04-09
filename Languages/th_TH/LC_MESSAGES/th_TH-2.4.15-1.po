@@ -12,13 +12,14 @@ msgstr ""
 "Project-Id-Version: 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-24 09:35+0100\n"
-"PO-Revision-Date: 2023-04-02 10:30+0530\n"
+"PO-Revision-Date: 2023-04-09 20:48+0530\n"
 "Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2023\n"
 "Language-Team: Thai (https://www.transifex.com/gnuacademy/teams/55037/th_TH/)\n"
 "Language: th_TH\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: frontaccounting.php:72 frontaccounting.php:73
 msgid "Main  Menu"
@@ -45,56 +46,58 @@ msgstr "กรุณาเข้าสู่ระบบที่นี่"
 
 #: access/login.php:34
 msgid "or"
-msgstr ""
+msgstr "หรือ"
 
 #: access/login.php:34
 msgid "request new password"
-msgstr ""
+msgstr "ขอรหัสผ่านใหม่"
 
 #: access/login.php:45
 msgid "Too many failed login attempts.<br>Please wait a while or try later."
 msgstr ""
+"ความพยายามในการเข้าสู่ระบบที่ล้มเหลวมากเกินไป<br>โปรดรอสักครู่หรือลองใหม่ในภายหลัง"
 
 #: access/login.php:47
 msgid "Invalid password or username. Please, try again."
-msgstr ""
+msgstr "รหัสผ่านหรือชื่อผู้ใช้ไม่ถูกต้อง กรุณาลองอีกครั้ง."
 
 #: access/login.php:57 access/login.php:90
 msgid "Authorization timeout"
-msgstr ""
+msgstr "หมดเวลาการให้สิทธิ์"
 
 #: access/login.php:57 access/login.php:95
 msgid "Login"
-msgstr ""
+msgstr "เข้าสู่ระบบ"
 
 #: access/login.php:95 access/password_reset.php:61 admin/inst_module.php:160
 msgid "Version"
-msgstr ""
+msgstr "รุ่น"
 
 #: access/login.php:103
 msgid "User name"
-msgstr ""
+msgstr "ชื่อผู้ใช้"
 
 #: access/login.php:107 admin/users.php:202
 msgid "Password:"
-msgstr ""
+msgstr "รหัสผ่าน:"
 
 #: access/login.php:116 access/login.php:122 access/password_reset.php:69
 #: access/password_reset.php:75 admin/create_coy.php:247
-#: admin/create_coy.php:327 admin/inst_upgrade.php:63 includes/sysnames.inc:210
+#: admin/create_coy.php:327 admin/inst_upgrade.php:63
+#: includes/sysnames.inc:210
 msgid "Company"
-msgstr ""
+msgstr "บริษัท"
 
 #: access/login.php:127
 msgid ""
 "HTTP access is not allowed on this site. This is unsecure. If you really "
-"want to access this unsecure site then set the SECURE_ONLY to false in /"
-"includes/session.inc file."
+"want to access this unsecure site then set the SECURE_ONLY to false in "
+"/includes/session.inc file."
 msgstr ""
 
 #: access/login.php:135
 msgid "Login -->"
-msgstr ""
+msgstr "เข้าสู่ระบบ -->"
 
 #: access/login.php:170 access/password_reset.php:106
 #: admin/display_prefs.php:125 themes/canvas/renderer.php:184
@@ -209,9 +212,9 @@ msgstr ""
 #: inventory/purchasing_data.php:168
 #: inventory/includes/item_adjustments_ui.inc:106
 #: inventory/includes/stock_transfers_ui.inc:85
-#: inventory/manage/item_categories.php:147 inventory/manage/item_codes.php:146
-#: inventory/manage/item_units.php:110 inventory/manage/locations.php:170
-#: inventory/manage/sales_kits.php:51
+#: inventory/manage/item_categories.php:147
+#: inventory/manage/item_codes.php:146 inventory/manage/item_units.php:110
+#: inventory/manage/locations.php:170 inventory/manage/sales_kits.php:51
 #: manufacturing/includes/work_order_issue_ui.inc:61
 #: manufacturing/manage/bom_edit.php:60
 #: manufacturing/manage/work_centres.php:114
@@ -253,9 +256,9 @@ msgstr ""
 #: inventory/prices.php:164 inventory/purchasing_data.php:169
 #: inventory/includes/item_adjustments_ui.inc:111
 #: inventory/includes/stock_transfers_ui.inc:86
-#: inventory/manage/item_categories.php:148 inventory/manage/item_codes.php:147
-#: inventory/manage/item_units.php:111 inventory/manage/locations.php:171
-#: inventory/manage/sales_kits.php:52
+#: inventory/manage/item_categories.php:148
+#: inventory/manage/item_codes.php:147 inventory/manage/item_units.php:111
+#: inventory/manage/locations.php:171 inventory/manage/sales_kits.php:52
 #: manufacturing/includes/work_order_issue_ui.inc:63
 #: manufacturing/manage/bom_edit.php:61
 #: manufacturing/manage/work_centres.php:115
@@ -275,10 +278,10 @@ msgstr ""
 #: admin/attachments.php:223 admin/view_print_transaction.php:126
 #: admin/void_transaction.php:186 dimensions/inquiry/search_dimensions.php:131
 #: dimensions/view/view_dimension.php:55
-#: fixed_assets/inquiry/stock_inquiry.php:165 gl/bank_account_reconcile.php:267
-#: gl/inquiry/bank_inquiry.php:71 gl/inquiry/gl_account_inquiry.php:128
-#: gl/inquiry/journal_inquiry.php:112 gl/inquiry/journal_inquiry.php:127
-#: includes/ui/allocation_cart.inc:311
+#: fixed_assets/inquiry/stock_inquiry.php:165
+#: gl/bank_account_reconcile.php:267 gl/inquiry/bank_inquiry.php:71
+#: gl/inquiry/gl_account_inquiry.php:128 gl/inquiry/journal_inquiry.php:112
+#: gl/inquiry/journal_inquiry.php:127 includes/ui/allocation_cart.inc:311
 #: inventory/inquiry/stock_movements.php:104
 #: manufacturing/search_work_orders.php:164
 #: manufacturing/includes/manufacturing_ui.inc:174
@@ -389,21 +392,21 @@ msgstr ""
 
 #: admin/backups.php:109 admin/create_coy.php:268 admin/fiscalyears.php:155
 #: admin/inst_lang.php:85 admin/inst_lang.php:97
-#: dimensions/inquiry/search_dimensions.php:107 gl/manage/bank_accounts.php:130
-#: gl/manage/currencies.php:162 gl/manage/gl_account_classes.php:126
-#: gl/manage/gl_quick_entries.php:237 includes/system_tests.inc:41
-#: includes/system_tests.inc:116 includes/system_tests.inc:129
-#: includes/ui/class.reflines_crud.inc:56 includes/ui/ui_lists.inc:1879
-#: purchasing/manage/suppliers.php:232 reporting/rep101.php:122
-#: reporting/rep101.php:133 reporting/rep102.php:107 reporting/rep102.php:109
-#: reporting/rep104.php:103 reporting/rep106.php:82 reporting/rep114.php:74
-#: reporting/rep115.php:160 reporting/rep201.php:111 reporting/rep202.php:117
-#: reporting/rep202.php:119 reporting/rep203.php:84 reporting/rep206.php:111
-#: reporting/rep303.php:214 reporting/rep303.php:219 reporting/rep304.php:123
-#: reporting/rep402.php:131 reporting/rep402.php:132 reporting/rep402.php:183
-#: reporting/rep501.php:113 sales/manage/sales_points.php:94
-#: sales/manage/sales_points.php:95 sales/manage/sales_types.php:119
-#: taxes/item_tax_types.php:129
+#: dimensions/inquiry/search_dimensions.php:107
+#: gl/manage/bank_accounts.php:130 gl/manage/currencies.php:162
+#: gl/manage/gl_account_classes.php:126 gl/manage/gl_quick_entries.php:237
+#: includes/system_tests.inc:41 includes/system_tests.inc:116
+#: includes/system_tests.inc:129 includes/ui/class.reflines_crud.inc:56
+#: includes/ui/ui_lists.inc:1879 purchasing/manage/suppliers.php:232
+#: reporting/rep101.php:122 reporting/rep101.php:133 reporting/rep102.php:107
+#: reporting/rep102.php:109 reporting/rep104.php:103 reporting/rep106.php:82
+#: reporting/rep114.php:74 reporting/rep115.php:160 reporting/rep201.php:111
+#: reporting/rep202.php:117 reporting/rep202.php:119 reporting/rep203.php:84
+#: reporting/rep206.php:111 reporting/rep303.php:214 reporting/rep303.php:219
+#: reporting/rep304.php:123 reporting/rep402.php:131 reporting/rep402.php:132
+#: reporting/rep402.php:183 reporting/rep501.php:113
+#: sales/manage/sales_points.php:94 sales/manage/sales_points.php:95
+#: sales/manage/sales_types.php:119 taxes/item_tax_types.php:129
 msgid "No"
 msgstr ""
 
@@ -899,7 +902,8 @@ msgstr ""
 #: admin/create_coy.php:152 admin/create_coy.php:188 admin/create_coy.php:220
 #: admin/db/maintenance_db.inc:253
 msgid ""
-" is not writable. Change its permissions so it is, then re-run the operation."
+" is not writable. Change its permissions so it is, then re-run the "
+"operation."
 msgstr ""
 
 #: admin/create_coy.php:164
@@ -964,8 +968,8 @@ msgstr ""
 msgid "Charset"
 msgstr ""
 
-#: admin/create_coy.php:248 admin/inst_lang.php:36 admin/print_profiles.php:161
-#: includes/ui/class.reflines_crud.inc:38
+#: admin/create_coy.php:248 admin/inst_lang.php:36
+#: admin/print_profiles.php:161 includes/ui/class.reflines_crud.inc:38
 #: purchasing/includes/ui/invoice_ui.inc:141
 #: purchasing/includes/ui/invoice_ui.inc:144
 #: purchasing/includes/ui/po_ui.inc:172 purchasing/includes/ui/po_ui.inc:174
@@ -974,11 +978,11 @@ msgstr ""
 
 #: admin/create_coy.php:268 admin/create_coy.php:351 admin/fiscalyears.php:159
 #: admin/inst_lang.php:85 admin/inst_lang.php:97
-#: dimensions/inquiry/search_dimensions.php:107 gl/manage/bank_accounts.php:128
-#: gl/manage/currencies.php:162 gl/manage/gl_account_classes.php:126
-#: gl/manage/gl_quick_entries.php:237 includes/system_tests.inc:41
-#: includes/system_tests.inc:116 includes/system_tests.inc:129
-#: includes/ui/class.reflines_crud.inc:56
+#: dimensions/inquiry/search_dimensions.php:107
+#: gl/manage/bank_accounts.php:128 gl/manage/currencies.php:162
+#: gl/manage/gl_account_classes.php:126 gl/manage/gl_quick_entries.php:237
+#: includes/system_tests.inc:41 includes/system_tests.inc:116
+#: includes/system_tests.inc:129 includes/ui/class.reflines_crud.inc:56
 #: includes/ui/class.reflines_crud.inc:101 includes/ui/ui_lists.inc:1880
 #: purchasing/manage/suppliers.php:232 reporting/rep101.php:121
 #: reporting/rep101.php:132 reporting/rep102.php:106 reporting/rep102.php:108
@@ -1324,8 +1328,7 @@ msgstr ""
 #: admin/fiscalyears.php:133
 msgid ""
 "Warning: Deleting a fiscal year all transactions \n"
-"\t\tare removed and converted into relevant balances. This process is "
-"irreversible!"
+"\t\tare removed and converted into relevant balances. This process is irreversible!"
 msgstr ""
 
 #: admin/fiscalyears.php:138
@@ -1406,7 +1409,8 @@ msgid "The invoice over-charge allowance must be between 0 and 100."
 msgstr ""
 
 #: admin/gl_setup.php:94
-msgid "Before GRN Clearing Account can be changed all GRNs have to be invoiced"
+msgid ""
+"Before GRN Clearing Account can be changed all GRNs have to be invoiced"
 msgstr ""
 
 #: admin/gl_setup.php:101 admin/db/fiscalyears_db.inc:142
@@ -1558,8 +1562,8 @@ msgstr ""
 msgid "Receivable Account:"
 msgstr ""
 
-#: admin/gl_setup.php:236 admin/gl_setup.php:281 inventory/manage/items.php:489
-#: inventory/manage/item_categories.php:228
+#: admin/gl_setup.php:236 admin/gl_setup.php:281
+#: inventory/manage/items.php:489 inventory/manage/item_categories.php:228
 #: sales/manage/customer_branches.php:242
 msgid "Sales Account:"
 msgstr ""
@@ -1757,8 +1761,8 @@ msgstr ""
 msgid "Install/Update Languages"
 msgstr ""
 
-#: admin/inst_lang.php:35 admin/printers.php:84 admin/shipping_companies.php:91
-#: dimensions/dimension_entry.php:261
+#: admin/inst_lang.php:35 admin/printers.php:84
+#: admin/shipping_companies.php:91 dimensions/dimension_entry.php:261
 #: dimensions/inquiry/search_dimensions.php:133
 #: dimensions/view/view_dimension.php:55 gl/gl_journal.php:556
 #: inventory/manage/item_categories.php:117
@@ -1997,14 +2001,14 @@ msgstr ""
 
 #: admin/payment_terms.php:95
 msgid ""
-"Cannot delete this payment term, because customer accounts have been created "
-"referring to this term."
+"Cannot delete this payment term, because customer accounts have been created"
+" referring to this term."
 msgstr ""
 
 #: admin/payment_terms.php:101
 msgid ""
-"Cannot delete this payment term, because supplier accounts have been created "
-"referring to this term"
+"Cannot delete this payment term, because supplier accounts have been created"
+" referring to this term"
 msgstr ""
 
 #: admin/payment_terms.php:107
@@ -2273,9 +2277,11 @@ msgstr ""
 #: includes/ui/class.crud_view.inc:301 includes/ui/simple_crud_class.inc:58
 #: includes/ui/simple_crud_class.inc:229 includes/ui/ui_controls.inc:645
 #: includes/ui/ui_input.inc:230 inventory/includes/item_adjustments_ui.inc:214
-#: inventory/includes/stock_transfers_ui.inc:151 inventory/manage/items.php:548
+#: inventory/includes/stock_transfers_ui.inc:151
+#: inventory/manage/items.php:548
 #: manufacturing/includes/work_order_issue_ui.inc:134
-#: purchasing/includes/ui/po_ui.inc:447 sales/create_recurrent_invoices.php:196
+#: purchasing/includes/ui/po_ui.inc:447
+#: sales/create_recurrent_invoices.php:196
 #: sales/includes/ui/sales_credit_ui.inc:290
 #: sales/includes/ui/sales_order_ui.inc:556
 msgid "Cancel"
@@ -2312,8 +2318,8 @@ msgstr ""
 
 #: admin/shipping_companies.php:67
 msgid ""
-"Cannot delete this shipping company because invoices have been created using "
-"this shipping company."
+"Cannot delete this shipping company because invoices have been created using"
+" this shipping company."
 msgstr ""
 
 #: admin/shipping_companies.php:72
@@ -2333,7 +2339,8 @@ msgid "Secondary Phone"
 msgstr ""
 
 #: admin/shipping_companies.php:91 inventory/manage/locations.php:155
-#: purchasing/inquiry/suppliers_list.php:53 sales/inquiry/customers_list.php:54
+#: purchasing/inquiry/suppliers_list.php:53
+#: sales/inquiry/customers_list.php:54
 msgid "Address"
 msgstr ""
 
@@ -2446,7 +2453,8 @@ msgstr ""
 #: admin/users.php:123 includes/ui/contacts_view.inc:40
 #: inventory/manage/locations.php:155 reporting/rep106.php:95
 #: reporting/includes/header2.inc:98
-#: sales/inquiry/customer_branches_list.php:49 sales/manage/sales_people.php:99
+#: sales/inquiry/customer_branches_list.php:49
+#: sales/manage/sales_people.php:99
 msgid "Phone"
 msgstr ""
 
@@ -2493,8 +2501,9 @@ msgstr ""
 
 #: admin/view_print_transaction.php:43 admin/view_print_transaction.php:45
 #: admin/view_print_transaction.php:129
-#: dimensions/inquiry/search_dimensions.php:123 includes/ui/ui_controls.inc:213
-#: manufacturing/search_work_orders.php:152 purchasing/inquiry/po_search.php:94
+#: dimensions/inquiry/search_dimensions.php:123
+#: includes/ui/ui_controls.inc:213 manufacturing/search_work_orders.php:152
+#: purchasing/inquiry/po_search.php:94
 #: purchasing/inquiry/po_search_completed.php:52
 #: sales/inquiry/customer_inquiry.php:102
 #: sales/inquiry/sales_deliveries_view.php:149
@@ -2605,8 +2614,8 @@ msgstr ""
 #: includes/ui/ui_input.inc:301 includes/ui/ui_lists.inc:20
 #: inventory/inquiry/stock_list.php:66 inventory/inquiry/stock_list.php:69
 #: purchasing/inquiry/suppliers_list.php:65
-#: purchasing/inquiry/suppliers_list.php:68 sales/inquiry/customers_list.php:66
-#: sales/inquiry/customers_list.php:69
+#: purchasing/inquiry/suppliers_list.php:68
+#: sales/inquiry/customers_list.php:66 sales/inquiry/customers_list.php:69
 #: sales/inquiry/customer_branches_list.php:60
 msgid "Select"
 msgstr ""
@@ -2695,7 +2704,8 @@ msgstr ""
 #: gl/gl_bank.php:267 gl/gl_journal.php:222 gl/gl_journal.php:261
 #: gl/manage/revaluate_currencies.php:51 inventory/adjustments.php:123
 #: inventory/transfers.php:115 manufacturing/work_order_add_finished.php:95
-#: manufacturing/work_order_costs.php:86 manufacturing/work_order_entry.php:151
+#: manufacturing/work_order_costs.php:86
+#: manufacturing/work_order_entry.php:151
 #: manufacturing/work_order_issue.php:82 purchasing/po_entry_items.php:351
 #: purchasing/po_receive_items.php:179 purchasing/supplier_credit.php:197
 #: purchasing/supplier_invoice.php:200 purchasing/supplier_payment.php:199
@@ -2709,7 +2719,8 @@ msgid ""
 msgstr ""
 
 #: admin/void_transaction.php:285
-msgid "The transaction number is expected to be numeric and greater than zero."
+msgid ""
+"The transaction number is expected to be numeric and greater than zero."
 msgstr ""
 
 #: admin/void_transaction.php:302
@@ -2856,8 +2867,8 @@ msgstr ""
 #: admin/includes/fa_patch.class.inc:126
 #, php-format
 msgid ""
-"Cannot upgrade company %s: database version is incompatible ('%s' instead of "
-"'%s')."
+"Cannot upgrade company %s: database version is incompatible ('%s' instead of"
+" '%s')."
 msgstr ""
 
 #: admin/includes/fa_patch.class.inc:141
@@ -3602,7 +3613,8 @@ msgid "The required by date entered is in an invalid format."
 msgstr ""
 
 #: dimensions/dimension_entry.php:180
-msgid "This dimension cannot be deleted because it has already been processed."
+msgid ""
+"This dimension cannot be deleted because it has already been processed."
 msgstr ""
 
 #: dimensions/dimension_entry.php:224
@@ -3803,10 +3815,11 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: dimensions/inquiry/search_dimensions.php:76 gl/includes/ui/gl_bank_ui.inc:52
-#: gl/includes/ui/gl_bank_ui.inc:114 gl/inquiry/bank_inquiry.php:50
-#: gl/inquiry/gl_trial_balance.php:55 gl/inquiry/journal_inquiry.php:48
-#: gl/inquiry/profit_loss.php:175 inventory/inquiry/stock_movements.php:85
+#: dimensions/inquiry/search_dimensions.php:76
+#: gl/includes/ui/gl_bank_ui.inc:52 gl/includes/ui/gl_bank_ui.inc:114
+#: gl/inquiry/bank_inquiry.php:50 gl/inquiry/gl_trial_balance.php:55
+#: gl/inquiry/journal_inquiry.php:48 gl/inquiry/profit_loss.php:175
+#: inventory/inquiry/stock_movements.php:85
 #: purchasing/inquiry/supplier_allocation_inquiry.php:50
 #: purchasing/inquiry/supplier_inquiry.php:143
 #: sales/inquiry/customer_inquiry.php:165
@@ -4152,8 +4165,8 @@ msgstr ""
 #: includes/sysnames.inc:43 includes/sysnames.inc:182
 #: inventory/manage/items.php:478 inventory/manage/items.php:480
 #: inventory/manage/item_categories.php:258
-#: inventory/manage/item_categories.php:260 purchasing/supplier_payment.php:332
-#: purchasing/supplier_payment.php:337
+#: inventory/manage/item_categories.php:260
+#: purchasing/supplier_payment.php:332 purchasing/supplier_payment.php:337
 #: purchasing/includes/ui/invoice_ui.inc:141
 #: purchasing/includes/ui/invoice_ui.inc:278
 #: purchasing/includes/ui/invoice_ui.inc:280
@@ -4199,7 +4212,8 @@ msgstr ""
 #: gl/view/gl_payment_view.php:110 gl/view/gl_payment_view.php:113
 #: gl/view/gl_trans_view.php:99 gl/view/gl_trans_view.php:102
 #: gl/view/gl_trans_view.php:105 includes/ui/class.reflines_crud.inc:38
-#: inventory/cost_update.php:148 inventory/includes/item_adjustments_ui.inc:236
+#: inventory/cost_update.php:148
+#: inventory/includes/item_adjustments_ui.inc:236
 #: inventory/includes/stock_transfers_ui.inc:169
 #: manufacturing/includes/work_order_issue_ui.inc:169
 #: manufacturing/view/wo_costs_view.php:61
@@ -4354,8 +4368,9 @@ msgstr ""
 
 #: gl/bank_account_reconcile.php:272 gl/inquiry/bank_inquiry.php:72
 #: gl/inquiry/gl_account_inquiry.php:143 gl/inquiry/gl_account_inquiry.php:145
-#: gl/view/accrual_trans.php:60 reporting/rep601.php:81 reporting/rep602.php:80
-#: reporting/rep704.php:80 reporting/rep704.php:87 reporting/rep704.php:95
+#: gl/view/accrual_trans.php:60 reporting/rep601.php:81
+#: reporting/rep602.php:80 reporting/rep704.php:80 reporting/rep704.php:87
+#: reporting/rep704.php:95
 msgid "Person/Item"
 msgstr ""
 
@@ -4814,7 +4829,8 @@ msgstr ""
 msgid "Input Tax"
 msgstr ""
 
-#: gl/gl_journal.php:556 gl/inquiry/tax_inquiry.php:96 reporting/rep709.php:191
+#: gl/gl_journal.php:556 gl/inquiry/tax_inquiry.php:96
+#: reporting/rep709.php:191
 msgid "Output Tax"
 msgstr ""
 
@@ -5163,8 +5179,9 @@ msgid "As at:"
 msgstr ""
 
 #: gl/inquiry/balance_sheet.php:225 gl/inquiry/profit_loss.php:298
-#: includes/dashboard.inc:687 reporting/rep705.php:346 reporting/rep706.php:280
-#: reporting/rep706.php:305 reporting/rep707.php:312 reporting/rep707.php:321
+#: includes/dashboard.inc:687 reporting/rep705.php:346
+#: reporting/rep706.php:280 reporting/rep706.php:305 reporting/rep707.php:312
+#: reporting/rep707.php:321
 msgid "Calculated Return"
 msgstr ""
 
@@ -5276,8 +5293,8 @@ msgstr ""
 
 #: gl/inquiry/gl_trial_balance.php:285 reporting/rep708.php:283
 msgid ""
-"The Opening Balance is not in balance, probably due to a non closed Previous "
-"Fiscalyear."
+"The Opening Balance is not in balance, probably due to a non closed Previous"
+" Fiscalyear."
 msgstr ""
 
 #: gl/inquiry/journal_inquiry.php:27
@@ -5405,8 +5422,8 @@ msgstr ""
 
 #: gl/manage/bank_accounts.php:76
 msgid ""
-"Cannot delete this bank account because transactions have been created using "
-"this account."
+"Cannot delete this bank account because transactions have been created using"
+" this account."
 msgstr ""
 
 #: gl/manage/bank_accounts.php:82
@@ -5512,7 +5529,8 @@ msgid "Selected date is not in fiscal year or the year is closed."
 msgstr ""
 
 #: gl/manage/close_period.php:47
-msgid "The entered date is earlier than date already selected as closing date."
+msgid ""
+"The entered date is earlier than date already selected as closing date."
 msgstr ""
 
 #: gl/manage/close_period.php:51
@@ -5529,10 +5547,8 @@ msgstr ""
 #: gl/manage/close_period.php:88
 msgid ""
 "Using this feature you can prevent entering new transactions <br>\n"
-"\tand disable edition of already entered transactions up to specified date."
-"<br>\n"
-"\tOnly transactions which can generate GL postings are subject to the "
-"constraint."
+"\tand disable edition of already entered transactions up to specified date.<br>\n"
+"\tOnly transactions which can generate GL postings are subject to the constraint."
 msgstr ""
 
 #: gl/manage/close_period.php:101
@@ -5731,8 +5747,8 @@ msgstr ""
 
 #: gl/manage/gl_accounts.php:124
 msgid ""
-"Cannot delete this account because transactions have been created using this "
-"account."
+"Cannot delete this account because transactions have been created using this"
+" account."
 msgstr ""
 
 #: gl/manage/gl_accounts.php:130
@@ -5747,7 +5763,8 @@ msgstr ""
 
 #: gl/manage/gl_accounts.php:142
 msgid ""
-"Cannot delete this account because it is used by one or more Item Categories."
+"Cannot delete this account because it is used by one or more Item "
+"Categories."
 msgstr ""
 
 #: gl/manage/gl_accounts.php:148
@@ -5765,7 +5782,8 @@ msgid ""
 msgstr ""
 
 #: gl/manage/gl_accounts.php:165
-msgid "Cannot delete this account because it is used by one or more suppliers."
+msgid ""
+"Cannot delete this account because it is used by one or more suppliers."
 msgstr ""
 
 #: gl/manage/gl_accounts.php:171
@@ -5909,8 +5927,8 @@ msgstr ""
 
 #: gl/manage/gl_account_types.php:97
 msgid ""
-"Cannot delete this account group because GL account groups have been created "
-"referring to it."
+"Cannot delete this account group because GL account groups have been created"
+" referring to it."
 msgstr ""
 
 #: gl/manage/gl_account_types.php:113
@@ -6897,10 +6915,10 @@ msgstr ""
 #: includes/dashboard.inc:200 includes/dashboard.inc:410
 #: includes/dashboard.inc:444 includes/dashboard.inc:1011
 #: includes/dashboard.inc:1051 includes/sysnames.inc:44
-#: includes/sysnames.inc:103 includes/sysnames.inc:211 reporting/rep101.php:146
-#: reporting/rep102.php:118 reporting/rep102.php:125 reporting/rep105.php:110
-#: reporting/rep106.php:90 reporting/rep114.php:95 reporting/rep115.php:170
-#: reporting/rep304.php:127 reporting/rep304.php:137
+#: includes/sysnames.inc:103 includes/sysnames.inc:211
+#: reporting/rep101.php:146 reporting/rep102.php:118 reporting/rep102.php:125
+#: reporting/rep105.php:110 reporting/rep106.php:90 reporting/rep114.php:95
+#: reporting/rep115.php:170 reporting/rep304.php:127 reporting/rep304.php:137
 #: reporting/reports_main.php:34 reporting/reports_main.php:38
 #: reporting/reports_main.php:47 reporting/reports_main.php:59
 #: reporting/reports_main.php:115 reporting/reports_main.php:134
@@ -6946,8 +6964,9 @@ msgstr ""
 
 #: includes/dashboard.inc:237 includes/dashboard.inc:415
 #: includes/dashboard.inc:486 includes/dashboard.inc:1095
-#: includes/sysnames.inc:45 includes/sysnames.inc:104 includes/sysnames.inc:189
-#: includes/sysnames.inc:212 inventory/purchasing_data.php:151
+#: includes/sysnames.inc:45 includes/sysnames.inc:104
+#: includes/sysnames.inc:189 includes/sysnames.inc:212
+#: inventory/purchasing_data.php:151
 #: purchasing/allocations/supplier_allocation_main.php:98
 #: purchasing/allocations/supplier_allocation_main.php:106
 #: purchasing/includes/ui/grn_ui.inc:20 purchasing/includes/ui/grn_ui.inc:52
@@ -7130,7 +7149,8 @@ msgstr ""
 #: manufacturing/includes/manufacturing_ui.inc:174
 #: manufacturing/includes/manufacturing_ui.inc:347
 #: manufacturing/includes/work_order_issue_ui.inc:33
-#: manufacturing/manage/bom_edit.php:44 manufacturing/view/wo_issue_view.php:76
+#: manufacturing/manage/bom_edit.php:44
+#: manufacturing/view/wo_issue_view.php:76
 #: purchasing/includes/ui/invoice_ui.inc:514
 #: purchasing/includes/ui/po_ui.inc:216 purchasing/view/view_grn.php:40
 #: purchasing/view/view_po.php:48 reporting/rep301.php:169
@@ -7192,7 +7212,8 @@ msgid "Total Customers Aged Analysis"
 msgstr ""
 
 #: includes/dashboard.inc:824 includes/dashboard.inc:880
-#: includes/dashboard.inc:960 reporting/rep102.php:230 reporting/rep202.php:250
+#: includes/dashboard.inc:960 reporting/rep102.php:230
+#: reporting/rep202.php:250
 msgid "Balances"
 msgstr ""
 
@@ -7499,8 +7520,8 @@ msgstr ""
 
 #: includes/session.inc:255
 msgid ""
-"Please remove $security_groups and $security_headings arrays from config.php "
-"file!"
+"Please remove $security_groups and $security_headings arrays from config.php"
+" file!"
 msgstr ""
 
 #: includes/session.inc:258
@@ -7517,8 +7538,8 @@ msgstr ""
 
 #: includes/session.inc:281
 msgid ""
-"System is blocked after source upgrade until database is updated on System/"
-"Software Upgrade page"
+"System is blocked after source upgrade until database is updated on "
+"System/Software Upgrade page"
 msgstr ""
 
 #: includes/sysnames.inc:23 includes/sysnames.inc:156
@@ -9021,8 +9042,8 @@ msgstr ""
 
 #: inventory/adjustments.php:133
 msgid ""
-"The adjustment cannot be processed because it would cause negative inventory "
-"balance for marked items as of document date or later."
+"The adjustment cannot be processed because it would cause negative inventory"
+" balance for marked items as of document date or later."
 msgstr ""
 
 #: inventory/adjustments.php:166
@@ -9161,14 +9182,15 @@ msgid "Sales Type"
 msgstr ""
 
 #: inventory/prices.php:151 inventory/purchasing_data.php:151
-#: purchasing/po_receive_items.php:63 purchasing/includes/ui/invoice_ui.inc:514
-#: purchasing/view/view_grn.php:41 purchasing/view/view_po.php:48
-#: reporting/rep104.php:109 reporting/includes/doctext.inc:32
-#: reporting/includes/doctext.inc:191 sales/customer_credit_invoice.php:276
-#: sales/customer_delivery.php:422 sales/customer_invoice.php:520
-#: sales/customer_invoice.php:523 sales/includes/ui/sales_credit_ui.inc:163
-#: sales/view/view_credit.php:91 sales/view/view_dispatch.php:113
-#: sales/view/view_invoice.php:119 sales/view/view_sales_order.php:222
+#: purchasing/po_receive_items.php:63
+#: purchasing/includes/ui/invoice_ui.inc:514 purchasing/view/view_grn.php:41
+#: purchasing/view/view_po.php:48 reporting/rep104.php:109
+#: reporting/includes/doctext.inc:32 reporting/includes/doctext.inc:191
+#: sales/customer_credit_invoice.php:276 sales/customer_delivery.php:422
+#: sales/customer_invoice.php:520 sales/customer_invoice.php:523
+#: sales/includes/ui/sales_credit_ui.inc:163 sales/view/view_credit.php:91
+#: sales/view/view_dispatch.php:113 sales/view/view_invoice.php:119
+#: sales/view/view_sales_order.php:222
 msgid "Price"
 msgstr ""
 
@@ -9402,7 +9424,8 @@ msgstr ""
 #: manufacturing/includes/work_order_issue_ui.inc:34
 #: purchasing/includes/ui/po_ui.inc:217 purchasing/view/view_grn.php:41
 #: purchasing/view/view_po.php:48 reporting/includes/doctext.inc:32
-#: reporting/includes/doctext.inc:191 sales/includes/ui/sales_credit_ui.inc:162
+#: reporting/includes/doctext.inc:191
+#: sales/includes/ui/sales_credit_ui.inc:162
 #: sales/includes/ui/sales_order_ui.inc:148 sales/view/view_credit.php:91
 #: sales/view/view_dispatch.php:113 sales/view/view_invoice.php:119
 #: sales/view/view_sales_order.php:221
@@ -9418,7 +9441,8 @@ msgstr ""
 msgid "Unit Cost"
 msgstr ""
 
-#: inventory/includes/item_adjustments_ui.inc:57 inventory/manage/items.php:527
+#: inventory/includes/item_adjustments_ui.inc:57
+#: inventory/manage/items.php:527
 msgid "Initial Value"
 msgstr ""
 
@@ -9448,8 +9472,8 @@ msgstr ""
 
 #: inventory/includes/db/items_db.inc:140
 msgid ""
-"Cannot delete this item because there are stock movements that refer to this "
-"item."
+"Cannot delete this item because there are stock movements that refer to this"
+" item."
 msgstr ""
 
 #: inventory/includes/db/items_db.inc:143
@@ -9794,9 +9818,10 @@ msgid "Tax type"
 msgstr ""
 
 #: inventory/manage/item_categories.php:117
-#: inventory/manage/item_categories.php:121 inventory/manage/item_codes.php:130
-#: inventory/manage/sales_kits.php:36 inventory/view/view_adjustment.php:55
-#: inventory/view/view_transfer.php:50 manufacturing/manage/bom_edit.php:44
+#: inventory/manage/item_categories.php:121
+#: inventory/manage/item_codes.php:130 inventory/manage/sales_kits.php:36
+#: inventory/view/view_adjustment.php:55 inventory/view/view_transfer.php:50
+#: manufacturing/manage/bom_edit.php:44
 #: manufacturing/view/wo_issue_view.php:76 purchasing/po_receive_items.php:62
 #: sales/customer_credit_invoice.php:275 sales/customer_delivery.php:421
 #: sales/customer_invoice.php:519 sales/customer_invoice.php:522
@@ -9886,7 +9911,8 @@ msgstr ""
 
 #: inventory/manage/item_codes.php:185 inventory/manage/sales_kits.php:243
 #: manufacturing/work_order_add_finished.php:194
-#: manufacturing/work_order_entry.php:404 manufacturing/manage/bom_edit.php:233
+#: manufacturing/work_order_entry.php:404
+#: manufacturing/manage/bom_edit.php:233
 msgid "Quantity:"
 msgstr ""
 
@@ -9975,8 +10001,8 @@ msgstr ""
 
 #: inventory/manage/locations.php:95
 msgid ""
-"Cannot delete this location because it is used by some branch records as the "
-"default location to deliver from."
+"Cannot delete this location because it is used by some branch records as the"
+" default location to deliver from."
 msgstr ""
 
 #: inventory/manage/locations.php:101 inventory/manage/locations.php:107
@@ -10041,8 +10067,8 @@ msgstr ""
 
 #: inventory/manage/sales_kits.php:97
 msgid ""
-"The selected component contains directly or on any lower level the kit under "
-"edition. Recursive kits are not allowed."
+"The selected component contains directly or on any lower level the kit under"
+" edition. Recursive kits are not allowed."
 msgstr ""
 
 #: inventory/manage/sales_kits.php:104
@@ -10219,7 +10245,8 @@ msgid "Select another &Work Order to Process"
 msgstr ""
 
 #: manufacturing/work_order_add_finished.php:64
-#: manufacturing/work_order_costs.php:63 manufacturing/work_order_entry.php:323
+#: manufacturing/work_order_costs.php:63
+#: manufacturing/work_order_entry.php:323
 msgid "The order number sent is not valid."
 msgstr ""
 
@@ -10284,7 +10311,8 @@ msgstr ""
 
 #: manufacturing/work_order_costs.php:92
 msgid ""
-"The additional cost date cannot be before the release date of the work order."
+"The additional cost date cannot be before the release date of the work "
+"order."
 msgstr ""
 
 #: manufacturing/work_order_costs.php:145
@@ -10354,8 +10382,8 @@ msgstr ""
 
 #: manufacturing/work_order_entry.php:199
 msgid ""
-"The work order cannot be processed because there is an insufficient quantity "
-"for component:"
+"The work order cannot be processed because there is an insufficient quantity"
+" for component:"
 msgstr ""
 
 #: manufacturing/work_order_entry.php:212
@@ -10626,7 +10654,8 @@ msgid "Issue Items to Work order"
 msgstr ""
 
 #: manufacturing/includes/db/work_orders_db.inc:95
-#: purchasing/includes/db/po_db.inc:154 sales/includes/db/cust_trans_db.inc:115
+#: purchasing/includes/db/po_db.inc:154
+#: sales/includes/db/cust_trans_db.inc:115
 #: sales/includes/db/sales_order_db.inc:213
 msgid "Updated."
 msgstr ""
@@ -10985,8 +11014,8 @@ msgstr ""
 #: purchasing/po_entry_items.php:194
 msgid ""
 "The line item quantities may be modified to quantities more than already "
-"received. prices cannot be altered for lines that have already been received "
-"and quantities cannot be reduced below the quantity already received."
+"received. prices cannot be altered for lines that have already been received"
+" and quantities cannot be reduced below the quantity already received."
 msgstr ""
 
 #: purchasing/po_entry_items.php:214
@@ -11028,8 +11057,8 @@ msgstr ""
 
 #: purchasing/po_entry_items.php:324
 msgid ""
-"The selected item does not exist or it is a kit part and therefore cannot be "
-"purchased."
+"The selected item does not exist or it is a kit part and therefore cannot be"
+" purchased."
 msgstr ""
 
 #: purchasing/po_entry_items.php:338 purchasing/supplier_credit.php:171
@@ -11180,7 +11209,8 @@ msgstr ""
 
 #: purchasing/po_receive_items.php:168 purchasing/po_receive_items.php:214
 msgid ""
-"There is nothing to process. Please enter valid quantities greater than zero."
+"There is nothing to process. Please enter valid quantities greater than "
+"zero."
 msgstr ""
 
 #: purchasing/po_receive_items.php:219
@@ -11259,8 +11289,8 @@ msgstr ""
 
 #: purchasing/supplier_credit.php:178
 msgid ""
-"The credit note cannot be processed because the there are no items or values "
-"on the invoice.  Credit notes are expected to have a charge."
+"The credit note cannot be processed because the there are no items or values"
+" on the invoice.  Credit notes are expected to have a charge."
 msgstr ""
 
 #: purchasing/supplier_credit.php:191
@@ -11277,8 +11307,8 @@ msgstr ""
 
 #: purchasing/supplier_credit.php:229
 msgid ""
-"The return cannot be processed because there is an insufficient quantity for "
-"item:"
+"The return cannot be processed because there is an insufficient quantity for"
+" item:"
 msgstr ""
 
 #: purchasing/supplier_credit.php:270
@@ -11322,8 +11352,8 @@ msgstr ""
 
 #: purchasing/supplier_invoice.php:194
 msgid ""
-"The invoice as entered cannot be processed because the invoice date is in an "
-"incorrect format."
+"The invoice as entered cannot be processed because the invoice date is in an"
+" incorrect format."
 msgstr ""
 
 #: purchasing/supplier_invoice.php:258
@@ -11440,7 +11470,8 @@ msgstr ""
 msgid "From Bank Account:"
 msgstr ""
 
-#: purchasing/supplier_payment.php:306 purchasing/view/view_supp_payment.php:58
+#: purchasing/supplier_payment.php:306
+#: purchasing/view/view_supp_payment.php:58
 msgid "Date Paid"
 msgstr ""
 
@@ -11879,7 +11910,8 @@ msgstr ""
 msgid "Also closed:"
 msgstr ""
 
-#: purchasing/inquiry/suppliers_list.php:53 sales/inquiry/customers_list.php:54
+#: purchasing/inquiry/suppliers_list.php:53
+#: sales/inquiry/customers_list.php:54
 msgid "Tax ID"
 msgstr ""
 
@@ -13654,7 +13686,8 @@ msgstr ""
 msgid "Report Period"
 msgstr ""
 
-#: reporting/includes/pdf_report.inc:990 reporting/includes/pdf_report.inc:1038
+#: reporting/includes/pdf_report.inc:990
+#: reporting/includes/pdf_report.inc:1038
 #, php-format
 msgid "You have no email contact defined for this type of document for '%s'."
 msgstr ""
@@ -13821,8 +13854,8 @@ msgstr ""
 
 #: sales/create_recurrent_invoices.php:176
 msgid ""
-"Recurrent invoices cannot be generated because selected sales order template "
-"uses prepayment sales terms. Change payment terms and try again."
+"Recurrent invoices cannot be generated because selected sales order template"
+" uses prepayment sales terms. Change payment terms and try again."
 msgstr ""
 
 #: sales/create_recurrent_invoices.php:184
@@ -13948,8 +13981,8 @@ msgstr ""
 
 #: sales/credit_note_entry.php:188
 msgid ""
-"For credit notes created to write off the stock, a general ledger account is "
-"required to be selected."
+"For credit notes created to write off the stock, a general ledger account is"
+" required to be selected."
 msgstr ""
 
 #: sales/credit_note_entry.php:189
@@ -14158,8 +14191,8 @@ msgstr ""
 
 #: sales/customer_delivery.php:132
 msgid ""
-"This page can only be opened if an order or delivery note has been selected. "
-"Please select it first."
+"This page can only be opened if an order or delivery note has been selected."
+" Please select it first."
 msgstr ""
 
 #: sales/customer_delivery.php:134
@@ -14194,8 +14227,8 @@ msgstr ""
 
 #: sales/customer_delivery.php:205 sales/sales_order_entry.php:389
 msgid ""
-"This document cannot be processed because there is insufficient quantity for "
-"items marked."
+"This document cannot be processed because there is insufficient quantity for"
+" items marked."
 msgstr ""
 
 #: sales/customer_delivery.php:342
@@ -14332,8 +14365,8 @@ msgstr ""
 
 #: sales/customer_invoice.php:142
 msgid ""
-"All quantities on this invoice has been credited. There is nothing to modify "
-"on this invoice"
+"All quantities on this invoice has been credited. There is nothing to modify"
+" on this invoice"
 msgstr ""
 
 #: sales/customer_invoice.php:156
@@ -14371,8 +14404,8 @@ msgstr ""
 
 #: sales/customer_invoice.php:346
 msgid ""
-"There is no non-invoiced payments for this order. If you want to issue final "
-"invoice, select delayed or cash payment terms."
+"There is no non-invoiced payments for this order. If you want to issue final"
+" invoice, select delayed or cash payment terms."
 msgstr ""
 
 #: sales/customer_invoice.php:437
@@ -14468,7 +14501,8 @@ msgid "Select Another Customer Payment for &Edition"
 msgstr ""
 
 #: sales/customer_payments.php:160
-msgid "The entered date is invalid. Please enter a valid date for the payment."
+msgid ""
+"The entered date is invalid. Please enter a valid date for the payment."
 msgstr ""
 
 #: sales/customer_payments.php:175 sales/customer_payments.php:181
@@ -14705,8 +14739,8 @@ msgstr ""
 
 #: sales/sales_order_entry.php:527
 msgid ""
-"The item could not be updated because you are attempting to set the quantity "
-"ordered to less than 0, or the discount percent to more than 100."
+"The item could not be updated because you are attempting to set the quantity"
+" ordered to less than 0, or the discount percent to more than 100."
 msgstr ""
 
 #: sales/sales_order_entry.php:531
@@ -14715,8 +14749,8 @@ msgstr ""
 
 #: sales/sales_order_entry.php:538
 msgid ""
-"You attempting to make the quantity ordered a quantity less than has already "
-"been delivered. The quantity delivered cannot be modified retrospectively."
+"You attempting to make the quantity ordered a quantity less than has already"
+" been delivered. The quantity delivered cannot be modified retrospectively."
 msgstr ""
 
 #: sales/sales_order_entry.php:556
@@ -14873,10 +14907,8 @@ msgstr ""
 
 #: sales/includes/db/custalloc_db.inc:386
 msgid ""
-"Unsuspected overallocation happened due to sparse credit notes exists for "
-"this invoice.\n"
-" Check all credit notes allocated to this invoice for summarized freight "
-"charges."
+"Unsuspected overallocation happened due to sparse credit notes exists for this invoice.\n"
+" Check all credit notes allocated to this invoice for summarized freight charges."
 msgstr ""
 
 #: sales/includes/db/recurrent_invoices_db.inc:158
@@ -14932,8 +14964,8 @@ msgstr ""
 #: sales/includes/ui/sales_order_ui.inc:288
 #: sales/manage/customer_branches.php:307
 msgid ""
-"The selected customer does not have any branches. Please create at least one "
-"branch."
+"The selected customer does not have any branches. Please create at least one"
+" branch."
 msgstr ""
 
 #: sales/includes/ui/sales_order_ui.inc:312
@@ -15193,8 +15225,8 @@ msgstr ""
 
 #: sales/manage/credit_status.php:63
 msgid ""
-"Cannot delete this credit status because customer accounts have been created "
-"referring to it."
+"Cannot delete this credit status because customer accounts have been created"
+" referring to it."
 msgstr ""
 
 #: sales/manage/credit_status.php:79
@@ -15237,8 +15269,8 @@ msgstr ""
 
 #: sales/manage/customers.php:71
 msgid ""
-"The discount percentage must be numeric and is expected to be less than 100% "
-"and greater than or equal to 0."
+"The discount percentage must be numeric and is expected to be less than 100%"
+" and greater than or equal to 0."
 msgstr ""
 
 #: sales/manage/customers.php:99
@@ -15251,14 +15283,14 @@ msgstr ""
 
 #: sales/manage/customers.php:134
 msgid ""
-"A default Branch has been automatically created, please check default Branch "
-"values by using link below."
+"A default Branch has been automatically created, please check default Branch"
+" values by using link below."
 msgstr ""
 
 #: sales/manage/customers.php:157
 msgid ""
-"This customer cannot be deleted because there are transactions that refer to "
-"it."
+"This customer cannot be deleted because there are transactions that refer to"
+" it."
 msgstr ""
 
 #: sales/manage/customers.php:164
@@ -15399,8 +15431,8 @@ msgstr ""
 
 #: sales/manage/customer_branches.php:35
 msgid ""
-"There are no shipping companies defined in the system. At least one shipping "
-"company is required before proceeding."
+"There are no shipping companies defined in the system. At least one shipping"
+" company is required before proceeding."
 msgstr ""
 
 #: sales/manage/customer_branches.php:67
@@ -15421,14 +15453,14 @@ msgstr ""
 
 #: sales/manage/customer_branches.php:124
 msgid ""
-"Cannot delete this branch because customer transactions have been created to "
-"this branch."
+"Cannot delete this branch because customer transactions have been created to"
+" this branch."
 msgstr ""
 
 #: sales/manage/customer_branches.php:131
 msgid ""
-"Cannot delete this branch because sales orders exist for it. Purge old sales "
-"orders first."
+"Cannot delete this branch because sales orders exist for it. Purge old sales"
+" orders first."
 msgstr ""
 
 #: sales/manage/customer_branches.php:136
@@ -15491,8 +15523,7 @@ msgstr ""
 #: sales/manage/recurrent_invoices.php:26
 msgid ""
 "There is no template order in database.\n"
-"\tYou have to create at least one sales order marked as template to be able "
-"to define recurrent invoices."
+"\tYou have to create at least one sales order marked as template to be able to define recurrent invoices."
 msgstr ""
 
 #: sales/manage/recurrent_invoices.php:40
@@ -15738,8 +15769,8 @@ msgstr ""
 
 #: sales/manage/sales_types.php:71
 msgid ""
-"Cannot delete this sale type because customer transactions have been created "
-"using this sales type."
+"Cannot delete this sale type because customer transactions have been created"
+" using this sales type."
 msgstr ""
 
 #: sales/manage/sales_types.php:78
@@ -15992,8 +16023,8 @@ msgstr ""
 
 #: sql/alter2.2.php:221
 msgid ""
-"Cannot upgrade extensions system: file /modules/installed_modules.php is not "
-"writeable"
+"Cannot upgrade extensions system: file /modules/installed_modules.php is not"
+" writeable"
 msgstr ""
 
 #: sql/alter2.3.php:21
@@ -16178,8 +16209,8 @@ msgstr ""
 
 #: taxes/tax_types.php:112
 msgid ""
-"To avoid problems with manual journal entry all tax types should have unique "
-"Sales/Purchasing GL accounts."
+"To avoid problems with manual journal entry all tax types should have unique"
+" Sales/Purchasing GL accounts."
 msgstr ""
 
 #: taxes/tax_types.php:115
