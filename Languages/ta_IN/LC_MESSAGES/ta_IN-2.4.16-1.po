@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 09:35+0100\n"
-"PO-Revision-Date: 2023-04-02 10:30+0530\n"
+"POT-Creation-Date: 2023-05-03 10:56+0200\n"
+"PO-Revision-Date: 2023-05-23 12:26+0530\n"
 "Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2023\n"
 "Language-Team: Tamil (India) (https://www.transifex.com/gnuacademy/teams/55037/ta_IN/)\n"
 "MIME-Version: 1.0\n"
@@ -54,11 +54,13 @@ msgstr "புதிய கடவுச்சொல்லை கேட்க"
 
 #: access/login.php:45
 msgid "Too many failed login attempts.<br>Please wait a while or try later."
-msgstr "பல முறை முயற்சித்த.<br>ஒரு காத்திருக்கவும் அல்லது பின்னர் முயற்சிக்கவும்."
+msgstr ""
+"பல முறை முயற்சித்த.<br>ஒரு காத்திருக்கவும் அல்லது பின்னர் முயற்சிக்கவும்."
 
 #: access/login.php:47
 msgid "Invalid password or username. Please, try again."
-msgstr "தவறான கடவுச்சொல் அல்லது பயனர்பெயர். தயவுசெய்து மீண்டும் முயற்சி செய்க."
+msgstr ""
+"தவறான கடவுச்சொல் அல்லது பயனர்பெயர். தயவுசெய்து மீண்டும் முயற்சி செய்க."
 
 #: access/login.php:57 access/login.php:90
 msgid "Authorization timeout"
@@ -83,7 +85,7 @@ msgstr "கடவுச்சொல்:"
 #: access/login.php:116 access/login.php:122 access/password_reset.php:69
 #: access/password_reset.php:75 admin/create_coy.php:247
 #: admin/create_coy.php:327 admin/inst_upgrade.php:63
-#: includes/sysnames.inc:210
+#: includes/sysnames.inc:212
 msgid "Company"
 msgstr "நிறுவனம்"
 
@@ -129,11 +131,11 @@ msgstr "மின்னஞ்சல்"
 msgid "Send password -->"
 msgstr "கடவுச்சொல்லை அனுப்பு -->"
 
-#: admin/attachments.php:71
+#: admin/attachments.php:72
 msgid "Attach Documents"
 msgstr "ஆவணங்களை இணைக்கவும்"
 
-#: admin/attachments.php:85 admin/db/voiding_db.inc:28
+#: admin/attachments.php:88 admin/db/voiding_db.inc:28
 #: admin/db/voiding_db.inc:40 admin/db/voiding_db.inc:53
 #: admin/db/voiding_db.inc:68 admin/db/voiding_db.inc:74
 #: admin/db/voiding_db.inc:93 admin/db/voiding_db.inc:100
@@ -141,36 +143,40 @@ msgstr "ஆவணங்களை இணைக்கவும்"
 msgid "Selected transaction does not exists."
 msgstr "தேர்ந்தெடுக்கப்பட்ட பரிமாற்றத்தில் உள்ளது இல்லை."
 
-#: admin/attachments.php:88
+#: admin/attachments.php:91
 msgid "Only graphics,pdf,doc and odt files are supported."
-msgstr "கிராபிக்ஸ், PDF, DOC மற்றும் ODT கோப்புகளை மட்டுமே ஆதரிக்கப்படுகின்றன."
+msgstr ""
+"கிராபிக்ஸ், PDF, DOC மற்றும் ODT கோப்புகளை மட்டுமே ஆதரிக்கப்படுகின்றன."
 
-#: admin/attachments.php:90 admin/attachments.php:95
+#: admin/attachments.php:93 admin/attachments.php:98
 msgid "Select attachment file."
 msgstr "தேர்ந்தெடு இணைப்பு கோப்பு."
 
-#: admin/attachments.php:93 admin/company_preferences.php:74
-#: inventory/manage/items.php:129
+#: admin/attachments.php:96 admin/company_preferences.php:74
+#: inventory/manage/items.php:130
 msgid "The file size is over the maximum allowed."
 msgstr "கோப்பு அளவு அதிகபட்ச அனுமதி விட பெரியது."
 
-#: admin/attachments.php:97
-msgid "File name exceeds maximum of 60 chars. Please change filename and try again."
-msgstr "கோப்பு பெயர் அதிகபட்சம் 60 எழுத்துகள் அதிகரிக்கிறது. தயவுசெய்து கோப்பு பெயரை மாற்றவும் மீண்டும் முயற்சிக்கவும்."
+#: admin/attachments.php:100
+msgid ""
+"File name exceeds maximum of 60 chars. Please change filename and try again."
+msgstr ""
+"கோப்பு பெயர் அதிகபட்சம் 60 எழுத்துகள் அதிகரிக்கிறது. தயவுசெய்து கோப்பு பெயரை"
+" மாற்றவும் மீண்டும் முயற்சிக்கவும்."
 
-#: admin/attachments.php:136
+#: admin/attachments.php:139
 msgid "Attachment has been inserted."
 msgstr "இணைப்பு சேர்க்கப்பட்டது."
 
-#: admin/attachments.php:142
+#: admin/attachments.php:145
 msgid "Attachment has been updated."
 msgstr "இணைப்பு மேம்படுத்தப்பட்டது."
 
-#: admin/attachments.php:157
+#: admin/attachments.php:160
 msgid "Attachment has been deleted."
 msgstr "இணைப்பு நீக்கப்பட்டுள்ளது."
 
-#: admin/attachments.php:179 admin/view_print_transaction.php:72
+#: admin/attachments.php:182 admin/view_print_transaction.php:72
 #: gl/inquiry/journal_inquiry.php:47
 #: manufacturing/work_order_add_finished.php:191
 #: manufacturing/work_order_costs.php:136
@@ -181,7 +187,7 @@ msgstr "இணைப்பு நீக்கப்பட்டுள்ளத�
 msgid "Type:"
 msgstr "வகை:"
 
-#: admin/attachments.php:184 sales/allocations/customer_allocation_main.php:32
+#: admin/attachments.php:187 sales/allocations/customer_allocation_main.php:32
 #: sales/inquiry/customer_allocation_inquiry.php:42
 #: sales/inquiry/customer_inquiry.php:159
 #: sales/inquiry/sales_deliveries_view.php:115
@@ -190,14 +196,18 @@ msgstr "வகை:"
 msgid "Select a customer: "
 msgstr "வாடிக்கையாளரைத் தேர்ந்தெடுக்கவும்: "
 
-#: admin/attachments.php:186 purchasing/inquiry/po_search.php:76
+#: admin/attachments.php:189 purchasing/inquiry/po_search.php:76
 #: purchasing/inquiry/po_search_completed.php:104
 #: purchasing/inquiry/supplier_allocation_inquiry.php:48
 #: purchasing/manage/suppliers.php:302
 msgid "Select a supplier: "
 msgstr "சப்ளையர் ஒன்றைத் தேர்ந்தெடுக்கவும்: "
 
-#: admin/attachments.php:201 admin/create_coy.php:269
+#: admin/attachments.php:191 admin/attachments.php:193
+msgid "Select an Item: "
+msgstr "ஒரு பொருளை தேர்ந்தெடு:"
+
+#: admin/attachments.php:212 admin/create_coy.php:269
 #: admin/crm_categories.php:106 admin/fiscalyears.php:164
 #: admin/inst_lang.php:100 admin/payment_terms.php:142 admin/printers.php:96
 #: admin/shipping_companies.php:106 admin/tags.php:140 admin/users.php:155
@@ -233,15 +243,15 @@ msgstr "சப்ளையர் ஒன்றைத் தேர்ந்தெ�
 msgid "Edit"
 msgstr "திருத்து"
 
-#: admin/attachments.php:206 gl/inquiry/journal_inquiry.php:122
+#: admin/attachments.php:217 gl/inquiry/journal_inquiry.php:122
 msgid "View"
 msgstr "காண்க"
 
-#: admin/attachments.php:211 includes/ui/attachment.inc:96
+#: admin/attachments.php:222 includes/ui/attachment.inc:96
 msgid "Download"
 msgstr "பதிவிறக்க"
 
-#: admin/attachments.php:216 admin/create_coy.php:272
+#: admin/attachments.php:227 admin/create_coy.php:272
 #: admin/crm_categories.php:110 admin/fiscalyears.php:166
 #: admin/inst_chart.php:90 admin/inst_lang.php:109 admin/inst_module.php:135
 #: admin/inst_theme.php:87 admin/payment_terms.php:143 admin/printers.php:97
@@ -276,7 +286,7 @@ msgstr "பதிவிறக்க"
 msgid "Delete"
 msgstr "நீக்குக"
 
-#: admin/attachments.php:223 admin/view_print_transaction.php:126
+#: admin/attachments.php:235 admin/view_print_transaction.php:126
 #: admin/void_transaction.php:186 dimensions/inquiry/search_dimensions.php:131
 #: dimensions/view/view_dimension.php:55
 #: fixed_assets/inquiry/stock_inquiry.php:165
@@ -295,10 +305,10 @@ msgstr "நீக்குக"
 #: purchasing/inquiry/po_search.php:117
 #: purchasing/inquiry/po_search_completed.php:119
 #: purchasing/inquiry/supplier_allocation_inquiry.php:137
-#: purchasing/inquiry/supplier_inquiry.php:175 purchasing/view/view_po.php:118
-#: purchasing/view/view_po.php:143 reporting/rep101.php:137
+#: purchasing/inquiry/supplier_inquiry.php:177 purchasing/view/view_po.php:117
+#: purchasing/view/view_po.php:144 reporting/rep101.php:137
 #: reporting/rep201.php:115 reporting/rep203.php:88 reporting/rep306.php:138
-#: reporting/rep310.php:139 reporting/rep601.php:81 reporting/rep602.php:80
+#: reporting/rep310.php:139 reporting/rep601.php:80 reporting/rep602.php:81
 #: reporting/rep704.php:79 reporting/rep704.php:87 reporting/rep704.php:95
 #: reporting/rep710.php:78 reporting/includes/doctext.inc:166
 #: reporting/includes/doctext.inc:209 reporting/includes/doctext.inc:247
@@ -309,56 +319,33 @@ msgstr "நீக்குக"
 msgid "#"
 msgstr "எண்"
 
-#: admin/attachments.php:224 admin/attachments.php:276
-#: admin/crm_categories.php:88 admin/payment_terms.php:127
-#: admin/printers.php:84 admin/print_profiles.php:147
-#: admin/view/view_package.php:32 fixed_assets/fixed_asset_classes.php:89
-#: fixed_assets/inquiry/stock_inquiry.php:168 gl/inquiry/accounts_list.php:39
-#: gl/inquiry/accounts_list.php:52 gl/inquiry/tax_inquiry.php:80
-#: gl/manage/gl_quick_entries.php:190 gl/manage/gl_quick_entries.php:230
-#: includes/dashboard.inc:1051 includes/dashboard.inc:1145
-#: inventory/inquiry/stock_list.php:41 inventory/inquiry/stock_list.php:53
-#: inventory/manage/item_codes.php:131 inventory/manage/item_units.php:94
-#: inventory/manage/sales_kits.php:36 inventory/view/view_adjustment.php:54
-#: inventory/view/view_transfer.php:50
-#: manufacturing/includes/manufacturing_ui.inc:28
-#: manufacturing/manage/bom_edit.php:43 purchasing/po_receive_items.php:62
-#: purchasing/includes/ui/invoice_ui.inc:501
-#: purchasing/includes/ui/invoice_ui.inc:513 reporting/rep104.php:109
-#: reporting/rep105.php:115 reporting/rep204.php:84 reporting/rep303.php:223
-#: reporting/rep303.php:229 reporting/rep304.php:127 reporting/rep305.php:106
-#: reporting/rep306.php:138 reporting/rep307.php:114 reporting/rep308.php:224
-#: reporting/rep309.php:99 reporting/rep310.php:139 reporting/rep401.php:71
-#: sales/create_recurrent_invoices.php:209
-#: sales/inquiry/sales_orders_view.php:305
-#: sales/inquiry/sales_orders_view.php:309 sales/manage/credit_status.php:97
-#: sales/manage/recurrent_invoices.php:128 taxes/tax_groups.php:126
-#: taxes/tax_types.php:115
-msgid "Description"
-msgstr "விரித்துரைத்தல்"
+#: admin/attachments.php:236 admin/attachments.php:288
+#: includes/ui/attachment.inc:84 includes/ui/attachment.inc:141
+msgid "Doc Title"
+msgstr "ஆவண தலைப்பு"
 
-#: admin/attachments.php:225 admin/backups.php:74 admin/backups.php:160
+#: admin/attachments.php:237 admin/backups.php:74 admin/backups.php:160
 #: includes/ui/attachment.inc:84
 msgid "Filename"
 msgstr "கோப்பு பெயர்"
 
-#: admin/attachments.php:226 includes/ui/attachment.inc:84
+#: admin/attachments.php:238 includes/ui/attachment.inc:84
 msgid "Size"
 msgstr "அளவு"
 
-#: admin/attachments.php:227 includes/ui/attachment.inc:84
+#: admin/attachments.php:239 includes/ui/attachment.inc:84
 msgid "Filetype"
 msgstr "கோப்புவகையும்"
 
-#: admin/attachments.php:228
-msgid "Date Uploaded"
-msgstr "பதிவேற்றிய தேதி"
+#: admin/attachments.php:240 includes/ui/attachment.inc:84
+msgid "Doc Date"
+msgstr "ஆவண தேதி"
 
-#: admin/attachments.php:268 admin/attachments.php:274
+#: admin/attachments.php:280 admin/attachments.php:286
 msgid "Transaction #"
 msgstr "பரிவர்த்தனை #"
 
-#: admin/attachments.php:277
+#: admin/attachments.php:289
 msgid "Attached File"
 msgstr "இணைக்கப்பட்டுள்ள கோப்பு"
 
@@ -429,7 +416,9 @@ msgstr "*.sql காப்புப் பிரதிகளை மட்டு�
 
 #: admin/backups.php:178
 msgid "Filename contains forbidden chars. Please rename file and try again."
-msgstr "கோப்பு பெயரில் தடை செய்யப்பட்ட எழுத்துகள் உள்ளன. கோப்பு மறுபெயரிட்டு மீண்டும் முயற்சிக்கவும்."
+msgstr ""
+"கோப்பு பெயரில் தடை செய்யப்பட்ட எழுத்துகள் உள்ளன. கோப்பு மறுபெயரிட்டு "
+"மீண்டும் முயற்சிக்கவும்."
 
 #: admin/backups.php:181
 msgid "File uploaded to backup directory"
@@ -593,20 +582,26 @@ msgid "Error uploading logo file."
 msgstr "லோகோ கோப்பைப் பதிவேற்றுவதில் பிழை."
 
 #: admin/company_preferences.php:92
-msgid "Only jpg and png files are supported - a file extension of .jpg or .png is expected"
-msgstr "Jpg and png கோப்புகள் மட்டுமே ஆதரிக்கப்படுகின்றன - .jpg அல்லது .png இன் கோப்பு நீட்டிப்பு எதிர்பார்க்கப்படுகிறது"
+msgid ""
+"Only jpg and png files are supported - a file extension of .jpg or .png is "
+"expected"
+msgstr ""
+"Jpg and png கோப்புகள் மட்டுமே ஆதரிக்கப்படுகின்றன - .jpg அல்லது .png இன் "
+"கோப்பு நீட்டிப்பு எதிர்பார்க்கப்படுகிறது"
 
-#: admin/company_preferences.php:97 inventory/manage/items.php:155
-msgid "The file size is over the maximum allowed. The maximum size allowed in KB is"
-msgstr "கோப்பு அளவு அதிகபட்ச அனுமதி உள்ளது. KB இல் அதிகபட்ச அளவு அனுமதிக்கப்படுகிறது"
+#: admin/company_preferences.php:97 inventory/manage/items.php:156
+msgid ""
+"The file size is over the maximum allowed. The maximum size allowed in KB is"
+msgstr ""
+"கோப்பு அளவு அதிகபட்ச அனுமதி உள்ளது. KB இல் அதிகபட்ச அளவு அனுமதிக்கப்படுகிறது"
 
-#: admin/company_preferences.php:102 inventory/manage/items.php:145
-#: inventory/manage/items.php:160
+#: admin/company_preferences.php:102 inventory/manage/items.php:146
+#: inventory/manage/items.php:161
 msgid "Only graphics files can be uploaded"
 msgstr "மட்டுமே கிராபிக்ஸ் கோப்புகளை பதிவேற்ற முடியும்"
 
 #: admin/company_preferences.php:110 admin/company_preferences.php:139
-#: inventory/manage/items.php:165
+#: inventory/manage/items.php:166
 msgid "The existing image could not be removed"
 msgstr "இருக்கும் படத்தை அகற்ற முடியவில்லை"
 
@@ -833,7 +828,7 @@ msgstr "நாட்கள்."
 #: admin/inst_module.php:189 admin/inst_theme.php:81
 #: dimensions/dimension_entry.php:283 gl/gl_bank.php:415 gl/gl_budget.php:134
 #: gl/includes/ui/gl_bank_ui.inc:265 gl/includes/ui/gl_journal_ui.inc:276
-#: gl/manage/gl_quick_entries.php:60 includes/ui/attachment.inc:169
+#: gl/manage/gl_quick_entries.php:60 includes/ui/attachment.inc:173
 #: includes/ui/class.crud_view.inc:298 includes/ui/db_pager_view.inc:180
 #: includes/ui/simple_crud_class.inc:56 includes/ui/simple_crud_class.inc:225
 #: includes/ui/ui_input.inc:227 includes/ui/ui_input.inc:967
@@ -843,11 +838,11 @@ msgstr "நாட்கள்."
 #: inventory/includes/stock_transfers_ui.inc:150
 #: inventory/manage/sales_kits.php:208 manufacturing/work_order_entry.php:437
 #: manufacturing/includes/work_order_issue_ui.inc:132
-#: purchasing/po_receive_items.php:325
+#: purchasing/po_receive_items.php:328
 #: purchasing/includes/ui/invoice_ui.inc:188
 #: purchasing/includes/ui/po_ui.inc:287 purchasing/includes/ui/po_ui.inc:445
 #: sales/credit_note_entry.php:302 sales/customer_credit_invoice.php:376
-#: sales/customer_delivery.php:528 sales/customer_invoice.php:663
+#: sales/customer_delivery.php:529 sales/customer_invoice.php:663
 #: sales/includes/ui/sales_credit_ui.inc:288
 #: sales/includes/ui/sales_order_ui.inc:231
 #: sales/includes/ui/sales_order_ui.inc:554
@@ -869,11 +864,16 @@ msgstr "தரவுத்தள போர்ட் எண் அல்லது
 
 #: admin/create_coy.php:59
 msgid "This database settings are already used by another company."
-msgstr "இந்த தரவுத்தள அமைப்புகள் ஏற்கனவே மற்றொரு நிறுவனத்தால் பயன்படுத்தப்படுகின்றன."
+msgstr ""
+"இந்த தரவுத்தள அமைப்புகள் ஏற்கனவே மற்றொரு நிறுவனத்தால் பயன்படுத்தப்படுகின்றன."
 
 #: admin/create_coy.php:64
-msgid "You cannot have table set without prefix together with prefixed sets in the same database."
-msgstr "அதே தரவுத்தளத்தில் prefixed செட் உடன் முன்னொட்டு இல்லாமல் அட்டவணை அமைக்க  முடியாது."
+msgid ""
+"You cannot have table set without prefix together with prefixed sets in the "
+"same database."
+msgstr ""
+"அதே தரவுத்தளத்தில் prefixed செட் உடன் முன்னொட்டு இல்லாமல் அட்டவணை அமைக்க "
+"முடியாது."
 
 #: admin/create_coy.php:124
 msgid "Error creating Database: "
@@ -901,8 +901,11 @@ msgstr "கட்டமைப்பு கோப்பு "
 
 #: admin/create_coy.php:152 admin/create_coy.php:188 admin/create_coy.php:220
 #: admin/db/maintenance_db.inc:253
-msgid " is not writable. Change its permissions so it is, then re-run the operation."
-msgstr " எழுத முடியாது. அதன் அனுமதியை மாற்றவும், அது மீண்டும் இயக்கத்தை இயக்கவும்."
+msgid ""
+" is not writable. Change its permissions so it is, then re-run the "
+"operation."
+msgstr ""
+" எழுத முடியாது. அதன் அனுமதியை மாற்றவும், அது மீண்டும் இயக்கத்தை இயக்கவும்."
 
 #: admin/create_coy.php:164
 msgid "New company has been created."
@@ -913,8 +916,12 @@ msgid "Company has been updated."
 msgstr "நிறுவனம் புதுப்பிக்கப்பட்டது."
 
 #: admin/create_coy.php:181
-msgid "Broken company subdirectories system. You have to remove this company manually."
-msgstr "உடைந்த நிறுவனம் துணை அடைவு அமைப்பு. நீங்கள் இந்த நிறுவனத்தை கைமுறையாக அகற்ற  வேண்டும்."
+msgid ""
+"Broken company subdirectories system. You have to remove this company "
+"manually."
+msgstr ""
+"உடைந்த நிறுவனம் துணை அடைவு அமைப்பு. நீங்கள் இந்த நிறுவனத்தை கைமுறையாக அகற்ற "
+"வேண்டும்."
 
 #: admin/create_coy.php:197
 msgid "Cannot rename subdirectory to temporary name."
@@ -1006,12 +1013,18 @@ msgid "The marked company is the current company which cannot be deleted."
 msgstr "குறிக்கப்பட்ட நிறுவனம் தற்போதைய நிறுவனமாக நீக்கப்பட முடியாதது."
 
 #: admin/create_coy.php:283
-msgid "If no Admin Password is entered, the new Admin Password will be '<b>password</b>' by default "
-msgstr "நிர்வாகம் கடவுச்சொல் உள்ளிட்டால், புதிய நிர்வாகி கடவுச்சொல் இயல்புநிலையாக '<b> கடவுச்சொல் </ b>' ஆக இருக்கும் "
+msgid ""
+"If no Admin Password is entered, the new Admin Password will be "
+"'<b>password</b>' by default "
+msgstr ""
+"நிர்வாகம் கடவுச்சொல் உள்ளிட்டால், புதிய நிர்வாகி கடவுச்சொல் இயல்புநிலையாக "
+"'<b> கடவுச்சொல் </ b>' ஆக இருக்கும் "
 
 #: admin/create_coy.php:284
 msgid "Set Only Port value if you cannot use the default port 3306."
-msgstr "3306 முன்னிருப்பு துறைமுகத்தை நீங்கள் பயன்படுத்த முடியாவிட்டால் மட்டுமே, போர்ட் மதிப்பு அமைக்கவும்."
+msgstr ""
+"3306 முன்னிருப்பு துறைமுகத்தை நீங்கள் பயன்படுத்த முடியாவிட்டால் மட்டுமே, "
+"போர்ட் மதிப்பு அமைக்கவும்."
 
 #: admin/create_coy.php:331 admin/create_coy.php:342 admin/printers.php:84
 msgid "Host"
@@ -1033,7 +1046,7 @@ msgstr "தரவுத்தள கூட்டுதல்:"
 #: admin/inst_lang.php:87 admin/inst_lang.php:90 admin/inst_module.php:118
 #: admin/inst_theme.php:76 admin/inst_theme.php:78
 #: gl/manage/gl_account_types.php:195 includes/ui/allocation_cart.inc:337
-#: inventory/manage/items.php:467
+#: inventory/manage/items.php:468
 msgid "None"
 msgstr "எதுவும் இல்லை"
 
@@ -1085,6 +1098,33 @@ msgstr "வகை துணை வகை"
 #: sales/inquiry/customers_list.php:54 sales/manage/customer_branches.php:283
 msgid "Short Name"
 msgstr "குறுகிய பெயர்"
+
+#: admin/crm_categories.php:88 admin/payment_terms.php:127
+#: admin/printers.php:84 admin/print_profiles.php:147
+#: admin/view/view_package.php:32 fixed_assets/fixed_asset_classes.php:89
+#: fixed_assets/inquiry/stock_inquiry.php:168 gl/inquiry/accounts_list.php:39
+#: gl/inquiry/accounts_list.php:52 gl/inquiry/tax_inquiry.php:80
+#: gl/manage/gl_quick_entries.php:190 gl/manage/gl_quick_entries.php:230
+#: includes/dashboard.inc:1051 includes/dashboard.inc:1145
+#: inventory/inquiry/stock_list.php:41 inventory/inquiry/stock_list.php:53
+#: inventory/manage/item_codes.php:131 inventory/manage/item_units.php:94
+#: inventory/manage/sales_kits.php:36 inventory/view/view_adjustment.php:54
+#: inventory/view/view_transfer.php:50
+#: manufacturing/includes/manufacturing_ui.inc:28
+#: manufacturing/manage/bom_edit.php:43 purchasing/po_receive_items.php:65
+#: purchasing/includes/ui/invoice_ui.inc:501
+#: purchasing/includes/ui/invoice_ui.inc:513 reporting/rep104.php:109
+#: reporting/rep105.php:115 reporting/rep204.php:84 reporting/rep303.php:223
+#: reporting/rep303.php:229 reporting/rep304.php:127 reporting/rep305.php:106
+#: reporting/rep306.php:138 reporting/rep307.php:114 reporting/rep308.php:224
+#: reporting/rep309.php:99 reporting/rep310.php:139 reporting/rep401.php:71
+#: sales/create_recurrent_invoices.php:209
+#: sales/inquiry/sales_orders_view.php:305
+#: sales/inquiry/sales_orders_view.php:309 sales/manage/credit_status.php:97
+#: sales/manage/recurrent_invoices.php:128 taxes/tax_groups.php:126
+#: taxes/tax_types.php:115
+msgid "Description"
+msgstr "விரித்துரைத்தல்"
 
 #: admin/crm_categories.php:135 admin/crm_categories.php:139
 msgid "Contact Category Type:"
@@ -1206,7 +1246,7 @@ msgid "Portrait"
 msgstr "ஓவிய"
 
 #: admin/display_prefs.php:117 applications/setup.php:42
-#: includes/sysnames.inc:101
+#: includes/sysnames.inc:103
 msgid "Miscellaneous"
 msgstr "இதர"
 
@@ -1527,14 +1567,14 @@ msgstr "எண்"
 #: purchasing/includes/ui/po_ui.inc:302 purchasing/inquiry/po_search.php:118
 #: purchasing/inquiry/po_search_completed.php:120
 #: purchasing/inquiry/supplier_allocation_inquiry.php:138
-#: purchasing/inquiry/supplier_inquiry.php:176 purchasing/view/view_po.php:118
+#: purchasing/inquiry/supplier_inquiry.php:178 purchasing/view/view_po.php:117
 #: purchasing/view/view_supp_credit.php:43
 #: purchasing/view/view_supp_invoice.php:50
 #: purchasing/view/view_supp_payment.php:76 reporting/rep501.php:87
-#: reporting/rep601.php:81 reporting/rep602.php:80 reporting/rep702.php:53
+#: reporting/rep601.php:80 reporting/rep602.php:81 reporting/rep702.php:53
 #: reporting/includes/doctext.inc:222 sales/customer_credit_invoice.php:241
-#: sales/customer_credit_invoice.php:246 sales/customer_delivery.php:334
-#: sales/customer_delivery.php:339 sales/customer_invoice.php:446
+#: sales/customer_credit_invoice.php:246 sales/customer_delivery.php:335
+#: sales/customer_delivery.php:340 sales/customer_invoice.php:446
 #: sales/customer_invoice.php:451
 #: sales/allocations/customer_allocation_main.php:94
 #: sales/includes/ui/sales_credit_ui.inc:81
@@ -1581,7 +1621,7 @@ msgid "Receivable Account:"
 msgstr "பெறத்தக்க கணக்கு:"
 
 #: admin/gl_setup.php:236 admin/gl_setup.php:281
-#: inventory/manage/items.php:489 inventory/manage/item_categories.php:228
+#: inventory/manage/items.php:490 inventory/manage/item_categories.php:228
 #: sales/manage/customer_branches.php:242
 msgid "Sales Account:"
 msgstr "விற்பனை கணக்கு:"
@@ -1670,23 +1710,23 @@ msgstr "எதிர்மறை விலைகளை அனுமதி:"
 msgid "Items Defaults"
 msgstr "விடயங்கள் இயல்புநிலை"
 
-#: admin/gl_setup.php:283 inventory/manage/items.php:498
+#: admin/gl_setup.php:283 inventory/manage/items.php:499
 #: inventory/manage/item_categories.php:244
 msgid "Inventory Account:"
 msgstr "சரக்குக் கணக்கு:"
 
-#: admin/gl_setup.php:285 inventory/manage/items.php:499
-#: inventory/manage/items.php:504 inventory/manage/item_categories.php:232
+#: admin/gl_setup.php:285 inventory/manage/items.php:500
+#: inventory/manage/items.php:505 inventory/manage/item_categories.php:232
 #: inventory/manage/item_categories.php:246
 msgid "C.O.G.S. Account:"
 msgstr "C.O.G.S. கணக்கு:"
 
-#: admin/gl_setup.php:287 inventory/manage/items.php:500
+#: admin/gl_setup.php:287 inventory/manage/items.php:501
 #: inventory/manage/item_categories.php:247
 msgid "Inventory Adjustments Account:"
 msgstr "சரக்கு சரிசெய்தல் கணக்கு:"
 
-#: admin/gl_setup.php:289 inventory/manage/items.php:511
+#: admin/gl_setup.php:289 inventory/manage/items.php:512
 msgid "WIP Account:"
 msgstr "WIP கணக்கு:"
 
@@ -1755,7 +1795,7 @@ msgstr "என்கோடிங்"
 
 #: admin/inst_chart.php:79 admin/inst_chart.php:81 admin/inst_lang.php:88
 #: admin/inst_module.php:119 admin/inst_module.php:120 admin/inst_theme.php:77
-#: includes/sysnames.inc:209
+#: includes/sysnames.inc:211
 msgid "Unknown"
 msgstr "தெரியாத"
 
@@ -2064,9 +2104,9 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட கட்ட�
 #: manufacturing/includes/manufacturing_ui.inc:295
 #: manufacturing/includes/manufacturing_ui.inc:346
 #: purchasing/inquiry/supplier_allocation_inquiry.php:136
-#: purchasing/inquiry/supplier_inquiry.php:174 reporting/rep102.php:127
+#: purchasing/inquiry/supplier_inquiry.php:176 reporting/rep102.php:127
 #: reporting/rep202.php:138 reporting/rep402.php:136 reporting/rep501.php:87
-#: reporting/rep601.php:81 reporting/rep602.php:80 reporting/rep702.php:60
+#: reporting/rep601.php:80 reporting/rep602.php:81 reporting/rep702.php:60
 #: reporting/rep704.php:79 reporting/rep704.php:87 reporting/rep704.php:95
 #: reporting/rep709.php:113 reporting/rep710.php:78 reporting/rep710.php:86
 #: reporting/reports_main.php:386 reporting/reports_main.php:551
@@ -2273,7 +2313,7 @@ msgstr "ரோல்:"
 
 #: admin/security_roles.php:177 fixed_assets/inquiry/stock_inquiry.php:40
 #: gl/manage/gl_accounts.php:208 inventory/inquiry/stock_movements.php:67
-#: inventory/manage/items.php:565 purchasing/manage/suppliers.php:304
+#: inventory/manage/items.php:566 purchasing/manage/suppliers.php:304
 #: sales/manage/customers.php:333
 msgid "Show inactive:"
 msgstr "செயலற்றவை காட்டு:"
@@ -2316,12 +2356,12 @@ msgstr "இந்த பங்கை நீக்கு"
 
 #: admin/security_roles.php:244 admin/void_transaction.php:253
 #: gl/includes/ui/gl_bank_ui.inc:267 gl/includes/ui/gl_journal_ui.inc:278
-#: gl/manage/gl_quick_entries.php:61 includes/ui/attachment.inc:171
+#: gl/manage/gl_quick_entries.php:61 includes/ui/attachment.inc:175
 #: includes/ui/class.crud_view.inc:301 includes/ui/simple_crud_class.inc:58
 #: includes/ui/simple_crud_class.inc:229 includes/ui/ui_controls.inc:645
 #: includes/ui/ui_input.inc:230 inventory/includes/item_adjustments_ui.inc:214
 #: inventory/includes/stock_transfers_ui.inc:151
-#: inventory/manage/items.php:548
+#: inventory/manage/items.php:549
 #: manufacturing/includes/work_order_issue_ui.inc:134
 #: purchasing/includes/ui/po_ui.inc:447
 #: sales/create_recurrent_invoices.php:196
@@ -2330,12 +2370,12 @@ msgstr "இந்த பங்கை நீக்கு"
 msgid "Cancel"
 msgstr "ரத்து"
 
-#: admin/security_roles.php:244 inventory/manage/items.php:548
+#: admin/security_roles.php:244 inventory/manage/items.php:549
 msgid "Cancel Edition"
 msgstr "பதிப்பு ரத்து"
 
 #: admin/shipping_companies.php:15 sales/customer_credit_invoice.php:253
-#: sales/customer_delivery.php:357 sales/customer_invoice.php:471
+#: sales/customer_delivery.php:358 sales/customer_invoice.php:471
 #: sales/view/view_credit.php:74 sales/view/view_dispatch.php:92
 #: sales/view/view_invoice.php:95
 msgid "Shipping Company"
@@ -2392,7 +2432,7 @@ msgid "Address"
 msgstr "முகவரி"
 
 #: admin/shipping_companies.php:134 gl/includes/ui/gl_bank_ui.inc:57
-#: gl/manage/gl_account_types.php:193 inventory/manage/items.php:388
+#: gl/manage/gl_account_types.php:193 inventory/manage/items.php:389
 #: manufacturing/manage/work_centres.php:137
 msgid "Name:"
 msgstr "பெயர்:"
@@ -2582,7 +2622,7 @@ msgstr "#:"
 #: purchasing/inquiry/po_search_completed.php:108
 #: purchasing/inquiry/suppliers_list.php:42
 #: purchasing/inquiry/supplier_allocation_inquiry.php:57
-#: purchasing/inquiry/supplier_inquiry.php:147
+#: purchasing/inquiry/supplier_inquiry.php:149
 #: sales/inquiry/customers_list.php:42
 #: sales/inquiry/customer_allocation_inquiry.php:51
 #: sales/inquiry/customer_branches_list.php:38
@@ -2618,7 +2658,7 @@ msgstr ""
 #: gl/view/bank_transfer_view.php:86 gl/view/gl_deposit_view.php:71
 #: gl/view/gl_payment_view.php:69 includes/dashboard.inc:1011
 #: includes/dashboard.inc:1095 includes/ui/allocation_cart.inc:311
-#: includes/ui/attachment.inc:136 includes/ui/ui_view.inc:552
+#: includes/ui/attachment.inc:140 includes/ui/ui_view.inc:552
 #: inventory/inquiry/stock_movements.php:109
 #: inventory/view/view_adjustment.php:44 inventory/view/view_transfer.php:37
 #: manufacturing/search_work_orders.php:171
@@ -2636,15 +2676,15 @@ msgstr ""
 #: purchasing/includes/ui/invoice_ui.inc:115
 #: purchasing/includes/ui/po_ui.inc:316
 #: purchasing/inquiry/supplier_allocation_inquiry.php:141
-#: purchasing/inquiry/supplier_inquiry.php:179 purchasing/view/view_po.php:143
+#: purchasing/inquiry/supplier_inquiry.php:181 purchasing/view/view_po.php:144
 #: reporting/rep101.php:137 reporting/rep107.php:226 reporting/rep201.php:115
 #: reporting/rep306.php:138 reporting/rep310.php:139 reporting/rep402.php:136
-#: reporting/rep402.php:141 reporting/rep501.php:87 reporting/rep601.php:81
-#: reporting/rep602.php:80 reporting/rep704.php:79 reporting/rep704.php:87
+#: reporting/rep402.php:141 reporting/rep501.php:87 reporting/rep601.php:80
+#: reporting/rep602.php:81 reporting/rep704.php:79 reporting/rep704.php:87
 #: reporting/rep704.php:95 reporting/rep709.php:117 reporting/rep710.php:77
 #: reporting/includes/doctext.inc:166 reporting/includes/doctext.inc:209
 #: reporting/includes/doctext.inc:247 reporting/includes/header2.inc:135
-#: sales/customer_delivery.php:367 sales/customer_invoice.php:486
+#: sales/customer_delivery.php:368 sales/customer_invoice.php:486
 #: sales/allocations/customer_allocation_main.php:95
 #: sales/inquiry/customer_allocation_inquiry.php:151
 #: sales/inquiry/customer_inquiry.php:203 sales/view/view_credit.php:69
@@ -2698,7 +2738,7 @@ msgstr "வெயிட்டிங் தேதி:"
 #: manufacturing/work_order_add_finished.php:196
 #: manufacturing/work_order_costs.php:147
 #: manufacturing/work_order_entry.php:429
-#: manufacturing/work_order_release.php:102 purchasing/po_entry_items.php:486
+#: manufacturing/work_order_release.php:102 purchasing/po_entry_items.php:489
 #: purchasing/supplier_payment.php:351
 #: purchasing/includes/ui/invoice_ui.inc:192
 #: purchasing/includes/ui/po_ui.inc:474 sales/customer_invoice.php:659
@@ -2750,9 +2790,9 @@ msgstr ""
 #: gl/gl_journal.php:255 gl/manage/close_period.php:34
 #: gl/manage/exchange_rates.php:33 gl/manage/revaluate_currencies.php:45
 #: manufacturing/work_order_add_finished.php:89
-#: manufacturing/work_order_costs.php:80 purchasing/po_receive_items.php:174
+#: manufacturing/work_order_costs.php:80 purchasing/po_receive_items.php:177
 #: purchasing/supplier_payment.php:193 sales/customer_credit_invoice.php:90
-#: sales/sales_order_entry.php:373 sales/manage/recurrent_invoices.php:60
+#: sales/sales_order_entry.php:379 sales/manage/recurrent_invoices.php:60
 #: sales/manage/recurrent_invoices.php:66
 #: sales/manage/recurrent_invoices.php:71
 msgid "The entered date is invalid."
@@ -2764,14 +2804,14 @@ msgstr "உள்ளிட்ட தேதி செல்லாதது."
 #: inventory/transfers.php:115 manufacturing/work_order_add_finished.php:95
 #: manufacturing/work_order_costs.php:86
 #: manufacturing/work_order_entry.php:151
-#: manufacturing/work_order_issue.php:82 purchasing/po_entry_items.php:351
-#: purchasing/po_receive_items.php:179 purchasing/supplier_credit.php:197
+#: manufacturing/work_order_issue.php:82 purchasing/po_entry_items.php:354
+#: purchasing/po_receive_items.php:182 purchasing/supplier_credit.php:197
 #: purchasing/supplier_invoice.php:200 purchasing/supplier_payment.php:199
 #: sales/create_recurrent_invoices.php:92
 #: sales/create_recurrent_invoices.php:170 sales/credit_note_entry.php:175
-#: sales/customer_credit_invoice.php:94 sales/customer_delivery.php:164
+#: sales/customer_credit_invoice.php:94 sales/customer_delivery.php:166
 #: sales/customer_invoice.php:303 sales/customer_payments.php:164
-#: sales/sales_order_entry.php:378
+#: sales/sales_order_entry.php:384
 msgid ""
 "The entered date is out of fiscal year or is closed for further data entry."
 msgstr ""
@@ -2920,7 +2960,8 @@ msgstr ""
 "தொடர்புடைய பணி ஆர்டர்%s ஏற்கனவே மூடப்பட்டுவிட்டது என்பதால் "
 "தேர்ந்தெடுக்கப்பட்ட ஆவணம் ரத்து செய்யப்படாது."
 
-#: admin/db/voiding_db.inc:130 sales/includes/db/sales_invoice_db.inc:254
+#: admin/db/voiding_db.inc:130 purchasing/inquiry/supplier_inquiry.php:85
+#: sales/includes/db/sales_invoice_db.inc:254
 msgid "Voided."
 msgstr "வெளியேற்றப்பட்ட."
 
@@ -3421,7 +3462,7 @@ msgstr "சரக்கு மற்றும் இடங்கள்"
 msgid "&Units of Measure"
 msgstr "அளவீடுகளின் அலகுகள்"
 
-#: applications/inventory.php:45 inventory/manage/items.php:594
+#: applications/inventory.php:45 inventory/manage/items.php:596
 msgid "&Reorder Levels"
 msgstr "நிலைகள் மற்றும் மறுவரிசைப்படுத்துக"
 
@@ -3437,7 +3478,7 @@ msgstr "விற்பனை விலை"
 msgid "Purchasing &Pricing"
 msgstr "கொள்முதல் விலை"
 
-#: applications/inventory.php:53 inventory/manage/items.php:593
+#: applications/inventory.php:53 inventory/manage/items.php:595
 msgid "Standard &Costs"
 msgstr "ஸ்டாண்டர்ட் செலவுகள்"
 
@@ -3687,7 +3728,7 @@ msgid "The dimension name must be entered."
 msgstr "பரிமாணத்தின் பெயர் உள்ளிடப்பட வேண்டும்."
 
 #: dimensions/dimension_entry.php:128 manufacturing/work_order_entry.php:145
-#: manufacturing/work_order_entry.php:223 purchasing/po_entry_items.php:250
+#: manufacturing/work_order_entry.php:223 purchasing/po_entry_items.php:253
 msgid "The date entered is in an invalid format."
 msgstr "உள்ளிட்ட தேதி தவறான வடிவத்தில் உள்ளது."
 
@@ -3767,7 +3808,7 @@ msgstr "இந்த பரிமாணத்தை நீக்கு"
 msgid "Delete unused dimension"
 msgstr "பயன்படுத்தப்படாத பரிமாணத்தை நீக்கு"
 
-#: dimensions/dimension_entry.php:292 includes/ui/attachment.inc:167
+#: dimensions/dimension_entry.php:292 includes/ui/attachment.inc:171
 #: includes/ui/class.crud_view.inc:305 includes/ui/simple_crud_class.inc:223
 #: purchasing/includes/ui/invoice_ui.inc:219
 #: purchasing/includes/ui/invoice_ui.inc:421
@@ -3789,7 +3830,7 @@ msgstr "இந்த பரிமாணத்திற்கான இருப�
 #: fixed_assets/process_depreciation.php:100 gl/accruals.php:104
 #: gl/inquiry/gl_account_inquiry.php:131 gl/inquiry/gl_trial_balance.php:231
 #: gl/manage/gl_quick_entries.php:248 gl/manage/gl_quick_entries.php:342
-#: includes/dashboard.inc:1176 includes/sysnames.inc:181
+#: includes/dashboard.inc:1176 includes/sysnames.inc:183
 #: purchasing/includes/ui/invoice_ui.inc:278
 #: purchasing/includes/ui/invoice_ui.inc:280
 #: purchasing/includes/ui/invoice_ui.inc:282 reporting/rep701.php:110
@@ -3810,7 +3851,7 @@ msgstr "கணக்கு"
 #: manufacturing/view/wo_costs_view.php:61
 #: purchasing/inquiry/supplier_allocation_inquiry.php:144
 #: reporting/rep115.php:164 reporting/rep206.php:115 reporting/rep402.php:141
-#: reporting/rep601.php:82 reporting/rep602.php:81 reporting/rep702.php:54
+#: reporting/rep601.php:81 reporting/rep602.php:82 reporting/rep702.php:54
 #: reporting/rep704.php:80 reporting/rep704.php:88 reporting/rep704.php:96
 #: reporting/rep708.php:192 reporting/rep708.php:193
 #: sales/inquiry/customer_allocation_inquiry.php:155
@@ -3826,10 +3867,10 @@ msgstr "டெபிட்"
 #: gl/inquiry/gl_trial_balance.php:240 gl/inquiry/gl_trial_balance.php:242
 #: gl/view/accrual_trans.php:60 gl/view/gl_trans_view.php:99
 #: gl/view/gl_trans_view.php:102 gl/view/gl_trans_view.php:105
-#: includes/sysnames.inc:92 manufacturing/view/wo_costs_view.php:61
+#: includes/sysnames.inc:94 manufacturing/view/wo_costs_view.php:61
 #: purchasing/inquiry/supplier_allocation_inquiry.php:145
 #: reporting/rep115.php:164 reporting/rep206.php:116 reporting/rep402.php:141
-#: reporting/rep601.php:82 reporting/rep602.php:81 reporting/rep702.php:54
+#: reporting/rep601.php:81 reporting/rep602.php:82 reporting/rep702.php:54
 #: reporting/rep704.php:80 reporting/rep704.php:88 reporting/rep704.php:96
 #: reporting/rep708.php:192 reporting/rep708.php:193
 #: sales/inquiry/customer_allocation_inquiry.php:156
@@ -3842,11 +3883,11 @@ msgstr "கடன்"
 #: includes/dashboard.inc:624 includes/dashboard.inc:649
 #: includes/dashboard.inc:1176
 #: purchasing/inquiry/supplier_allocation_inquiry.php:147
-#: purchasing/inquiry/supplier_inquiry.php:183
-#: purchasing/inquiry/supplier_inquiry.php:196 reporting/rep101.php:141
+#: purchasing/inquiry/supplier_inquiry.php:185
+#: purchasing/inquiry/supplier_inquiry.php:198 reporting/rep101.php:141
 #: reporting/rep115.php:164 reporting/rep201.php:119 reporting/rep203.php:89
 #: reporting/rep204.php:84 reporting/rep206.php:116 reporting/rep307.php:114
-#: reporting/rep601.php:82 reporting/rep602.php:81 reporting/rep701.php:110
+#: reporting/rep601.php:81 reporting/rep602.php:82 reporting/rep701.php:110
 #: reporting/rep704.php:80 reporting/rep704.php:88 reporting/rep704.php:96
 #: reporting/rep708.php:185 sales/inquiry/customer_allocation_inquiry.php:158
 #: sales/inquiry/customer_inquiry.php:209
@@ -3906,7 +3947,7 @@ msgstr "அனைத்து"
 #: gl/inquiry/journal_inquiry.php:48 gl/inquiry/profit_loss.php:175
 #: inventory/inquiry/stock_movements.php:85
 #: purchasing/inquiry/supplier_allocation_inquiry.php:50
-#: purchasing/inquiry/supplier_inquiry.php:143
+#: purchasing/inquiry/supplier_inquiry.php:145
 #: sales/inquiry/customer_inquiry.php:165
 msgid "From:"
 msgstr "இருந்து:"
@@ -3915,7 +3956,7 @@ msgstr "இருந்து:"
 #: gl/inquiry/gl_trial_balance.php:56 gl/inquiry/journal_inquiry.php:49
 #: gl/inquiry/profit_loss.php:176 inventory/inquiry/stock_movements.php:86
 #: purchasing/inquiry/supplier_allocation_inquiry.php:51
-#: purchasing/inquiry/supplier_inquiry.php:144
+#: purchasing/inquiry/supplier_inquiry.php:146
 #: sales/inquiry/customer_inquiry.php:166
 msgid "To:"
 msgstr "பெறுநர்:"
@@ -3935,7 +3976,7 @@ msgstr "திறந்தே:"
 #: includes/dashboard.inc:1095 includes/ui/allocation_cart.inc:311
 #: purchasing/includes/ui/invoice_ui.inc:136
 #: purchasing/inquiry/supplier_allocation_inquiry.php:142
-#: purchasing/inquiry/supplier_inquiry.php:180
+#: purchasing/inquiry/supplier_inquiry.php:182
 #: purchasing/view/view_supp_credit.php:48
 #: purchasing/view/view_supp_invoice.php:55 reporting/rep101.php:137
 #: reporting/rep201.php:115 reporting/rep203.php:88 reporting/rep501.php:87
@@ -4035,7 +4076,7 @@ msgstr "மேப்பார்வை வகுப்பு:"
 msgid "Fixed asset class:"
 msgstr "நிலையான சொத்து வகுப்பு:"
 
-#: fixed_assets/fixed_asset_classes.php:137 inventory/manage/items.php:390
+#: fixed_assets/fixed_asset_classes.php:137 inventory/manage/items.php:391
 #: inventory/manage/item_codes.php:186 inventory/manage/sales_kits.php:206
 #: inventory/manage/sales_kits.php:230
 #: manufacturing/manage/work_centres.php:138
@@ -4080,7 +4121,8 @@ msgid "There are no fixed assets that could be depreciated."
 msgstr "நீக்கக்கூடிய நிலையான சொத்துக்கள் எதுவும் இல்லை."
 
 #: fixed_assets/process_depreciation.php:100 includes/dashboard.inc:556
-#: includes/dashboard.inc:558 manufacturing/search_work_orders.php:168
+#: includes/dashboard.inc:558 includes/sysnames.inc:46
+#: manufacturing/search_work_orders.php:168
 #: manufacturing/view/wo_issue_view.php:43
 #: manufacturing/view/wo_production_view.php:44
 #: purchasing/includes/ui/invoice_ui.inc:501
@@ -4090,7 +4132,7 @@ msgstr "நீக்கக்கூடிய நிலையான சொத்�
 msgid "Item"
 msgstr "பொருள்"
 
-#: fixed_assets/process_depreciation.php:139 inventory/manage/items.php:562
+#: fixed_assets/process_depreciation.php:139 inventory/manage/items.php:563
 msgid "Select an item:"
 msgstr "ஒரு பொருளைத் தேர்ந்தெடுக்கவும்:"
 
@@ -4106,7 +4148,7 @@ msgstr "மாதத்திலிருந்து தொடங்குக�
 #: reporting/rep115.php:169 reporting/rep201.php:123 reporting/rep206.php:121
 #: reporting/rep304.php:134 reporting/rep305.php:111 reporting/rep306.php:145
 #: reporting/rep307.php:119 reporting/rep308.php:230 reporting/rep309.php:104
-#: reporting/rep310.php:146 reporting/rep601.php:94 reporting/rep602.php:86
+#: reporting/rep310.php:146 reporting/rep601.php:93 reporting/rep602.php:87
 #: reporting/rep702.php:59 reporting/rep704.php:103 reporting/rep704.php:113
 #: reporting/rep704.php:121 reporting/rep706.php:188 reporting/rep706.php:196
 #: reporting/rep706.php:206 reporting/rep706.php:214 reporting/rep707.php:212
@@ -4142,13 +4184,13 @@ msgstr "நிலையான சொத்துக்கள் விசார�
 #: inventory/inquiry/stock_movements.php:88
 #: purchasing/includes/ui/invoice_ui.inc:483
 #: purchasing/inquiry/supplier_allocation_inquiry.php:57
-#: purchasing/inquiry/supplier_inquiry.php:147
+#: purchasing/inquiry/supplier_inquiry.php:149
 #: sales/inquiry/customer_allocation_inquiry.php:51
 #: sales/inquiry/customer_inquiry.php:170
 msgid "Refresh Inquiry"
 msgstr "புதுப்பித்தல் விசாரணை"
 
-#: fixed_assets/inquiry/stock_inquiry.php:101 inventory/manage/items.php:451
+#: fixed_assets/inquiry/stock_inquiry.php:101 inventory/manage/items.php:452
 msgid "years"
 msgstr "ஆண்டுகள்"
 
@@ -4185,7 +4227,7 @@ msgstr "முறை"
 msgid "Status"
 msgstr "நிலை"
 
-#: fixed_assets/inquiry/stock_inquiry.php:172 includes/sysnames.inc:174
+#: fixed_assets/inquiry/stock_inquiry.php:172 includes/sysnames.inc:176
 msgid "Purchased"
 msgstr "வாங்கப்பட்டது"
 
@@ -4193,7 +4235,7 @@ msgstr "வாங்கப்பட்டது"
 msgid "Initial"
 msgstr "ஆரம்ப"
 
-#: fixed_assets/inquiry/stock_inquiry.php:174 inventory/manage/items.php:528
+#: fixed_assets/inquiry/stock_inquiry.php:174 inventory/manage/items.php:529
 #: reporting/rep451.php:80 themes/canvas/renderer.php:120
 msgid "Depreciations"
 msgstr "Depreciations"
@@ -4253,8 +4295,8 @@ msgstr "%s க்கான வருமானம்"
 #: gl/view/gl_payment_view.php:106 gl/view/gl_payment_view.php:109
 #: gl/view/gl_trans_view.php:98 gl/view/gl_trans_view.php:101
 #: includes/dashboard.inc:354 includes/dashboard.inc:624
-#: includes/sysnames.inc:43 includes/sysnames.inc:182
-#: inventory/manage/items.php:478 inventory/manage/items.php:480
+#: includes/sysnames.inc:43 includes/sysnames.inc:184
+#: inventory/manage/items.php:479 inventory/manage/items.php:481
 #: inventory/manage/item_categories.php:258
 #: inventory/manage/item_categories.php:260
 #: purchasing/supplier_payment.php:332 purchasing/supplier_payment.php:337
@@ -4278,7 +4320,7 @@ msgstr "%s க்கான வருமானம்"
 #: reporting/reports_main.php:441 reporting/reports_main.php:453
 #: reporting/reports_main.php:459 reporting/reports_main.php:468
 #: reporting/reports_main.php:479 reporting/reports_main.php:491
-#: sales/customer_delivery.php:384 sales/customer_delivery.php:392
+#: sales/customer_delivery.php:385 sales/customer_delivery.php:393
 #: sales/customer_invoice.php:458 sales/customer_invoice.php:495
 #: sales/customer_payments.php:375 sales/customer_payments.php:380
 #: sales/includes/ui/sales_credit_ui.inc:128
@@ -4311,7 +4353,7 @@ msgstr "பரிமாண"
 #: purchasing/includes/ui/invoice_ui.inc:278
 #: purchasing/includes/ui/invoice_ui.inc:280
 #: purchasing/includes/ui/invoice_ui.inc:282 reporting/rep402.php:141
-#: sales/customer_credit_invoice.php:359 sales/customer_delivery.php:524
+#: sales/customer_credit_invoice.php:359 sales/customer_delivery.php:525
 #: sales/includes/ui/sales_credit_ui.inc:334
 msgid "Memo"
 msgstr "மெமோ"
@@ -4361,18 +4403,18 @@ msgstr "வருவாய்/செலவு கணக்கு"
 #: gl/view/gl_payment_view.php:113 includes/dashboard.inc:444
 #: includes/dashboard.inc:486 includes/dashboard.inc:558
 #: includes/dashboard.inc:978 includes/dashboard.inc:983
-#: includes/sysnames.inc:140 includes/ui/allocation_cart.inc:311
+#: includes/sysnames.inc:142 includes/ui/allocation_cart.inc:311
 #: includes/ui/ui_lists.inc:1375
 #: manufacturing/includes/manufacturing_ui.inc:253
 #: purchasing/includes/ui/invoice_ui.inc:278
 #: purchasing/includes/ui/invoice_ui.inc:280
 #: purchasing/includes/ui/invoice_ui.inc:282
-#: purchasing/inquiry/supplier_inquiry.php:182
+#: purchasing/inquiry/supplier_inquiry.php:184
 #: purchasing/view/view_supp_payment.php:63
 #: purchasing/view/view_supp_payment.php:75 reporting/rep102.php:234
 #: reporting/rep107.php:228 reporting/rep107.php:293 reporting/rep109.php:181
 #: reporting/rep110.php:194 reporting/rep111.php:196 reporting/rep113.php:183
-#: reporting/rep202.php:253 reporting/rep209.php:196 reporting/rep706.php:314
+#: reporting/rep202.php:253 reporting/rep209.php:197 reporting/rep706.php:314
 #: reporting/rep707.php:330 reporting/rep710.php:78
 #: sales/inquiry/customer_inquiry.php:208 sales/view/view_receipt.php:47
 msgid "Amount"
@@ -4449,7 +4491,7 @@ msgstr "கணக்கு <br> மொத்தம்"
 msgid "Reconciled<br>Amount"
 msgstr "ஒருமைப்படுத்திய <br> தொகை"
 
-#: gl/bank_account_reconcile.php:232 reporting/rep602.php:205
+#: gl/bank_account_reconcile.php:232 reporting/rep602.php:206
 msgid "Difference"
 msgstr "வேறுபாடு"
 
@@ -4459,8 +4501,8 @@ msgstr "சமரசம் செய்ய வங்கி அறிக்கை
 
 #: gl/bank_account_reconcile.php:272 gl/inquiry/bank_inquiry.php:72
 #: gl/inquiry/gl_account_inquiry.php:143 gl/inquiry/gl_account_inquiry.php:145
-#: gl/view/accrual_trans.php:60 reporting/rep601.php:81
-#: reporting/rep602.php:80 reporting/rep704.php:80 reporting/rep704.php:87
+#: gl/view/accrual_trans.php:60 reporting/rep601.php:80
+#: reporting/rep602.php:81 reporting/rep704.php:80 reporting/rep704.php:87
 #: reporting/rep704.php:95
 msgid "Person/Item"
 msgstr "நபர்/பொருள்"
@@ -4623,12 +4665,15 @@ msgid "Enter A &Deposit"
 msgstr "ஒரு வைப்பு உள்ளிடவும்"
 
 #: gl/gl_bank.php:89 gl/gl_journal.php:64 inventory/adjustments.php:65
-#: manufacturing/work_order_entry.php:67 purchasing/po_entry_items.php:117
-#: purchasing/po_entry_items.php:138 purchasing/supplier_credit.php:86
+#: manufacturing/work_order_entry.php:67 purchasing/po_entry_items.php:99
+#: purchasing/po_entry_items.php:122 purchasing/po_entry_items.php:143
+#: purchasing/po_receive_items.php:46 purchasing/supplier_credit.php:86
 #: purchasing/supplier_invoice.php:74 purchasing/supplier_payment.php:107
 #: sales/credit_note_entry.php:77 sales/customer_credit_invoice.php:61
-#: sales/customer_invoice.php:72 sales/customer_payments.php:117
-#: sales/sales_order_entry.php:250
+#: sales/customer_delivery.php:65 sales/customer_invoice.php:72
+#: sales/customer_payments.php:117 sales/sales_order_entry.php:140
+#: sales/sales_order_entry.php:178 sales/sales_order_entry.php:225
+#: sales/sales_order_entry.php:256
 msgid "Add an Attachment"
 msgstr "இணைப்பு சேர்க்கவும்"
 
@@ -4778,11 +4823,11 @@ msgstr "சென்ற ஆண்டு"
 #: includes/dashboard.inc:1095 inventory/includes/item_adjustments_ui.inc:60
 #: inventory/includes/item_adjustments_ui.inc:126
 #: manufacturing/includes/manufacturing_ui.inc:195
-#: purchasing/po_receive_items.php:63
+#: purchasing/po_receive_items.php:66
 #: purchasing/allocations/supplier_allocation_main.php:100
 #: purchasing/includes/ui/invoice_ui.inc:342
 #: purchasing/includes/ui/invoice_ui.inc:504
-#: purchasing/includes/ui/invoice_ui.inc:575 purchasing/view/view_po.php:143
+#: purchasing/includes/ui/invoice_ui.inc:575 purchasing/view/view_po.php:144
 #: reporting/rep101.php:262 reporting/rep106.php:91 reporting/rep106.php:126
 #: reporting/rep106.php:173 reporting/rep114.php:161 reporting/rep201.php:230
 #: reporting/rep203.php:89 reporting/rep203.php:166 reporting/rep204.php:113
@@ -4797,7 +4842,7 @@ msgstr "சென்ற ஆண்டு"
 #: reporting/rep706.php:257 reporting/rep706.php:292 reporting/rep707.php:114
 #: reporting/rep707.php:300 reporting/rep708.php:253 reporting/rep710.php:126
 #: reporting/includes/doctext.inc:32 reporting/includes/doctext.inc:191
-#: sales/customer_credit_invoice.php:276 sales/customer_delivery.php:422
+#: sales/customer_credit_invoice.php:276 sales/customer_delivery.php:423
 #: sales/customer_invoice.php:520 sales/customer_invoice.php:523
 #: sales/allocations/customer_allocation_main.php:98
 #: sales/includes/ui/sales_credit_ui.inc:163
@@ -4817,7 +4862,7 @@ msgstr "சேமி"
 msgid "Modifying Journal Transaction # %d."
 msgstr "ஜர்னல் பரிமாற்றத்தை மாற்றியமைத்தல்%d."
 
-#: gl/gl_journal.php:36 includes/sysnames.inc:22 includes/sysnames.inc:157
+#: gl/gl_journal.php:36 includes/sysnames.inc:22 includes/sysnames.inc:159
 #: themes/canvas/renderer.php:131
 msgid "Journal Entry"
 msgstr "ஜர்னல் நுழைவு"
@@ -5230,7 +5275,7 @@ msgstr "நிகழ்வு தேதி:"
 msgid "Source ref:"
 msgstr "மூல நிரல்:"
 
-#: gl/includes/ui/gl_journal_ui.inc:57 includes/sysnames.inc:105
+#: gl/includes/ui/gl_journal_ui.inc:57 includes/sysnames.inc:107
 msgid "Quick Entry"
 msgstr "விரைவு நுழைவு"
 
@@ -5271,7 +5316,7 @@ msgstr "[கணக்கைத் தேர்ந்தெடு]"
 msgid "Add new line to journal"
 msgstr "பத்திரிகைக்கு புதிய வரி சேர்க்கவும்"
 
-#: gl/inquiry/accounts_list.php:25 inventory/manage/items.php:487
+#: gl/inquiry/accounts_list.php:25 inventory/manage/items.php:488
 #: sales/manage/customer_branches.php:240 themes/canvas/renderer.php:136
 msgid "GL Accounts"
 msgstr "GL கணக்குகள்"
@@ -5306,7 +5351,7 @@ msgstr "இருக்கிறதுபோல:"
 msgid "Calculated Return"
 msgstr "கணக்கிடப்பட்ட திரும்ப"
 
-#: gl/inquiry/balance_sheet.php:233 includes/sysnames.inc:128
+#: gl/inquiry/balance_sheet.php:233 includes/sysnames.inc:130
 #: reporting/rep706.php:292
 msgid "Liabilities"
 msgstr "பொறுப்புகள்"
@@ -5330,13 +5375,13 @@ msgid "Bank Account Inquiry"
 msgstr "வங்கி கணக்கு விசாரணை"
 
 #: gl/inquiry/bank_inquiry.php:79 gl/inquiry/gl_account_inquiry.php:164
-#: reporting/rep601.php:112 reporting/rep602.php:103 reporting/rep704.php:152
+#: reporting/rep601.php:111 reporting/rep602.php:104 reporting/rep704.php:152
 msgid "Opening Balance"
 msgstr "ஆரம்ப இருப்பு"
 
 #: gl/inquiry/bank_inquiry.php:130 gl/inquiry/gl_account_inquiry.php:220
-#: gl/inquiry/gl_trial_balance.php:277 reporting/rep601.php:165
-#: reporting/rep602.php:157 reporting/rep704.php:200 reporting/rep708.php:262
+#: gl/inquiry/gl_trial_balance.php:277 reporting/rep601.php:164
+#: reporting/rep602.php:158 reporting/rep704.php:200 reporting/rep708.php:262
 msgid "Ending Balance"
 msgstr "இருப்பு முடித்தல்"
 
@@ -5450,7 +5495,7 @@ msgstr "டிரான்ஸ் #"
 #: purchasing/includes/ui/grn_ui.inc:34 purchasing/includes/ui/grn_ui.inc:77
 #: purchasing/includes/ui/po_ui.inc:332 purchasing/inquiry/po_search.php:121
 #: purchasing/inquiry/po_search_completed.php:123
-#: purchasing/inquiry/supplier_inquiry.php:178
+#: purchasing/inquiry/supplier_inquiry.php:180
 #: purchasing/view/view_supp_credit.php:44
 #: purchasing/view/view_supp_invoice.php:51 reporting/includes/doctext.inc:163
 #: reporting/includes/doctext.inc:186
@@ -5579,15 +5624,15 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட வங்க�
 #: purchasing/inquiry/supplier_allocation_inquiry.php:143
 #: purchasing/inquiry/supplier_allocation_inquiry.php:153
 #: purchasing/inquiry/supplier_inquiry.php:50
-#: purchasing/inquiry/supplier_inquiry.php:181
-#: purchasing/inquiry/supplier_inquiry.php:193
+#: purchasing/inquiry/supplier_inquiry.php:183
+#: purchasing/inquiry/supplier_inquiry.php:195
 #: purchasing/view/view_supp_credit.php:49
 #: purchasing/view/view_supp_invoice.php:57 reporting/rep101.php:148
 #: reporting/rep102.php:126 reporting/rep102.php:132 reporting/rep103.php:229
 #: reporting/rep104.php:114 reporting/rep115.php:173 reporting/rep201.php:125
 #: reporting/rep202.php:137 reporting/rep203.php:96 reporting/rep205.php:141
 #: reporting/rep206.php:123 sales/customer_credit_invoice.php:236
-#: sales/customer_delivery.php:329 sales/customer_invoice.php:456
+#: sales/customer_delivery.php:330 sales/customer_invoice.php:456
 #: sales/allocations/customer_allocation_main.php:97
 #: sales/allocations/customer_allocation_main.php:105
 #: sales/inquiry/customer_allocation_inquiry.php:154
@@ -6135,7 +6180,7 @@ msgstr "வர்க்கம்:"
 msgid "Quick Entries"
 msgstr "விரைவு பதிவுகள்"
 
-#: gl/manage/gl_quick_entries.php:58 includes/ui/attachment.inc:163
+#: gl/manage/gl_quick_entries.php:58 includes/ui/attachment.inc:167
 #: includes/ui/class.crud_view.inc:305 includes/ui/class.crud_view.inc:309
 #: includes/ui/simple_crud_class.inc:219 includes/ui/ui_input.inc:225
 msgid "Add new"
@@ -6223,7 +6268,7 @@ msgstr "கணக்கு/வரி வகை"
 msgid "Posted"
 msgstr "வெளியிட்டது"
 
-#: gl/manage/gl_quick_entries.php:338 sales/customer_delivery.php:422
+#: gl/manage/gl_quick_entries.php:338 sales/customer_delivery.php:423
 #: sales/customer_invoice.php:520 sales/customer_invoice.php:523
 msgid "Tax Type"
 msgstr "வரி வகை"
@@ -6490,7 +6535,7 @@ msgid "Dimensions configuration"
 msgstr "பரிமாணங்களின் கட்டமைப்பு"
 
 #: includes/access_levels.inc:79 includes/dashboard.inc:332
-#: inventory/manage/items.php:476 reporting/reports_main.php:350
+#: inventory/manage/items.php:477 reporting/reports_main.php:350
 msgid "Dimensions"
 msgstr "பரிமாணங்கள்"
 
@@ -6826,7 +6871,7 @@ msgstr "நிலையான சொத்து இடம் இடமாற்
 msgid "Fixed Asset disposals"
 msgstr "நிலையான சொத்து முறிவுகள்"
 
-#: includes/access_levels.inc:207 inventory/manage/items.php:432
+#: includes/access_levels.inc:207 inventory/manage/items.php:433
 msgid "Depreciation"
 msgstr "தேய்மானம்"
 
@@ -7095,7 +7140,7 @@ msgstr "மீதமுள்ள பற்றுச்சீட்டுகள�
 #: includes/dashboard.inc:200 includes/dashboard.inc:410
 #: includes/dashboard.inc:444 includes/dashboard.inc:1011
 #: includes/dashboard.inc:1051 includes/sysnames.inc:44
-#: includes/sysnames.inc:103 includes/sysnames.inc:211
+#: includes/sysnames.inc:105 includes/sysnames.inc:213
 #: reporting/rep101.php:146 reporting/rep102.php:118 reporting/rep102.php:125
 #: reporting/rep105.php:110 reporting/rep106.php:90 reporting/rep114.php:95
 #: reporting/rep115.php:170 reporting/rep304.php:127 reporting/rep304.php:137
@@ -7103,7 +7148,7 @@ msgstr "மீதமுள்ள பற்றுச்சீட்டுகள�
 #: reporting/reports_main.php:47 reporting/reports_main.php:59
 #: reporting/reports_main.php:115 reporting/reports_main.php:134
 #: reporting/reports_main.php:260 sales/create_recurrent_invoices.php:209
-#: sales/customer_credit_invoice.php:234 sales/customer_delivery.php:327
+#: sales/customer_credit_invoice.php:234 sales/customer_delivery.php:328
 #: sales/customer_invoice.php:432
 #: sales/allocations/customer_allocation_main.php:96
 #: sales/allocations/customer_allocation_main.php:104
@@ -7144,8 +7189,8 @@ msgstr "பற்றுச்சீட்டுகள்"
 
 #: includes/dashboard.inc:237 includes/dashboard.inc:415
 #: includes/dashboard.inc:486 includes/dashboard.inc:1095
-#: includes/sysnames.inc:45 includes/sysnames.inc:104
-#: includes/sysnames.inc:189 includes/sysnames.inc:212
+#: includes/sysnames.inc:45 includes/sysnames.inc:106
+#: includes/sysnames.inc:191 includes/sysnames.inc:214
 #: inventory/purchasing_data.php:151
 #: purchasing/allocations/supplier_allocation_main.php:98
 #: purchasing/allocations/supplier_allocation_main.php:106
@@ -7156,8 +7201,8 @@ msgstr "பற்றுச்சீட்டுகள்"
 #: purchasing/inquiry/suppliers_list.php:53
 #: purchasing/inquiry/supplier_allocation_inquiry.php:139
 #: purchasing/inquiry/supplier_allocation_inquiry.php:152
-#: purchasing/inquiry/supplier_inquiry.php:177
-#: purchasing/inquiry/supplier_inquiry.php:192
+#: purchasing/inquiry/supplier_inquiry.php:179
+#: purchasing/inquiry/supplier_inquiry.php:194
 #: purchasing/view/view_supp_credit.php:42
 #: purchasing/view/view_supp_invoice.php:49 reporting/rep201.php:124
 #: reporting/rep202.php:129 reporting/rep202.php:136 reporting/rep203.php:95
@@ -7438,7 +7483,7 @@ msgstr "குறிப்புகள்."
 #: includes/dashboard.inc:1011 includes/dashboard.inc:1051
 #: reporting/rep105.php:110 reporting/rep106.php:90 reporting/rep112.php:189
 #: sales/create_recurrent_invoices.php:209
-#: sales/customer_credit_invoice.php:235 sales/customer_delivery.php:328
+#: sales/customer_credit_invoice.php:235 sales/customer_delivery.php:329
 #: sales/customer_invoice.php:433 sales/inquiry/customer_branches_list.php:37
 #: sales/inquiry/customer_branches_list.php:49
 #: sales/inquiry/customer_inquiry.php:206
@@ -7451,7 +7496,7 @@ msgid "Branch"
 msgstr "கிளை"
 
 #: includes/dashboard.inc:1012 includes/dashboard.inc:1096
-#: includes/sysnames.inc:139
+#: includes/sysnames.inc:141
 msgid "Remainder"
 msgstr "எஞ்சிய"
 
@@ -7474,7 +7519,7 @@ msgstr " செலுத்தப்படாத கொள்முதல் வ
 
 #: includes/dashboard.inc:1124
 #: purchasing/inquiry/supplier_allocation_inquiry.php:158
-#: purchasing/inquiry/supplier_inquiry.php:200 purchasing/view/view_po.php:103
+#: purchasing/inquiry/supplier_inquiry.php:202 purchasing/view/view_po.php:102
 #: sales/inquiry/customer_allocation_inquiry.php:168
 #: sales/inquiry/customer_inquiry.php:225
 #: sales/inquiry/sales_deliveries_view.php:196
@@ -7539,8 +7584,8 @@ msgid "The entered reference is invalid."
 msgstr "உள்ளிட்ட குறிப்பு தவறானது."
 
 #: includes/data_checks.inc:674 sales/credit_note_entry.php:199
-#: sales/customer_credit_invoice.php:204 sales/customer_delivery.php:299
-#: sales/customer_invoice.php:365 sales/sales_order_entry.php:478
+#: sales/customer_credit_invoice.php:204 sales/customer_delivery.php:300
+#: sales/customer_invoice.php:365 sales/sales_order_entry.php:484
 msgid "The entered reference is already in use."
 msgstr "உள்ளிட்ட குறிப்பு ஏற்கனவே பயன்படுத்தப்பட்டுள்ளது."
 
@@ -7750,11 +7795,11 @@ msgstr ""
 "கணினி/மென்பொருள் மேம்படுத்து பக்கத்தில் தரவுத்தளம் மேம்படுத்தப்படும் வரை "
 "கணினி மேம்படுத்தல் பிறகு கணினி தடுக்கப்பட்டது"
 
-#: includes/sysnames.inc:23 includes/sysnames.inc:156
+#: includes/sysnames.inc:23 includes/sysnames.inc:158
 msgid "Bank Payment"
 msgstr "வங்கி செலுத்துதல்"
 
-#: includes/sysnames.inc:24 includes/sysnames.inc:155
+#: includes/sysnames.inc:24 includes/sysnames.inc:157
 msgid "Bank Deposit"
 msgstr "வங்கி வைப்பு"
 
@@ -7808,7 +7853,7 @@ msgstr "வழங்குபவர் செலுத்துதல்"
 msgid "Purchase Order Delivery"
 msgstr "கொள்முதல் ஆர்டர் டெலிவரி"
 
-#: includes/sysnames.inc:37 includes/sysnames.inc:102 includes/types.inc:135
+#: includes/sysnames.inc:37 includes/sysnames.inc:104 includes/types.inc:137
 msgid "Work Order"
 msgstr "பணி ஆணை"
 
@@ -7825,7 +7870,7 @@ msgstr "வேலை ஆணை உற்பத்தி"
 msgid "Sales Order"
 msgstr "விற்பனை ஆணை"
 
-#: includes/sysnames.inc:41 sales/sales_order_entry.php:659
+#: includes/sysnames.inc:41 sales/sales_order_entry.php:665
 msgid "Sales Quotation"
 msgstr "விற்பனை மேற்கோள்"
 
@@ -7833,400 +7878,404 @@ msgstr "விற்பனை மேற்கோள்"
 msgid "Cost Update"
 msgstr "செலவு புதுப்பிக்கப்பட்டது"
 
-#: includes/sysnames.inc:49 inventory/adjustments.php:32
+#: includes/sysnames.inc:47
+msgid "Fixed Asset"
+msgstr "அசையா சொத்து"
+
+#: includes/sysnames.inc:51 inventory/adjustments.php:32
 msgid "Fixed Assets Disposal"
 msgstr "நிலையான சொத்துகள் அகற்றல்"
 
-#: includes/sysnames.inc:50
+#: includes/sysnames.inc:52
 msgid "Fixed Assets Revaluation"
 msgstr "நிலையான சொத்துக்களின் மறு மதிப்பீடு"
 
-#: includes/sysnames.inc:54
+#: includes/sysnames.inc:56
 msgid "GJ"
 msgstr "GJ"
 
-#: includes/sysnames.inc:55
+#: includes/sysnames.inc:57
 msgid "BP"
 msgstr "BP"
 
-#: includes/sysnames.inc:56
+#: includes/sysnames.inc:58
 msgid "BD"
 msgstr "BD"
 
-#: includes/sysnames.inc:57
+#: includes/sysnames.inc:59
 msgid "BT"
 msgstr "BT"
 
-#: includes/sysnames.inc:58
+#: includes/sysnames.inc:60
 msgid "SI"
 msgstr "SI"
 
-#: includes/sysnames.inc:59
+#: includes/sysnames.inc:61
 msgid "CN"
 msgstr "CN"
 
-#: includes/sysnames.inc:60
+#: includes/sysnames.inc:62
 msgid "CP"
 msgstr "CP"
 
-#: includes/sysnames.inc:61 sales/customer_invoice.php:526
+#: includes/sysnames.inc:63 sales/customer_invoice.php:526
 msgid "DN"
 msgstr "DN"
 
-#: includes/sysnames.inc:62
+#: includes/sysnames.inc:64
 msgid "IT"
 msgstr "IT"
 
-#: includes/sysnames.inc:63
+#: includes/sysnames.inc:65
 msgid "IA"
 msgstr "IA"
 
-#: includes/sysnames.inc:64
+#: includes/sysnames.inc:66
 msgid "PO"
 msgstr "PO"
 
-#: includes/sysnames.inc:65
+#: includes/sysnames.inc:67
 msgid "PI"
 msgstr "PI"
 
-#: includes/sysnames.inc:66
+#: includes/sysnames.inc:68
 msgid "PC"
 msgstr "PC"
 
-#: includes/sysnames.inc:67
+#: includes/sysnames.inc:69
 msgid "SP"
 msgstr "SP"
 
-#: includes/sysnames.inc:68 reporting/rep204.php:84 reporting/rep305.php:106
+#: includes/sysnames.inc:70 reporting/rep204.php:84 reporting/rep305.php:106
 msgid "GRN"
 msgstr "GRN"
 
-#: includes/sysnames.inc:69
+#: includes/sysnames.inc:71
 msgid "WO"
 msgstr "WO"
 
-#: includes/sysnames.inc:70
+#: includes/sysnames.inc:72
 msgid "WI"
 msgstr "WI"
 
-#: includes/sysnames.inc:71
+#: includes/sysnames.inc:73
 msgid "WP"
 msgstr "WP"
 
-#: includes/sysnames.inc:72
+#: includes/sysnames.inc:74
 msgid "SO"
 msgstr "SO"
 
-#: includes/sysnames.inc:73
+#: includes/sysnames.inc:75
 msgid "SQ"
 msgstr "SQ"
 
-#: includes/sysnames.inc:74
+#: includes/sysnames.inc:76
 msgid "CU"
 msgstr "CU"
 
-#: includes/sysnames.inc:75
+#: includes/sysnames.inc:77
 msgid "Dim"
 msgstr "Dim"
 
-#: includes/sysnames.inc:83
+#: includes/sysnames.inc:85
 msgid "Savings Account"
 msgstr "சேமிப்பு கணக்கு"
 
-#: includes/sysnames.inc:84
+#: includes/sysnames.inc:86
 msgid "Chequing Account"
 msgstr "கணக்கு கணக்கை"
 
-#: includes/sysnames.inc:85 manufacturing/work_order_costs.php:146
+#: includes/sysnames.inc:87 manufacturing/work_order_costs.php:146
 msgid "Credit Account"
 msgstr "கடன் கணக்கு"
 
-#: includes/sysnames.inc:86
+#: includes/sysnames.inc:88
 msgid "Cash Account"
 msgstr "பணக் கணக்கு"
 
-#: includes/sysnames.inc:90
+#: includes/sysnames.inc:92
 msgid "Transfer"
 msgstr "மாற்றம்"
 
-#: includes/sysnames.inc:91
+#: includes/sysnames.inc:93
 msgid "Cheque"
 msgstr "சரிபார்க்கவும்"
 
-#: includes/sysnames.inc:93 includes/sysnames.inc:197
+#: includes/sysnames.inc:95 includes/sysnames.inc:199
 msgid "Cash"
 msgstr "பணம்"
 
-#: includes/sysnames.inc:112
+#: includes/sysnames.inc:114
 msgid "Assemble"
 msgstr "அசெம்பிள்"
 
-#: includes/sysnames.inc:113
+#: includes/sysnames.inc:115
 msgid "Unassemble"
 msgstr "Unassemble"
 
-#: includes/sysnames.inc:114
+#: includes/sysnames.inc:116
 msgid "Advanced Manufacture"
 msgstr "மேம்பட்ட உற்பத்தி"
 
-#: includes/sysnames.inc:118
+#: includes/sysnames.inc:120
 msgid "Labour Cost"
 msgstr "தொழிலாளர் செலவு"
 
-#: includes/sysnames.inc:119
+#: includes/sysnames.inc:121
 msgid "Overhead Cost"
 msgstr "உற்பத்தி சாராத நிர்வாக செலவு"
 
-#: includes/sysnames.inc:120
+#: includes/sysnames.inc:122
 msgid "Materials"
 msgstr "பொருட்கள்"
 
-#: includes/sysnames.inc:127
+#: includes/sysnames.inc:129
 msgid "Assets"
 msgstr "சொத்துக்கள்"
 
-#: includes/sysnames.inc:129
+#: includes/sysnames.inc:131
 msgid "Equity"
 msgstr "ஈக்விட்டி"
 
-#: includes/sysnames.inc:130
+#: includes/sysnames.inc:132
 msgid "Income"
 msgstr "வருமான"
 
-#: includes/sysnames.inc:131
+#: includes/sysnames.inc:133
 msgid "Cost of Goods Sold"
 msgstr "விற்ற பொருட்களின் கொள்முதல் விலை"
 
-#: includes/sysnames.inc:132
+#: includes/sysnames.inc:134
 msgid "Expense"
 msgstr "செலவு"
 
-#: includes/sysnames.inc:141
+#: includes/sysnames.inc:143
 msgid "Amount, increase base"
 msgstr "தொகை, ஆதாரத்தை அதிகரிக்கிறது"
 
-#: includes/sysnames.inc:142
+#: includes/sysnames.inc:144
 msgid "Amount, reduce base"
 msgstr "தொகை, அடிப்படை குறைக்க"
 
-#: includes/sysnames.inc:143
+#: includes/sysnames.inc:145
 msgid "% amount of base"
 msgstr "% அடிப்படை அளவு"
 
-#: includes/sysnames.inc:144
+#: includes/sysnames.inc:146
 msgid "% amount of base, increase base"
 msgstr "% அடிப்படை அளவு, அளவு அதிகரிக்கிறது"
 
-#: includes/sysnames.inc:145
+#: includes/sysnames.inc:147
 msgid "% amount of base, reduce base"
 msgstr "% அடிப்படை அளவு, தளத்தை குறைக்கின்றன"
 
-#: includes/sysnames.inc:146
+#: includes/sysnames.inc:148
 msgid "Taxes added"
 msgstr "வரிகள் சேர்க்கப்பட்டன"
 
-#: includes/sysnames.inc:147
+#: includes/sysnames.inc:149
 msgid "Taxes added, increase base"
 msgstr "வரிகளை சேர்க்க, அடிப்படை அதிகரிக்க"
 
-#: includes/sysnames.inc:148
+#: includes/sysnames.inc:150
 msgid "Taxes added, reduce base"
 msgstr "வரிகளை சேர்க்க, அடிப்படை குறைக்க"
 
-#: includes/sysnames.inc:149
+#: includes/sysnames.inc:151
 msgid "Taxes included"
 msgstr "வரிகளை உள்ளடக்கியது"
 
-#: includes/sysnames.inc:150
+#: includes/sysnames.inc:152
 msgid "Taxes included, increase base"
 msgstr "வரி சேர்க்கப்பட்டுள்ளது, அடிப்படை அதிகரிக்க"
 
-#: includes/sysnames.inc:151
+#: includes/sysnames.inc:153
 msgid "Taxes included, reduce base"
 msgstr "வரி சேர்க்கப்பட்டுள்ளது, அடிப்படை குறைக்க"
 
-#: includes/sysnames.inc:158
+#: includes/sysnames.inc:160
 msgid "Supplier Invoice/Credit"
 msgstr "சப்ளையர் விலைப்பட்டியல்/கடன்"
 
-#: includes/sysnames.inc:164
+#: includes/sysnames.inc:166
 msgid "Declining balance"
 msgstr "சரிவு சமநிலை"
 
-#: includes/sysnames.inc:165
+#: includes/sysnames.inc:167
 msgid "Straight line"
 msgstr "நேர் கோடு"
 
-#: includes/sysnames.inc:166
+#: includes/sysnames.inc:168
 msgid "Sum of the Year Digits"
 msgstr "ஆண்டு இலக்கங்களின் தொகை"
 
-#: includes/sysnames.inc:167
+#: includes/sysnames.inc:169
 msgid "One-time"
 msgstr "ஒரு முறை"
 
-#: includes/sysnames.inc:173 manufacturing/search_work_orders.php:170
+#: includes/sysnames.inc:175 manufacturing/search_work_orders.php:170
 #: manufacturing/includes/manufacturing_ui.inc:293 reporting/rep402.php:136
 msgid "Manufactured"
 msgstr "உற்பத்தி"
 
-#: includes/sysnames.inc:175
+#: includes/sysnames.inc:177
 msgid "Service"
 msgstr "சேவை"
 
-#: includes/sysnames.inc:188
+#: includes/sysnames.inc:190
 msgid "Customer branch"
 msgstr "வாடிக்கையாளர் கிளை"
 
-#: includes/sysnames.inc:190
+#: includes/sysnames.inc:192
 msgid "Shipper"
 msgstr "ஏற்றுமதி செய்பவர்"
 
-#: includes/sysnames.inc:191
+#: includes/sysnames.inc:193
 msgid "Company internal"
 msgstr "நிறுவனத்தின் உள்"
 
-#: includes/sysnames.inc:196
+#: includes/sysnames.inc:198
 msgid "Prepayment"
 msgstr "முன்செலுத்தல்"
 
-#: includes/sysnames.inc:198
+#: includes/sysnames.inc:200
 msgid "After No. of Days"
 msgstr "நாட்கள் எண்ணிக்கைக்குப் பிறகு"
 
-#: includes/sysnames.inc:199
+#: includes/sysnames.inc:201
 msgid "Day In Following Month"
 msgstr "மாதம் தொடர்ந்து நாளில்"
 
-#: includes/sysnames.inc:203
+#: includes/sysnames.inc:205
 msgid "Sum per line taxes"
 msgstr "வரி வரிகள் ஒன்றுக்கு ஒன்று"
 
-#: includes/sysnames.inc:204
+#: includes/sysnames.inc:206
 msgid "Taxes from totals"
 msgstr "மொத்தத்திலிருந்து வரி"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Jan"
 msgstr "Jan"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Feb"
 msgstr "Feb"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Mar"
 msgstr "Mar"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Apr"
 msgstr "Apr"
 
-#: includes/sysnames.inc:216 includes/ui/ui_view.inc:1010
+#: includes/sysnames.inc:218 includes/ui/ui_view.inc:1010
 msgid "May"
 msgstr "May"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Jun"
 msgstr "Jun"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Jul"
 msgstr "Jul"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Aug"
 msgstr "Aug"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Sep"
 msgstr "Sep"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Oct"
 msgstr "Oct"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Nov"
 msgstr "Nov"
 
-#: includes/sysnames.inc:216
+#: includes/sysnames.inc:218
 msgid "Dec"
 msgstr "Dec"
 
-#: includes/sysnames.inc:222
+#: includes/sysnames.inc:224
 msgid "Unicode (multilanguage)"
 msgstr "யூனிகோட் (பன்மொழி)"
 
-#: includes/sysnames.inc:223
+#: includes/sysnames.inc:225
 msgid "Icelandic"
 msgstr "ஐஸ்லென்டிக்"
 
-#: includes/sysnames.inc:224
+#: includes/sysnames.inc:226
 msgid "Latvian"
 msgstr "லேட்வியன்"
 
-#: includes/sysnames.inc:225
+#: includes/sysnames.inc:227
 msgid "Romanian"
 msgstr "ரோமேனியன்"
 
-#: includes/sysnames.inc:226
+#: includes/sysnames.inc:228
 msgid "Slovenian"
 msgstr "ஸ்லோவேனியன்"
 
-#: includes/sysnames.inc:227
+#: includes/sysnames.inc:229
 msgid "Polish"
 msgstr "போலிஷ்"
 
-#: includes/sysnames.inc:228
+#: includes/sysnames.inc:230
 msgid "Estonian"
 msgstr "எஸ்டோனியன்"
 
-#: includes/sysnames.inc:229
+#: includes/sysnames.inc:231
 msgid "Spanish"
 msgstr "ஸ்பானிஷ்"
 
-#: includes/sysnames.inc:230
+#: includes/sysnames.inc:232
 msgid "Swedish"
 msgstr "ஸ்வீடிஷ்"
 
-#: includes/sysnames.inc:231
+#: includes/sysnames.inc:233
 msgid "Turkish"
 msgstr "துருக்கிய"
 
-#: includes/sysnames.inc:232
+#: includes/sysnames.inc:234
 msgid "Czech"
 msgstr "செக்"
 
-#: includes/sysnames.inc:233
+#: includes/sysnames.inc:235
 msgid "Danish"
 msgstr "டேனிஷ்"
 
-#: includes/sysnames.inc:234
+#: includes/sysnames.inc:236
 msgid "Lithuanian"
 msgstr "லிதுவேனியன்"
 
-#: includes/sysnames.inc:235
+#: includes/sysnames.inc:237
 msgid "Slovak"
 msgstr "ஸ்லோவாக்"
 
-#: includes/sysnames.inc:236
+#: includes/sysnames.inc:238
 msgid "Spanish (alternative)"
 msgstr "ஸ்பானிஷ் (மாற்று)"
 
-#: includes/sysnames.inc:237
+#: includes/sysnames.inc:239
 msgid "Persian"
 msgstr "பாரசீக"
 
-#: includes/sysnames.inc:238
+#: includes/sysnames.inc:240
 msgid "Hungarian"
 msgstr "ஹங்கேரியன்"
 
-#: includes/sysnames.inc:239
+#: includes/sysnames.inc:241
 msgid "French"
 msgstr "பிரஞ்சு"
 
-#: includes/sysnames.inc:240
+#: includes/sysnames.inc:242
 msgid "Italian"
 msgstr "இத்தாலிய"
 
@@ -8645,14 +8694,6 @@ msgstr ""
 msgid "ID"
 msgstr "ஐடி"
 
-#: includes/ui/attachment.inc:84 includes/ui/attachment.inc:137
-msgid "Docs Title"
-msgstr "ஆவணங்கள் தலைப்பு"
-
-#: includes/ui/attachment.inc:84
-msgid "Date Updated"
-msgstr "தேதி புதுப்பிக்கப்பட்டது"
-
 #: includes/ui/attachment.inc:112
 msgid "Attachment Detail"
 msgstr "இணைப்பு விவரம்"
@@ -8665,46 +8706,54 @@ msgstr "வாடிக்கையாளர் ID"
 msgid "Supplier ID"
 msgstr "சப்ளையர் ID"
 
-#: includes/ui/attachment.inc:139
+#: includes/ui/attachment.inc:135
+msgid "Item ID"
+msgstr "பொருள் ID"
+
+#: includes/ui/attachment.inc:137
+msgid "Fixed Asset ID"
+msgstr "அசையா சொத்து ID"
+
+#: includes/ui/attachment.inc:143
 msgid "File:"
 msgstr "கோப்பு:"
 
-#: includes/ui/attachment.inc:139
+#: includes/ui/attachment.inc:143
 #, php-format
 msgid "%s [%s bytes]"
 msgstr "%s [%s பைட்டுகள்]"
 
-#: includes/ui/attachment.inc:140
+#: includes/ui/attachment.inc:144
 msgid "File change"
 msgstr "கோப்பு மாற்றம்"
 
-#: includes/ui/attachment.inc:140
+#: includes/ui/attachment.inc:144
 msgid "Select file"
 msgstr "கோப்பைத் தேர்ந்தெடுக்கவும்"
 
-#: includes/ui/attachment.inc:169 includes/ui/class.crud_view.inc:298
+#: includes/ui/attachment.inc:173 includes/ui/class.crud_view.inc:298
 #: includes/ui/simple_crud_class.inc:225 includes/ui/ui_input.inc:227
 msgid "Submit changes"
 msgstr "மாற்றங்களைச் சமர்ப்பி"
 
-#: includes/ui/attachment.inc:171 includes/ui/simple_crud_class.inc:229
+#: includes/ui/attachment.inc:175 includes/ui/simple_crud_class.inc:229
 #: includes/ui/ui_input.inc:230
 msgid "Cancel edition"
 msgstr "பதிப்பை ரத்துசெய்"
 
-#: includes/ui/attachment.inc:207 includes/ui/attachment.inc:259
+#: includes/ui/attachment.inc:211 includes/ui/attachment.inc:263
 msgid "The existing Docs could not be removed"
 msgstr "இருக்கும் ஆவணங்களை அகற்ற முடியவில்லை"
 
-#: includes/ui/attachment.inc:224
+#: includes/ui/attachment.inc:228
 msgid "A New Attachment Added Successfully"
 msgstr "ஒரு புதிய இணைப்பு வெற்றிகரமாக சேர்க்கப்பட்டது"
 
-#: includes/ui/attachment.inc:285
+#: includes/ui/attachment.inc:289
 msgid "Description cannot be empty."
 msgstr "விளக்கம் காலியாக இருக்க முடியாது."
 
-#: includes/ui/attachment.inc:315
+#: includes/ui/attachment.inc:319
 msgid "The Selected Attachment is Deleted Successfully"
 msgstr "தேர்ந்தெடுக்கப்பட்ட இணைப்பு வெற்றிகரமாக நீக்கப்பட்டது"
 
@@ -9110,14 +9159,14 @@ msgstr "தேதி குடை:"
 
 #: includes/ui/ui_view.inc:448 reporting/rep107.php:284
 #: reporting/rep109.php:172 reporting/rep110.php:185 reporting/rep111.php:187
-#: reporting/rep113.php:174 reporting/rep209.php:187
+#: reporting/rep113.php:174 reporting/rep209.php:188
 msgid "Total Tax Excluded"
 msgstr "மொத்த வரி விலக்கு"
 
 #: includes/ui/ui_view.inc:454 includes/ui/ui_view.inc:473
 #: includes/ui/ui_view.inc:497 includes/ui/ui_view.inc:514
 #: reporting/rep107.php:293 reporting/rep109.php:181 reporting/rep110.php:194
-#: reporting/rep111.php:196 reporting/rep113.php:183 reporting/rep209.php:196
+#: reporting/rep111.php:196 reporting/rep113.php:183 reporting/rep209.php:197
 msgid "Included"
 msgstr "சேர்க்கப்பட்ட"
 
@@ -9268,7 +9317,7 @@ msgid "Enter &Another Adjustment"
 msgstr "மற்றொரு சரிசெய்தல் உள்ளிடவும்"
 
 #: inventory/adjustments.php:104 inventory/transfers.php:98
-#: sales/credit_note_entry.php:158 sales/sales_order_entry.php:383
+#: sales/credit_note_entry.php:158 sales/sales_order_entry.php:389
 msgid "You must enter at least one non empty item line."
 msgstr "குறைந்தபட்சம் ஒரு வெற்று உருப்படியை நீங்கள் உள்ளிட வேண்டும்."
 
@@ -9294,7 +9343,7 @@ msgid "The entered standard cost is negative or invalid."
 msgstr "உள்ளிட்ட நிலையான செலவு எதிர்மறை அல்லது தவறானது."
 
 #: inventory/adjustments.php:231 inventory/cost_update.php:42
-#: inventory/transfers.php:217 sales/sales_order_entry.php:705
+#: inventory/transfers.php:217 sales/sales_order_entry.php:711
 msgid "There are no fixed assets defined in the system."
 msgstr "கணினியில் வரையறுக்கப்பட்ட நிலையான சொத்துகள் எதுவும் இல்லை."
 
@@ -9422,18 +9471,18 @@ msgid "The selected price has been deleted."
 msgstr "தேர்ந்தெடுக்கப்பட்ட விலக்கம் நீக்கப்பட்டது."
 
 #: inventory/prices.php:151 reporting/rep104.php:116
-#: sales/customer_delivery.php:344 sales/customer_invoice.php:454
+#: sales/customer_delivery.php:345 sales/customer_invoice.php:454
 #: sales/includes/ui/sales_credit_ui.inc:98 sales/view/view_credit.php:73
 #: sales/view/view_dispatch.php:93 sales/view/view_invoice.php:96
 msgid "Sales Type"
 msgstr "விற்பனை வகை"
 
 #: inventory/prices.php:151 inventory/purchasing_data.php:151
-#: purchasing/po_receive_items.php:63
+#: inventory/purchasing_data.php:215 purchasing/po_receive_items.php:66
 #: purchasing/includes/ui/invoice_ui.inc:514 purchasing/view/view_grn.php:41
 #: purchasing/view/view_po.php:48 reporting/rep104.php:109
 #: reporting/includes/doctext.inc:32 reporting/includes/doctext.inc:191
-#: sales/customer_credit_invoice.php:276 sales/customer_delivery.php:422
+#: sales/customer_credit_invoice.php:276 sales/customer_delivery.php:423
 #: sales/customer_invoice.php:520 sales/customer_invoice.php:523
 #: sales/includes/ui/sales_credit_ui.inc:163 sales/view/view_credit.php:91
 #: sales/view/view_dispatch.php:113 sales/view/view_invoice.php:119
@@ -9449,7 +9498,7 @@ msgstr "இந்த பகுதிக்கு எந்த விலைகள
 msgid "Sales Type:"
 msgstr "விற்பனை வகை:"
 
-#: inventory/prices.php:204 inventory/purchasing_data.php:214
+#: inventory/prices.php:204
 msgid "Price:"
 msgstr "விலை:"
 
@@ -9465,7 +9514,7 @@ msgstr "விலை கணக்கிடப்படுகிறது."
 msgid "Supplier Purchasing Data"
 msgstr "சப்ளையர் வாங்குதல் தரவு"
 
-#: inventory/purchasing_data.php:29 purchasing/po_entry_items.php:149
+#: inventory/purchasing_data.php:29 purchasing/po_entry_items.php:152
 msgid "There are no purchasable inventory items defined in the system."
 msgstr "கணினியில் வரையறுக்கப்பட்ட எந்த வாங்கத்தக்க சரக்கு பொருட்கள் உள்ளன."
 
@@ -9528,15 +9577,15 @@ msgstr "மாற்று காரணி"
 msgid "Supplier's Description"
 msgstr "சப்ளையரின் விவரம்"
 
-#: inventory/purchasing_data.php:215
+#: inventory/purchasing_data.php:218
 msgid "Suppliers Unit of Measure:"
 msgstr "அளவீட்டு அளவீடுகளின் பிரிவு:"
 
-#: inventory/purchasing_data.php:221
+#: inventory/purchasing_data.php:224
 msgid "Conversion Factor (to our UOM):"
 msgstr "மாற்றம் காரணி (எங்கள் UOM க்கு):"
 
-#: inventory/purchasing_data.php:222
+#: inventory/purchasing_data.php:225
 msgid "Supplier's Code or Description:"
 msgstr "சப்ளையரின் கோட் அல்லது விளக்கம்:"
 
@@ -9643,11 +9692,11 @@ msgstr "இருப்பிடம்:"
 #: inventory/inquiry/stock_list.php:53 inventory/view/view_adjustment.php:54
 #: inventory/view/view_transfer.php:50
 #: manufacturing/includes/work_order_issue_ui.inc:33
-#: purchasing/po_receive_items.php:62 purchasing/includes/ui/po_ui.inc:216
+#: purchasing/po_receive_items.php:65 purchasing/includes/ui/po_ui.inc:216
 #: purchasing/view/view_grn.php:40 purchasing/view/view_po.php:48
 #: reporting/includes/doctext.inc:31 reporting/includes/doctext.inc:190
 #: reporting/includes/doctext.inc:229 sales/customer_credit_invoice.php:275
-#: sales/customer_delivery.php:420 sales/customer_invoice.php:519
+#: sales/customer_delivery.php:421 sales/customer_invoice.php:519
 #: sales/customer_invoice.php:522 sales/includes/ui/sales_credit_ui.inc:162
 #: sales/includes/ui/sales_order_ui.inc:146 sales/view/view_credit.php:90
 #: sales/view/view_dispatch.php:112 sales/view/view_invoice.php:118
@@ -9662,7 +9711,7 @@ msgstr "பொருள் கோட்"
 #: purchasing/includes/ui/po_ui.inc:216 purchasing/view/view_grn.php:40
 #: purchasing/view/view_po.php:48 reporting/includes/doctext.inc:31
 #: reporting/includes/doctext.inc:190 reporting/includes/doctext.inc:229
-#: sales/customer_credit_invoice.php:275 sales/customer_delivery.php:420
+#: sales/customer_credit_invoice.php:275 sales/customer_delivery.php:421
 #: sales/customer_invoice.php:519 sales/customer_invoice.php:522
 #: sales/includes/ui/sales_credit_ui.inc:162
 #: sales/includes/ui/sales_order_ui.inc:146 sales/view/view_credit.php:90
@@ -9696,7 +9745,7 @@ msgid "Unit Cost"
 msgstr "அலகு விலை"
 
 #: inventory/includes/item_adjustments_ui.inc:57
-#: inventory/manage/items.php:527
+#: inventory/manage/items.php:528
 msgid "Initial Value"
 msgstr "தொடக்க மதிப்பு"
 
@@ -9831,19 +9880,19 @@ msgstr "தேவை"
 msgid "On Order"
 msgstr "வரிசையில்"
 
-#: inventory/manage/items.php:74
+#: inventory/manage/items.php:75
 msgid "No image"
 msgstr "படம் இல்லை"
 
-#: inventory/manage/items.php:91
+#: inventory/manage/items.php:92
 msgid "Delete Image:"
 msgstr "படத்தை நீக்கு:"
 
-#: inventory/manage/items.php:133
+#: inventory/manage/items.php:134
 msgid "Error uploading file."
 msgstr "கோப்பை பதிவேற்றுவதில் பிழை."
 
-#: inventory/manage/items.php:150
+#: inventory/manage/items.php:151
 msgid ""
 "Only graphics files are supported - a file extension of .jpg, .png or .gif "
 "is expected"
@@ -9851,7 +9900,7 @@ msgstr ""
 "கிராபிக்ஸ் கோப்புகள் மட்டுமே ஆதரிக்கப்படுகின்றன - .jpg, .png அல்லது .gif "
 "கோப்பு நீட்டிப்பு எதிர்பார்க்கப்படுகிறது"
 
-#: inventory/manage/items.php:183
+#: inventory/manage/items.php:184
 msgid ""
 "There are no fixed asset categories defined in the system. At least one "
 "fixed asset category is required to add a fixed asset."
@@ -9859,7 +9908,7 @@ msgstr ""
 "கணினியில் வரையறுக்கப்பட்ட எந்த நிலையான சொத்து வகைகளும் இல்லை. ஒரு நிலையான "
 "சொத்து சேர்க்க குறைந்தபட்சம் ஒரு நிலையான சொத்து வகை தேவைப்படுகிறது."
 
-#: inventory/manage/items.php:184
+#: inventory/manage/items.php:185
 msgid ""
 "There are no fixed asset classes defined in the system. At least one fixed "
 "asset class is required to add a fixed asset."
@@ -9868,7 +9917,7 @@ msgstr ""
 "நிலையான சொத்து சேர்க்க குறைந்தபட்சம் ஒரு நிலையான சொத்து வகுப்பு "
 "தேவைப்படுகிறது."
 
-#: inventory/manage/items.php:186
+#: inventory/manage/items.php:187
 msgid ""
 "There are no item categories defined in the system. At least one item "
 "category is required to add a item."
@@ -9876,7 +9925,7 @@ msgstr ""
 "கணினியில் வரையறுக்கப்பட்டுள்ள உருப்படி வகைகள் எதுவும் இல்லை. ஒரு "
 "உருப்படியைச் சேர்க்க குறைந்தது ஒரு உருப்படி வகை தேவை."
 
-#: inventory/manage/items.php:188
+#: inventory/manage/items.php:189
 msgid ""
 "There are no item tax types defined in the system. At least one item tax "
 "type is required to add a item."
@@ -9884,15 +9933,15 @@ msgstr ""
 "கணினியில் வரையறுக்கப்பட்ட உருப்படியை வரி வகைகள் எதுவும் இல்லை. ஒரு "
 "உருப்படியைச் சேர்ப்பதற்கு குறைந்தபட்சம் ஒரு பொருளின் வரி வகை தேவைப்படுகிறது."
 
-#: inventory/manage/items.php:220
+#: inventory/manage/items.php:221
 msgid "The item name must be entered."
 msgstr "உருப்படியை பெயர் உள்ளிட வேண்டும்."
 
-#: inventory/manage/items.php:226
+#: inventory/manage/items.php:227
 msgid "The item code cannot be empty"
 msgstr "உருப்படியின் குறியீடு காலியாக இருக்க முடியாது"
 
-#: inventory/manage/items.php:234
+#: inventory/manage/items.php:235
 msgid ""
 "The item code cannot contain any of the following characters -  & + OR a "
 "space OR quotes"
@@ -9900,178 +9949,183 @@ msgstr ""
 "உருப்படியின் குறியீடு பின்வரும் கதாபாத்திரங்களில் ஏதேனும் இருக்கக்கூடாது - &"
 " + ஒரு இடைவெளி அல்லது மேற்கோள்"
 
-#: inventory/manage/items.php:241 inventory/manage/item_codes.php:58
+#: inventory/manage/items.php:242 inventory/manage/item_codes.php:58
 #: inventory/manage/sales_kits.php:89
 msgid "This item code is already assigned to stock item or sale kit."
 msgstr ""
 "இந்த உருப்படியின் குறியீடு ஏற்கனவே பங்கு உருப்படி அல்லது விற்பனை கிட்டிற்கு "
 "ஒதுக்கப்பட்டுள்ளது."
 
-#: inventory/manage/items.php:254
+#: inventory/manage/items.php:255
 msgid "The depracation cannot start before the fixed asset purchase date"
 msgstr "நிலையான சொத்து கொள்முதல் தேதிக்கு முன்பாக கீழிறக்கம் தொடங்க முடியாது"
 
-#: inventory/manage/items.php:282
+#: inventory/manage/items.php:283
 msgid "Item has been updated."
 msgstr "பொருள் புதுப்பிக்கப்பட்டது."
 
-#: inventory/manage/items.php:297
+#: inventory/manage/items.php:298
 msgid "A new item has been added."
 msgstr "புதிய உருப்படி சேர்க்கப்பட்டுள்ளது."
 
-#: inventory/manage/items.php:339
+#: inventory/manage/items.php:340
 msgid "Selected item has been deleted."
 msgstr "தேர்ந்தெடுத்த உருப்படி நீக்கப்பட்டது."
 
-#: inventory/manage/items.php:356
+#: inventory/manage/items.php:357
 msgid "General Settings"
 msgstr "பொது அமைப்புகள்"
 
-#: inventory/manage/items.php:365
+#: inventory/manage/items.php:366
 msgid "Generate EAN-8 Barcode"
 msgstr "EAN-8 பார்கோடு உருவாக்கவும்"
 
-#: inventory/manage/items.php:372 inventory/manage/items.php:382
+#: inventory/manage/items.php:373 inventory/manage/items.php:383
 msgid "Item Code:"
 msgstr "பொருள் கோட்:"
 
-#: inventory/manage/items.php:392 inventory/manage/item_codes.php:187
+#: inventory/manage/items.php:393 inventory/manage/item_codes.php:187
 #: inventory/manage/sales_kits.php:207 inventory/manage/sales_kits.php:231
 msgid "Category:"
 msgstr "வகை:"
 
-#: inventory/manage/items.php:417 inventory/manage/item_categories.php:212
+#: inventory/manage/items.php:418 inventory/manage/item_categories.php:212
 msgid "Item Tax Type:"
 msgstr "பொருள் வரி வகை:"
 
-#: inventory/manage/items.php:420 inventory/manage/item_categories.php:217
+#: inventory/manage/items.php:421 inventory/manage/item_categories.php:217
 msgid "Item Type:"
 msgstr "பொருள் வகை:"
 
-#: inventory/manage/items.php:422 inventory/manage/item_categories.php:219
+#: inventory/manage/items.php:423 inventory/manage/item_categories.php:219
 msgid "Units of Measure:"
 msgstr "அளவீட்டு அலகுகள்:"
 
-#: inventory/manage/items.php:426
+#: inventory/manage/items.php:427
 msgid "Editable description:"
 msgstr "திருத்தும்படி விளக்கம்:"
 
-#: inventory/manage/items.php:427 inventory/manage/item_categories.php:224
+#: inventory/manage/items.php:428 inventory/manage/item_categories.php:224
 msgid "Exclude from sales:"
 msgstr "விற்பனைக்கு விலக்கு:"
 
-#: inventory/manage/items.php:428 inventory/manage/item_categories.php:226
+#: inventory/manage/items.php:429 inventory/manage/item_categories.php:226
 msgid "Exclude from purchases:"
 msgstr "கொள்முதல் விலிருந்து விலக்கு:"
 
-#: inventory/manage/items.php:434
+#: inventory/manage/items.php:435
 msgid "Fixed Asset Class"
 msgstr "நிலையான சொத்து வகுப்பு"
 
-#: inventory/manage/items.php:436
+#: inventory/manage/items.php:437
 msgid "Depreciation Method"
 msgstr "தேய்மான முறை"
 
-#: inventory/manage/items.php:447 inventory/manage/items.php:456
+#: inventory/manage/items.php:448 inventory/manage/items.php:457
 msgid "Depreciation Rate"
 msgstr "தேய்மான விகிதம்"
 
-#: inventory/manage/items.php:451
+#: inventory/manage/items.php:452
 msgid "Depreciation Years"
 msgstr "தேய்மானம் ஆண்டுகள்"
 
-#: inventory/manage/items.php:454
+#: inventory/manage/items.php:455
 msgid "Base Rate"
 msgstr "அடிப்படை விகிதம்"
 
-#: inventory/manage/items.php:459
+#: inventory/manage/items.php:460
 msgid "Rate multiplier"
 msgstr "பெருக்கல் விகிதம்"
 
-#: inventory/manage/items.php:463 inventory/manage/items.php:466
+#: inventory/manage/items.php:464 inventory/manage/items.php:467
 msgid "Depreciation Start"
 msgstr "தேய்மானம் தொடங்குகிறது"
 
-#: inventory/manage/items.php:467
+#: inventory/manage/items.php:468
 msgid "Last Depreciation"
 msgstr "கடைசியாக தேய்மானம்"
 
-#: inventory/manage/items.php:492 inventory/manage/item_categories.php:238
+#: inventory/manage/items.php:493 inventory/manage/item_categories.php:238
 msgid "Asset account:"
 msgstr "சொத்து கணக்கு:"
 
-#: inventory/manage/items.php:493 inventory/manage/item_categories.php:239
+#: inventory/manage/items.php:494 inventory/manage/item_categories.php:239
 msgid "Depreciation cost account:"
 msgstr "தேய்மான செலவு கணக்கு:"
 
-#: inventory/manage/items.php:494 inventory/manage/item_categories.php:240
+#: inventory/manage/items.php:495 inventory/manage/item_categories.php:240
 msgid "Depreciation/Disposal account:"
 msgstr "தேய்மானம்/அகற்றும் கணக்கு:"
 
-#: inventory/manage/items.php:515
+#: inventory/manage/items.php:516
 msgid "Other"
 msgstr "மற்ற"
 
-#: inventory/manage/items.php:517
+#: inventory/manage/items.php:518
 msgid "Image File (.jpg)"
 msgstr "படக் கோப்பு (.jpg)"
 
-#: inventory/manage/items.php:521
+#: inventory/manage/items.php:522
 msgid "Item status:"
 msgstr "பொருள் நிலை:"
 
-#: inventory/manage/items.php:523
+#: inventory/manage/items.php:524
 msgid "Values"
 msgstr "மதிப்புகள்"
 
-#: inventory/manage/items.php:529
+#: inventory/manage/items.php:530
 msgid "Current Value"
 msgstr "தற்போதைய மதிப்பு"
 
-#: inventory/manage/items.php:538
+#: inventory/manage/items.php:539
 msgid "Insert New Item"
 msgstr "புதிய பொருள் செருகவும்"
 
-#: inventory/manage/items.php:542
+#: inventory/manage/items.php:543
 msgid "Update Item"
 msgstr "புதுப்பிப்பு உருப்படி"
 
-#: inventory/manage/items.php:545
+#: inventory/manage/items.php:546
 msgid "Select this items and return to document entry."
 msgstr "இந்த உருப்படிகளைத் தேர்ந்தெடுத்து, ஆவணத்தில் நுழையவும்."
 
-#: inventory/manage/items.php:546
+#: inventory/manage/items.php:547
 msgid "Clone This Item"
 msgstr "இந்த பொருள் குளோன்"
 
-#: inventory/manage/items.php:547
+#: inventory/manage/items.php:548
 msgid "Delete This Item"
 msgstr "இந்த உருப்படியை நீக்கு"
 
-#: inventory/manage/items.php:563
+#: inventory/manage/items.php:564
 msgid "New item"
 msgstr "புதிய உருப்படி"
 
-#: inventory/manage/items.php:587 inventory/manage/items.php:590
+#: inventory/manage/items.php:588 inventory/manage/items.php:592
 #: purchasing/manage/suppliers.php:321 sales/manage/customers.php:352
 #: sales/manage/customer_branches.php:310
 msgid "&General settings"
 msgstr "பொது அமைப்புகள்"
 
-#: inventory/manage/items.php:588 inventory/manage/items.php:596
+#: inventory/manage/items.php:589 inventory/manage/items.php:598
 #: purchasing/manage/suppliers.php:323 sales/manage/customers.php:354
 msgid "&Transactions"
 msgstr "பரிவர்த்தனைகள்"
 
-#: inventory/manage/items.php:591
+#: inventory/manage/items.php:590 inventory/manage/items.php:601
+#: purchasing/manage/suppliers.php:325 sales/manage/customers.php:356
+msgid "Attachments"
+msgstr "இணைப்புகள்"
+
+#: inventory/manage/items.php:593
 msgid "S&ales Pricing"
 msgstr "விற்பனை விலை"
 
-#: inventory/manage/items.php:592
+#: inventory/manage/items.php:594
 msgid "&Purchasing Pricing"
 msgstr "வாங்குதல் விலை"
 
-#: inventory/manage/items.php:598
+#: inventory/manage/items.php:600
 msgid "&Status"
 msgstr "நிலைமை"
 
@@ -10109,8 +10163,8 @@ msgstr "வரி வகை"
 #: inventory/manage/item_codes.php:130 inventory/manage/sales_kits.php:36
 #: inventory/view/view_adjustment.php:55 inventory/view/view_transfer.php:50
 #: manufacturing/manage/bom_edit.php:44
-#: manufacturing/view/wo_issue_view.php:76 purchasing/po_receive_items.php:62
-#: sales/customer_credit_invoice.php:275 sales/customer_delivery.php:421
+#: manufacturing/view/wo_issue_view.php:76 purchasing/po_receive_items.php:65
+#: sales/customer_credit_invoice.php:275 sales/customer_delivery.php:422
 #: sales/customer_invoice.php:519 sales/customer_invoice.php:522
 msgid "Units"
 msgstr "அலகுகள்"
@@ -10164,7 +10218,7 @@ msgstr "பொருள் சட்டமன்ற செலவு கணக்
 msgid "Foreign Item Codes"
 msgstr "வெளிநாட்டு பொருள் குறியீடுகள்"
 
-#: inventory/manage/item_codes.php:26 sales/sales_order_entry.php:707
+#: inventory/manage/item_codes.php:26 sales/sales_order_entry.php:713
 msgid "There are no inventory items defined in the system."
 msgstr "கணினியில் வரையறுக்கப்பட்ட எந்த சரக்கு பொருட்களும் இல்லை."
 
@@ -10258,6 +10312,14 @@ msgstr "விவரிக்கும் பெயர்:"
 #: inventory/manage/item_units.php:142
 msgid "Decimal Places:"
 msgstr "தசம இடங்கள்:"
+
+#: inventory/manage/locations.php:22
+msgid "Fixed Assets Locations"
+msgstr "அசையா சொத்துகள் இருப்பிடங்கள்"
+
+#: inventory/manage/locations.php:25
+msgid "Inventory Locations"
+msgstr "இருப்பு இடங்கள்"
 
 #: inventory/manage/locations.php:46
 msgid ""
@@ -10977,7 +11039,7 @@ msgid "Issue Items to Work order"
 msgstr "வேலை பொருட்டு வெளியீடு பொருட்கள்"
 
 #: manufacturing/includes/db/work_orders_db.inc:95
-#: purchasing/includes/db/po_db.inc:154
+#: purchasing/includes/db/po_db.inc:166
 #: sales/includes/db/cust_trans_db.inc:115
 #: sales/includes/db/sales_order_db.inc:213
 msgid "Updated."
@@ -11270,12 +11332,12 @@ msgid "&View this order"
 msgstr "இந்த வரிசையை காண்க"
 
 #: purchasing/po_entry_items.php:88 sales/sales_order_entry.php:129
-#: sales/sales_order_entry.php:149
+#: sales/sales_order_entry.php:151
 msgid "&Print This Order"
 msgstr "இந்த வரிசையை அச்சிடவும்"
 
 #: purchasing/po_entry_items.php:90 sales/sales_order_entry.php:130
-#: sales/sales_order_entry.php:150
+#: sales/sales_order_entry.php:152
 msgid "&Email This Order"
 msgstr "இந்த வரிசையை மின்னஞ்சல் செய்யவும்"
 
@@ -11291,19 +11353,19 @@ msgstr "மற்றொரு கொள்முதல் ஆணை சேர்
 msgid "Select An &Outstanding Purchase Order"
 msgstr "ஒரு சிறந்த கொள்முதல் ஆணை தேர்ந்தெடுக்கவும்"
 
-#: purchasing/po_entry_items.php:106
+#: purchasing/po_entry_items.php:109
 msgid "Direct GRN has been entered"
 msgstr "நேரடி GRN உள்ளிடப்பட்டுள்ளது"
 
-#: purchasing/po_entry_items.php:108
+#: purchasing/po_entry_items.php:111
 msgid "&View this GRN"
 msgstr "இந்த GRN ஐ & காண்க"
 
-#: purchasing/po_entry_items.php:112 purchasing/po_receive_items.php:40
+#: purchasing/po_entry_items.php:115 purchasing/po_receive_items.php:40
 msgid "View the GL Journal Entries for this Delivery"
 msgstr "இந்த டெலிவரிக்கு GL ஜர்னல் பதிவுகள் காண்க"
 
-#: purchasing/po_entry_items.php:115 purchasing/po_receive_items.php:42
+#: purchasing/po_entry_items.php:118 purchasing/po_receive_items.php:42
 msgid "Entry purchase &invoice for this receival"
 msgstr "இந்த வரவேற்புக்கான நுழைவு கொள்முதல் விலைப்பட்டியல்"
 
@@ -11311,19 +11373,19 @@ msgstr "இந்த வரவேற்புக்கான நுழைவு 
 msgid "Enter &Another GRN"
 msgstr "மற்றொரு GRN ஐ உள்ளிடுக"
 
-#: purchasing/po_entry_items.php:129
+#: purchasing/po_entry_items.php:132
 msgid "Direct Purchase Invoice has been entered"
 msgstr "நேரடி கொள்முதல் விலைப்பட்டியல் உள்ளிடப்பட்டுள்ளது"
 
-#: purchasing/po_entry_items.php:131
+#: purchasing/po_entry_items.php:134
 msgid "&View this Invoice"
 msgstr "இந்த விலைப்பட்டியல் காண்க"
 
-#: purchasing/po_entry_items.php:133 purchasing/supplier_invoice.php:67
+#: purchasing/po_entry_items.php:136 purchasing/supplier_invoice.php:67
 msgid "View the GL Journal Entries for this Invoice"
 msgstr "இந்த விலைப்பட்டியல் க்கான GL ஜர்னல் பதிவுகள் காண்க"
 
-#: purchasing/po_entry_items.php:135 purchasing/supplier_invoice.php:69
+#: purchasing/po_entry_items.php:138 purchasing/supplier_invoice.php:69
 msgid "Entry supplier &payment for this invoice"
 msgstr "இந்த விலைப்பட்டியல் நுழைவு வழங்குபவர் மற்றும் கட்டணம் செலுத்துதல்"
 
@@ -11331,22 +11393,22 @@ msgstr "இந்த விலைப்பட்டியல் நுழைவ�
 msgid "Enter &Another Direct Invoice"
 msgstr "மற்றொரு நேரடி விலைப்பட்டியல் சேர்க்கவும்"
 
-#: purchasing/po_entry_items.php:147
+#: purchasing/po_entry_items.php:150
 msgid "There are no purchasable fixed assets defined in the system."
 msgstr "கணினியில் வரையறுக்கப்பட்ட எந்தவிதமான நிலையான சொத்துகளும் இல்லை."
 
-#: purchasing/po_entry_items.php:178
+#: purchasing/po_entry_items.php:181
 msgid ""
 "This item cannot be deleted because some of it has already been received."
 msgstr "இந்த உருப்படியை ஏற்கனவே நீக்கப்பட்டுள்ளதால், அதை நீக்க முடியாது."
 
-#: purchasing/po_entry_items.php:193
+#: purchasing/po_entry_items.php:196
 msgid ""
 "This order cannot be cancelled because some of it has already been received."
 msgstr ""
 "இந்த உத்தரவை ரத்து செய்ய முடியாது, ஏனெனில் இதில் சில ஏற்கனவே பெற்றுள்ளது."
 
-#: purchasing/po_entry_items.php:194
+#: purchasing/po_entry_items.php:197
 msgid ""
 "The line item quantities may be modified to quantities more than already "
 "received. prices cannot be altered for lines that have already been received"
@@ -11356,27 +11418,27 @@ msgstr ""
 " ஏற்கெனவே பெற்றுக் கொண்ட வரிகளுக்கு மாற்றங்களை மாற்ற முடியாது மற்றும் "
 "ஏற்கெனவே கிடைத்த அளவிற்கு அளவு குறைக்க முடியாது."
 
-#: purchasing/po_entry_items.php:214
+#: purchasing/po_entry_items.php:217
 msgid "This purchase order has been cancelled."
 msgstr "இந்த வாங்கிய ஆர்டர் ரத்துசெய்யப்பட்டது."
 
-#: purchasing/po_entry_items.php:216
+#: purchasing/po_entry_items.php:219
 msgid "Enter a new purchase order"
 msgstr "புதிய வாங்குதல் வரிசையை உள்ளிடவும்"
 
-#: purchasing/po_entry_items.php:228 sales/sales_order_entry.php:522
+#: purchasing/po_entry_items.php:231 sales/sales_order_entry.php:528
 msgid "Item description cannot be empty."
 msgstr "பொருள் விளக்கம் காலியாக இருக்க முடியாது."
 
-#: purchasing/po_entry_items.php:238
+#: purchasing/po_entry_items.php:241
 msgid "The quantity of the order item must be numeric and not less than "
 msgstr "ஆர்டர் உருப்படியின் அளவு எண்ணாகவும் குறைவாகவும் இருக்க கூடாது "
 
-#: purchasing/po_entry_items.php:245
+#: purchasing/po_entry_items.php:248
 msgid "The price entered must be numeric and not less than zero."
 msgstr "உள்ளீடு விலை பூஜ்ஜியத்தை விட குறைவாக இருக்க வேண்டும்."
 
-#: purchasing/po_entry_items.php:269
+#: purchasing/po_entry_items.php:272
 msgid ""
 "You are attempting to make the quantity ordered a quantity less than has "
 "already been invoiced or received.  This is prohibited."
@@ -11384,7 +11446,7 @@ msgstr ""
 "ஏற்கெனவே விலைக்கு வாங்கப்பட்ட அல்லது பெறப்பட்ட அளவுக்கு அளவுக்கு அளவுக்கு "
 "அளவுக்கு ஆர்டர் செய்ய நீங்கள் முயற்சிக்கிறீர்கள். இது தடைசெய்யப்பட்டுள்ளது."
 
-#: purchasing/po_entry_items.php:270
+#: purchasing/po_entry_items.php:273
 msgid ""
 "The quantity received can only be modified by entering a negative receipt "
 "and the quantity invoiced can only be reduced by entering a credit note "
@@ -11394,11 +11456,11 @@ msgstr ""
 "முடியும் மற்றும் இந்த உருப்படிக்கு எதிரான கடன் குறிப்புக்குள் நுழைவதன் மூலம்"
 " மட்டுமே கணக்கிடப்பட்ட அளவு குறைக்கப்பட முடியும்."
 
-#: purchasing/po_entry_items.php:298
+#: purchasing/po_entry_items.php:301
 msgid "The selected item is already on this order."
 msgstr "தேர்ந்தெடுத்த உருப்படி ஏற்கனவே இந்த வரிசையில் உள்ளது."
 
-#: purchasing/po_entry_items.php:324
+#: purchasing/po_entry_items.php:327
 msgid ""
 "The selected item does not exist or it is a kit part and therefore cannot be"
 " purchased."
@@ -11406,26 +11468,26 @@ msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட உருப்படி இல்லை அல்லது அது கிட் பகுதியாக உள்ளது, எனவே அதை"
 " வாங்க முடியாது."
 
-#: purchasing/po_entry_items.php:338 purchasing/supplier_credit.php:171
+#: purchasing/po_entry_items.php:341 purchasing/supplier_credit.php:171
 #: purchasing/supplier_invoice.php:175 purchasing/supplier_invoice.php:392
 #: purchasing/supplier_payment.php:131
 msgid "There is no supplier selected."
 msgstr "எந்த சப்ளையர் தேர்வு செய்யப்படவில்லை."
 
-#: purchasing/po_entry_items.php:345
+#: purchasing/po_entry_items.php:348
 msgid "The entered order date is invalid."
 msgstr "உள்ளிட்ட ஆர்டர் தேதி தவறானது."
 
-#: purchasing/po_entry_items.php:358
+#: purchasing/po_entry_items.php:361
 msgid "The entered due date is invalid."
 msgstr "உள்ளிட்ட உரிய தேதி தவறானது."
 
-#: purchasing/po_entry_items.php:374 purchasing/supplier_credit.php:210
+#: purchasing/po_entry_items.php:377 purchasing/supplier_credit.php:210
 #: purchasing/supplier_invoice.php:213
 msgid "You must enter a supplier's invoice reference."
 msgstr "நீங்கள் சப்ளையரின் விலைப்பட்டியல் குறிப்பு உள்ளிட வேண்டும்."
 
-#: purchasing/po_entry_items.php:381 purchasing/supplier_credit.php:217
+#: purchasing/po_entry_items.php:384 purchasing/supplier_credit.php:217
 #: purchasing/supplier_invoice.php:220
 msgid ""
 "This invoice number has already been entered. It cannot be entered again."
@@ -11433,67 +11495,67 @@ msgstr ""
 "இந்த விலைப்பட்டியல் எண் ஏற்கனவே உள்ளிடப்பட்டுள்ளது. அதை மீண்டும் உள்ளிட "
 "முடியாது."
 
-#: purchasing/po_entry_items.php:387
+#: purchasing/po_entry_items.php:390
 msgid "There is no delivery address specified."
 msgstr "எந்த விநியோக முகவரியும் குறிப்பிடப்படவில்லை."
 
-#: purchasing/po_entry_items.php:393
+#: purchasing/po_entry_items.php:396
 msgid "There is no location specified to move any items into."
 msgstr "ஏதேனும் உருப்படிகளை நகர்த்த எந்த இடமும் குறிப்பிடப்படவில்லை."
 
-#: purchasing/po_entry_items.php:401
+#: purchasing/po_entry_items.php:404
 msgid ""
 "The order cannot be placed because there are no lines entered on this order."
 msgstr "ஒழுங்கு வைக்க முடியாது, ஏனெனில் இந்த வரிசையில் உள்ள வரிகள் இல்லை."
 
-#: purchasing/po_entry_items.php:406
+#: purchasing/po_entry_items.php:409
 msgid "Required prepayment is greater than total invoice value."
 msgstr ""
 "தேவையான விலைப்பட்டியல் மதிப்பு மொத்த விலைப்பட்டியல் மதிப்பைவிட அதிகமாகும்."
 
-#: purchasing/po_entry_items.php:483 purchasing/includes/ui/po_ui.inc:470
+#: purchasing/po_entry_items.php:486 purchasing/includes/ui/po_ui.inc:470
 #: sales/customer_invoice.php:440 sales/includes/ui/sales_order_ui.inc:396
 #: sales/includes/ui/sales_order_ui.inc:398
 msgid "Payment:"
 msgstr "கொடுப்பனவு:"
 
-#: purchasing/po_entry_items.php:483 purchasing/includes/ui/po_ui.inc:470
+#: purchasing/po_entry_items.php:486 purchasing/includes/ui/po_ui.inc:470
 msgid "Delayed"
 msgstr "தாமதமாக"
 
-#: purchasing/po_entry_items.php:491 sales/sales_order_entry.php:735
+#: purchasing/po_entry_items.php:494 sales/sales_order_entry.php:741
 msgid "Place Order"
 msgstr "இடம் ஆர்டர்"
 
-#: purchasing/po_entry_items.php:492
+#: purchasing/po_entry_items.php:495
 msgid "Update Order"
 msgstr "ஆர்டர் வரிசை"
 
-#: purchasing/po_entry_items.php:493 sales/sales_order_entry.php:734
+#: purchasing/po_entry_items.php:496 sales/sales_order_entry.php:740
 msgid "Cancel Order"
 msgstr "ஆர்டர் ரத்து"
 
-#: purchasing/po_entry_items.php:495
+#: purchasing/po_entry_items.php:498
 msgid "Process GRN"
 msgstr "செயல்முறை GRN"
 
-#: purchasing/po_entry_items.php:496
+#: purchasing/po_entry_items.php:499
 msgid "Update GRN"
 msgstr "GRN புதுப்பிக்கவும்"
 
-#: purchasing/po_entry_items.php:497
+#: purchasing/po_entry_items.php:500
 msgid "Cancel GRN"
 msgstr "GRN ஐ ரத்துசெய்"
 
-#: purchasing/po_entry_items.php:500 sales/customer_invoice.php:665
+#: purchasing/po_entry_items.php:503 sales/customer_invoice.php:665
 msgid "Process Invoice"
 msgstr "செயல்முறை விலைப்பட்டியல்"
 
-#: purchasing/po_entry_items.php:501
+#: purchasing/po_entry_items.php:504
 msgid "Update Invoice"
 msgstr "விலைப்பட்டியல் புதுப்பிக்கவும்"
 
-#: purchasing/po_entry_items.php:502 sales/sales_order_entry.php:715
+#: purchasing/po_entry_items.php:505 sales/sales_order_entry.php:721
 msgid "Cancel Invoice"
 msgstr "விலைப்பட்டியல் ரத்து செய்யப்பட்டது"
 
@@ -11515,7 +11577,7 @@ msgstr ""
 "எதிராக பொருட்களை வாங்குவதற்கு வேறுபட்ட & கொள்முதல் ஆர்டர் ஒன்றைத் "
 "தேர்ந்தெடுக்கவும்"
 
-#: purchasing/po_receive_items.php:53
+#: purchasing/po_receive_items.php:56
 msgid ""
 "This page can only be opened if a purchase order has been selected. Please "
 "select a purchase order first."
@@ -11523,50 +11585,50 @@ msgstr ""
 "வாங்குதல் ஆர்டர் தேர்ந்தெடுக்கப்பட்டால் மட்டுமே இந்த பக்கம் திறக்கப்படும். "
 "முதலில் வாங்குதல் ஆர்டர் ஒன்றைத் தேர்ந்தெடுக்கவும்."
 
-#: purchasing/po_receive_items.php:62 reporting/rep105.php:115
-#: sales/customer_delivery.php:421
+#: purchasing/po_receive_items.php:65 reporting/rep105.php:115
+#: sales/customer_delivery.php:422
 msgid "Ordered"
 msgstr "ஆணையிட்டார்"
 
-#: purchasing/po_receive_items.php:62 purchasing/includes/ui/po_ui.inc:216
+#: purchasing/po_receive_items.php:65 purchasing/includes/ui/po_ui.inc:216
 msgid "Received"
 msgstr "பெறப்பட்டது"
 
-#: purchasing/po_receive_items.php:63 reporting/rep101.php:138
+#: purchasing/po_receive_items.php:66 reporting/rep101.php:138
 #: reporting/rep105.php:116 reporting/rep105.php:170 reporting/rep201.php:116
 #: reporting/includes/doctext.inc:248
 msgid "Outstanding"
 msgstr "சிறந்த"
 
-#: purchasing/po_receive_items.php:63 sales/customer_delivery.php:422
+#: purchasing/po_receive_items.php:66 sales/customer_delivery.php:423
 msgid "This Delivery"
 msgstr "இந்த டெலிவரி"
 
-#: purchasing/po_receive_items.php:114 purchasing/includes/ui/po_ui.inc:276
+#: purchasing/po_receive_items.php:117 purchasing/includes/ui/po_ui.inc:276
 #: reporting/rep107.php:255 reporting/rep109.php:138 reporting/rep110.php:156
-#: reporting/rep111.php:153 reporting/rep113.php:145 reporting/rep209.php:166
-#: sales/customer_credit_invoice.php:317 sales/customer_delivery.php:506
+#: reporting/rep111.php:153 reporting/rep113.php:145 reporting/rep209.php:167
+#: sales/customer_credit_invoice.php:317 sales/customer_delivery.php:507
 #: sales/customer_invoice.php:626 sales/includes/ui/sales_credit_ui.inc:212
 #: sales/includes/ui/sales_order_ui.inc:223 sales/view/view_dispatch.php:146
 #: sales/view/view_invoice.php:153
 msgid "Sub-total"
 msgstr "கூட்டுத்தொகை"
 
-#: purchasing/po_receive_items.php:122 purchasing/includes/ui/po_ui.inc:285
-#: purchasing/view/view_grn.php:89 purchasing/view/view_po.php:96
-#: sales/customer_delivery.php:513 sales/includes/ui/sales_order_ui.inc:230
+#: purchasing/po_receive_items.php:125 purchasing/includes/ui/po_ui.inc:285
+#: purchasing/view/view_grn.php:89 purchasing/view/view_po.php:95
+#: sales/customer_delivery.php:514 sales/includes/ui/sales_order_ui.inc:230
 #: sales/view/view_sales_order.php:265
 msgid "Amount Total"
 msgstr "தொகை மொத்தம்"
 
-#: purchasing/po_receive_items.php:168 purchasing/po_receive_items.php:214
+#: purchasing/po_receive_items.php:171 purchasing/po_receive_items.php:217
 msgid ""
 "There is nothing to process. Please enter valid quantities greater than "
 "zero."
 msgstr ""
 "செயல்படுத்த எதுவும் இல்லை. பூஜ்ஜியத்தை விட அதிகமான அளவு செல்லுபடியாகும்."
 
-#: purchasing/po_receive_items.php:219
+#: purchasing/po_receive_items.php:222
 msgid ""
 "Entered quantities cannot be greater than the quantity entered on the "
 "purchase order including the allowed over-receive percentage"
@@ -11574,7 +11636,7 @@ msgstr ""
 "அனுமதிக்கப்பட்ட அளவுகளை விட அதிகமான தொகை கொள்முதல் வரிசையில் உள்ளதை விட "
 "அதிகமானதாக இருக்க முடியாது"
 
-#: purchasing/po_receive_items.php:221
+#: purchasing/po_receive_items.php:224
 msgid ""
 "Modify the ordered items on the purchase order if you wish to increase the "
 "quantities."
@@ -11582,7 +11644,7 @@ msgstr ""
 "நீங்கள் அளவுகளை அதிகரிக்க விரும்பினால் வாங்கிய வரிசையில் ஆர்டர் செய்யப்பட்ட "
 "உருப்படிகளை மாற்றவும்."
 
-#: purchasing/po_receive_items.php:239
+#: purchasing/po_receive_items.php:242
 msgid ""
 "This order has been changed or invoiced since this delivery was started to "
 "be actioned. Processing halted. To enter a delivery against this purchase "
@@ -11595,25 +11657,25 @@ msgstr ""
 "மாற்றங்களை புதுப்பிக்க மீண்டும் மீண்டும் தேர்ந்தெடுக்கப்பட்டும் மறுபடியும் "
 "வாசிக்க வேண்டும்."
 
-#: purchasing/po_receive_items.php:242
+#: purchasing/po_receive_items.php:245
 msgid "Select a different purchase order for receiving goods against"
 msgstr ""
 "பொருளை வாங்குவதற்கு வேறு வாங்குவதற்கான ஆர்டர் ஒன்றைத் தேர்ந்தெடுக்கவும்"
 
-#: purchasing/po_receive_items.php:245
+#: purchasing/po_receive_items.php:248
 msgid "Re-Read the updated purchase order for receiving goods against"
 msgstr ""
 "பொருட்களை வாங்குவதற்காக புதுப்பிக்கப்பட்ட வாங்கிய ஆர்டரை மீண்டும் படிக்கவும்"
 
-#: purchasing/po_receive_items.php:321
+#: purchasing/po_receive_items.php:324
 msgid "Items to Receive"
 msgstr "பெறுவதற்கான உருப்படிகள்"
 
-#: purchasing/po_receive_items.php:326
+#: purchasing/po_receive_items.php:329
 msgid "Process Receive Items"
 msgstr "செயல்முறைகள் பெறுதல்"
 
-#: purchasing/po_receive_items.php:326
+#: purchasing/po_receive_items.php:329
 #: purchasing/includes/ui/invoice_ui.inc:222
 msgid "Clear all GL entry fields"
 msgstr "அனைத்து GL உள்ளீடு துறைகள் அழி"
@@ -12201,15 +12263,15 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட சப்ள�
 msgid "Credits can only be applied to invoiced items."
 msgstr "வரவுசெலவு செய்யப்படும் பொருட்களுக்கு மட்டுமே கடன்கள் வழங்கப்படும்."
 
-#: purchasing/includes/ui/po_ui.inc:135 sales/sales_order_entry.php:731
+#: purchasing/includes/ui/po_ui.inc:135 sales/sales_order_entry.php:737
 msgid "Order Date:"
 msgstr "ஆர்டர் தேதி:"
 
-#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:718
+#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:724
 msgid "Delivery Date:"
 msgstr "டெலிவரி தேதி:"
 
-#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:712
+#: purchasing/includes/ui/po_ui.inc:136 sales/sales_order_entry.php:718
 msgid "Invoice Date:"
 msgstr "விலைப்பட்டியல் தேதி:"
 
@@ -12358,16 +12420,16 @@ msgstr "விதிமுறை"
 msgid "Total Balance"
 msgstr "மொத்த இருப்பு"
 
-#: purchasing/inquiry/supplier_inquiry.php:94
+#: purchasing/inquiry/supplier_inquiry.php:96
 #: sales/inquiry/customer_inquiry.php:78
 msgid "Credit This"
 msgstr "கடன் இந்த"
 
-#: purchasing/inquiry/supplier_inquiry.php:109
+#: purchasing/inquiry/supplier_inquiry.php:111
 msgid "Print Remittance"
 msgstr "அச்சு பணம் செலுத்துதல்"
 
-#: purchasing/inquiry/supplier_inquiry.php:137
+#: purchasing/inquiry/supplier_inquiry.php:139
 msgid "Select a supplier:"
 msgstr "சப்ளையர் ஒன்றைத் தேர்ந்தெடுக்கவும்:"
 
@@ -12545,10 +12607,6 @@ msgstr "தொடர்புகளும்"
 msgid "Purchase &Orders"
 msgstr "கொள்முதல் ஆணைகள்"
 
-#: purchasing/manage/suppliers.php:325 sales/manage/customers.php:356
-msgid "Attachments"
-msgstr "இணைப்புகள்"
-
 #: purchasing/view/view_grn.php:21
 msgid "View Purchase Order Delivery"
 msgstr "கொள்முதல் ஆர்டர் ஆர்டர் டெலிவரி"
@@ -12568,7 +12626,7 @@ msgstr "வரி விவரம்"
 msgid "Required by"
 msgstr "இந்தத் தேதிக்குள் தேவை"
 
-#: purchasing/view/view_grn.php:80 purchasing/view/view_po.php:87
+#: purchasing/view/view_grn.php:80 purchasing/view/view_po.php:86
 #: purchasing/view/view_supp_credit.php:60
 #: purchasing/view/view_supp_invoice.php:69 sales/view/view_credit.php:135
 #: sales/view/view_sales_order.php:255
@@ -12596,16 +12654,16 @@ msgstr ""
 msgid "Requested By"
 msgstr "கேட்டுக்கொள்ளப்பட்டதின்படி"
 
-#: purchasing/view/view_po.php:116 sales/view/view_invoice.php:101
+#: purchasing/view/view_po.php:115 sales/view/view_invoice.php:101
 #: sales/view/view_sales_order.php:51
 msgid "Deliveries"
 msgstr "விநியோகங்கள்"
 
-#: purchasing/view/view_po.php:118
+#: purchasing/view/view_po.php:117
 msgid "Delivered On"
 msgstr "வழங்கப்பட்டது"
 
-#: purchasing/view/view_po.php:141 sales/view/view_sales_order.php:53
+#: purchasing/view/view_po.php:142 sales/view/view_sales_order.php:53
 msgid "Invoices/Credits"
 msgstr "பொருள் / கடன்"
 
@@ -12665,7 +12723,7 @@ msgid "Payment Currency"
 msgstr "பணம் நாணயம்"
 
 #: purchasing/view/view_supp_payment.php:65 reporting/rep112.php:164
-#: reporting/rep210.php:164 sales/customer_delivery.php:422
+#: reporting/rep210.php:164 sales/customer_delivery.php:423
 #: sales/customer_invoice.php:520 sales/customer_invoice.php:523
 #: sales/view/view_receipt.php:48 sales/view/view_sales_order.php:222
 msgid "Discount"
@@ -12890,7 +12948,7 @@ msgstr "டெல் தேதி"
 msgid "Loc"
 msgstr "இருப்பிடம்"
 
-#: reporting/rep105.php:115 sales/customer_delivery.php:421
+#: reporting/rep105.php:115 sales/customer_delivery.php:422
 #: sales/customer_invoice.php:522 sales/includes/ui/sales_order_ui.inc:147
 msgid "Delivered"
 msgstr "டெலிவரி செய்யப்பட்டது"
@@ -13160,7 +13218,7 @@ msgstr "சப்ளையர் சோதனை இருப்பு"
 msgid "PURCHASE ORDER"
 msgstr "கொள்முதல் ஆணை"
 
-#: reporting/rep209.php:210
+#: reporting/rep209.php:211
 msgid "TOTAL PO"
 msgstr "மொத்த PO"
 
@@ -13176,6 +13234,10 @@ msgstr "மொத்த மறுமதிப்பீடு"
 #: reporting/rep301.php:178
 msgid "Inventory Valuation Report"
 msgstr "சரக்கு மதிப்பீட்டு அறிக்கை"
+
+#: reporting/rep302.php:121
+msgid "3*M"
+msgstr "3*M"
 
 #: reporting/rep302.php:122
 msgid "Cust Ord"
@@ -13360,36 +13422,36 @@ msgstr "YTD"
 msgid "Dimension Summary"
 msgstr "பரிமாண சுருக்கம்"
 
-#: reporting/rep601.php:74
+#: reporting/rep601.php:73
 msgid "Bank Statement"
 msgstr "வங்கி அறிக்கை"
 
-#: reporting/rep601.php:95 reporting/rep602.php:87
+#: reporting/rep601.php:94 reporting/rep602.php:88
 #: reporting/includes/doctext.inc:261
 msgid "Bank Account"
 msgstr "வங்கி கணக்கு"
 
-#: reporting/rep601.php:159 reporting/rep602.php:151
+#: reporting/rep601.php:158 reporting/rep602.php:152
 msgid "Total Debit / Credit"
 msgstr "மொத்த கடன் / கடன்"
 
-#: reporting/rep601.php:176 reporting/rep602.php:167
+#: reporting/rep601.php:175 reporting/rep602.php:168
 msgid "Net Change"
 msgstr "நிகர மாற்றம்"
 
-#: reporting/rep602.php:73
+#: reporting/rep602.php:74
 msgid "Bank Statement w/Reconcile"
 msgstr "வங்கி அறிக்கை w/சரிசெய்யும்"
 
-#: reporting/rep602.php:81
+#: reporting/rep602.php:82
 msgid "Reco Date"
 msgstr "ரெக்கோ தேதி"
 
-#: reporting/rep602.php:81
+#: reporting/rep602.php:82
 msgid "Narration"
 msgstr "கதை"
 
-#: reporting/rep602.php:195
+#: reporting/rep602.php:196
 msgid "Bank Balance"
 msgstr "வங்கி இருப்பு"
 
@@ -14347,7 +14409,7 @@ msgstr "மறுதொகுப்பு விவரங்கள் இல்�
 msgid "Modifying Customer Credit Note #%d"
 msgstr "வாடிக்கையாளர் கடன் குறிப்பு #%d ஐ மாற்றியமைக்கிறது"
 
-#: sales/credit_note_entry.php:51 sales/sales_order_entry.php:709
+#: sales/credit_note_entry.php:51 sales/sales_order_entry.php:715
 msgid ""
 "There are no customers, or there are no customers with branches. Please "
 "define customers and customer branches."
@@ -14382,18 +14444,18 @@ msgid "Enter Another &Credit Note"
 msgstr "மற்றொரு கடன் குறிப்பு சேர்க்கவும்"
 
 #: sales/credit_note_entry.php:145 sales/customer_payments.php:147
-#: sales/sales_order_entry.php:360
+#: sales/sales_order_entry.php:366
 msgid "There is no customer selected."
 msgstr "எந்த வாடிக்கையாளரும் தேர்ந்தெடுக்கப்படவில்லை."
 
 #: sales/credit_note_entry.php:152 sales/customer_payments.php:154
-#: sales/sales_order_entry.php:367
+#: sales/sales_order_entry.php:373
 msgid "This customer has no branch defined."
 msgstr "இந்த வாடிக்கையாளர் வரையறுக்கப்பட்டுள்ள கிளைக்கு இல்லை."
 
 #: sales/credit_note_entry.php:164 sales/customer_credit_invoice.php:101
-#: sales/customer_delivery.php:177 sales/customer_invoice.php:317
-#: sales/sales_order_entry.php:445
+#: sales/customer_delivery.php:179 sales/customer_invoice.php:317
+#: sales/sales_order_entry.php:451
 msgid "You must enter a reference."
 msgstr "நீங்கள் ஒரு குறிப்பு உள்ளிட வேண்டும்."
 
@@ -14534,36 +14596,36 @@ msgstr "டெலிவரி குறிப்பு # %d ஐ மாற்ற�
 msgid "Deliver Items for a Sales Order"
 msgstr "விற்பனை ஆணைக்கு பொருட்களை வழங்குதல்"
 
-#: sales/customer_delivery.php:49 sales/sales_order_entry.php:199
+#: sales/customer_delivery.php:49 sales/sales_order_entry.php:203
 #, php-format
 msgid "Delivery # %d has been entered."
 msgstr "டெலிவரி # %d உள்ளிடப்பட்டுள்ளது."
 
-#: sales/customer_delivery.php:51 sales/sales_order_entry.php:201
+#: sales/customer_delivery.php:51 sales/sales_order_entry.php:205
 msgid "&View This Delivery"
 msgstr "இந்த டெலிவரி பார்க்கவும்"
 
-#: sales/customer_delivery.php:53 sales/customer_delivery.php:75
-#: sales/sales_order_entry.php:203
+#: sales/customer_delivery.php:53 sales/customer_delivery.php:77
+#: sales/sales_order_entry.php:207
 msgid "&Print Delivery Note"
 msgstr "அச்சு விநியோக குறிப்பு"
 
-#: sales/customer_delivery.php:54 sales/customer_delivery.php:76
-#: sales/sales_order_entry.php:204
+#: sales/customer_delivery.php:54 sales/customer_delivery.php:78
+#: sales/sales_order_entry.php:208
 msgid "&Email Delivery Note"
 msgstr "மின்னஞ்சல் டெலிவரி குறிப்பு"
 
-#: sales/customer_delivery.php:55 sales/customer_delivery.php:77
-#: sales/sales_order_entry.php:205
+#: sales/customer_delivery.php:55 sales/customer_delivery.php:79
+#: sales/sales_order_entry.php:209
 msgid "P&rint as Packing Slip"
 msgstr "பேக் ஸ்ளிப் என அச்சிடுக"
 
-#: sales/customer_delivery.php:56 sales/customer_delivery.php:78
-#: sales/sales_order_entry.php:206
+#: sales/customer_delivery.php:56 sales/customer_delivery.php:80
+#: sales/sales_order_entry.php:210
 msgid "E&mail as Packing Slip"
 msgstr "பேக் ஸ்ளிப் என மின்னஞ்சல்"
 
-#: sales/customer_delivery.php:58 sales/sales_order_entry.php:209
+#: sales/customer_delivery.php:58 sales/sales_order_entry.php:213
 msgid "View the GL Journal Entries for this Dispatch"
 msgstr "இந்த டிஸ்ப்ளேஜிற்காக GL ஜர்னல் பதிவுகள் காண்க"
 
@@ -14575,24 +14637,24 @@ msgstr "விலைப்பட்டியல் இந்த டெலிவ�
 msgid "Select Another Order For Dispatch"
 msgstr "டிஸ்பாட்சிற்கு மற்றொரு ஆர்டர் ஒன்றைத் தேர்ந்தெடுக்கவும்"
 
-#: sales/customer_delivery.php:71
+#: sales/customer_delivery.php:73
 #, php-format
 msgid "Delivery Note # %d has been updated."
 msgstr "டெலிவரி குறிப்பு # %d புதுப்பிக்கப்பட்டது."
 
-#: sales/customer_delivery.php:73
+#: sales/customer_delivery.php:75
 msgid "View this delivery"
 msgstr "இந்த விநியோகத்தைக் காண்க"
 
-#: sales/customer_delivery.php:81
+#: sales/customer_delivery.php:83
 msgid "Confirm Delivery and Invoice"
 msgstr "டெலிவரி மற்றும் விலைப்பட்டியல் உறுதிப்படுத்துக"
 
-#: sales/customer_delivery.php:83
+#: sales/customer_delivery.php:85
 msgid "Select A Different Delivery"
 msgstr "வேறுபட்ட டெலிவரி ஐ தேர்ந்தெடுக்கவும்"
 
-#: sales/customer_delivery.php:93 sales/customer_invoice.php:148
+#: sales/customer_delivery.php:95 sales/customer_invoice.php:148
 msgid ""
 "You have to set Deferred Income Account in GL Setup to entry prepayment "
 "invoices."
@@ -14600,15 +14662,15 @@ msgstr ""
 "நுழைவு முன்செலுத்தல் பொருள் செய்ய ஜி.ஜே. அமைப்பில் நீக்கப்பட்ட வருமானம் "
 "கணக்கு அமைக்க வேண்டும்."
 
-#: sales/customer_delivery.php:97 sales/customer_delivery.php:102
+#: sales/customer_delivery.php:99 sales/customer_delivery.php:104
 msgid "Select a different sales order to delivery"
 msgstr "வழங்குவதற்கு வேறுபட்ட விற்பனையைத் தேர்ந்தெடுக்கவும்"
 
-#: sales/customer_delivery.php:98
+#: sales/customer_delivery.php:100
 msgid "This order has no items. There is nothing to delivery."
 msgstr "இந்த வரிசையில் உருப்படி இல்லை. விநியோகிக்க எதுவும் இல்லை."
 
-#: sales/customer_delivery.php:104
+#: sales/customer_delivery.php:106
 msgid ""
 "This prepayment order is not yet ready for delivery due to insufficient "
 "amount received."
@@ -14616,15 +14678,15 @@ msgstr ""
 "பெறப்பட்ட போதிய அளவு கிடைக்காததால் இந்த முன் வரிசையில் ஆர்டர் இன்னும் "
 "தயாராகவில்லை."
 
-#: sales/customer_delivery.php:121
+#: sales/customer_delivery.php:123
 msgid "Select a different delivery"
 msgstr "வேறு விநியோகத்தைத் தேர்ந்தெடுக்கவும்"
 
-#: sales/customer_delivery.php:122
+#: sales/customer_delivery.php:124
 msgid "This delivery has all items invoiced. There is nothing to modify."
 msgstr "இந்த டெலிவரி அனைத்து பொருட்களையும் பெறுகிறது. மாற்ற எதுவும் இல்லை."
 
-#: sales/customer_delivery.php:132
+#: sales/customer_delivery.php:134
 msgid ""
 "This page can only be opened if an order or delivery note has been selected."
 " Please select it first."
@@ -14632,11 +14694,11 @@ msgstr ""
 "ஒரு ஆர்டர் அல்லது விநியோக குறிப்பு தேர்ந்தெடுக்கப்பட்டால் மட்டுமே இந்த "
 "பக்கம் திறக்கப்படும். முதலில் அதைத் தேர்ந்தெடுக்கவும்."
 
-#: sales/customer_delivery.php:134
+#: sales/customer_delivery.php:136
 msgid "Select a Sales Order to Delivery"
 msgstr "டெலிவரிக்கு விற்பனை ஆணை ஒன்றைத் தேர்ந்தெடுக்கவும்"
 
-#: sales/customer_delivery.php:143
+#: sales/customer_delivery.php:145
 msgid ""
 "Selected quantity cannot be less than quantity invoiced nor more than "
 "quantity\tnot dispatched on sales order."
@@ -14644,27 +14706,27 @@ msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட அளவு விற்பனை அளவுக்கு அனுப்பப்பட்ட அளவை விட குறைவாக "
 "இருக்க முடியாது."
 
-#: sales/customer_delivery.php:146
+#: sales/customer_delivery.php:148
 msgid "Freight cost cannot be less than zero"
 msgstr "சரக்குச் செலவு பூஜ்ஜியத்தைக் காட்டிலும் குறைவாக இருக்க முடியாது"
 
-#: sales/customer_delivery.php:158
+#: sales/customer_delivery.php:160
 msgid "The entered date of delivery is invalid."
 msgstr "வழங்கப்பட்ட தேதி வழங்கப்பட்ட தேதி தவறானது."
 
-#: sales/customer_delivery.php:170
+#: sales/customer_delivery.php:172
 msgid "The entered dead-line for invoice is invalid."
 msgstr "உள்ளீட்டிற்கான உள்ளிட்ட இறந்த-வரி தவறானது."
 
-#: sales/customer_delivery.php:187 sales/customer_invoice.php:330
+#: sales/customer_delivery.php:189 sales/customer_invoice.php:330
 msgid "The entered shipping value is not numeric."
 msgstr "உள்ளிட்ட கப்பல் மதிப்பு எண் அல்ல."
 
-#: sales/customer_delivery.php:193
+#: sales/customer_delivery.php:195
 msgid "There are no item quantities on this delivery note."
 msgstr "இந்த விநியோக குறிப்பில் எந்த உருப்படியும் இல்லை."
 
-#: sales/customer_delivery.php:205 sales/sales_order_entry.php:389
+#: sales/customer_delivery.php:207 sales/sales_order_entry.php:395
 msgid ""
 "This document cannot be processed because there is insufficient quantity for"
 " items marked."
@@ -14672,19 +14734,19 @@ msgstr ""
 "குறிக்கப்பட்ட பொருட்களுக்கு போதிய அளவு இல்லாததால், இந்த ஆவணத்தை செயலாக்க "
 "முடியாது."
 
-#: sales/customer_delivery.php:342
+#: sales/customer_delivery.php:343
 msgid "For Sales Order"
 msgstr "விற்பனை ஆணை"
 
-#: sales/customer_delivery.php:351
+#: sales/customer_delivery.php:352
 msgid "Delivery From"
 msgstr "இருந்து டெலிவரி"
 
-#: sales/customer_delivery.php:400
+#: sales/customer_delivery.php:401
 msgid "Invoice Dead-line"
 msgstr "விலைப்பட்டியல் டெட்-லைன்"
 
-#: sales/customer_delivery.php:410 sales/customer_invoice.php:507
+#: sales/customer_delivery.php:411 sales/customer_invoice.php:507
 #: sales/includes/ui/sales_order_ui.inc:83
 #: sales/includes/ui/sales_order_ui.inc:357
 msgid ""
@@ -14694,51 +14756,51 @@ msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட வாடிக்கையாளர் கணக்கு தற்போது உள்ளது. விவாதிக்க கடன் "
 "கட்டுப்பாட்டு அதிகாரிகளை தொடர்பு கொள்ளவும்."
 
-#: sales/customer_delivery.php:415
+#: sales/customer_delivery.php:416
 msgid "Delivery Items"
 msgstr "டெலிவரி பொருட்கள்"
 
-#: sales/customer_delivery.php:421
+#: sales/customer_delivery.php:422
 msgid "Max. delivery"
 msgstr "அதிகபட்ச விநியோகம்"
 
-#: sales/customer_delivery.php:421 sales/customer_invoice.php:522
+#: sales/customer_delivery.php:422 sales/customer_invoice.php:522
 msgid "Invoiced"
 msgstr "விலை விவரம்"
 
-#: sales/customer_delivery.php:498 sales/customer_invoice.php:612
+#: sales/customer_delivery.php:499 sales/customer_invoice.php:612
 msgid "Shipping Cost"
 msgstr "கப்பல் செலவு"
 
-#: sales/customer_delivery.php:518 sales/includes/ui/sales_order_ui.inc:236
+#: sales/customer_delivery.php:519 sales/includes/ui/sales_order_ui.inc:236
 msgid ""
 "Marked items have insufficient quantities in stock as on day of delivery."
 msgstr ""
 "குறிக்கப்பட்ட பொருட்கள் விநியோகத்தின் போது பங்குகளில் போதிய அளவு இல்லை."
 
-#: sales/customer_delivery.php:522
+#: sales/customer_delivery.php:523
 msgid "Action For Balance"
 msgstr "இருப்பு செயல்"
 
-#: sales/customer_delivery.php:529 sales/customer_delivery.php:531
-#: sales/customer_delivery.php:534 sales/customer_invoice.php:664
+#: sales/customer_delivery.php:530 sales/customer_delivery.php:532
+#: sales/customer_delivery.php:535 sales/customer_invoice.php:664
 msgid "Refresh document page"
 msgstr "ஆவணப் பக்கத்தை புதுப்பி"
 
-#: sales/customer_delivery.php:531
+#: sales/customer_delivery.php:532
 msgid "Reset quantity"
 msgstr "அளவு மீட்டமை"
 
-#: sales/customer_delivery.php:534
+#: sales/customer_delivery.php:535
 msgid "Clear quantity"
 msgstr "தெளிவான அளவு"
 
-#: sales/customer_delivery.php:536
+#: sales/customer_delivery.php:537
 msgid "Process Dispatch"
 msgstr "செயலாக்க அனுப்புதல்"
 
-#: sales/customer_delivery.php:537 sales/customer_invoice.php:666
-#: sales/sales_order_entry.php:756
+#: sales/customer_delivery.php:538 sales/customer_invoice.php:666
+#: sales/sales_order_entry.php:762
 msgid "Check entered data and save document"
 msgstr "தரவு உள்ளிட்டு, ஆவணம் சேமிக்கவும்"
 
@@ -14764,7 +14826,7 @@ msgid "Selected deliveries has been processed"
 msgstr "தேர்ந்தெடுத்த விநியோகங்கள் செயலாக்கப்பட்டன"
 
 #: sales/customer_invoice.php:59 sales/customer_invoice.php:83
-#: sales/sales_order_entry.php:228
+#: sales/sales_order_entry.php:234
 msgid "&View This Invoice"
 msgstr "இந்த விலைப்பட்டியல் காண்க"
 
@@ -14776,7 +14838,7 @@ msgstr "இந்த விலைப்பட்டியல் அச்சி�
 msgid "&Email This Invoice"
 msgstr "இந்த விலைப்பட்டியல் மின்னஞ்சல்"
 
-#: sales/customer_invoice.php:64 sales/sales_order_entry.php:238
+#: sales/customer_invoice.php:64 sales/sales_order_entry.php:244
 msgid "View the GL &Journal Entries for this Invoice"
 msgstr "இந்த விலைப்பட்டியல் க்கான GL ஜர்னல் பதிவுகள் காண்க"
 
@@ -14784,7 +14846,7 @@ msgstr "இந்த விலைப்பட்டியல் க்கான 
 msgid "Select Another &Delivery For Invoicing"
 msgstr "விலைக்கு மற்றொரு டெலிவரி தேர்ந்தெடுக்கவும்"
 
-#: sales/customer_invoice.php:69 sales/sales_order_entry.php:248
+#: sales/customer_invoice.php:69 sales/sales_order_entry.php:254
 msgid "Entry &customer payment for this invoice"
 msgstr "இந்த விலைப்பட்டியல் வாடிக்கையாளர் கட்டணம் செலுத்துங்கள்"
 
@@ -14869,7 +14931,7 @@ msgstr ""
 msgid "Payment terms:"
 msgstr "கட்டண வரையறைகள்:"
 
-#: sales/customer_invoice.php:513 sales/sales_order_entry.php:732
+#: sales/customer_invoice.php:513 sales/sales_order_entry.php:738
 msgid "Sales Order Items"
 msgstr "விற்பனை ஆணை பொருட்கள்"
 
@@ -15059,7 +15121,7 @@ msgstr ""
 msgid "Order # %d has been entered."
 msgstr "ஆர்டர் # %d உள்ளிடப்பட்டுள்ளது."
 
-#: sales/sales_order_entry.php:127 sales/sales_order_entry.php:147
+#: sales/sales_order_entry.php:127 sales/sales_order_entry.php:149
 msgid "&View This Order"
 msgstr "இந்த வரிசையைக் காண்க"
 
@@ -15071,103 +15133,103 @@ msgstr "இந்த ஆர்டர் மீது டெலிவரி ச�
 msgid "Enter a &New Order"
 msgstr "புதிய ஆர்டர் ஒன்றை உள்ளிடவும்"
 
-#: sales/sales_order_entry.php:145
+#: sales/sales_order_entry.php:147
 #, php-format
 msgid "Order # %d has been updated."
 msgstr "ஆர்டர் # %d புதுப்பிக்கப்பட்டது."
 
-#: sales/sales_order_entry.php:153
+#: sales/sales_order_entry.php:155
 msgid "Confirm Order Quantities and Make &Delivery"
 msgstr "ஆர்டர் அளவுகளை உறுதிப்படுத்தி டெலிவரி செய்யுங்கள்"
 
-#: sales/sales_order_entry.php:156
+#: sales/sales_order_entry.php:158
 msgid "Select A Different &Order"
 msgstr "வேறுபட்ட வரிசை ஒன்றைத் தேர்ந்தெடுக்கவும்"
 
-#: sales/sales_order_entry.php:163
+#: sales/sales_order_entry.php:165
 #, php-format
 msgid "Quotation # %d has been entered."
 msgstr "மேற்கோள் # %d உள்ளிடப்பட்டுள்ளது."
 
-#: sales/sales_order_entry.php:165 sales/sales_order_entry.php:183
+#: sales/sales_order_entry.php:167 sales/sales_order_entry.php:187
 msgid "&View This Quotation"
 msgstr "இந்த மேற்கோளைக் காண்க"
 
-#: sales/sales_order_entry.php:167 sales/sales_order_entry.php:185
+#: sales/sales_order_entry.php:169 sales/sales_order_entry.php:189
 msgid "&Print This Quotation"
 msgstr "இந்த மேற்கோளை அச்சிடுக"
 
-#: sales/sales_order_entry.php:168 sales/sales_order_entry.php:186
+#: sales/sales_order_entry.php:170 sales/sales_order_entry.php:190
 msgid "&Email This Quotation"
 msgstr "இந்த மேற்கோளை மின்னஞ்சல்"
 
-#: sales/sales_order_entry.php:171 sales/sales_order_entry.php:189
+#: sales/sales_order_entry.php:173 sales/sales_order_entry.php:193
 msgid "Make &Sales Order Against This Quotation"
 msgstr "இந்த மேற்கோளை எதிர்த்து விற்பனையை ஆர்டர் செய்யவும்"
 
-#: sales/sales_order_entry.php:174
+#: sales/sales_order_entry.php:176
 msgid "Enter a New &Quotation"
 msgstr "புதிய மேற்கோளை உள்ளிடவும்"
 
-#: sales/sales_order_entry.php:181
+#: sales/sales_order_entry.php:185
 #, php-format
 msgid "Quotation # %d has been updated."
 msgstr "மேற்கோள் # %d புதுப்பிக்கப்பட்டது."
 
-#: sales/sales_order_entry.php:192
+#: sales/sales_order_entry.php:196
 msgid "Select A Different &Quotation"
 msgstr "வேறுபட்ட மேற்கோளைத் தேர்ந்தெடுக்கவும்"
 
-#: sales/sales_order_entry.php:211
+#: sales/sales_order_entry.php:215
 msgid "Make &Invoice Against This Delivery"
 msgstr "இந்த டெலிவரிக்கு எதிரான விலைப்பட்டியல் செய்யுங்கள்"
 
-#: sales/sales_order_entry.php:215
+#: sales/sales_order_entry.php:219
 msgid "Enter a New Template &Delivery"
 msgstr "ஒரு புதிய டெம்ப்ளேட் டெலிவரி உள்ளிடவும்"
 
-#: sales/sales_order_entry.php:218
+#: sales/sales_order_entry.php:222
 msgid "Enter a &New Delivery"
 msgstr "புதிய டெலிவரி உள்ளிடவும்"
 
-#: sales/sales_order_entry.php:226
+#: sales/sales_order_entry.php:232
 #, php-format
 msgid "Invoice # %d has been entered."
 msgstr "விலைப்பட்டியல் # %d உள்ளிடப்பட்டுள்ளது."
 
-#: sales/sales_order_entry.php:230
+#: sales/sales_order_entry.php:236
 msgid "&Print Sales Invoice"
 msgstr "விற்பனை விவரப்பட்டியல் அச்சிடு"
 
-#: sales/sales_order_entry.php:231
+#: sales/sales_order_entry.php:237
 msgid "&Email Sales Invoice"
 msgstr "மின்னஞ்சல் விற்பனை விலைப்பட்டியல்"
 
-#: sales/sales_order_entry.php:236
+#: sales/sales_order_entry.php:242
 msgid "Print &Receipt"
 msgstr "அச்சு ரசீது"
 
-#: sales/sales_order_entry.php:241
+#: sales/sales_order_entry.php:247
 msgid "Enter a &New Template Invoice"
 msgstr "ஒரு புதிய டெம்ப்ளேட் விலைப்பட்டியல் உள்ளிடவும்"
 
-#: sales/sales_order_entry.php:244
+#: sales/sales_order_entry.php:250
 msgid "Enter a &New Direct Invoice"
 msgstr "புதிய நேரடி விலைப்பட்டியல் சேர்க்கவும்"
 
-#: sales/sales_order_entry.php:395
+#: sales/sales_order_entry.php:401
 msgid "Pre-payment required have to be positive and less than total amount."
 msgstr ""
 "முன் பணம் தேவைப்படும்போது, ​​மொத்த தொகையை விட நேர்மறை மற்றும் குறைவாக இருக்க"
 " வேண்டும்."
 
-#: sales/sales_order_entry.php:400
+#: sales/sales_order_entry.php:406
 msgid ""
 "You must enter the person or company to whom delivery should be made to."
 msgstr ""
 "விநியோகிக்கப்பட வேண்டிய நபரிடம் அல்லது நபரிடம் நீங்கள் நுழைய வேண்டும்."
 
-#: sales/sales_order_entry.php:406
+#: sales/sales_order_entry.php:412
 msgid ""
 "You should enter the street address in the box provided. Orders cannot be "
 "accepted without a valid street address."
@@ -15175,38 +15237,38 @@ msgstr ""
 "வழங்கப்பட்ட பெட்டியில் தெரு முகவரிக்குள் நுழைய வேண்டும். செல்லுபடியாகும் "
 "தெரு முகவரி இல்லாமல் ஆணைகளை ஏற்றுக்கொள்ள முடியாது."
 
-#: sales/sales_order_entry.php:415
+#: sales/sales_order_entry.php:421
 msgid "The shipping cost entered is expected to be numeric."
 msgstr "நுழைந்த கப்பல் செலவு எண்ணிக் கணக்கிடப்படுகிறது."
 
-#: sales/sales_order_entry.php:421
+#: sales/sales_order_entry.php:427
 msgid "The Valid date is invalid."
 msgstr "செல்லுபடியாகும் தேதி செல்லாதது."
 
-#: sales/sales_order_entry.php:423
+#: sales/sales_order_entry.php:429
 msgid "The delivery date is invalid."
 msgstr "விநியோக தேதி தவறானது."
 
-#: sales/sales_order_entry.php:429
+#: sales/sales_order_entry.php:435
 msgid "The requested valid date is before the date of the quotation."
 msgstr "கோரப்பட்ட செல்லுபடியாகும் தேதி மேற்கோள் தேதிக்கு முன்பே உள்ளது."
 
-#: sales/sales_order_entry.php:431
+#: sales/sales_order_entry.php:437
 msgid "The requested delivery date is before the date of the order."
 msgstr "கோரப்பட்ட விநியோக தேதி ஆர்டர் தேதி முன் உள்ளது."
 
-#: sales/sales_order_entry.php:440
+#: sales/sales_order_entry.php:446
 msgid "You need to define a cash account for your Sales Point."
 msgstr "உங்கள் விற்பனை புள்ளியில் ஒரு பணக் கணக்கை நீங்கள் வரையறுக்க வேண்டும்."
 
-#: sales/sales_order_entry.php:483
+#: sales/sales_order_entry.php:489
 msgid ""
 "The reference number field has been increased. Please save the document "
 "again."
 msgstr ""
 "குறிப்பு எண் புலம் அதிகரிக்கப்பட்டுள்ளது. ஆவணத்தை மீண்டும் சேமிக்கவும்."
 
-#: sales/sales_order_entry.php:527
+#: sales/sales_order_entry.php:533
 msgid ""
 "The item could not be updated because you are attempting to set the quantity"
 " ordered to less than 0, or the discount percent to more than 100."
@@ -15214,13 +15276,13 @@ msgstr ""
 "உருப்படியை புதுப்பிக்க முடியவில்லை, ஏனென்றால் 0-க்கும் குறைவாகக் கட்டப்பட்ட "
 "அளவு அல்லது 100 க்கும் குறைவான தள்ளுபடி சதையை அமைக்க முயற்சிக்கிறீர்கள்."
 
-#: sales/sales_order_entry.php:531
+#: sales/sales_order_entry.php:537
 msgid "Price for inventory item must be entered and can not be less than 0"
 msgstr ""
 "சரக்கு உருப்படிக்கான விலை உள்ளிடப்பட வேண்டும் மற்றும் 0 ஐ விட குறைவாக இருக்க"
 " முடியாது"
 
-#: sales/sales_order_entry.php:538
+#: sales/sales_order_entry.php:544
 msgid ""
 "You attempting to make the quantity ordered a quantity less than has already"
 " been delivered. The quantity delivered cannot be modified retrospectively."
@@ -15228,134 +15290,134 @@ msgstr ""
 "ஏற்கனவே வழங்கப்பட்டதை விட குறைவான அளவை ஆர்டர் செய்ய முயற்சிக்கிறீர்கள். "
 "வழங்கப்பட்ட அளவை திருத்தியமைக்க முடியாது."
 
-#: sales/sales_order_entry.php:556
+#: sales/sales_order_entry.php:562
 #, php-format
 msgid "Price %s is below Standard Cost %s"
 msgstr "விலை %s ஆனது நிலையான விலை%s ஆகும்"
 
-#: sales/sales_order_entry.php:581
+#: sales/sales_order_entry.php:587
 msgid ""
 "This item cannot be deleted because some of it has already been delivered."
 msgstr ""
 "இந்த உருப்படியை நீக்க முடியாது, ஏனெனில் அதில் சில ஏற்கனவே வழங்கப்பட்டுள்ளன."
 
-#: sales/sales_order_entry.php:610
+#: sales/sales_order_entry.php:616
 msgid "Direct delivery entry has been cancelled as requested."
 msgstr "கோரப்பட்டபடி நேரடி டெலிவரி நுழைவு ரத்து செய்யப்பட்டது."
 
-#: sales/sales_order_entry.php:611
+#: sales/sales_order_entry.php:617
 msgid "Enter a New Sales Delivery"
 msgstr "புதிய விற்பனை டெலிவரி உள்ளிடவும்"
 
-#: sales/sales_order_entry.php:613
+#: sales/sales_order_entry.php:619
 msgid "Direct invoice entry has been cancelled as requested."
 msgstr "கோரப்பட்டபடி நேரடி விலைப்பட்டியல் நுழைவு ரத்து செய்யப்பட்டது."
 
-#: sales/sales_order_entry.php:614
+#: sales/sales_order_entry.php:620
 msgid "Enter a New Sales Invoice"
 msgstr "புதிய விற்பனை விவரப்பட்டியல் சேர்க்கவும்"
 
-#: sales/sales_order_entry.php:619
+#: sales/sales_order_entry.php:625
 msgid "This sales quotation has been cancelled as requested."
 msgstr "கோரப்பட்டபடி இந்த விற்பனை மேற்கோள் ரத்து செய்யப்பட்டது."
 
-#: sales/sales_order_entry.php:620
+#: sales/sales_order_entry.php:626
 msgid "Enter a New Sales Quotation"
 msgstr "புதிய விற்பனை மேற்கோள் உள்ளிடவும்"
 
-#: sales/sales_order_entry.php:627
+#: sales/sales_order_entry.php:633
 msgid "Undelivered part of order has been cancelled as requested."
 msgstr "வேண்டுமென்றே உத்தரவாதமற்ற பகுதியை ரத்து செய்யப்பட்டது."
 
-#: sales/sales_order_entry.php:628
+#: sales/sales_order_entry.php:634
 msgid "Select Another Sales Order for Edition"
 msgstr "பதிப்புக்கு மற்றொரு விற்பனை ஆணை தேர்ந்தெடுக்கவும்"
 
-#: sales/sales_order_entry.php:632
+#: sales/sales_order_entry.php:638
 msgid "This sales order has been cancelled as requested."
 msgstr "கோரப்பட்டபடி இந்த விற்பனை ஆர்டர் ரத்து செய்யப்பட்டது."
 
-#: sales/sales_order_entry.php:633
+#: sales/sales_order_entry.php:639
 msgid "Enter a New Sales Order"
 msgstr "புதிய விற்பனை ஆணை சேர்க்கவும்"
 
-#: sales/sales_order_entry.php:713
+#: sales/sales_order_entry.php:719
 msgid "Sales Invoice Items"
 msgstr "விற்பனை விலைப்பட்டியல் பொருட்கள்"
 
-#: sales/sales_order_entry.php:714
+#: sales/sales_order_entry.php:720
 msgid "Enter Delivery Details and Confirm Invoice"
 msgstr "டெலிவரி விவரங்களை உள்ளிட்டு, விலைப்பட்டியல் உறுதிப்படுத்தவும்"
 
-#: sales/sales_order_entry.php:716
+#: sales/sales_order_entry.php:722
 msgid "Place Invoice"
 msgstr "இடம் விலைப்பட்டியல்"
 
-#: sales/sales_order_entry.php:719
+#: sales/sales_order_entry.php:725
 msgid "Delivery Note Items"
 msgstr "டெலிவரி குறிப்பு பொருட்கள்"
 
-#: sales/sales_order_entry.php:720
+#: sales/sales_order_entry.php:726
 msgid "Enter Delivery Details and Confirm Dispatch"
 msgstr "டெலிவரி விவரங்களை உள்ளிடுக"
 
-#: sales/sales_order_entry.php:721
+#: sales/sales_order_entry.php:727
 msgid "Cancel Delivery"
 msgstr "டெலிவரி ரத்துசெய்யவும்"
 
-#: sales/sales_order_entry.php:722
+#: sales/sales_order_entry.php:728
 msgid "Place Delivery"
 msgstr "இடம் வழங்கல்"
 
-#: sales/sales_order_entry.php:724
+#: sales/sales_order_entry.php:730
 msgid "Quotation Date:"
 msgstr "மேற்கோள் தேதி:"
 
-#: sales/sales_order_entry.php:725
+#: sales/sales_order_entry.php:731
 msgid "Sales Quotation Items"
 msgstr "விற்பனை மேற்கோள் பொருட்கள்"
 
-#: sales/sales_order_entry.php:726
+#: sales/sales_order_entry.php:732
 msgid "Enter Delivery Details and Confirm Quotation"
 msgstr "டெலிவரி விவரங்களை உள்ளிட்டு மேற்கோள் உறுதிப்படுத்தவும்"
 
-#: sales/sales_order_entry.php:727
+#: sales/sales_order_entry.php:733
 msgid "Cancel Quotation"
 msgstr "மேற்கோளை ரத்துசெய்"
 
-#: sales/sales_order_entry.php:728
+#: sales/sales_order_entry.php:734
 msgid "Place Quotation"
 msgstr "இடம் மேற்கோள்"
 
-#: sales/sales_order_entry.php:729
+#: sales/sales_order_entry.php:735
 msgid "Commit Quotations Changes"
 msgstr "மேற்கோள்கள் மாற்றங்களைச் செய்யவும்"
 
-#: sales/sales_order_entry.php:733
+#: sales/sales_order_entry.php:739
 msgid "Enter Delivery Details and Confirm Order"
 msgstr "டெலிவரி விவரங்களை உள்ளிடுக"
 
-#: sales/sales_order_entry.php:736
+#: sales/sales_order_entry.php:742
 msgid "Commit Order Changes"
 msgstr "ஆணை மாற்றங்களைச் செய்யவும்"
 
-#: sales/sales_order_entry.php:758 sales/sales_order_entry.php:764
+#: sales/sales_order_entry.php:764 sales/sales_order_entry.php:770
 msgid ""
 "Cancels document entry or removes sales order when editing an old document"
 msgstr ""
 "பழைய ஆவணத்தைத் திருத்தும்போது ஆவணம் இடுகையை ரத்துசெய்தல் அல்லது விற்பனை "
 "வரிசையை நீக்குகிறது"
 
-#: sales/sales_order_entry.php:759 sales/sales_order_entry.php:768
+#: sales/sales_order_entry.php:765 sales/sales_order_entry.php:774
 msgid "You are about to void this Document.\\nDo you want to continue?"
 msgstr ""
 "இந்த ஆவணத்தை நீங்கள் முடக்குகிறீர்கள். \\nநீங்கள் தொடர விரும்புகிறீர்களா?"
 
-#: sales/sales_order_entry.php:762
+#: sales/sales_order_entry.php:768
 msgid "Validate changes and update document"
 msgstr "மாற்றங்களை சரிபார்க்கவும் மற்றும் ஆவணத்தை புதுப்பிக்கவும்"
 
-#: sales/sales_order_entry.php:766
+#: sales/sales_order_entry.php:772
 msgid ""
 "You are about to cancel undelivered part of this order.\\nDo you want to "
 "continue?"
@@ -15389,7 +15451,7 @@ msgstr ""
 "இந்த திருத்தும் அமர்வு மற்றொரு உலாவி தாவலில் விற்பனையைத் திறக்கும் ஆவணத்தைத்"
 " திறந்து விட்டது. ஒரே ஒரு விற்பனை ஆவணத்தை ஒரே நேரத்தில் திருத்த முடியாது."
 
-#: sales/includes/db/custalloc_db.inc:386
+#: sales/includes/db/custalloc_db.inc:387
 msgid ""
 "Unsuspected overallocation happened due to sparse credit notes exists for this invoice.\n"
 " Check all credit notes allocated to this invoice for summarized freight charges."
