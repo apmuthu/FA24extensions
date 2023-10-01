@@ -317,7 +317,7 @@ function auto_create($current)
                     $to_reconciled=date2sql($_POST['reconcile_date']);
                 }
                 // display_notification($from_account ." " .  $to_account . " " .  $newdate ." " .  $amt ." " . $reference);
-                add_bank_transfer($from_account, $to_account, $newdate, $amt, $reference, "", 0, 0, $from_reconciled, $to_reconciled);
+                add_bank_transfer($from_account, $to_account, $newdate, $amt, $reference, "", $sim['dim1'], $sim['dim2'], 0,0, $from_reconciled, $to_reconciled);
             } else {
                 $id = bank_inclusive_tax($sim['type'], $reference, $newdate, $_POST['bank_account'], $bank_account_gl_code, $trans_no, $sim['account'], $sim['dim1'], $sim['dim2'], "", $amt, $sim['person_type_id'], $sim['person_id'], $BranchNo);
 
@@ -459,7 +459,7 @@ if (isset($_POST['import'])) {
 
                         if (db_num_rows($result) == 1) {
                             $sim = db_fetch($result);
-                            display_notification("$date : $amount : $comment will be created using account " . $sim['account'] . " " . $sim['account_name'] . " dimension " . $sim['dim1']); 
+                            display_notification("$date : $amount : $comment will be created using account " . $sim['account'] . " " . $sim['account_name'] . " dimension " . $sim['dim1'] . " type " . $sim['type']); 
                             $auto[] = array($sim['id'], $amount, $comment, $date);
                             $total_current += $amount;
                             $total += $amount;
@@ -470,16 +470,18 @@ if (isset($_POST['import'])) {
                     display_notification("$date : $amount : $comment NOT FOUND - FIX THIS");
                     $total_miss += $amount;
                     $total += $amount;
-                } else if (db_num_rows($result) == 1 || $early) {
+                } else {
                     $row = db_fetch($result);
+                    if (!(db_num_rows($result) == 1 || $early)) {
+                        // could be double billing, or two separate items that happen to be the same
+                        // if the wrong match is made, change the dates
+                        display_notification("Multiple match for $date : $checkno : $amount : $comment");
+                        display_notification($row['trans_date'] . ":" . $row['amount'] . ":" . $row['memo_']);
+                        display_notification("Hint: if incorrect match, change transaction dates to match bank statement.");
+                    }
                     $current[$row['id']] = $comment;
                     $total_current += $row['amount'];
                     $total += $row['amount'];
-                } else {
-                    display_error("Multiple match for $date : $checkno : $amount : $comment");
-                    while ($row = db_fetch($result))
-                        display_error($row['trans_date'] . ":" . $row['amount'] . ":" . $row['memo_']);
-                    display_error("Hint: edit transaction dates to match bank statement.");
                 }
             } // foreach
         } // for

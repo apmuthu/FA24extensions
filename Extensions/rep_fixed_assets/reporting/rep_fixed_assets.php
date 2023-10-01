@@ -43,36 +43,29 @@ function get_fixed_asset_gl_trans($from_date, $to_date, $trans_no=0,
     if (!$detail)
         $sql .= " SUM(gl.amount) as total, gl.dimension_id, gl.dimension2_id";
     else
-        $sql .= " gl.*, j.event_date, j.doc_date, a.gl_seq, u.user_id, st.supp_reference, gl.person_id subcode,
+        $sql .= " gl.*, gl.person_id,
 			IFNULL(IFNULL(sup.supp_name, debt.name), bt.person_id) as person_name, 
 			IFNULL(gl.person_id, IFNULL(sup.supplier_id, IFNULL(debt.debtor_no, bt.person_id))) as person_id,
-                        IF(gl.person_id, gl.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id,
-			IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl.tran_date)))) as doc_date,
-			coa.account_name, ref.reference";
+                        IF(gl.person_id, gl.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id";
+
 
     $sql .= " FROM ".TB_PREF."gl_trans gl
-			LEFT JOIN ".TB_PREF."voided v ON gl.type_no=v.id AND v.type=gl.type
+			LEFT JOIN ".TB_PREF."voided v ON gl.type_no=v.id AND v.type=gl.type";
 
-			LEFT JOIN ".TB_PREF."supp_trans st ON gl.type_no=st.trans_no AND st.type=gl.type AND (gl.type!=".ST_JOURNAL." OR gl.person_id=st.supplier_id)
+    if ($detail)
+        $sql .= " LEFT JOIN ".TB_PREF."supp_trans st ON gl.type_no=st.trans_no AND st.type=gl.type AND (gl.type!=".ST_JOURNAL." OR gl.person_id=st.supplier_id)
 			LEFT JOIN ".TB_PREF."grn_batch grn ON grn.id=gl.type_no AND gl.type=".ST_SUPPRECEIVE." AND gl.person_id=grn.supplier_id
 			LEFT JOIN ".TB_PREF."debtor_trans dt ON gl.type_no=dt.trans_no AND dt.type=gl.type AND (gl.type!=".ST_JOURNAL." OR gl.person_id=dt.debtor_no)
 
 			LEFT JOIN ".TB_PREF."suppliers sup ON st.supplier_id=sup.supplier_id OR grn.supplier_id=sup.supplier_id
-			LEFT JOIN ".TB_PREF."cust_branch branch ON dt.branch_code=branch.branch_code
 			LEFT JOIN ".TB_PREF."debtors_master debt ON dt.debtor_no=debt.debtor_no
 
 			LEFT JOIN ".TB_PREF."bank_trans bt ON bt.type=gl.type AND bt.trans_no=gl.type_no AND bt.amount!=0
-                        AND (bt.person_id != '' AND !ISNULL(bt.person_id))
+                        AND (bt.person_id != '' AND !ISNULL(bt.person_id))";
 
-			LEFT JOIN ".TB_PREF."journal j ON j.type=gl.type AND j.trans_no=gl.type_no
-			LEFT JOIN ".TB_PREF."audit_trail a ON a.type=gl.type AND a.trans_no=gl.type_no AND NOT ISNULL(gl_seq)
-			LEFT JOIN ".TB_PREF."users u ON a.user=u.id
-			LEFT JOIN ".TB_PREF."comments c ON c.type=gl.type AND c.id=gl.type_no
+    $sql .= " LEFT JOIN ".TB_PREF."comments c ON c.type=gl.type AND c.id=gl.type_no
 
-			LEFT JOIN ".TB_PREF."refs ref ON ref.type=gl.type AND ref.id=gl.type_no,"
-		.TB_PREF."chart_master coa
-		WHERE coa.account_code=gl.account
-		AND ISNULL(v.date_)
+		WHERE ISNULL(v.date_)
 		AND gl.tran_date >= '$from'
 		AND gl.tran_date <= '$to'
 		AND gl.amount <> 0"; 
@@ -97,8 +90,10 @@ function get_fixed_asset_gl_trans($from_date, $to_date, $trans_no=0,
             $sql .= " AND gl.dimension2_id = ".($dimension2<0 ? 0 : db_escape($dimension2));
     }
 
+    // split bank_trans result in multiple rows
+    // GROUP BY bt.trans_no retrieves just a single row to prevent identical memo rows
     if ($detail)
-        $sql .= " ORDER BY memo, tran_date, counter";
+        $sql .= " GROUP BY bt.trans_no ORDER BY memo, tran_date, counter";
     else
         $sql .= " GROUP BY memo HAVING ROUND(total,2) != 0 ORDER BY memo";
 
