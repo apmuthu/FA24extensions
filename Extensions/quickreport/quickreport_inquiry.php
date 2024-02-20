@@ -279,7 +279,8 @@ function show_results()
 	while (($row2 = db_fetch($result)) || $myrow != null)
 	{
         // display_notification(print_r($row2, true));
-        if ($row2 != null
+        if ($_POST["account"] == null
+            && $row2 != null
             && $myrow['type'] == $row2['type']
             && $myrow['type_no'] == $row2['type_no']) {
             $split++;
