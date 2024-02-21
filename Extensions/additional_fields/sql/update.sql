@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `0_addfields_cust`;
 CREATE TABLE IF NOT EXISTS `0_addfields_cust` (
     `cust_debtor_no` int(11) NOT NULL,
+    `cust_branch_no` int(11) NOT NULL,
     `cust_city` varchar(30) DEFAULT NULL,
     `cust_department` varchar(30) DEFAULT NULL,
     `cust_country` varchar(30) DEFAULT NULL,
@@ -14,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `0_addfields_cust` (
     `cust_custom_two` tinytext DEFAULT NULL,
     `cust_custom_three` tinytext DEFAULT NULL,
     `cust_custom_four` tinytext DEFAULT NULL,
-    PRIMARY KEY (`cust_debtor_no`)
+    PRIMARY KEY (`cust_debtor_no`,`cust_branch_no`)
 ) ENGINE=InnoDB;
 
 

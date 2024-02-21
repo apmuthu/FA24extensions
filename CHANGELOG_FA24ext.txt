@@ -1,3 +1,4 @@
+2024-02-21  trafficpest  Updated additional_fields extension from upstream with branch
 2024-02-20  BraathWaate  Updated quickreport extension from upstream
 2023-10-28  Ap.Muthu     Updated core Tamil language ta_IN for FA v2.4.17
 2023-05-18  Ap.Muthu     Updated core Tamil language ta_IN for FA v2.4.16
