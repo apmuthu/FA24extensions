@@ -34,7 +34,8 @@ function get_delivery_date_range($from, $to, $route)
 
 	$ref = ($SysPrefs->print_invoice_no() == 1 ? "trans_no" : "reference");
 
-	$sql = "SELECT trans.debtor_no, trans.trans_no, trans.reference";
+  $sql = "SELECT trans.debtor_no, trans.branch_code, "
+    ."trans.trans_no, trans.reference";
   if ($route == 1)
     $sql .=", addfields.cust_custom_one";
 
@@ -43,7 +44,7 @@ function get_delivery_date_range($from, $to, $route)
       ."trans.trans_no=voided.id";
   if ($route == 1)
     $sql .= " LEFT JOIN ".TB_PREF."addfields_cust addfields ON "
-      ."trans.debtor_no=addfields.cust_debtor_no" ;
+      ."trans.branch_code = addfields.cust_branch_no" ;
 
 	$sql .= " WHERE trans.type=".ST_CUSTDELIVERY
 		." AND ISNULL(voided.id)"
@@ -53,6 +54,28 @@ function get_delivery_date_range($from, $to, $route)
   $sql .= " ORDER BY trans.tran_date, trans.$ref";
   
   return db_query($sql, "Cant retrieve invoice range");
+}
+
+function no_geocode_error($branch_id)
+{
+  global $path_to_root;
+
+  $branch = get_branch($branch_id);
+  $cust = get_customer($branch['debtor_no']);
+
+  $url1 = $path_to_root.'/modules/additional_fields/manage/add_customers.php?'
+    .'debtor_no='.$branch['debtor_no']
+    .'&branch_code='.$branch['debtor_no'];
+
+  $url2 = $path_to_root.'/sales/manage/customer_branches.php?'
+    .'SelectedBranch='.$branch_id;
+
+  display_error("No Geocode Found" ."<br>"
+    .'<a href="'.$url1.'">'
+    ."Customer Name: ".$cust['debtor_ref'] ."<br>" ."</a>"
+    ."Branch Name: ".$branch['branch_ref'] ."<br>" 
+    .'<a href="'.$url2.'">'
+    ."Mailing Address: ".$branch['br_post_address'] ."</a>");
 }
 
 print_deliveries();
@@ -65,18 +88,18 @@ function print_deliveries()
 
 	include_once($path_to_root . "/reporting/includes/pdf_report.inc");
 
+  // Shipper ie. Driver requires modified class and function in core.
+  // Changes have been submitted and pending in git
 	$from = $_POST['PARAM_0'];
 	$to = $_POST['PARAM_1'];
 	$email = $_POST['PARAM_2'];
 	$packing_slip = $_POST['PARAM_3'];
-	$route = $_POST['PARAM_4'];
-	$remove_home = $_POST['PARAM_5'];
-	$route_linear = $_POST['PARAM_6'];
-	$comments = $_POST['PARAM_7'];
-	$orientation = $_POST['PARAM_8'];
-  // Shipper ie. Driver requires modified class and function in core.
-  // Changes have been submitted and pending in git
-#	$shipper = $_POST['PARAM_9']; 
+	$shipper = $_POST['PARAM_4']; 
+	$route = $_POST['PARAM_5'];
+	$remove_home = $_POST['PARAM_6'];
+	$route_linear = $_POST['PARAM_7'];
+	$comments = $_POST['PARAM_8'];
+	$orientation = $_POST['PARAM_9'];
 
 	if (!$from || !$to) return;
 
@@ -170,6 +193,9 @@ function print_deliveries()
       {
         if (!exists_customer_trans(ST_CUSTDELIVERY, $row['trans_no']))
           continue;
+        $trans_row = get_customer_trans($row['trans_no'], ST_CUSTDELIVERY);
+        if ($shipper && $trans_row['ship_via'] != $shipper)
+         continue;
         // if data is lat,long swap order
         if ($route_config['swap_cords'] == 1)
         {
@@ -180,14 +206,14 @@ function print_deliveries()
           $geocodes[] = $row[$geocode]; 
         }
         $myrow = get_customer_trans($row['trans_no'], ST_CUSTDELIVERY);
-        $branch[] = get_branch($myrow["branch_code"]);
+        $branch[] = get_branch($myrow['branch_code']);
         $rows[] = $row;
       }else{
-        display_error('No geocode for debtor_no = ' . $row['debtor_no']);
+        no_geocode_error($row['branch_code']);
         return;
       }
     }
-    
+
     // format the url
     $query = implode(';', $geocodes);
     $request_url = $osrm_url.$home_point.$query.$osrm_opt;
@@ -246,6 +272,16 @@ function print_deliveries()
     $rep->TextCol(0, 1,	"Total", -2);
     $rep->TextCol(2, 1,	number_format(array_sum($distance),3), -2);
 
+  }else{
+    $rows = array();
+    $range = array();
+    $range = get_delivery_date_range($from, $to, $route);
+    while($row = db_fetch($range)){
+      if (!exists_customer_trans(ST_CUSTDELIVERY, $row['trans_no']))
+        continue;
+      $myrow = get_customer_trans($row['trans_no'], ST_CUSTDELIVERY);
+      $rows[] = $row;
+    }
   }
 
   //Start to make the tickets
@@ -258,8 +294,8 @@ function print_deliveries()
 
       // Shipper ie. Driver requires modified class and function in core.
       // Changes have been submitted and pending in git
-#			if ($shipper && $myrow['ship_via'] != $shipper)
-#       continue;
+			if ($shipper && $myrow['ship_via'] != $shipper)
+       continue;
    
       $branch = get_branch($myrow["branch_code"]);
 			$sales_order = get_sales_order_header($myrow["order_"], ST_SALESORDER); 

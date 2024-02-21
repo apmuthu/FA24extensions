@@ -67,9 +67,6 @@ first delivery stop. Set this to generate a route from the first stop
 (oldest delivery) to the last stop (newest).
 
 ## Known Limitations
-- `additional fields` does not have branch support, So Only one geocode per 
-client. If you have clients with more than one branch ie location they should be 
-seperated.
 - Only one trip is supported, the locations have to connect by roadway. You 
 couldnt route deliveries in france and england at the same time.
 - Doesn't support Shippers ie. Drivers. FrontAcconting core needs a small change 
