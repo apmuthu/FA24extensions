@@ -69,7 +69,8 @@ first delivery stop. Set this to generate a route from the first stop
 ## Known Limitations
 - Only one trip is supported, the locations have to connect by roadway. You 
 couldnt route deliveries in france and england at the same time.
-- Doesn't support Shippers ie. Drivers. FrontAcconting core needs a small change 
-I have submitted to the github mirror repo
+- Needs update to a FrontAccounting core function to support filter by shippers 
+ie. Drivers. FrontAcconting core needs a small change. You can find it in 
+my FA repo. Hope it will be added soon. I have submitted to the github mirror.
 - Doesn't support more than one shipping location (home point) This would be 
 nice to add.

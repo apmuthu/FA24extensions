@@ -169,6 +169,11 @@ function print_deliveries()
     $osrm_url = $route_config['osrm_url'];
     // Set or clear home point 
     $home_point = $route_config['home_point'] . ';';
+    if ($remove_home == 0 && $homepoint == null){
+        display_error("You haven't set your homepoint in route_config.php");
+        return;
+    }
+
     if ($remove_home == 1)
       $home_point = "";
     // Clear for rountrip Set opt for linear 
@@ -243,10 +248,8 @@ function print_deliveries()
       $distance[] = $legs['distance'];
     }
 
-#    display_error($request_url);
-#    display_error(json_encode($waypoint_index));
     array_multisort($waypoint_index,$branch,$rows);
-#    display_error(json_encode($waypoint_index));
+
     $rep->Font('bold');
     $rep->Info($params, $cols, null, $aligns);
     $rep->NewPage();
