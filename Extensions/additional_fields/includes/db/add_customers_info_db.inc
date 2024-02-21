@@ -60,6 +60,63 @@ function update_customer_additional_info($cust_debtor_no, $cust_city, $cust_depa
 	db_query($sql,"The customer additional information could not be updated");
 }
 
+function add_branch_additional_info($cust_debtor_no, $cust_branch_no, 
+	$cust_city, $cust_department, $cust_country, $cust_postcode, $cust_doc_type, 
+	$cust_valid_digit, $cust_start_date, $cust_sector, $cust_class, 
+	$cust_custom_one, $cust_custom_two, $cust_custom_three, $cust_custom_four)
+{
+	$date = date2sql($cust_start_date);
+  $sql = "INSERT INTO ".TB_PREF."addfields_cust (cust_debtor_no, cust_branch_no, 
+    cust_city, cust_department, cust_country, cust_postcode, cust_doc_type, 
+    cust_valid_digit, cust_start_date, cust_sector, cust_class, 
+    cust_custom_one, cust_custom_two, cust_custom_three, cust_custom_four) 
+    VALUES ("
+		.db_escape($cust_debtor_no) .", "
+		.db_escape($cust_branch_no) .", "
+		.db_escape($cust_city) .", "
+		.db_escape($cust_department) . ", "
+		.db_escape($cust_country) . ","
+		.db_escape($cust_postcode) . ", " 
+		.db_escape($cust_doc_type) . ", "
+		.db_escape($cust_valid_digit) . ", "
+		.db_escape($date) . ", "
+		.db_escape($cust_sector) . ", "
+		.db_escape($cust_class) . ", "
+		.db_escape($cust_custom_one) . ", "
+		.db_escape($cust_custom_two) . ", "
+		.db_escape($cust_custom_three) .", "
+		.db_escape($cust_custom_four).")";
+	db_query($sql,"The branch additional information could not be added");
+}
+
+function update_branch_additional_info($cust_debtor_no, $cust_branch_no, 
+	$cust_city, $cust_department, $cust_country, $cust_postcode, $cust_doc_type, 
+	$cust_valid_digit, $cust_start_date, $cust_sector, $cust_class, 
+	$cust_custom_one, $cust_custom_two, $cust_custom_three, $cust_custom_four)
+{
+	$date = date2sql($cust_start_date);
+	$sql = "UPDATE ".TB_PREF."addfields_cust SET 
+		cust_debtor_no=" . db_escape($cust_debtor_no) . ", 
+		cust_branch_no=" . db_escape($cust_branch_no) . ", 
+		cust_city=" . db_escape($cust_city) . ",
+		cust_department=".db_escape($cust_department) . ", 
+		cust_country=".db_escape($cust_country) . ", 
+		cust_postcode=".db_escape($cust_postcode) . ", 
+		cust_doc_type=".db_escape($cust_doc_type) . ", 
+		cust_valid_digit=".db_escape($cust_valid_digit) . ",
+		cust_start_date='$date', 
+		cust_sector=".db_escape($cust_sector) . ", 
+		cust_class=" .db_escape($cust_class) . ", 
+		cust_custom_one=" .db_escape($cust_custom_one) . ", 
+		cust_custom_two=" .db_escape($cust_custom_two) . ", 
+		cust_custom_three = ".db_escape($cust_custom_three) . ", 
+		cust_custom_four=".db_escape($cust_custom_four) ."
+		WHERE cust_branch_no = ".db_escape($cust_branch_no) ."
+		AND cust_debtor_no = ".db_escape($cust_debtor_no);
+
+	db_query($sql,"The branch additional information could not be updated");
+}
+
 function delete_customer_additional_info($customer_id)
 {
 	begin_transaction();
@@ -70,9 +127,17 @@ function delete_customer_additional_info($customer_id)
 	commit_transaction();
 }
 
+function delete_branch_additional_info($branch_id)
+{
+	begin_transaction();
 
-//MOD
-//----------------------------------------------------------------------------------
+	$sql = "DELETE FROM ".TB_PREF."addfields_cust "."WHERE cust_branch_no=".db_escape($branch_id);
+	db_query($sql,"cannot delete branch additional infomation");
+	commit_transaction();
+}
+
+
+//------------------------------------------------------------------------------
 function get_customer_additional_info($customer_id)
 {
 	$sql = "SELECT * FROM ".TB_PREF."addfields_cust WHERE cust_debtor_no=".db_escape($customer_id);
@@ -81,7 +146,16 @@ function get_customer_additional_info($customer_id)
 
 	return db_fetch($result);
 }
-//----------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+function get_branch_additional_info($branch_id)
+{
+	$sql = "SELECT * FROM ".TB_PREF."addfields_cust WHERE cust_branch_no=".db_escape($branch_id);
+
+	$result = db_query($sql, "could not get branch additonal info");
+
+	return db_fetch($result);
+}
+//------------------------------------------------------------------------------
 
 //DOCUMENT TYPES
 

@@ -35,13 +35,24 @@ if (isset($_GET['debtor_no']))
 }
 
 $selected_id = get_post('customer_id','');
-//--------------------------------------------------------------------------------------------
+$selected_branch = get_post('branch_id','');
 
-function customer_settings($selected_id) 
+// Clear branch if cust changed
+if (list_updated('customer_id')) {
+  $selected_branch = NULL;
+}
+
+// Table only displays when customer_id updated, set it after branch update
+if (list_updated('branch_id')) {
+$_POST['_customer_id_update'] = " ";
+}
+//------------------------------------------------------------------------------
+
+function customer_settings($selected_id, $selected_branch) 
 {
 	global $page_nested;
 	
-	if ($selected_id) 
+	if ($selected_branch) 
 	{
 		$myrow = get_customer($selected_id);
 
@@ -59,8 +70,9 @@ function customer_settings($selected_id)
 		$_POST['notes']  = $myrow["notes"];
 		$_POST['inactive'] = $myrow["inactive"];
 
-		$myrow2 = get_customer_additional_info($selected_id);
+		$myrow2 = get_branch_additional_info($selected_branch);
 		$_POST['customer_id'] = $myrow2["cust_debtor_no"];
+		$_POST['branch_id'] = $myrow2["cust_branch_no"];
 		$_POST['cust_city']  = $myrow2["cust_city"];
 		$_POST['cust_department']  = $myrow2["cust_department"];
 		$_POST['cust_country']  = $myrow2["cust_country"];
@@ -76,6 +88,13 @@ function customer_settings($selected_id)
 		$_POST['cust_custom_four']  = $myrow2["cust_custom_four"];
 
 	}
+  
+  // Quick Debug
+#  display_notification("cust: ".$selected_id);
+#  display_notification("branch: ".$selected_branch);
+#  display_notification(json_encode($myrow));
+#  display_notification(json_encode($myrow2));
+#  display_notification(json_encode($_POST));
 
 	start_outer_table(TABLESTYLE2);
 
@@ -142,12 +161,13 @@ function customer_settings($selected_id)
 if (isset($_POST['submit'])) 
 {
 
-	if ($selected_id) 
+	if ($selected_branch) 
 	{
-		$add_cust_info_exists = db_query("SELECT cust_debtor_no FROM ".TB_PREF."addfields_cust where cust_debtor_no = '$selected_id' LIMIT 1");
+		$add_cust_info_exists = db_query("SELECT cust_branch_no FROM ".TB_PREF."addfields_cust where cust_branch_no = '$selected_branch' LIMIT 1");
 		if(db_fetch($add_cust_info_exists)) 
 			{
-		        update_customer_additional_info($_POST['customer_id'], 
+		        update_branch_additional_info($_POST['customer_id'], 
+		        $_POST['branch_id'], 
 		        $_POST['cust_city'], $_POST['cust_department'],
 				$_POST['cust_country'], $_POST['cust_postcode'], 
 				$_POST['cust_doc_type'], $_POST['cust_valid_digit'], 
@@ -158,7 +178,8 @@ if (isset($_POST['submit']))
 		    } 
 		    else 
 		    {
-		        add_customer_additional_info($_POST['customer_id'], 
+		        add_branch_additional_info($_POST['customer_id'], 
+		        $_POST['branch_id'], 
 		        $_POST['cust_city'], $_POST['cust_department'],
 				$_POST['cust_country'], $_POST['cust_postcode'], 
 				$_POST['cust_doc_type'], $_POST['cust_valid_digit'], 
@@ -174,11 +195,11 @@ if (isset($_POST['submit']))
 }
 elseif (isset($_POST['delete'])) 
 {
-		delete_customer_additional_info($selected_id);
+		delete_branch_additional_info($selected_branch);
 		display_notification(_("Selected Customer Additional Infomation has been deleted."));
 		$Ajax->activate('_page_body');
 }
-//--------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
  
 start_form();
 
@@ -189,6 +210,9 @@ if (db_has_customers())
 	customer_list_cells(_("Select a customer: "), 'customer_id', null, _('Select a customer'), true, check_value('show_inactive'));
 	check_cells(_("Show inactive:"), 'show_inactive', null, true);
 	end_row();
+	start_row();
+	customer_branches_list_cells(_("Branch:"), $_POST['customer_id'], 'branch_id', null, true, true, true, true);
+	end_row();
 	end_table();
 
 	if (get_post('_show_inactive_update')) {
@@ -198,10 +222,10 @@ if (db_has_customers())
 } 
 else 
 {
-	hidden('customer_id');
+	hidden('branch_id');
 }
-if ($selected_id) 
-	customer_settings($selected_id); 
+if ($selected_id && $selected_branch) 
+	customer_settings($selected_id, $selected_branch); 
 
 end_form();
 end_page();
