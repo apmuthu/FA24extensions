@@ -113,9 +113,11 @@ class email {
 		$this->phpmailer->Subject = $subject;
 	}
 
-	public function attachment($file) {
-		$this->phpmailer->addAttachment($file);
-	}
+  public function attachment($file, $filename=null) {
+    if (!isset($filename))
+      $filename = basename($file);
+    $this->phpmailer->addAttachment($file, $filename);
+  }
 
 	public function text($text) {
 		$this->phpmailer->Body = $text;
