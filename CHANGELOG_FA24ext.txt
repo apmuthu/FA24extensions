@@ -1,3 +1,4 @@
+2024-03-22  trafficpest  Updated mail extension - attachment to have report name for file like in core 
 2024-02-23  trafficpest  Added rep_route_deliveries_no_ship extension
 2024-02-21  trafficpest  Updated additional_fields extension from upstream with branch
 2024-02-20  BraathWaate  Updated quickreport extension from upstream
