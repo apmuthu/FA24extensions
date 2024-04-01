@@ -10,7 +10,7 @@ it is installed before use.
 2. In FrontAccounting, activate it in `Install/Active Extensions` under the 
    `Setup` tab.
 3. If needed change the `access setup` to use reports.
-4. Do not use this extension if the extension `rep_route_deliveries` is in use.
+4. Do not use this extension if the extension `rep_route_deliveries_no_ship` is in use.
 
 
 ## Usage
@@ -53,7 +53,7 @@ Set this to true to get kilometers. The default is miles
 
 ## Configuration (In App)
 
-### Route Deliveries no ship
+### Route Deliveries
 With this it turns the routing function on, adds a route log to your report, 
 and sorts the delivery slips in route order for you. This report does allow 
 print by date that front accounting lacks by default.
