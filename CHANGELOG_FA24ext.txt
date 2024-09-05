@@ -1,3 +1,4 @@
+2024-09-05  Ap.Muthu     Updated zh_CN Simplified Chinese language for core
 2024-04-26  Ap.Muthu     Updated core Tamil and Hindi languages for new upstream feature
 2024-04-14  trafficpest  Added rep_route_deliveries extension
 2024-04-14  trafficpest  Updated rep_route_deliveries_no_ship extension with shipper contact
