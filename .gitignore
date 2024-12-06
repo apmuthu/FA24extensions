@@ -1,0 +1,3 @@
+# Exclude Vim tags files
+tags
+*/tags

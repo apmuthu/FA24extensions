@@ -251,7 +251,7 @@ function journal_bank_trans($type, $reference, $date, $bank_account, $bank_accou
 }
 
 //Note: Ajax will be implemented here since default is true
-function checkbox_row($label, $name, $value, $submit_on_change = true, $title, $params = "") //adapted from check_row to accomodate colspan
+function checkbox_row($label, $name, $value, $title, $submit_on_change = true, $params = "") //adapted from check_row to accomodate colspan
 {
     if (is_array($label)) {
         echo "<tr><td class='label' $params><ul>";
@@ -339,7 +339,7 @@ function check_customer_supplier($code_id, $person_id, $person_type_id, $line, $
 }
 
 //csv_demo_line("Example Journal Dr:","this", "16/12/2014", $lastjlref, "8100", "D1", "D2", "222.24");
-function csv_demo_line($param = "", $count, $a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l, $m) //utilized for displaying examples in a table
+function csv_demo_line($count, $a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l, $m, $param = "") //utilized for displaying examples in a table
 {
     start_row($param); // param usefull for incorporating css classes.
     label_cell($a, "width=3% wrap", $count + 1);
@@ -608,7 +608,7 @@ function journal_display($i, $type, $taxtype, $amt, $entry, $code_id, $dim1, $di
 }
 
 // extra inclusive of tax column in csv
-function journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $code, $dim1, $dim2, $memo, $amt, $taxtype = null, $person_type_id, $person_id) {
+function journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $code, $dim1, $dim2, $memo, $amt, $person_type_id, $person_id, $taxtype = null) {
     if ($person_type_id == 0) {
         $person = get_person_by_name($person_id);
         $person_type_id = $person[0];
@@ -714,23 +714,23 @@ function show_table_section_display($type) {
     table_section_title(_("Display"), 2);
     $array = array(ST_SALESORDER, ST_SALESINVOICE);
     if (in_array($type, $array, false)) {
-        checkbox_row(_("Lookup id's for Payment terms relating to Sales Orders / Invoices "), 'salestools', $_POST['salestools'], $submit_on_change = true, $title = "", 'colspan=1');
+       checkbox_row(_("Lookup id's for Payment terms relating to Sales Orders / Invoices "), 'salestools', $_POST['salestools'], '', true, 'colspan=1'); 
         if ((isset($_POST['salestools'])) && ($_POST['salestools'] != null))
             show_table_section_sales();
         else $Ajax->activate('_page_body');
     }
 
-    checkbox_row(_("Lookup id's for Tax Type, Customers, and Suppliers"), 'tools', $_POST['tools'], $submit_on_change = true, $title = "", 'colspan=1');
+   checkbox_row(_("Lookup id's for Tax Type, Customers, and Suppliers"), 'tools', $_POST['tools'], '', true, 'colspan=1'); 
     if ((isset($_POST['tools'])) && ($_POST['tools'] != null))
         show_table_section_tools();
     else $Ajax->activate('_page_body');
 
-    checkbox_row(_("Display Company Settings Lookup"), 'lookup', $_POST['lookup'], $submit_on_change = true, $title = "", 'colspan=1');
+    checkbox_row(_("Display Company Settings Lookup"), 'lookup', $_POST['lookup'], '', true, 'colspan=1');
     if ((isset($_POST['lookup'])) && ($_POST['lookup'] != null))
         show_table_section_company_settings_lookup();
     else $Ajax->activate('_page_body');
 
-    checkbox_row(_("Display Help Notes"), 'notes', $_POST['notes'], $submit_on_change = true, $title = "", 'colspan=1');
+    checkbox_row(_("Display Help Notes"), 'notes', $_POST['notes'], '', true, 'colspan=1');
     if ((isset($_POST['notes'])) && ($_POST['notes'] != null))
         show_table_section_notes($type);
     else $Ajax->activate('_page_body');
@@ -800,7 +800,7 @@ function show_table_section_sales_notes() {
 
 function show_table_section_sales() {
     table_section_title(_("Lookup: Orders / Invoices"), 2);
-    checkbox_row(_("Cash Only (no tick)/Credit Sales (tick)"), 'cashorcredit', $_POST['cashorcredit'], $submit_on_change = true, $title = "", 'colspan=1');
+    checkbox_row(_("Cash Only (no tick)/Credit Sales (tick)"), 'cashorcredit', $_POST['cashorcredit'], '', true, 'colspan=1'); 
     $paymcat = ((isset($_POST['cashorcredit'])) && ($_POST['cashorcredit'] != null) ? PM_CREDIT : ((!isset($_POST['cashorcredit'])) && ($_POST['cashorcredit'] == null) ? PM_CASH : PM_ANY));
 
     echo "<tr class='evenrow'>";
@@ -872,7 +872,7 @@ function show_table_section_bankstatement_checkbox() {
         _("Template <a href='./templates/bank_en_GB.csv'>bank_en_GB.csv</a>.")
         );
     table_section_title(_("Bank Statement Format"), 2);
-    checkbox_row($bs, 'stateformat', $_POST['stateformat'], false, $title = "", 'colspan=1 wrap align=left');
+    checkbox_row($bs, 'stateformat', $_POST['stateformat'], '', false, 'colspan=1 wrap align=left'); 
     return $stateformat = $_POST['stateformat'];
 }
 

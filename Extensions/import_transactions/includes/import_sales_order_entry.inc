@@ -8,7 +8,7 @@ include_once($path_to_root . "/sales/includes/sales_db.inc");
 include_once($path_to_root . "/sales/includes/db/sales_types_db.inc");
 include_once($path_to_root . "/reporting/includes/reporting.inc");
 
-function can_process($line, $customer_id, $branchNo, $reference, $date, $dimension_id, $dimension2_id, $freightcost=0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate) {
+function can_process($line, $customer_id, $branchNo, $reference, $date, $dimension_id, $dimension2_id, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate, $freightcost=0) {
 
     global $Refs, $SysPrefs;
 

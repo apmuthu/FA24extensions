@@ -242,7 +242,7 @@ if ((isset($_POST['type']))) {
                     import_add_to_order($_SESSION['Items'], $item_code, $quantity, $price, $discountpercentage, $item_description);
                     $_SESSION['Items']->cust_ref = $reference;
                     if ((!check_import_item_data($line_no = $docline, $item_code, $item_description, $quantity, $unit, $price, $discountpercentage)) ||
-                        (!can_process($line, $customer_id, $branchNo, $reference, $date, $dimension_id, $dimension2_id, $freightcost = 0, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate))) {
+                        (!can_process($line, $customer_id, $branchNo, $reference, $date, $dimension_id, $dimension2_id, $delfrom, $deldate, $delto, $deladdress, $contactphone, $email, $custref, $shipvia, $comments, $exrate, $freightcost))) {
                         display_notification_centered("Error");
                         $error = true;
                     }
@@ -314,7 +314,7 @@ if ((isset($_POST['type']))) {
                             journal_bank_trans($type, $reference, $date, $bank_account, $bank_account_gl_code, $line, $curEntryId, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id, $BranchNo, $comments, $prev_ref != $reference);
                         else {
                             if (check_tax_appropriate($code_id, $taxtype, $line) == true) {
-                                journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $code_id, $dim1, $dim2, $memo, $amt, $taxtype, $person_type_id, $person_id);
+                               journal_inclusive_tax($type, $reference, $date, $line, $curEntryId, $code_id, $dim1, $dim2, $memo, $amt, $person_type_id, $person_id, $taxtype); 
                             }
                         }
                         add_audit_trail($type, $curEntryId, $date);
