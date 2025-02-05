@@ -1,0 +1,15 @@
+Package: woo_orders
+Name: WooCommerce Order and Customer Import Module
+Description: This module works with WordPress version 6.7.1 and WooCommerce 9.6
+ it is used to import orders and customers into the FA database. It can also
+ be used to check prices between both systems. It is a modification of osc_orders
+ This module make use of mysqli API and will not work on legacy systems using old mysql API.
+Author: Thomas A. Moulton <tom@moulton.us>
+Maintenance: Thomas A. Moulton <tom@moulton.us>
+Homepage: <none>
+Type: extension
+InstallPath: modules/woo_orders
+Filename: woo_orders-2.4.0-1
+Version: 2.4.0-1
+SHA1sum: tbd
+
