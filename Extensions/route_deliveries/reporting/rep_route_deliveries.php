@@ -24,7 +24,6 @@ include_once($path_to_root . "/includes/session.inc");
 include_once($path_to_root . "/includes/date_functions.inc");
 include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/sales/includes/sales_db.inc");
-include_once($path_to_root . "/admin/db/shipping_db.inc");
 
 //------------------------------------------------------------------------------
 function get_delivery_date_range($from, $to, $route)
@@ -37,15 +36,10 @@ function get_delivery_date_range($from, $to, $route)
 
   $sql = "SELECT trans.debtor_no, trans.branch_code, "
     ."trans.trans_no, trans.reference";
-  if ($route == 1)
-    $sql .=", addfields.cust_custom_one";
 
 	$sql .= " FROM ".TB_PREF."debtor_trans trans 
     LEFT JOIN ".TB_PREF."voided voided ON trans.type=voided.type AND "
       ."trans.trans_no=voided.id";
-  if ($route == 1)
-    $sql .= " LEFT JOIN ".TB_PREF."addfields_cust addfields ON "
-      ."trans.branch_code = addfields.cust_branch_no" ;
 
 	$sql .= " WHERE trans.type=".ST_CUSTDELIVERY
 		." AND ISNULL(voided.id)"
@@ -57,26 +51,40 @@ function get_delivery_date_range($from, $to, $route)
   return db_query($sql, "Cant retrieve invoice range");
 }
 
-function no_geocode_error($branch_id)
+function get_gps_coordinates($debtor_no, $branch_no)
 {
-  global $path_to_root;
+    $sql = "SELECT latitude, longitude FROM ".TB_PREF."route_delivery_gps 
+            WHERE debtor_no = " . db_escape($debtor_no) . " 
+            AND branch_no = " . db_escape($branch_no);
+    $result = db_query($sql, "Error fetching GPS coordinates");
+    return db_fetch($result);
+}
 
-  $branch = get_branch($branch_id);
-  $cust = get_customer($branch['debtor_no']);
+function fetch_osrm_data($url)
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $response = curl_exec($ch);
+    curl_close($ch);
 
-  $url1 = $path_to_root.'/modules/additional_fields/manage/add_customers.php?'
-    .'debtor_no='.$branch['debtor_no']
-    .'&branch_code='.$branch['branch_code'];
+    $osrm_data = json_decode($response, true);
+    if (isset($osrm_data['code']) && $osrm_data['code'] == 'Ok') {
+        return $osrm_data;
+    }
 
-  $url2 = $path_to_root.'/sales/manage/customer_branches.php?'
-    .'SelectedBranch='.$branch_id;
+    return false;
+}
 
-  display_error("No Geocode Found" ."<br>"
-    .'<a href="'.$url1.'">'
-    ."Customer Name:"."</a> ".$cust['debtor_ref'] ."<br>" 
-    ."Branch Name: ".$branch['branch_ref'] ."<br>" 
-    .'<a href="'.$url2.'">'
-    ."Mailing Address:"."</a> ".$branch['br_post_address'] );
+function no_geocode_error($debtor_no, $branch_no)
+{  
+  $url = $path_to_root.'/modules/route_deliveries/manage/cust_gps.php?'
+    .'customer_id='.$debtor_no
+    .'&branch_id='.$branch_no;
+
+  display_error('No GPS data found for Debtor: ' . $debtor_no . ' Branch: ' 
+    . $branch_no . '<br>' 
+    . '<a href ="'.$url.'" target="_blank">Click here to set it</a>');
 }
 
 print_deliveries();
@@ -130,144 +138,97 @@ function print_deliveries()
 
   if ($route == 1)
   {
-    // Make sure addional_fields plugin is installed
-    if (file_exists($path_to_root 
-      ."/modules/additional_fields/includes/addfields_db.inc"))
-    {
-      include_once($path_to_root 
-        ."/modules/additional_fields/includes/addfields_db.inc");
-    }else {
-      display_error('Routing requires additional_fields module');
-      return;
-    }
-    
     // Import your config settings
     $route_config = include_once($path_to_root 
-      ."/modules/rep_route_deliveries/route_config.php");
+      ."/modules/route_deliveries/route_config.php");
+      
+     // Initialize variables
+    $geocodes = [];
+    $branch = [];
+    $rows = [];
 
-    // Find what label id where geocoding is store in $geocode
-    $field_label = $route_config['field_label'];
-    $labels = get_cust_custom_labelss();
-
-    while ($row = db_fetch($labels)){
-      if ($row['description'] == $field_label)
-        $label_id = $row['id'];
-      if (!isset($label_id)){
-        display_error('Could not find custom field labeled ' . $field_label);
-        return;
-      }
-    }
-    $label_keys = array(
-      1 => "cust_custom_one",
-      2 => "cust_custom_two",
-      3 => "cust_custom_three",
-      4 => "cust_custom_four",
-    );
-
-    $geocode = $label_keys[$label_id];
-    
-    // Set the instance of osrm url
-    $osrm_url = $route_config['osrm_url'];
-    // Set or clear home point 
-    $home_point = $route_config['home_point'] . ';';
-    if ($remove_home == 0 && $homepoint == null){
-        display_error("You haven't set your homepoint in route_config.php");
-        return;
+    // Add home location if required
+    if ($remove_home == 0) {
+      $geocodes[] = $route_config['home_point_long'].','
+                      .$route_config['home_point_lat'];
     }
 
-    if ($remove_home == 1)
-      $home_point = "";
-    // Clear for rountrip Set opt for linear 
-    if ($route_linear == 1)
-      $osrm_opt = "?roundtrip=false&source=first&destination=last";
-
-    $geocodes = array();
-    $branch = array();
-    $rows = array();
-    $range = array();
-
-    // add elements for missing home location if set
-    if($remove_home == 0){
-      $rows[] = $row;
-      $branch[]['br_name'] = 'Start Location'; 
-    }
-
-    // Iterate, fill arrays to sort since osrm doesn't sort it
+    // Fetch deliveries within the specified range
     $range = get_delivery_date_range($from, $to, $route);
-    while($row = db_fetch($range)){
-      if (!empty($row[$geocode]))
-      {
-        if (!exists_customer_trans(ST_CUSTDELIVERY, $row['trans_no']))
-          continue;
-        $trans_row = get_customer_trans($row['trans_no'], ST_CUSTDELIVERY);
-        if ($shipper && $trans_row['ship_via'] != $shipper)
-         continue;
-        // if data is lat,long swap order
-        if ($route_config['swap_cords'] == 1)
-        {
-          $cordinates = explode(',', $row[$geocode]);
-          $geocodes[] = $cordinates[1].",".$cordinates[0]; 
-        }else{
-          // else data is long,lat
-          $geocodes[] = $row[$geocode]; 
+
+    while ($row = db_fetch($range)) {
+        $gps_data = get_gps_coordinates($row['debtor_no'], $row['branch_code']);
+        if ($gps_data) {
+            $geocodes[] = "{$gps_data['longitude']},{$gps_data['latitude']}";
+            $branch[] = get_branch($row['branch_code']);
+            $rows[] = $row;
+        } else {
+            no_geocode_error($row['debtor_no'], $row['branch_code']);
+            return;
         }
-        $myrow = get_customer_trans($row['trans_no'], ST_CUSTDELIVERY);
-        $branch[] = get_branch($myrow['branch_code']);
-        $rows[] = $row;
-      }else{
-        no_geocode_error($row['branch_code']);
-        return;
-      }
     }
 
-    // format the url
+    // Format the URL for OSRM
     $query = implode(';', $geocodes);
-    $request_url = $osrm_url.$home_point.$query.$osrm_opt;
+    $osrm_opt = $route_linear ? "?roundtrip=false&source=first&destination=last" : "";
+    $request_url = $route_config['osrm_url'] . $query . $osrm_opt;
 
-    // Use curl to get the data
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $request_url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $osrm = curl_exec($ch);
-    curl_close($ch);
-    $osrm = json_decode($osrm, true);
-
-    if ($osrm['code'] != 'Ok')
-    {
-      display_error('OSRM call failed, reason given: ' . $osrm['message']);
-      display_error('API call was: ' . $request_url);
-      return;
-    }
-
+    // Fetch routing data
+    $osrm_data = fetch_osrm_data($request_url);
+    if (!$osrm_data) {
+        display_error('Routing failed. Please check OSRM service or the request URL.');
+        return;
+    } 
     $waypoint_index = array();
-    foreach($osrm['waypoints'] as $waypoints){
+    foreach($osrm_data['waypoints'] as $waypoints){
       $waypoint_index[] = $waypoints['waypoint_index'];
     }
-
     $distance = array();
-    foreach($osrm['trips'][0]['legs'] as $legs){
+    foreach($osrm_data['trips'][0]['legs'] as $legs){
       $distance[] = $legs['distance'];
     }
 
+    if ($remove_home == 0) {
+      $first_waypoint = array_shift($waypoint_index);
+      $way_offset = 0;
+    } else {
+      //$first_distance = array_shift($distance);
+      $way_offset = 1;
+    }
+    
+    // Sort Debugging
+    //display_error('ways:'.count($waypoint_index).' '.json_encode($waypoint_index));
+    //display_error('branches:'.count($branch).' '.json_encode($branch));
+    //display_error('rows:'.count($rows).' '.json_encode($rows));
+    //display_error(json_encode($osrm_data));
     array_multisort($waypoint_index,$branch,$rows);
+
+    // Make the summary log
+    
+    // Convert Distance from meters to desired setting
+    for($i = 0; $i < count($distance);$i++){
+      if($route_config['km'] == 1)
+        $distance[$i] = $distance[$i]/1000;
+      else
+        $distance[$i] = $distance[$i]*0.00062137;
+    }
+    if($route_config['km'] == 1)
+      $measurement = 'km';
+    else
+      $measurement = 'mi';
+
 
     $rep->Font('bold');
     $rep->Info($params, $cols, null, $aligns);
     $rep->NewPage();
     $rep->TextCol(0, 1,	"Delivery #", -2);
     $rep->TextCol(1, 1,	"Name", -2);
-    if($route_config['km'] == 1)
-      $rep->TextCol(2, 1,	"Distance km", -2);
-    else
-      $rep->TextCol(2, 1,	"Distance mi", -2);
+    $rep->TextCol(2, 1,	"Distance ".$measurement, -2);
     $rep->Font();
-    for($i = 0; $i < count($osrm['waypoints']);$i++){
-      if($route_config['km'] == 1)
-        $distance[$i] = $distance[$i]/1000;
-      else
-        $distance[$i] = $distance[$i]*0.00062137;
+
+    for($i = 0; $i < count($waypoint_index);$i++){
 	  $rep->NewLine();
-    $rep->TextCol(0, 1,	$waypoint_index[$i]+1, -2);
+    $rep->TextCol(0, 1,	($waypoint_index[$i]+$way_offset), -2);
     $rep->TextCol(1, 1,	$branch[$i]['br_name'], -2);
     $rep->TextCol(2, 1,	number_format($distance[$i],3), -2);
     }
@@ -328,7 +289,7 @@ function print_deliveries()
 			$rep->SetHeaderType('Header2');
 			$rep->NewPage();
 
-   			$result = get_customer_trans_details(ST_CUSTDELIVERY, $row['trans_no']);
+   	  $result = get_customer_trans_details(ST_CUSTDELIVERY, $row['trans_no']);
 			$SubTotal = 0;
 			while ($myrow2=db_fetch($result))
 			{
@@ -343,7 +304,7 @@ function print_deliveries()
         $DisplayQty = number_format2($myrow2["quantity"],
                       get_qty_dec($myrow2['stock_id']));
 	    	$DisplayNet = number_format2($Net,$dec);
-	    	if ($myrow2["discount_percent"]==0)
+        if ($myrow2["discount_percent"]==0)
 		  		$DisplayDiscount ="";
 	    	else
           $DisplayDiscount = number_format2($myrow2["discount_percent"]*100,
@@ -374,7 +335,7 @@ function print_deliveries()
       if ($route == 1)
       {
 				$rep->NewLine();
-        $rep->TextCol(0, 5, "Route Order: ".($waypoint_index[$i]+1), -2);
+        $rep->TextCol(0, 5, "Route Order: ".($waypoint_index[$i]+$way_offset), -2);
         $i++;
       }
 			$memo = get_comments_string(ST_CUSTDELIVERY, $row['trans_no']);
@@ -383,17 +344,6 @@ function print_deliveries()
 				$rep->NewLine();
 				$rep->TextColLines(1, 3, $memo, -2);
       }
-
-      $rep->row = $rep->bottomMargin + (11.5 * $rep->lineHeight);
-
-      $shipper =  get_shipper($myrow['ship_via']);  
-      $rep->NewLine();
-      $rep->TextCol(0, 5, "Delivered By: ".$shipper['contact']." ".$shipper['phone'], -2);
-      $rep->NewLine();
-      $rep->TextCol(0, 5, ($shipper['shipper_name']), -2);
-      $rep->NewLine();
-      $rep->TextCol(0, 5, ($shipper['address']), -2);
-
 
    			$DisplaySubTot = number_format2($SubTotal,$dec);
 
@@ -456,8 +406,25 @@ function print_deliveries()
             $myrow["ov_freight_tax"] + $myrow["ov_gst"] +
 					  $myrow["ov_amount"],$dec);
 				$rep->Font('bold');
-				$rep->TextCol(3, 6, _("TOTAL DELIVERY INCL. VAT"), - 2);
+				$rep->TextCol(3, 6, _("TOTAL DELIVERY INCL. TAX"), - 2);
 				$rep->TextCol(6, 7,	$DisplayTotal, -2);
+
+	      $customer_record = get_customer_details($branch['debtor_no'], $to, false);
+        //error_log(json_encode($to));
+
+        if ($customer_record != false)
+        {
+          $total_with_this = number_format2($customer_record["Balance"], $dec) +
+            $DisplayTotal;
+    			$rep->NewLine();
+				  $rep->Font();
+				  $rep->TextCol(3, 6, _("PRIOR BALANCE"), - 2);
+				  $rep->TextCol(6, 7,	number_format2($customer_record["Balance"], $dec), -2);
+    			$rep->NewLine();
+				  $rep->Font('bold');
+				  $rep->TextCol(3, 6, _("TOTAL BALANCE INCL. THIS"), - 2);
+				  $rep->TextCol(6, 7,	number_format2($total_with_this, $dec), -2);
+        }  
 				$words = price_in_words($myrow['Total'], ST_CUSTDELIVERY);
 				if ($words != "")
 				{

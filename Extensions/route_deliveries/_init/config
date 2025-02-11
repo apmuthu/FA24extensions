@@ -1,0 +1,11 @@
+Package: route_delivieries
+Description: Print Deliveries Geo Routed 
+Name: Route Deliveries
+Author: Jason March <buki>
+Maintenance: jason <jason@trafficpestsolutions.com>
+Homepage: trafficpestsolutions.com
+Type: extension
+InstallPath: modules/route_deliveries
+Filename: route_deliveries-2.4.0-1
+Version: 2.4.0-1
+
