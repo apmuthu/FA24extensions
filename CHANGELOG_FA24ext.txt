@@ -1,3 +1,4 @@
+2025-04-15  nazirsayedquli  Added Persian fa_IR Translations for the core
 2025-02-11  trafficpest  Added Route Deliveries extension
 2025-02-05  Tom Moulton  Added wooCommerce Orders Import
 2024-09-05  Ap.Muthu     Updated zh_CN Simplified Chinese language for core
