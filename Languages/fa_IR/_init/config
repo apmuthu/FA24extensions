@@ -1,0 +1,16 @@
+Package: fa_IR
+Version: 2.4.18-1
+Description: Persian Iran translation
+Author: Nazir Sayed Quli <nazirsayedquli@gmail.com>
+Maintenance: Nazir Sayed Quli <nazirsayedquli@gmail.com>
+Homepage: frontaccounting.com
+Language: fa_IR
+Encoding: utf-8
+RTLDir: yes
+Depends: 
+Type: language
+Name: Persian Iran
+Name-th_TH: ایران فارسی
+InstallPath: lang/fa_IR
+Filename: fa_IR-2.4.18-1
+

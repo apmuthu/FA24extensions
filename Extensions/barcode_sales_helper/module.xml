@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <name>Barcode Sales Helper</name>
+    <path>barcode_sales_helper</path>
+    <tab>S</tab>
+    <type>extension</type>
+    <version>1.0</version>
+    <author>Faisal Ayub (@boxygen)</author>
+    <access>SA_SALESINVOICE</access>
+</module>

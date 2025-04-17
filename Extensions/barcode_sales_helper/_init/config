@@ -1,0 +1,12 @@
+Package: barcode_sales_helper
+Name: Barcode Sales Helper
+Description: Adds items in the Cart using Bar Code Scan
+Author: Faisal Ayub
+Maintenance: Faisal Ayub
+Homepage: frontaccounting.com
+Depends: 
+InstallPath: modules/barcode_sales_helper
+Type: extension
+Filename: barcode_sales_helper-2.4.18-1
+Version: 2.4.18-1
+
