@@ -750,18 +750,16 @@ if ($_SESSION['Items']->trans_type == ST_SALESINVOICE) {
 	$porder = _("Place Order");
 	$corder = _("Commit Order Changes");
 }
-
 start_form();
 
 hidden('cart_id');
 $customer_error = display_order_header($_SESSION['Items'], !$_SESSION['Items']->is_started(), $idate);
 
-
 if ($customer_error == "") {
 	start_table(TABLESTYLE, "width='80%'", 10);
 	echo "<tr><td colspan='2'>";
-echo "<input type='text' id='barcode_input' placeholder='Scan barcode...' autofocus style='width: 300px; font-size: 16px;'>";
-echo "</td></tr>";
+	echo "<input type='text' id='barcode_input' placeholder='Scan barcode...' autofocus style='width: 300px; font-size: 16px;'>";
+	echo "</td></tr>";
 	echo "<tr><td>";
 	display_order_summary($orderitems, $_SESSION['Items'], true);
 	echo "</td></tr>";
@@ -799,6 +797,4 @@ echo "<script>
 
 global $path_to_root;
 echo "<script src='{$path_to_root}/modules/barcode_sales_helper/barcode_helper_v3.js'></script>";
-
 end_page();
-
