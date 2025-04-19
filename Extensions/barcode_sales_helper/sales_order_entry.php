@@ -360,7 +360,7 @@ function line_start_focus() {
   	global 	$Ajax;
 
   	$Ajax->activate('items_table');
-  	set_focus('_stock_id_edit');
+  	set_focus('barcode_input');
 }
 
 //--------------------------------------------------------------------------------
@@ -757,9 +757,8 @@ $customer_error = display_order_header($_SESSION['Items'], !$_SESSION['Items']->
 
 if ($customer_error == "") {
 	start_table(TABLESTYLE, "width='80%'", 10);
-	echo "<tr><td colspan='2'>";
-	echo "<input type='text' id='barcode_input' placeholder='Scan barcode...' autofocus style='width: 300px; font-size: 16px;'>";
-	echo "</td></tr>";
+	text_cells(NULL, 'barcode_input', "", 25, 25, "Scan Barcode", "", "", "id='barcode_input' placeholder='Scan barcode..'");
+	line_start_focus();
 	echo "<tr><td>";
 	display_order_summary($orderitems, $_SESSION['Items'], true);
 	echo "</td></tr>";
@@ -791,10 +790,6 @@ if ($customer_error == "") {
 }
 
 end_form();
-echo "<script>
-    console.log('✅ Inline JS is running!');
-</script>";
 
-global $path_to_root;
 echo "<script src='{$path_to_root}/modules/barcode_sales_helper/barcode_helper_v3.js'></script>";
 end_page();

@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Set the form fields
                     const stockIdField = document.getElementsByName('stock_id')[0];
                     const qtyField = document.getElementsByName('qty')[0];
+                    const priceField = document.getElementsByName('price')[0];
 
                     if (!stockIdField || !qtyField) {
                         alert("❌ One or more input fields not found in the form.");
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     stockIdField.value = data.stock_id;
                     qtyField.value = '1'; // default quantity
+                    priceField.value = data.price;
 
                     console.log("🛒 Adding item:", data.stock_id);
 
@@ -65,12 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         // First attempt to focus immediately
                         barcodeInput.value = '';
                         barcodeInput.focus();
-                    
-                        // In case FA redraws the DOM and steals focus, do it again after a short delay
-                        setTimeout(() => {
-                            barcodeInput.focus();
-                            console.log("🔁 Refocused on barcode input");
-                        }, 300); // Delay can be tweaked
                     
                     }, 100);
                     

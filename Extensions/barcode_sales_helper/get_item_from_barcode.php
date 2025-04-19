@@ -13,7 +13,8 @@ $sql = "SELECT stock_id FROM 0_stock_master WHERE stock_id = ".db_escape($barcod
 $res = db_query($sql, "Could not find item by barcode");
 
 if ($row = db_fetch($res)) {
-    echo json_encode(['success' => true, 'stock_id' => $row['stock_id']]);
+    $price = get_stock_price_type_currency($row['stock_id'], get_company_pref('base_sales'), get_company_pref('curr_default'))['price'];
+    echo json_encode(['success' => true, 'stock_id' => $row['stock_id'], 'price'=>$price]);
 } else {
     echo json_encode(['success' => false]);
 }
